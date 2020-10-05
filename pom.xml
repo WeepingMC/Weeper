@@ -1,34 +1,42 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.empireminecraft</groupId>
-    <artifactId>empirecraft-parent</artifactId>
-    <version>dev-1.12-R0.1-SNAPSHOT</version>
+    <groupId>de.craftstuebchen.weeper</groupId>
+    <artifactId>weeper-parent</artifactId>
+    <version>1.16.4-R0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>EmpireCraft (Parent)</name>
+    <name>Weeper (Parent)</name>
 
     <properties>
-        <repo>http://empireminecraft.com/nexus/content/repositories/empireminecraft</repo>
         <skipTests>true</skipTests>
     </properties>
 
     <repositories>
-        <repository>
-            <id>empireminecraft</id>
-            <url>https://repo.aikar.co/content/groups/public/</url>
-        </repository>
         <repository>
             <id>aikar</id>
             <url>https://repo.aikar.co/content/repositories/aikar/</url>
         </repository>
     </repositories>
 
+    <distributionManagement>
+        <repository>
+            <id>cs</id>
+            <url>https://dev.craftstuebchen.de/repo/repository/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>cs</id>
+            <url>https://dev.craftstuebchen.de/repo/repository/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+
     <build>
         <defaultGoal>install</defaultGoal>
         <finalName>${project.artifactId}</finalName>
     </build>
+
     <modules>
-        <module>EmpireCraft-API</module>
-        <module>EmpireCraft-Server</module>
+        <module>Weeper-API</module>
+        <module>Weeper-Server</module>
     </modules>
 </project>

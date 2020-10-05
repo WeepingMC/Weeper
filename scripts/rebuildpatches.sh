@@ -23,22 +23,22 @@ function savePatches {
 		declare -a files=("$basedir/patches/$2/"*.patch)
 		for i in $(seq -f "%04g" 1 1 $last)
 		do
-			if [ $i -lt $next ]; then
-				rm "${files[`expr $i - 1`]}"
+			if [ "$i" -lt "$next" ]; then
+				rm -f "${files[`expr $i - 1`]}"
 			fi
 		done
 	else
-		rm $basedir/patches/$2/*.patch
+		rm -f "$basedir"/patches/"$2"/*.patch
 	fi
 
-	git format-patch --quiet -N -o $basedir/patches/$2 upstream/upstream
-	cd $basedir
-	git add -A $basedir/patches/$2
-	cleanupPatches $basedir/patches/$2/
+	git format-patch --quiet -N -o "$basedir"/patches/"$2" upstream/upstream
+	cd "$basedir" || exit
+	git add -A "$basedir"/patches/$2
+	cleanupPatches "$basedir"/patches/$2/
 	echo "  Patches saved for $what to patches/$2"
 }
 
-savePatches ${FORK_NAME}-API api
-savePatches ${FORK_NAME}-Server server
+savePatches "${FORK_NAME}"-API api
+savePatches "${FORK_NAME}"-Server server
 
-$basedir/scripts/push.sh
+"$basedir"/scripts/push.sh

@@ -1,0 +1,104 @@
+From b962bb3a4541baf06cd75f256793d26ec215c436 Mon Sep 17 00:00:00 2001
+From: ysl3000 <yannicklamprecht@live.de>
+Date: Mon, 5 Oct 2020 19:09:35 +0200
+Subject: [PATCH] changed name
+
+---
+ pom.xml                                       | 19 +++++++++----------
+ .../net/minecraft/server/MinecraftServer.java |  2 +-
+ .../org/bukkit/craftbukkit/CraftServer.java   |  2 +-
+ .../bukkit/craftbukkit/util/Versioning.java   |  2 +-
+ 4 files changed, 12 insertions(+), 13 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index 80f165291..c9c8e9cee 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -1,11 +1,10 @@
+ <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+-    <artifactId>paper</artifactId>
++    <artifactId>weeper-server</artifactId>
+     <packaging>jar</packaging>
+-    <version>1.16.4-R0.1-SNAPSHOT</version>
+-    <name>Paper</name>
+-    <url>https://papermc.io</url>
++    <name>weeper-server</name>
++    <url>https://crafstuebchen.de</url>
+ 
+     <properties>
+         <!-- <skipTests>true</skipTests> Paper - This [was] not going to end well -->
+@@ -18,16 +17,16 @@
+     </properties>
+ 
+     <parent>
+-        <groupId>com.destroystokyo.paper</groupId>
+-        <artifactId>paper-parent</artifactId>
+-        <version>dev-SNAPSHOT</version>
++        <groupId>de.craftstuebchen.weeper</groupId>
++        <artifactId>weeper-parent</artifactId>
++        <version>1.16.4-R0.1-SNAPSHOT</version>
+         <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+     <dependencies>
+         <dependency>
+-            <groupId>com.destroystokyo.paper</groupId>
+-            <artifactId>paper-api</artifactId>
++            <groupId>${project.parent.groupId}</groupId>
++            <artifactId>weeper-api</artifactId>
+             <version>${project.version}</version>
+             <scope>compile</scope>
+         </dependency>
+@@ -165,7 +164,7 @@
+ 
+     <!-- This builds a completely 'ready to start' jar with all dependencies inside -->
+     <build>
+-        <finalName>paper-${minecraft.version}</finalName>
++        <finalName>${artifactId}-${minecraft.version}</finalName>
+         <defaultGoal>clean install</defaultGoal> <!-- Paper -->
+         <plugins>
+             <plugin>
+diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
+index 172fc9ef9..df1cc3a0b 100644
+--- a/src/main/java/net/minecraft/server/MinecraftServer.java
++++ b/src/main/java/net/minecraft/server/MinecraftServer.java
+@@ -1449,7 +1449,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
+     }
+ 
+     public String getServerModName() {
+-        return "Paper"; //Paper - Paper > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
++        return "Craftstuebchen-Paper"; //Paper - Paper > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
+     }
+ 
+     public CrashReport b(CrashReport crashreport) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index dc7de2b59..39fd42ee2 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -232,7 +232,7 @@ import javax.annotation.Nullable; // Paper
+ import javax.annotation.Nonnull; // Paper
+ 
+ public final class CraftServer implements Server {
+-    private final String serverName = "Paper"; // Paper
++    private final String serverName = "CraftstuebchenPaper"; // Paper
+     private final String serverVersion;
+     private final String bukkitVersion = Versioning.getBukkitVersion();
+     private final Logger logger = Logger.getLogger("Minecraft");
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+index 674096cab..b4b15071b 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+@@ -11,7 +11,7 @@ public final class Versioning {
+     public static String getBukkitVersion() {
+         String result = "Unknown-Version";
+ 
+-        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.destroystokyo.paper/paper-api/pom.properties");
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/de.craftstuebchen.paper/cspaper-api/pom.properties");
+         Properties properties = new Properties();
+ 
+         if (stream != null) {
+-- 
+2.29.2
+

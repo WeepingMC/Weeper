@@ -1,0 +1,44 @@
+From a273aeee89e39679d43b15c67ab8fcfb4ce50880 Mon Sep 17 00:00:00 2001
+From: ysl3000 <yannicklamprecht@live.de>
+Date: Mon, 5 Oct 2020 18:22:56 +0200
+Subject: [PATCH] pom cleanup
+
+get rid of snapshot in favour or nexus repo
+---
+ pom.xml | 15 ++++++---------
+ 1 file changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index 1c33b1f4..ded589e4 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -1,20 +1,17 @@
+-
+ <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+     <modelVersion>4.0.0</modelVersion>
+     <parent>
+-        <groupId>com.destroystokyo.paper</groupId>
+-        <artifactId>paper-parent</artifactId>
+-        <version>dev-SNAPSHOT</version>
++        <groupId>de.craftstuebchen.weeper</groupId>
++        <artifactId>weeper-parent</artifactId>
++        <version>1.16.4-R0.1-SNAPSHOT</version>
++        <relativePath>../pom.xml</relativePath>
+     </parent>
+ 
+-    <groupId>com.destroystokyo.paper</groupId>
+-    <artifactId>paper-api</artifactId>
+-    <version>1.16.4-R0.1-SNAPSHOT</version>
++    <artifactId>weeper-api</artifactId>
+     <packaging>jar</packaging>
+ 
+-    <name>Paper-API</name>
+-    <url>https://github.com/PaperMC/Paper</url>
++    <name>weeper-api</name>
+     <description>An enhanced plugin API for Minecraft servers.</description>
+ 
+     <properties>
+-- 
+2.29.2
+

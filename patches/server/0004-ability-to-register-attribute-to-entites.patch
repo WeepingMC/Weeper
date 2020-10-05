@@ -1,0 +1,61 @@
+From 277ba5a151efc96f5946bfa839b544137faf09e0 Mon Sep 17 00:00:00 2001
+From: ysl3000 <yannicklamprecht@live.de>
+Date: Sat, 24 Oct 2020 16:37:44 +0200
+Subject: [PATCH] ability to register attribute to entites
+
+---
+ src/main/java/net/minecraft/server/AttributeMapBase.java  | 6 ++++++
+ .../bukkit/craftbukkit/attribute/CraftAttributeMap.java   | 8 ++++++++
+ .../org/bukkit/craftbukkit/entity/CraftLivingEntity.java  | 2 ++
+ 3 files changed, 16 insertions(+)
+
+diff --git a/src/main/java/net/minecraft/server/AttributeMapBase.java b/src/main/java/net/minecraft/server/AttributeMapBase.java
+index c57e23e16..c9e098bd4 100644
+--- a/src/main/java/net/minecraft/server/AttributeMapBase.java
++++ b/src/main/java/net/minecraft/server/AttributeMapBase.java
+@@ -130,4 +130,10 @@ public class AttributeMapBase {
+         }
+ 
+     }
++    // CsPaper - start
++    public void registerAttribute(AttributeBase attributeBase){
++        net.minecraft.server.AttributeModifiable attributeModifiable = new net.minecraft.server.AttributeModifiable(attributeBase, net.minecraft.server.AttributeModifiable::getAttribute);
++        b.put(attributeBase, attributeModifiable);
++    }
++    // CsPaper - end
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/attribute/CraftAttributeMap.java b/src/main/java/org/bukkit/craftbukkit/attribute/CraftAttributeMap.java
+index c5dd25add..10c1ce8ec 100644
+--- a/src/main/java/org/bukkit/craftbukkit/attribute/CraftAttributeMap.java
++++ b/src/main/java/org/bukkit/craftbukkit/attribute/CraftAttributeMap.java
+@@ -40,6 +40,14 @@ public class CraftAttributeMap implements Attributable {
+         return (nms == null) ? null : new CraftAttributeInstance(nms, attribute);
+     }
+ 
++    // CsPaper start
++    @Override
++    public void registerAttribute(Attribute attribute) {
++        Preconditions.checkArgument(attribute != null, "attribute");
++        handle.registerAttribute(CraftAttributeMap.toMinecraft(attribute));
++    }
++    // CsPaper end
++
+     public static AttributeBase toMinecraft(Attribute attribute) {
+         return IRegistry.ATTRIBUTE.get(CraftNamespacedKey.toMinecraft(attribute.getKey()));
+     }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+index 1fc356d0b..32ffeb57b 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -665,6 +665,8 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+         return getHandle().craftAttributes.getAttribute(attribute);
+     }
+ 
++    @Override public void registerAttribute(Attribute attribute) { getHandle().craftAttributes.registerAttribute(attribute); } // CsPaper
++
+     @Override
+     public void setAI(boolean ai) {
+         if (this.getHandle() instanceof EntityInsentient) {
+-- 
+2.29.2
+

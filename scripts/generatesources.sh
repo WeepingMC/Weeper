@@ -22,8 +22,12 @@ if [ ! -d ".git" ]; then
 	git init
 fi
 
-rm src/net/minecraft/server/*.java
-cp $basedir/$decompile/net/minecraft/server/*.java src/net/minecraft/server
+rm -f src/net/minecraft/server/*.java
+
+for file in $(find $basedir/$decompile/net/minecraft/server/ -type f -name '*.java')
+do
+	cp $file src/net/minecraft/server
+done
 
 base="$basedir/Paper/Paper-Server/src/main/java/net/minecraft/server"
 cd $basedir/mc-dev/src/net/minecraft/server/

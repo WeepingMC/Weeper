@@ -1,0 +1,42 @@
+From 7c6061d40b78374de0436bf2ba3073ec8bb6e558 Mon Sep 17 00:00:00 2001
+From: ysl3000 <yannicklamprecht@live.de>
+Date: Mon, 19 Oct 2020 16:38:35 +0200
+Subject: [PATCH] possibility to access spawnegg entity spawn location
+
+---
+ .../java/org/bukkit/inventory/meta/SpawnEggMeta.java   | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/src/main/java/org/bukkit/inventory/meta/SpawnEggMeta.java b/src/main/java/org/bukkit/inventory/meta/SpawnEggMeta.java
+index 9ae84de4..b96f512c 100644
+--- a/src/main/java/org/bukkit/inventory/meta/SpawnEggMeta.java
++++ b/src/main/java/org/bukkit/inventory/meta/SpawnEggMeta.java
+@@ -1,8 +1,12 @@
+ package org.bukkit.inventory.meta;
+ 
++import org.bukkit.Location;
++import org.bukkit.World;
+ import org.bukkit.entity.EntityType;
++import org.bukkit.util.Vector;
+ import org.jetbrains.annotations.Contract;
+ import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.Nullable;
+ 
+ /**
+  * Represents a spawn egg and it's spawned type.
+@@ -30,6 +34,12 @@ public interface SpawnEggMeta extends ItemMeta {
+     @Contract("_ -> fail")
+     void setSpawnedType(EntityType type);
+ 
++    @Nullable
++    Location getSpawnLocation(World world);
++
++    @Nullable
++    Vector getVelocity();
++
+     @NotNull
+     @Override
+     SpawnEggMeta clone();
+-- 
+2.29.2
+

@@ -1,0 +1,30 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+stages:
+  - cleanup
+  - test
+  - build
+  - publish
+
+build:
+  stage: build
+  script:
+    - "git submodule update --init --recursive"
+    - "./weeper up"
+    - "./weeper patch"
+    - "./weeper build"
+    - "./weeper pc"
+    - "scp Weeper-Server/target/weeper-*.jar dev:"
+  artifacts:
+    paths:
+        - "Weeper-API/target/weeper-api-*-shaded.jar"
+    expire_in: 1 day
+
+deploy:
+  stage: publish
+  script:
+    - "mvn deploy"
+  only:
+    - release
+    - tags
