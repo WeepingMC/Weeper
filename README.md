@@ -75,16 +75,16 @@ Takes current patches/{bukkit,craftbukkit} and applys them on latest spigot upst
   2. `git fetch origin`
   3. `git pull origin master --ff`
   4. `cd ..`
-  5. `./concrete up`
-  6. `./concrete patch`
+  5. `./weeper up`
+  6. `./weeper patch`
   	1. 
-  7. `./concrete build`
+  7. `./weeper build`
 
 
 ## Adding patches
 
  Follow https://github.com/PaperMC/Paper/blob/master/CONTRIBUTING.md#adding-patches
- instead of `./paper rebuild` run `./concrete rb`
+ instead of `./paper rebuild` run `./weeper rb`
 
 
 ## Addition info
