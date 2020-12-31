@@ -11,15 +11,13 @@ paperjar="$basedir/${FORK_NAME}-Server/target/${DOWN_FORK_NAME}-server-$mcver.ja
 vanillajar="$workdir/Minecraft/$mcver/$mcver.jar"
 echo "$paperjar"
 
-clipName="$(echo "${FORK_NAME}" | tr '[:upper:]' '[:lower:]')clip.jar"
+clipName="$(echo "${FORK_NAME}" | tr '[:upper:]' '[:lower:]')clip-$mcver.jar"
 
-#sed -i '/.*clip.jar$/d' .gitignore
-printf '%s' "$clipName" >> .gitignore
 (
     cd "$workdir/Paperclip"
     mvn clean package "-Dmcver=$mcver" "-Dpaperjar=$paperjar" "-Dvanillajar=$vanillajar"
 )
-#cp "$workdir/Paperclip/assembly/target/paperclip-${mcver}.jar" "$basedir/$clipName"
+cp "$workdir/Paperclip/assembly/target/paperclip-${mcver}.jar" "$basedir/$clipName"
 
 echo ""
 echo ""

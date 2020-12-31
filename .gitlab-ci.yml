@@ -15,10 +15,10 @@ build:
     - "./weeper patch"
     - "./weeper build"
     - "./weeper pc"
-    - "scp Weeper-Server/target/weeper-*.jar dev:"
   artifacts:
     paths:
         - "Weeper-API/target/weeper-api-*-shaded.jar"
+        - "weeperclip-*.jar"
     expire_in: 1 day
 
 deploy:
