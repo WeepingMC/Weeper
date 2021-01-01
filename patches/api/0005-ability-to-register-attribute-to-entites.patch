@@ -1,4 +1,4 @@
-From a02abdb37d1463c815562adebe9cf22e7977e364 Mon Sep 17 00:00:00 2001
+From d4585f20f34cb4ca2f182366b527ea65cb37211c Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Sat, 24 Oct 2020 16:37:21 +0200
 Subject: [PATCH] ability to register attribute to entites
