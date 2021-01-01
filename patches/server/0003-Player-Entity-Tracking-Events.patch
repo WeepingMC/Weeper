@@ -1,0 +1,69 @@
+From 21420df8852dcb8b3b8a7c7a908b85bd60744e43 Mon Sep 17 00:00:00 2001
+From: ysl3000 <yannicklamprecht@live.de>
+Date: Mon, 12 Oct 2020 23:11:41 +0200
+Subject: [PATCH] Player Entity Tracking Events
+
+---
+ src/main/java/net/minecraft/server/EntityPlayer.java       | 6 +++++-
+ src/main/java/net/minecraft/server/EntityTrackerEntry.java | 7 ++++++-
+ 2 files changed, 11 insertions(+), 2 deletions(-)
+
+diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
+index 7240b885d..e6511b4fe 100644
+--- a/src/main/java/net/minecraft/server/EntityPlayer.java
++++ b/src/main/java/net/minecraft/server/EntityPlayer.java
+@@ -18,6 +18,7 @@ import java.util.UUID;
+ import javax.annotation.Nullable;
+ import io.papermc.paper.event.packet.PlayerChunkLoadEvent; // Paper
+ import io.papermc.paper.event.packet.PlayerChunkUnloadEvent; // Paper
++import io.papermc.paper.event.packet.PlayerUntrackEntityEvent; // Paper
+ import org.apache.logging.log4j.LogManager;
+ import org.apache.logging.log4j.Logger;
+ 
+@@ -479,7 +480,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+ 
+             Integer integer;
+             while (j < i && (integer = this.removeQueue.poll()) != null) {
+-                aint[j++] = integer.intValue();
++                int entityId = integer.intValue();
++                aint[j++] = entityId;
++                new PlayerUntrackEntityEvent(getBukkitEntity(), entityId, world.getEntity(entityId) != null ? world.getEntity(entityId).getBukkitEntity() : null).callEvent();
+             }
+             // Paper end
+ 
+@@ -1738,6 +1741,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+     public void c(Entity entity) {
+         if (entity instanceof EntityHuman) {
+             this.playerConnection.sendPacket(new PacketPlayOutEntityDestroy(new int[]{entity.getId()}));
++            new PlayerUntrackEntityEvent(getBukkitEntity(), entity.getId(), entity.getBukkitEntity()).callEvent(); // Paper
+         } else {
+             this.removeQueue.add((Integer) entity.getId()); // CraftBukkit - decompile error
+         }
+diff --git a/src/main/java/net/minecraft/server/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+index 4efc40c01..57db43efc 100644
+--- a/src/main/java/net/minecraft/server/EntityTrackerEntry.java
++++ b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
+@@ -2,6 +2,7 @@ package net.minecraft.server;
+ 
+ import com.google.common.collect.Lists;
+ import com.mojang.datafixers.util.Pair;
++import io.papermc.paper.event.packet.PlayerTrackEntityEvent; // Paper
+ import java.util.Collection;
+ import java.util.Collections;
+ import java.util.HashSet;
+@@ -282,7 +283,11 @@ public class EntityTrackerEntry {
+         Packet<?> packet = this.tracker.P();
+ 
+         this.headYaw = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
+-        consumer.accept(packet);
++        // Paper start
++        if (PlayerTrackEntityEvent.getHandlerList().getRegisteredListeners().length == 0 || new PlayerTrackEntityEvent(entityplayer.getBukkitEntity(), tracker.getBukkitEntity()).callEvent()) {
++            consumer.accept(packet);
++        }
++        // Paper end
+         if (!this.tracker.getDataWatcher().d()) {
+             consumer.accept(new PacketPlayOutEntityMetadata(this.tracker.getId(), this.tracker.getDataWatcher(), true));
+         }
+-- 
+2.29.2
+
