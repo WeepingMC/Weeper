@@ -1,4 +1,4 @@
-From 3a40a1533aec29d74399b16513c03c7c38be3546 Mon Sep 17 00:00:00 2001
+From 7301de1975d488882e965c38a6a562dd105d665f Mon Sep 17 00:00:00 2001
 From: Yannick Lamprecht <yannicklamprecht@live.de>
 Date: Fri, 1 Jan 2021 19:00:36 +0100
 Subject: [PATCH] rip out legacy classes
@@ -12,7 +12,7 @@ Subject: [PATCH] rip out legacy classes
  .../craftbukkit/CraftChunkSnapshot.java       |   7 -
  .../org/bukkit/craftbukkit/CraftEffect.java   |   8 +-
  .../org/bukkit/craftbukkit/CraftParticle.java |  12 +-
- .../org/bukkit/craftbukkit/CraftServer.java   |  11 -
+ .../org/bukkit/craftbukkit/CraftServer.java   |  13 +-
  .../org/bukkit/craftbukkit/CraftWorld.java    |  28 +-
  .../bukkit/craftbukkit/block/CraftBanner.java |   9 +-
  .../bukkit/craftbukkit/block/CraftBlock.java  |  25 +-
@@ -43,7 +43,7 @@ Subject: [PATCH] rip out legacy classes
  .../craftbukkit/generator/CraftChunkData.java |  22 -
  .../craftbukkit/inventory/CraftInventory.java |   7 -
  .../inventory/CraftItemFactory.java           |   3 -
- .../craftbukkit/inventory/CraftItemStack.java |  12 +-
+ .../craftbukkit/inventory/CraftItemStack.java |  38 +-
  .../inventory/CraftMetaBanner.java            |  10 +-
  .../inventory/CraftMetaBlockState.java        |   2 +-
  .../craftbukkit/inventory/CraftMetaItem.java  |  13 +-
@@ -63,11 +63,12 @@ Subject: [PATCH] rip out legacy classes
  src/test/java/org/bukkit/ParticleTest.java    |   3 -
  src/test/java/org/bukkit/PerMaterialTest.java |  28 +-
  .../DeprecatedItemMetaCustomValueTest.java    | 313 -------------
- .../inventory/NMSCraftItemStackTest.java      |   1 -
+ .../craftbukkit/inventory/ItemMetaTest.java   |   9 -
+ .../inventory/NMSCraftItemStackTest.java      |   2 -
  .../bukkit/craftbukkit/legacy/EvilTest.java   |  23 -
  .../bukkit/craftbukkit/legacy/LegacyTest.java | 128 -----
  .../bukkit/support/AbstractTestingBase.java   |   2 +-
- 63 files changed, 178 insertions(+), 1916 deletions(-)
+ 64 files changed, 183 insertions(+), 1949 deletions(-)
  delete mode 100644 src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedContainerTagType.java
  delete mode 100644 src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedCustomTagContainer.java
  delete mode 100644 src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedItemAdapterContext.java
@@ -402,7 +403,7 @@ index 54800bbed..18092602d 100644
              BlockData data = (BlockData) obj;
              return new ParticleParamBlock((net.minecraft.server.Particle<ParticleParamBlock>) nms, ((CraftBlockData) data).getState());
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 326fc35b5..ba3e9d929 100644
+index 326fc35b5..42c5a3d98 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -181,7 +181,6 @@ import org.bukkit.entity.Entity;
@@ -429,6 +430,15 @@ index 326fc35b5..ba3e9d929 100644
          MobEffects.BLINDNESS.getClass();
          PotionEffectType.stopAcceptingRegistrations();
          // Ugly hack :(
+@@ -1324,7 +1321,7 @@ public final class CraftServer implements Server {
+             if (stack.getType() != result.getType()) {
+                 continue;
+             }
+-            if (result.getDurability() == -1 || result.getDurability() == stack.getDurability()) {
++            if(recipe.getResult().equals(results)){
+                 results.add(recipe);
+             }
+         }
 @@ -1919,14 +1916,6 @@ public final class CraftServer implements Server {
  
      public List<String> tabCompleteChat(Player player, String message) {
@@ -1501,7 +1511,7 @@ index af84813c7..150d1d046 100644
          case AIR:
              return null;
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
-index addb8ef99..759b6a170 100644
+index addb8ef99..5d0530036 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
 @@ -11,13 +11,11 @@ import org.apache.commons.lang.Validate;
@@ -1527,7 +1537,28 @@ index addb8ef99..759b6a170 100644
  
          if (item == null) {
              return net.minecraft.server.ItemStack.b;
-@@ -105,11 +103,6 @@ public final class CraftItemStack extends ItemStack {
+@@ -81,7 +79,7 @@ public final class CraftItemStack extends ItemStack {
+     }
+ 
+     public static CraftItemStack asNewCraftStack(Item item, int amount) {
+-        return new CraftItemStack(CraftMagicNumbers.getMaterial(item), amount, (short) 0, null);
++        return new CraftItemStack(CraftMagicNumbers.getMaterial(item), amount, null);
+     }
+ 
+     net.minecraft.server.ItemStack handle;
+@@ -95,21 +93,15 @@ public final class CraftItemStack extends ItemStack {
+     }
+ 
+     private CraftItemStack(ItemStack item) {
+-        this(item.getType(), item.getAmount(), item.getDurability(), item.hasItemMeta() ? item.getItemMeta() : null);
++        this(item.getType(), item.getAmount(), item.hasItemMeta() ? item.getItemMeta() : null);
+     }
+ 
+-    private CraftItemStack(Material type, int amount, short durability, ItemMeta itemMeta) {
++    private CraftItemStack(Material type, int amount, ItemMeta itemMeta) {
+         setType(type);
+         setAmount(amount);
+-        setDurability(durability);
          setItemMeta(itemMeta);
      }
  
@@ -1539,7 +1570,7 @@ index addb8ef99..759b6a170 100644
      @Override
      public Material getType() {
          return handle != null ? CraftMagicNumbers.getMaterial(handle.getItem()) : Material.AIR;
-@@ -132,7 +125,6 @@ public final class CraftItemStack extends ItemStack {
+@@ -132,7 +124,6 @@ public final class CraftItemStack extends ItemStack {
                  setItemMeta(handle, getItemMeta(handle));
              }
          }
@@ -1547,15 +1578,41 @@ index addb8ef99..759b6a170 100644
      }
  
      @Override
-@@ -561,7 +553,7 @@ public final class CraftItemStack extends ItemStack {
+@@ -152,23 +143,6 @@ public final class CraftItemStack extends ItemStack {
+         }
+     }
+ 
+-    @Override
+-    public void setDurability(final short durability) {
+-        // Ignore damage if item is null
+-        if (handle != null) {
+-            handle.setDamage(durability);
+-        }
+-    }
+-
+-    @Override
+-    public short getDurability() {
+-        if (handle != null) {
+-            return (short) handle.getDamage();
+-        } else {
+-            return -1;
+-        }
+-    }
+-
+     @Override
+     public int getMaxStackSize() {
+         return (handle == null) ? Material.AIR.getMaxStackSize() : handle.getItem().getMaxStackSize();
+@@ -561,8 +535,8 @@ public final class CraftItemStack extends ItemStack {
          if (handle == null || that.handle == null) {
              return false;
          }
 -        Material comparisonType = CraftLegacy.fromLegacy(that.getType()); // This may be called from legacy item stacks, try to get the right material
+-        if (!(comparisonType == getType() && getDurability() == that.getDurability())) {
 +        Material comparisonType = that.getType();
-         if (!(comparisonType == getType() && getDurability() == that.getDurability())) {
++        if (comparisonType != getType()) {
              return false;
          }
+         return hasItemMeta() ? that.hasItemMeta() && handle.getTag().equals(that.handle.getTag()) : !that.hasItemMeta();
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBanner.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBanner.java
 index 87a19622c..49c144cc3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBanner.java
@@ -3318,13 +3375,36 @@ index 0ab65ac73..000000000
 -        }
 -    }
 -}
+diff --git a/src/test/java/org/bukkit/craftbukkit/inventory/ItemMetaTest.java b/src/test/java/org/bukkit/craftbukkit/inventory/ItemMetaTest.java
+index b0edd62eb..f1643254f 100644
+--- a/src/test/java/org/bukkit/craftbukkit/inventory/ItemMetaTest.java
++++ b/src/test/java/org/bukkit/craftbukkit/inventory/ItemMetaTest.java
+@@ -100,16 +100,7 @@ public class ItemMetaTest extends AbstractTestingBase {
+     private void testItemMeta(ItemStack stack) {
+         assertThat("Should not have ItemMeta", stack.hasItemMeta(), is(false));
+ 
+-        stack.setDurability((short) 0);
+-        assertThat("ItemStack with zero durability should not have ItemMeta", stack.hasItemMeta(), is(false));
+-
+-        stack.setDurability((short) 2);
+-        assertThat("ItemStack with non-zero durability should have ItemMeta", stack.hasItemMeta(), is(true));
+-
+         stack.setLore(Collections.singletonList("Lore"));
+-        assertThat("ItemStack with lore and durability should have ItemMeta", stack.hasItemMeta(), is(true));
+-
+-        stack.setDurability((short) 0);
+         assertThat("ItemStack with lore should have ItemMeta", stack.hasItemMeta(), is(true));
+ 
+         stack.setLore(null);
 diff --git a/src/test/java/org/bukkit/craftbukkit/inventory/NMSCraftItemStackTest.java b/src/test/java/org/bukkit/craftbukkit/inventory/NMSCraftItemStackTest.java
-index 5f5781230..22f8f4e9c 100644
+index 5f5781230..dad37abf2 100644
 --- a/src/test/java/org/bukkit/craftbukkit/inventory/NMSCraftItemStackTest.java
 +++ b/src/test/java/org/bukkit/craftbukkit/inventory/NMSCraftItemStackTest.java
-@@ -19,7 +19,6 @@ public class NMSCraftItemStackTest extends AbstractTestingBase {
+@@ -17,9 +17,7 @@ public class NMSCraftItemStackTest extends AbstractTestingBase {
+         ItemStack clone = itemStack.clone();
+         assertThat(clone.getType(), is(itemStack.getType()));
          assertThat(clone.getAmount(), is(itemStack.getAmount()));
-         assertThat(clone.getDurability(), is(itemStack.getDurability()));
+-        assertThat(clone.getDurability(), is(itemStack.getDurability()));
          assertThat(clone.getEnchantments(), is(itemStack.getEnchantments()));
 -        assertThat(clone.getData(), is(itemStack.getData()));
          assertThat(clone, is(itemStack));

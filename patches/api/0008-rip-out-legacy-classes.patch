@@ -1,4 +1,4 @@
-From 2ea654a50d589f6553e793ad554913597c76adce Mon Sep 17 00:00:00 2001
+From adcadc0d59ec622ffae5c508c30c4f520063979c Mon Sep 17 00:00:00 2001
 From: Yannick Lamprecht <yannicklamprecht@live.de>
 Date: Fri, 1 Jan 2021 17:55:25 +0100
 Subject: [PATCH] rip out legacy classes
@@ -39,9 +39,10 @@ Subject: [PATCH] rip out legacy classes
  .../event/player/PlayerPreLoginEvent.java     |   166 -
  .../org/bukkit/generator/ChunkGenerator.java  |    56 -
  .../org/bukkit/inventory/FurnaceRecipe.java   |    38 +-
- .../java/org/bukkit/inventory/ItemStack.java  |    83 +-
+ .../java/org/bukkit/inventory/ItemStack.java  |   128 +-
+ .../org/bukkit/inventory/RecipeChoice.java    |     9 +-
  .../org/bukkit/inventory/ShapedRecipe.java    |    14 -
- .../org/bukkit/inventory/ShapelessRecipe.java |    53 -
+ .../org/bukkit/inventory/ShapelessRecipe.java |    91 +-
  .../org/bukkit/inventory/meta/ItemMeta.java   |    19 -
  .../meta/tags/CustomItemTagContainer.java     |   111 -
  .../meta/tags/ItemTagAdapterContext.java      |    24 -
@@ -114,7 +115,7 @@ Subject: [PATCH] rip out legacy classes
  src/test/java/org/bukkit/MaterialTest.java    |    18 -
  .../event/PlayerChatTabCompleteEventTest.java |    26 -
  .../bukkit/materials/MaterialDataTest.java    |   427 -
- 110 files changed, 6844 insertions(+), 17717 deletions(-)
+ 111 files changed, 6849 insertions(+), 17804 deletions(-)
  delete mode 100644 src/main/java/org/bukkit/SkullType.java
  delete mode 100644 src/main/java/org/bukkit/entity/LingeringPotion.java
  delete mode 100644 src/main/java/org/bukkit/entity/SplashPotion.java
@@ -17405,7 +17406,7 @@ index 1d442dc1..10bdaf1a 100644
      @Override
      public FurnaceRecipe setInput(@NotNull Material input) {
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index ccd81fca..4abc90b6 100644
+index ccd81fca..a53305ce 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
 @@ -14,7 +14,6 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -17424,8 +17425,11 @@ index ccd81fca..4abc90b6 100644
      private ItemMeta meta;
  
      @Utility
-@@ -70,27 +68,12 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
-      * @deprecated see {@link #setDurability(short)}
+@@ -67,30 +65,11 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
+      * @param type item material
+      * @param amount stack size
+      * @param damage durability / damage
+-     * @deprecated see {@link #setDurability(short)}
       */
      public ItemStack(@NotNull final Material type, final int amount, final short damage) {
 -        this(type, amount, damage, null);
@@ -17443,16 +17447,16 @@ index ccd81fca..4abc90b6 100644
          Validate.notNull(type, "Material cannot be null");
          this.type = type;
          this.amount = amount;
-         if (damage != 0) {
-             setDurability(damage);
-         }
+-        if (damage != 0) {
+-            setDurability(damage);
+-        }
 -        if (data != null) {
 -            createData(data);
 -        }
      }
  
      /**
-@@ -104,9 +87,6 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
+@@ -104,9 +83,6 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
          Validate.notNull(stack, "Cannot copy null stack");
          this.type = stack.getType();
          this.amount = stack.getAmount();
@@ -17462,7 +17466,7 @@ index ccd81fca..4abc90b6 100644
          if (stack.hasItemMeta()) {
              setItemMeta0(stack.getItemMeta(), type);
          }
-@@ -141,11 +121,6 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
+@@ -141,11 +117,6 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
          if (this.meta != null) {
              this.meta = Bukkit.getItemFactory().asMetaFor(meta, type);
          }
@@ -17474,7 +17478,7 @@ index ccd81fca..4abc90b6 100644
      }
  
      /**
-@@ -166,40 +141,6 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
+@@ -166,71 +137,6 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
          this.amount = amount;
      }
  
@@ -17512,10 +17516,41 @@ index ccd81fca..4abc90b6 100644
 -        }
 -    }
 -
+-    /**
+-     * Sets the durability of this item
+-     *
+-     * @param durability Durability of this item
+-     * @deprecated durability is now part of ItemMeta. To avoid confusion and
+-     * misuse, {@link #getItemMeta()}, {@link #setItemMeta(ItemMeta)} and
+-     * {@link Damageable#setDamage(int)} should be used instead. This is because
+-     * any call to this method will be overwritten by subsequent setting of
+-     * ItemMeta which was created before this call.
+-     */
+-    @Deprecated
+-    public void setDurability(final short durability) {
+-        ItemMeta meta = getItemMeta();
+-        if (meta != null) {
+-            ((Damageable) meta).setDamage(durability);
+-            setItemMeta(meta);
+-        }
+-    }
+-
+-    /**
+-     * Gets the durability of this item
+-     *
+-     * @return Durability of this item
+-     * @deprecated see {@link #setDurability(short)}
+-     */
+-    @Deprecated
+-    public short getDurability() {
+-        ItemMeta meta = getItemMeta();
+-        return (meta == null) ? 0 : (short) ((Damageable) meta).getDamage();
+-    }
+-
      /**
-      * Sets the durability of this item
-      *
-@@ -246,10 +187,6 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
+      * Get the maximum stacksize for the material hold in this ItemStack.
+      * (Returns -1 if it has no idea)
+@@ -246,10 +152,6 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
          return -1;
      }
  
@@ -17526,16 +17561,18 @@ index ccd81fca..4abc90b6 100644
      @Override
      @Utility
      public String toString() {
-@@ -289,7 +226,7 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
+@@ -289,8 +191,8 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
          if (stack == this) {
              return true;
          }
 -        Material comparisonType = (this.type.isLegacy()) ? Bukkit.getUnsafe().fromLegacy(this.getData(), true) : this.type; // This may be called from legacy item stacks, try to get the right material
+-        return comparisonType == stack.getType() && getDurability() == stack.getDurability() && hasItemMeta() == stack.hasItemMeta() && (hasItemMeta() ? Bukkit.getItemFactory().equals(getItemMeta(), stack.getItemMeta()) : true);
 +        Material comparisonType = this.type; // This may be called from legacy item stacks, try to get the right material
-         return comparisonType == stack.getType() && getDurability() == stack.getDurability() && hasItemMeta() == stack.hasItemMeta() && (hasItemMeta() ? Bukkit.getItemFactory().equals(getItemMeta(), stack.getItemMeta()) : true);
++        return comparisonType == stack.getType() && hasItemMeta() == stack.hasItemMeta() && (hasItemMeta() ? Bukkit.getItemFactory().equals(getItemMeta(), stack.getItemMeta()) : true);
      }
  
-@@ -303,10 +240,6 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
+     @NotNull
+@@ -303,10 +205,6 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
                  itemStack.meta = this.meta.clone();
              }
  
@@ -17546,18 +17583,26 @@ index ccd81fca..4abc90b6 100644
              return itemStack;
          } catch (CloneNotSupportedException e) {
              throw new Error(e);
-@@ -489,20 +422,8 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
+@@ -320,7 +218,6 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
+ 
+         hash = hash * 31 + getType().hashCode();
+         hash = hash * 31 + getAmount();
+-        hash = hash * 31 + (getDurability() & 0xffff);
+         hash = hash * 31 + (hasItemMeta() ? (meta == null ? getItemMeta().hashCode() : meta.hashCode()) : 0);
+ 
+         return hash;
+@@ -489,20 +386,8 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
              damage = ((Number) args.get("damage")).shortValue();
          }
  
 -        Material type;
 -        if (version < 0) {
 -            type = Material.getMaterial(Material.LEGACY_PREFIX + (String) args.get("type"));
--
--            byte dataVal = (type != null && type.getMaxDurability() == 0) ? (byte) damage : 0; // Actually durable items get a 0 passed into conversion
--            type = Bukkit.getUnsafe().fromLegacy(new MaterialData(type, dataVal), true);
 +        Material type = Bukkit.getUnsafe().getMaterial((String) args.get("type"), version);
  
+-            byte dataVal = (type != null && type.getMaxDurability() == 0) ? (byte) damage : 0; // Actually durable items get a 0 passed into conversion
+-            type = Bukkit.getUnsafe().fromLegacy(new MaterialData(type, dataVal), true);
+-
 -            // We've converted now so the data val isn't a thing and can be reset
 -            if (dataVal != 0) {
 -                damage = 0;
@@ -17568,6 +17613,40 @@ index ccd81fca..4abc90b6 100644
  
          if (args.containsKey("amount")) {
              amount = ((Number) args.get("amount")).intValue();
+@@ -532,13 +417,6 @@ public class ItemStack implements Cloneable, ConfigurationSerializable {
+             }
+         }
+ 
+-        if (version < 0) {
+-            // Set damage again incase meta overwrote it
+-            if (args.containsKey("damage")) {
+-                result.setDurability(damage);
+-            }
+-        }
+-
+         return result.ensureServerConversions(); // Paper
+     }
+ 
+diff --git a/src/main/java/org/bukkit/inventory/RecipeChoice.java b/src/main/java/org/bukkit/inventory/RecipeChoice.java
+index 3d325cab..1c943aa8 100644
+--- a/src/main/java/org/bukkit/inventory/RecipeChoice.java
++++ b/src/main/java/org/bukkit/inventory/RecipeChoice.java
+@@ -85,14 +85,7 @@ public interface RecipeChoice extends Predicate<ItemStack>, Cloneable {
+         @NotNull
+         @Override
+         public ItemStack getItemStack() {
+-            ItemStack stack = new ItemStack(choices.get(0));
+-
+-            // For compat
+-            if (choices.size() > 1) {
+-                stack.setDurability(Short.MAX_VALUE);
+-            }
+-
+-            return stack;
++            return new ItemStack(choices.get(0));
+         }
+ 
+         @NotNull
 diff --git a/src/main/java/org/bukkit/inventory/ShapedRecipe.java b/src/main/java/org/bukkit/inventory/ShapedRecipe.java
 index 222a12ba..9b132555 100644
 --- a/src/main/java/org/bukkit/inventory/ShapedRecipe.java
@@ -17608,18 +17687,19 @@ index 222a12ba..9b132555 100644
       * Sets the material that a character in the recipe shape refers to.
       *
 diff --git a/src/main/java/org/bukkit/inventory/ShapelessRecipe.java b/src/main/java/org/bukkit/inventory/ShapelessRecipe.java
-index ddcf84e6..37937deb 100644
+index ddcf84e6..9739f9f7 100644
 --- a/src/main/java/org/bukkit/inventory/ShapelessRecipe.java
 +++ b/src/main/java/org/bukkit/inventory/ShapelessRecipe.java
-@@ -9,7 +9,6 @@ import org.apache.commons.lang.Validate;
+@@ -9,7 +9,7 @@ import org.apache.commons.lang.Validate;
  import org.bukkit.Keyed;
  import org.bukkit.Material;
  import org.bukkit.NamespacedKey;
 -import org.bukkit.material.MaterialData;
++import org.bukkit.inventory.RecipeChoice.MaterialChoice;
  import org.jetbrains.annotations.NotNull;
  
  /**
-@@ -38,10 +37,8 @@ public class ShapelessRecipe implements Recipe, Keyed {
+@@ -38,10 +38,8 @@ public class ShapelessRecipe implements Recipe, Keyed {
       * @param key the unique recipe key
       * @param result The item you want the recipe to create.
       * @see ShapelessRecipe#addIngredient(Material)
@@ -17630,7 +17710,7 @@ index ddcf84e6..37937deb 100644
       * @see ShapelessRecipe#addIngredient(int,Material,int)
       */
      public ShapelessRecipe(@NotNull NamespacedKey key, @NotNull ItemStack result) {
-@@ -50,17 +47,6 @@ public class ShapelessRecipe implements Recipe, Keyed {
+@@ -50,17 +48,6 @@ public class ShapelessRecipe implements Recipe, Keyed {
          this.output = new ItemStack(result);
      }
  
@@ -17648,7 +17728,7 @@ index ddcf84e6..37937deb 100644
      /**
       * Adds the specified ingredient.
       *
-@@ -86,18 +72,6 @@ public class ShapelessRecipe implements Recipe, Keyed {
+@@ -86,18 +73,6 @@ public class ShapelessRecipe implements Recipe, Keyed {
          return addIngredient(1, ingredient, rawdata);
      }
  
@@ -17667,10 +17747,13 @@ index ddcf84e6..37937deb 100644
      /**
       * Adds multiples of the specified ingredient.
       *
-@@ -203,19 +177,6 @@ public class ShapelessRecipe implements Recipe, Keyed {
-         return removeIngredient(ingredient, 0);
-     }
- 
+@@ -200,20 +175,7 @@ public class ShapelessRecipe implements Recipe, Keyed {
+      */
+     @NotNull
+     public ShapelessRecipe removeIngredient(@NotNull Material ingredient) {
+-        return removeIngredient(ingredient, 0);
+-    }
+-
 -    /**
 -     * Removes an ingredient from the list. If the ingredient occurs multiple
 -     * times, only one instance of it is removed. If the data value is -1,
@@ -17682,15 +17765,17 @@ index ddcf84e6..37937deb 100644
 -    @NotNull
 -    public ShapelessRecipe removeIngredient(@NotNull MaterialData ingredient) {
 -        return removeIngredient(ingredient.getItemType(), ingredient.getData());
--    }
--
-     /**
-      * Removes multiple instances of an ingredient from the list. If there are
-      * less instances then specified, all will be removed. Only removes exact
-@@ -230,20 +191,6 @@ public class ShapelessRecipe implements Recipe, Keyed {
-         return removeIngredient(count, ingredient, 0);
++        return removeIngredient(new MaterialChoice(ingredient));
      }
  
+     /**
+@@ -227,57 +189,10 @@ public class ShapelessRecipe implements Recipe, Keyed {
+      */
+     @NotNull
+     public ShapelessRecipe removeIngredient(int count, @NotNull Material ingredient) {
+-        return removeIngredient(count, ingredient, 0);
+-    }
+-
 -    /**
 -     * Removes multiple instances of an ingredient from the list. If there are
 -     * less instances then specified, all will be removed. If the data value
@@ -17705,9 +17790,44 @@ index ddcf84e6..37937deb 100644
 -        return removeIngredient(count, ingredient.getItemType(), ingredient.getData());
 -    }
 -
-     /**
-      * Removes an ingredient from the list. If the ingredient occurs multiple
-      * times, only one instance of it is removed. If the data value is -1,
+-    /**
+-     * Removes an ingredient from the list. If the ingredient occurs multiple
+-     * times, only one instance of it is removed. If the data value is -1,
+-     * only ingredients with a -1 data value will be removed.
+-     *
+-     * @param ingredient The ingredient to remove
+-     * @param rawdata The data value;
+-     * @return The changed recipe.
+-     * @deprecated Magic value
+-     */
+-    @Deprecated
+-    @NotNull
+-    public ShapelessRecipe removeIngredient(@NotNull Material ingredient, int rawdata) {
+-        return removeIngredient(1, ingredient, rawdata);
+-    }
+-
+-    /**
+-     * Removes multiple instances of an ingredient from the list. If there are
+-     * less instances then specified, all will be removed. If the data value
+-     * is -1, only ingredients with a -1 data value will be removed.
+-     *
+-     * @param count The number of copies to remove.
+-     * @param ingredient The ingredient to remove.
+-     * @param rawdata The data value.
+-     * @return The changed recipe.
+-     * @deprecated Magic value
+-     */
+-    @Deprecated
+-    @NotNull
+-    public ShapelessRecipe removeIngredient(int count, @NotNull Material ingredient, int rawdata) {
+         Iterator<RecipeChoice> iterator = ingredients.iterator();
+         while (count > 0 && iterator.hasNext()) {
+             ItemStack stack = iterator.next().getItemStack();
+-            if (stack.getType() == ingredient && stack.getDurability() == rawdata) {
++            if (stack.getType() == ingredient) {
+                 iterator.remove();
+                 count--;
+             }
 diff --git a/src/main/java/org/bukkit/inventory/meta/ItemMeta.java b/src/main/java/org/bukkit/inventory/meta/ItemMeta.java
 index 5db838ca..d67df75b 100644
 --- a/src/main/java/org/bukkit/inventory/meta/ItemMeta.java
