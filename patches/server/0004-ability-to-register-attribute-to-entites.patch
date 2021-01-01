@@ -1,4 +1,4 @@
-From 8d3cb7f6c93de804c4004641f7f33336519aa7ef Mon Sep 17 00:00:00 2001
+From 5cd61e472d76ade06130ebaf4c1cfd8a8e2c2146 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Sat, 24 Oct 2020 16:37:44 +0200
 Subject: [PATCH] ability to register attribute to entites
@@ -6,8 +6,8 @@ Subject: [PATCH] ability to register attribute to entites
 ---
  src/main/java/net/minecraft/server/AttributeMapBase.java  | 6 ++++++
  .../bukkit/craftbukkit/attribute/CraftAttributeMap.java   | 8 ++++++++
- .../org/bukkit/craftbukkit/entity/CraftLivingEntity.java  | 2 ++
- 3 files changed, 16 insertions(+)
+ .../org/bukkit/craftbukkit/entity/CraftLivingEntity.java  | 7 +++++++
+ 3 files changed, 21 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/AttributeMapBase.java b/src/main/java/net/minecraft/server/AttributeMapBase.java
 index c57e23e16..f93d89b7c 100644
@@ -44,14 +44,19 @@ index c5dd25add..5c647eae8 100644
          return IRegistry.ATTRIBUTE.get(CraftNamespacedKey.toMinecraft(attribute.getKey()));
      }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-index 16e69cfd4..3ac1668ab 100644
+index 16e69cfd4..1e6f15769 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
-@@ -665,6 +665,8 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+@@ -665,6 +665,13 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
          return getHandle().craftAttributes.getAttribute(attribute);
      }
  
-+    @Override public void registerAttribute(Attribute attribute) { getHandle().craftAttributes.registerAttribute(attribute); } // Weeper
++    // Weeper start
++    @Override
++    public void registerAttribute(Attribute attribute) {
++        getHandle().craftAttributes.registerAttribute(attribute);
++    }
++    // Weeper end
 +
      @Override
      public void setAI(boolean ai) {
