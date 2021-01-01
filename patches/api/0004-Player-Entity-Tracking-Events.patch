@@ -1,4 +1,4 @@
-From 41490145719aa69ccba930a9e4c4c1e8af1263bd Mon Sep 17 00:00:00 2001
+From 2834123fefc049ec514dd83901c9c05c1de58c12 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 12 Oct 2020 23:06:57 +0200
 Subject: [PATCH] Player Entity Tracking Events
@@ -7,16 +7,16 @@ Subject: [PATCH] Player Entity Tracking Events
  .../event/packet/PlayerTrackEntityEvent.java  | 64 +++++++++++++++++++
  .../packet/PlayerUntrackEntityEvent.java      | 55 ++++++++++++++++
  2 files changed, 119 insertions(+)
- create mode 100644 src/main/java/io/papermc/paper/event/packet/PlayerTrackEntityEvent.java
- create mode 100644 src/main/java/io/papermc/paper/event/packet/PlayerUntrackEntityEvent.java
+ create mode 100644 src/main/java/de/craftstuebchen/weepermc/event/packet/PlayerTrackEntityEvent.java
+ create mode 100644 src/main/java/de/craftstuebchen/weepermc/event/packet/PlayerUntrackEntityEvent.java
 
-diff --git a/src/main/java/io/papermc/paper/event/packet/PlayerTrackEntityEvent.java b/src/main/java/io/papermc/paper/event/packet/PlayerTrackEntityEvent.java
+diff --git a/src/main/java/de/craftstuebchen/weepermc/event/packet/PlayerTrackEntityEvent.java b/src/main/java/de/craftstuebchen/weepermc/event/packet/PlayerTrackEntityEvent.java
 new file mode 100644
-index 00000000..2dcf8c4f
+index 00000000..7c807c38
 --- /dev/null
-+++ b/src/main/java/io/papermc/paper/event/packet/PlayerTrackEntityEvent.java
++++ b/src/main/java/de/craftstuebchen/weepermc/event/packet/PlayerTrackEntityEvent.java
 @@ -0,0 +1,64 @@
-+package io.papermc.paper.event.packet;
++package de.craftstuebchen.weepermc.event.packet;
 +
 +import org.bukkit.entity.Entity;
 +import org.bukkit.entity.Player;
@@ -80,13 +80,13 @@ index 00000000..2dcf8c4f
 +        this.cancelled = cancel;
 +    }
 +}
-diff --git a/src/main/java/io/papermc/paper/event/packet/PlayerUntrackEntityEvent.java b/src/main/java/io/papermc/paper/event/packet/PlayerUntrackEntityEvent.java
+diff --git a/src/main/java/de/craftstuebchen/weepermc/event/packet/PlayerUntrackEntityEvent.java b/src/main/java/de/craftstuebchen/weepermc/event/packet/PlayerUntrackEntityEvent.java
 new file mode 100644
-index 00000000..7f33b2b4
+index 00000000..d95c8c38
 --- /dev/null
-+++ b/src/main/java/io/papermc/paper/event/packet/PlayerUntrackEntityEvent.java
++++ b/src/main/java/de/craftstuebchen/weepermc/event/packet/PlayerUntrackEntityEvent.java
 @@ -0,0 +1,55 @@
-+package io.papermc.paper.event.packet;
++package de.craftstuebchen.weepermc.event.packet;
 +
 +import org.bukkit.entity.Entity;
 +import org.bukkit.entity.Player;

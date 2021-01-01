@@ -1,15 +1,15 @@
-From a391cc64c0309ca00322dad4f3bb186667ac6b5c Mon Sep 17 00:00:00 2001
+From 300a5b4fd195aeb65cf32e4f868c490bd53f536d Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Sun, 7 Jun 2020 16:32:16 +0200
 Subject: [PATCH] packet support
 
 ---
  .../destroystokyo/paper/PaperSkinParts.java   |  55 ++++
- .../paper/packet/ChainablePacketStep.java     |  96 +++++++
- .../paper/packet/CraftEntityMetaBuilder.java  |  49 ++++
- .../paper/packet/CraftPacketConversion.java   | 135 ++++++++++
- .../paper/packet/CraftPacketPipeline.java     |  48 ++++
- .../paper/packet/CraftPacketStepBuilder.java  | 236 ++++++++++++++++++
+ .../weepermc/packet/ChainablePacketStep.java  |  96 +++++++
+ .../packet/CraftEntityMetaBuilder.java        |  49 ++++
+ .../packet/CraftPacketConversion.java         | 135 ++++++++++
+ .../weepermc/packet/CraftPacketPipeline.java  |  48 ++++
+ .../packet/CraftPacketStepBuilder.java        | 236 ++++++++++++++++++
  .../server/PacketPlayOutAnimation.java        |   7 +
  .../PacketPlayOutEntityHeadRotation.java      |   7 +
  .../server/PacketPlayOutEntityMetadata.java   |   6 +
@@ -20,11 +20,11 @@ Subject: [PATCH] packet support
  .../scoreboard/CraftScoreboard.java           |   2 +-
  .../craftbukkit/scoreboard/CraftTeam.java     |  10 +-
  15 files changed, 685 insertions(+), 4 deletions(-)
- create mode 100644 src/main/java/io/papermc/paper/packet/ChainablePacketStep.java
- create mode 100644 src/main/java/io/papermc/paper/packet/CraftEntityMetaBuilder.java
- create mode 100644 src/main/java/io/papermc/paper/packet/CraftPacketConversion.java
- create mode 100644 src/main/java/io/papermc/paper/packet/CraftPacketPipeline.java
- create mode 100644 src/main/java/io/papermc/paper/packet/CraftPacketStepBuilder.java
+ create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java
+ create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/CraftEntityMetaBuilder.java
+ create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java
+ create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketPipeline.java
+ create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
 index b6f4400df..89d5bfe73 100644
@@ -90,13 +90,13 @@ index b6f4400df..89d5bfe73 100644
 +        }
 +    }
  }
-diff --git a/src/main/java/io/papermc/paper/packet/ChainablePacketStep.java b/src/main/java/io/papermc/paper/packet/ChainablePacketStep.java
+diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java b/src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java
 new file mode 100644
-index 000000000..cc10c2f1d
+index 000000000..c376446c9
 --- /dev/null
-+++ b/src/main/java/io/papermc/paper/packet/ChainablePacketStep.java
++++ b/src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java
 @@ -0,0 +1,96 @@
-+package io.papermc.paper.packet;
++package de.craftstuebchen.weepermc.packet;
 +
 +import net.minecraft.server.Packet;
 +
@@ -192,28 +192,28 @@ index 000000000..cc10c2f1d
 +        }
 +    }
 +}
-diff --git a/src/main/java/io/papermc/paper/packet/CraftEntityMetaBuilder.java b/src/main/java/io/papermc/paper/packet/CraftEntityMetaBuilder.java
+diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftEntityMetaBuilder.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftEntityMetaBuilder.java
 new file mode 100644
-index 000000000..d62566c7c
+index 000000000..b582c8518
 --- /dev/null
-+++ b/src/main/java/io/papermc/paper/packet/CraftEntityMetaBuilder.java
++++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftEntityMetaBuilder.java
 @@ -0,0 +1,49 @@
-+package io.papermc.paper.packet;
++package de.craftstuebchen.weepermc.packet;
 +
 +import net.md_5.bungee.api.chat.BaseComponent;
 +import net.minecraft.server.DataWatcher;
 +import net.minecraft.server.DataWatcherObject;
 +import net.minecraft.server.DataWatcherRegistry;
 +import net.minecraft.server.IChatBaseComponent;
-+import io.papermc.paper.packet.options.EntityMetaBuilder;
-+import io.papermc.paper.packet.options.EntityStatus;
++import de.craftstuebchen.weepermc.packet.options.EntityMetaBuilder;
++import de.craftstuebchen.weepermc.packet.options.EntityStatus;
 +
 +import java.util.ArrayList;
 +import java.util.List;
 +import java.util.Optional;
 +import java.util.Set;
 +
-+import static io.papermc.paper.packet.CraftPacketConversion.mapStatus;
++import static de.craftstuebchen.weepermc.packet.CraftPacketConversion.mapStatus;
 +
 +import javax.annotation.Nonnull;
 +
@@ -247,18 +247,18 @@ index 000000000..d62566c7c
 +        return this;
 +    }
 +}
-diff --git a/src/main/java/io/papermc/paper/packet/CraftPacketConversion.java b/src/main/java/io/papermc/paper/packet/CraftPacketConversion.java
+diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java
 new file mode 100644
-index 000000000..80830e0ef
+index 000000000..298a5f0da
 --- /dev/null
-+++ b/src/main/java/io/papermc/paper/packet/CraftPacketConversion.java
++++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java
 @@ -0,0 +1,135 @@
-+package io.papermc.paper.packet;
++package de.craftstuebchen.weepermc.packet;
 +
 +import com.mojang.datafixers.util.Pair;
 +
-+import io.papermc.paper.packet.options.Animation;
-+import io.papermc.paper.packet.options.TeamMode;
++import de.craftstuebchen.weepermc.packet.options.Animation;
++import de.craftstuebchen.weepermc.packet.options.TeamMode;
 +import net.minecraft.server.EnumItemSlot;
 +import net.minecraft.server.ItemStack;
 +import net.minecraft.server.PacketPlayOutPlayerInfo;
@@ -266,8 +266,8 @@ index 000000000..80830e0ef
 +import org.bukkit.craftbukkit.inventory.CraftItemStack;
 +import org.bukkit.inventory.EquipmentSlot;
 +
-+import io.papermc.paper.packet.options.EntityStatus;
-+import io.papermc.paper.packet.options.ProfileAction;
++import de.craftstuebchen.weepermc.packet.options.EntityStatus;
++import de.craftstuebchen.weepermc.packet.options.ProfileAction;
 +
 +import java.util.ArrayList;
 +import java.util.EnumMap;
@@ -388,13 +388,13 @@ index 000000000..80830e0ef
 +        throw new UnsupportedOperationException("Invalid case!");
 +    }
 +}
-diff --git a/src/main/java/io/papermc/paper/packet/CraftPacketPipeline.java b/src/main/java/io/papermc/paper/packet/CraftPacketPipeline.java
+diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketPipeline.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketPipeline.java
 new file mode 100644
-index 000000000..50bfe2b2f
+index 000000000..71d9ec3b3
 --- /dev/null
-+++ b/src/main/java/io/papermc/paper/packet/CraftPacketPipeline.java
++++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketPipeline.java
 @@ -0,0 +1,48 @@
-+package io.papermc.paper.packet;
++package de.craftstuebchen.weepermc.packet;
 +
 +
 +import javax.annotation.Nonnull;
@@ -406,7 +406,7 @@ index 000000000..50bfe2b2f
 +import com.destroystokyo.paper.PaperSkinParts;
 +import com.destroystokyo.paper.SkinParts.Builder;
 +
-+import io.papermc.paper.packet.options.EntityMetaBuilder;
++import de.craftstuebchen.weepermc.packet.options.EntityMetaBuilder;
 +import net.minecraft.server.Scoreboard;
 +
 +public class CraftPacketPipeline implements PacketPipeline {
@@ -442,21 +442,21 @@ index 000000000..50bfe2b2f
 +        return RandomStringUtils.random(count, letters, numbers);
 +    }
 +}
-diff --git a/src/main/java/io/papermc/paper/packet/CraftPacketStepBuilder.java b/src/main/java/io/papermc/paper/packet/CraftPacketStepBuilder.java
+diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java
 new file mode 100644
-index 000000000..49c924b45
+index 000000000..af23cfe47
 --- /dev/null
-+++ b/src/main/java/io/papermc/paper/packet/CraftPacketStepBuilder.java
++++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java
 @@ -0,0 +1,236 @@
-+package io.papermc.paper.packet;
++package de.craftstuebchen.weepermc.packet;
 +
 +import com.destroystokyo.paper.profile.CraftPlayerProfile;
 +import com.destroystokyo.paper.profile.PlayerProfile;
 +import com.mojang.authlib.GameProfile;
 +import com.mojang.datafixers.util.Pair;
 +
-+import io.papermc.paper.packet.ChainablePacketStep.DelayPacketStep;
-+import io.papermc.paper.packet.ChainablePacketStep.NmsPacketStep;
++import de.craftstuebchen.weepermc.packet.ChainablePacketStep.DelayPacketStep;
++import de.craftstuebchen.weepermc.packet.ChainablePacketStep.NmsPacketStep;
 +import net.minecraft.server.BlockPosition;
 +import net.minecraft.server.DataWatcher;
 +import net.minecraft.server.DataWatcherObject;
@@ -487,10 +487,10 @@ index 000000000..49c924b45
 +import org.bukkit.inventory.EquipmentSlot;
 +import org.bukkit.inventory.ItemStack;
 +
-+import io.papermc.paper.packet.options.Animation;
-+import io.papermc.paper.packet.options.EntityMetaBuilder;
-+import io.papermc.paper.packet.options.ProfileAction;
-+import io.papermc.paper.packet.options.TeamMode;
++import de.craftstuebchen.weepermc.packet.options.Animation;
++import de.craftstuebchen.weepermc.packet.options.EntityMetaBuilder;
++import de.craftstuebchen.weepermc.packet.options.ProfileAction;
++import de.craftstuebchen.weepermc.packet.options.TeamMode;
 +import org.bukkit.plugin.java.JavaPlugin;
 +import org.bukkit.scoreboard.Team;
 +import org.bukkit.util.Vector;
@@ -503,7 +503,7 @@ index 000000000..49c924b45
 +import java.util.UUID;
 +import java.util.concurrent.TimeUnit;
 +
-+import static io.papermc.paper.packet.CraftPacketConversion.from;
++import static de.craftstuebchen.weepermc.packet.CraftPacketConversion.from;
 +
 +import javax.annotation.Nonnull;
 +
@@ -810,7 +810,7 @@ index 9a48a4e90..91a5dd2fb 100644
          private final int b;
          private final EnumGamemode c;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 39fd42ee2..ed6868964 100644
+index d432e1cbf..326fc35b5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -2416,5 +2416,11 @@ public final class CraftServer implements Server {
@@ -818,9 +818,9 @@ index 39fd42ee2..ed6868964 100644
          return mobGoals;
      }
 +
-+    private final io.papermc.paper.packet.PacketPipeline packetPipeline = new io.papermc.paper.packet.CraftPacketPipeline();
++    private final de.craftstuebchen.weepermc.packet.PacketPipeline packetPipeline = new de.craftstuebchen.weepermc.packet.CraftPacketPipeline();
 +    @Override
-+    public @Nonnull io.papermc.paper.packet.PacketPipeline getPacketPipeline() {
++    public @Nonnull de.craftstuebchen.weepermc.packet.PacketPipeline getPacketPipeline() {
 +        return packetPipeline;
 +    }
      // Paper end
