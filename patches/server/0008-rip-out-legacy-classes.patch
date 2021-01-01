@@ -1,0 +1,859 @@
+From 7322fa251714e78ad7d52ef879151f96911fbac9 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Fri, 1 Jan 2021 19:00:36 +0100
+Subject: [PATCH] rip out legacy classes
+
+---
+ .../org/bukkit/craftbukkit/CraftParticle.java |   6 +-
+ .../bukkit/craftbukkit/legacy/CraftEvil.java  | 106 -----
+ .../craftbukkit/legacy/CraftLegacy.java       | 437 ------------------
+ .../bukkit/craftbukkit/util/CraftLegacy.java  |  42 --
+ src/test/java/org/bukkit/PerMaterialTest.java |  28 +-
+ .../bukkit/craftbukkit/legacy/EvilTest.java   |  23 -
+ .../bukkit/craftbukkit/legacy/LegacyTest.java | 128 -----
+ 7 files changed, 2 insertions(+), 768 deletions(-)
+ delete mode 100644 src/main/java/org/bukkit/craftbukkit/legacy/CraftEvil.java
+ delete mode 100644 src/main/java/org/bukkit/craftbukkit/legacy/CraftLegacy.java
+ delete mode 100644 src/main/java/org/bukkit/craftbukkit/util/CraftLegacy.java
+ delete mode 100644 src/test/java/org/bukkit/craftbukkit/legacy/EvilTest.java
+ delete mode 100644 src/test/java/org/bukkit/craftbukkit/legacy/LegacyTest.java
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftParticle.java b/src/main/java/org/bukkit/craftbukkit/CraftParticle.java
+index 54800bbed..d88aa7c6c 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftParticle.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftParticle.java
+@@ -97,11 +97,7 @@ public enum CraftParticle {
+     FALLING_OBSIDIAN_TEAR("falling_obsidian_tear"),
+     LANDING_OBSIDIAN_TEAR("landing_obsidian_tear"),
+     REVERSE_PORTAL("reverse_portal"),
+-    WHITE_ASH("white_ash"),
+-    // ----- Legacy Separator -----
+-    LEGACY_BLOCK_CRACK("block"),
+-    LEGACY_BLOCK_DUST("block"),
+-    LEGACY_FALLING_DUST("falling_dust");
++    WHITE_ASH("white_ash");
+     private final MinecraftKey minecraftKey;
+     private final Particle bukkit;
+     private static final BiMap<Particle, MinecraftKey> particles;
+diff --git a/src/main/java/org/bukkit/craftbukkit/legacy/CraftEvil.java b/src/main/java/org/bukkit/craftbukkit/legacy/CraftEvil.java
+deleted file mode 100644
+index afb706fc8..000000000
+--- a/src/main/java/org/bukkit/craftbukkit/legacy/CraftEvil.java
++++ /dev/null
+@@ -1,106 +0,0 @@
+-package org.bukkit.craftbukkit.legacy;
+-
+-import com.google.common.base.Preconditions;
+-import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap;
+-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+-import org.bukkit.Location;
+-import org.bukkit.Material;
+-import org.bukkit.World;
+-import org.bukkit.block.Block;
+-import org.bukkit.block.BlockState;
+-import org.bukkit.craftbukkit.block.CraftBlock;
+-import org.bukkit.craftbukkit.block.CraftBlockState;
+-import org.bukkit.inventory.ItemStack;
+-
+-/**
+- * @deprecated do not use for any reason
+- */
+-@Deprecated
+-public final class CraftEvil {
+-
+-    private static final Int2ObjectMap<Material> byId = new Int2ObjectLinkedOpenHashMap<>();
+-
+-    static {
+-        for (Material material : Material.values()) {
+-            if (!material.isLegacy()) {
+-                continue;
+-            }
+-
+-            Preconditions.checkState(!byId.containsKey(material.getId()), "Duplicate material ID for", material);
+-            byId.put(material.getId(), material);
+-        }
+-    }
+-
+-    private CraftEvil() {
+-        //
+-    }
+-
+-    public static int getBlockTypeIdAt(World world, int x, int y, int z) {
+-        return getId(world.getBlockAt(x, y, z).getType());
+-    }
+-
+-    public static int getBlockTypeIdAt(World world, Location location) {
+-        return getId(world.getBlockAt(location).getType());
+-    }
+-
+-    public static Material getType(Block block) {
+-        return CraftLegacy.toLegacyMaterial(((CraftBlock) block).getNMS());
+-    }
+-
+-    public static Material getType(BlockState block) {
+-        return CraftLegacy.toLegacyMaterial(((CraftBlockState) block).getHandle());
+-    }
+-
+-    public static int getTypeId(Block block) {
+-        return getId(block.getType());
+-    }
+-
+-    public static boolean setTypeId(Block block, int type) {
+-        block.setType(getMaterial(type));
+-        return true;
+-    }
+-
+-    public static boolean setTypeId(Block block, int type, boolean applyPhysics) {
+-        block.setType(getMaterial(type), applyPhysics);
+-        return true;
+-    }
+-
+-    public static boolean setTypeIdAndData(Block block, int type, byte data, boolean applyPhysics) {
+-        block.setType(getMaterial(type), applyPhysics);
+-        setData(block, data);
+-        return true;
+-    }
+-
+-    public static void setData(Block block, byte data) {
+-        ((CraftBlock) block).setData(data);
+-    }
+-
+-    public static void setData(Block block, byte data, boolean applyPhysics) {
+-        ((CraftBlock) block).setData(data, applyPhysics);
+-    }
+-
+-    public static int getTypeId(BlockState state) {
+-        return getId(state.getType());
+-    }
+-
+-    public static boolean setTypeId(BlockState state, int type) {
+-        state.setType(getMaterial(type));
+-        return true;
+-    }
+-
+-    public static int getTypeId(ItemStack stack) {
+-        return getId(stack.getType());
+-    }
+-
+-    public static void setTypeId(ItemStack stack, int type) {
+-        stack.setType(getMaterial(type));
+-    }
+-
+-    public static Material getMaterial(int id) {
+-        return byId.get(id);
+-    }
+-
+-    public static int getId(Material material) {
+-        return CraftLegacy.toLegacy(material).getId();
+-    }
+-}
+diff --git a/src/main/java/org/bukkit/craftbukkit/legacy/CraftLegacy.java b/src/main/java/org/bukkit/craftbukkit/legacy/CraftLegacy.java
+deleted file mode 100644
+index b14333ce9..000000000
+--- a/src/main/java/org/bukkit/craftbukkit/legacy/CraftLegacy.java
++++ /dev/null
+@@ -1,437 +0,0 @@
+-package org.bukkit.craftbukkit.legacy;
+-
+-import com.google.common.base.Preconditions;
+-import com.mojang.serialization.Dynamic;
+-import java.util.Arrays;
+-import java.util.HashMap;
+-import java.util.HashSet;
+-import java.util.Map;
+-import java.util.Optional;
+-import java.util.Set;
+-import net.minecraft.server.Block;
+-import net.minecraft.server.BlockStateList;
+-import net.minecraft.server.Blocks;
+-import net.minecraft.server.DataConverterFlattenData;
+-import net.minecraft.server.DataConverterMaterialId;
+-import net.minecraft.server.DataConverterRegistry;
+-import net.minecraft.server.DataConverterTypes;
+-import net.minecraft.server.DispenserRegistry;
+-import net.minecraft.server.DynamicOpsNBT;
+-import net.minecraft.server.IBlockData;
+-import net.minecraft.server.IBlockState;
+-import net.minecraft.server.IRegistry;
+-import net.minecraft.server.Item;
+-import net.minecraft.server.Items;
+-import net.minecraft.server.MinecraftKey;
+-import net.minecraft.server.MinecraftServer;
+-import net.minecraft.server.NBTBase;
+-import net.minecraft.server.NBTTagCompound;
+-import org.bukkit.Material;
+-import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+-import org.bukkit.entity.EntityType;
+-import org.bukkit.material.MaterialData;
+-
+-/**
+- * This class may seem unnecessarily slow and complicated/repetitive however it
+- * is able to handle a lot more edge cases and invertible transformations (many
+- * of which are not immediately obvious) than any other alternative. If you do
+- * make changes to this class please make sure to contribute them back
+- * https://hub.spigotmc.org/stash/projects/SPIGOT/repos/craftbukkit/browse so
+- * that all may benefit.
+- *
+- * @deprecated legacy use only
+- */
+-@Deprecated
+-public final class CraftLegacy {
+-
+-    private static final Map<Byte, Material> SPAWN_EGGS = new HashMap<>();
+-    private static final Set<String> whitelistedStates = new HashSet<>(Arrays.asList("explode", "check_decay", "decayable", "facing"));
+-    private static final Map<MaterialData, Item> materialToItem = new HashMap<>(16384);
+-    private static final Map<Item, MaterialData> itemToMaterial = new HashMap<>(1024);
+-    private static final Map<MaterialData, IBlockData> materialToData = new HashMap<>(4096);
+-    private static final Map<IBlockData, MaterialData> dataToMaterial = new HashMap<>(4096);
+-    private static final Map<MaterialData, Block> materialToBlock = new HashMap<>(4096);
+-    private static final Map<Block, MaterialData> blockToMaterial = new HashMap<>(1024);
+-
+-    private CraftLegacy() {
+-        //
+-    }
+-
+-    public static Material toLegacy(Material material) {
+-        if (material == null || material.isLegacy()) {
+-            return material;
+-        }
+-
+-        return toLegacyData(material).getItemType();
+-    }
+-
+-    public static MaterialData toLegacyData(Material material) {
+-        Preconditions.checkArgument(!material.isLegacy(), "toLegacy on legacy Material");
+-        MaterialData mappedData;
+-
+-        if (material.isBlock()) {
+-            Block block = CraftMagicNumbers.getBlock(material);
+-            IBlockData blockData = block.getBlockData();
+-
+-            // Try exact match first
+-            mappedData = dataToMaterial.get(blockData);
+-            // Fallback to any block
+-            if (mappedData == null) {
+-                mappedData = blockToMaterial.get(block);
+-                // Fallback to matching item
+-                if (mappedData == null) {
+-                    mappedData = itemToMaterial.get(block.getItem());
+-                }
+-            }
+-        } else {
+-            Item item = CraftMagicNumbers.getItem(material);
+-            mappedData = itemToMaterial.get(item);
+-        }
+-
+-        return (mappedData == null) ? new MaterialData(Material.LEGACY_AIR) : mappedData;
+-    }
+-
+-    public static IBlockData fromLegacyData(Material material, byte data) {
+-        Preconditions.checkArgument(material.isLegacy(), "fromLegacyData on modern Material");
+-
+-        MaterialData materialData = new MaterialData(material, data);
+-
+-        // Try exact match first
+-        IBlockData converted = materialToData.get(materialData);
+-        if (converted != null) {
+-            return converted;
+-        }
+-
+-        // Fallback to any block
+-        Block convertedBlock = materialToBlock.get(materialData);
+-        if (convertedBlock != null) {
+-            return convertedBlock.getBlockData();
+-        }
+-
+-        // Return air
+-        return Blocks.AIR.getBlockData();
+-    }
+-
+-    public static Item fromLegacyData(Material material, short data) {
+-        Preconditions.checkArgument(material.isLegacy(), "fromLegacyData on modern Material. Did you forget to define a modern (1.13+) api-version in your plugin.yml?");
+-
+-        MaterialData materialData = new MaterialData(material, (byte) data);
+-
+-        // First try matching item
+-        Item convertedItem = materialToItem.get(materialData);
+-        if (convertedItem != null) {
+-            return convertedItem;
+-        }
+-
+-        // Fallback to matching block
+-        if (material.isBlock()) {
+-            // Try exact match first
+-            IBlockData converted = materialToData.get(materialData);
+-            if (converted != null) {
+-                return converted.getBlock().getItem();
+-            }
+-
+-            // Fallback to any block
+-            Block convertedBlock = materialToBlock.get(materialData);
+-            if (convertedBlock != null) {
+-                return convertedBlock.getItem();
+-            }
+-        }
+-
+-        // Return air
+-        return Items.AIR;
+-    }
+-
+-    public static byte toLegacyData(IBlockData blockData) {
+-        return toLegacy(blockData).getData();
+-    }
+-
+-    public static Material toLegacyMaterial(IBlockData blockData) {
+-        return toLegacy(blockData).getItemType();
+-    }
+-
+-    public static MaterialData toLegacy(IBlockData blockData) {
+-        MaterialData mappedData;
+-
+-        // Try exact match first
+-        mappedData = dataToMaterial.get(blockData);
+-        // Fallback to any block
+-        if (mappedData == null) {
+-            mappedData = blockToMaterial.get(blockData.getBlock());
+-        }
+-
+-        return (mappedData == null) ? new MaterialData(Material.LEGACY_AIR) : mappedData;
+-    }
+-
+-    public static Material fromLegacy(Material material) {
+-        if (material == null || !material.isLegacy()) {
+-            return material;
+-        }
+-
+-        return fromLegacy(new MaterialData(material));
+-    }
+-
+-    public static Material fromLegacy(MaterialData materialData) {
+-        return fromLegacy(materialData, false);
+-    }
+-
+-    public static Material fromLegacy(MaterialData materialData, boolean itemPriority) {
+-        Material material = materialData.getItemType();
+-        if (material == null || !material.isLegacy()) {
+-            return material;
+-        }
+-
+-        Material mappedData = null;
+-
+-        // Try item first
+-        if (itemPriority) {
+-            Item item = materialToItem.get(materialData);
+-            if (item != null) {
+-                mappedData = CraftMagicNumbers.getMaterial(item);
+-            }
+-        }
+-
+-        if (mappedData == null && material.isBlock()) {
+-            // Try exact match first
+-            IBlockData iblock = materialToData.get(materialData);
+-            if (iblock != null) {
+-                mappedData = CraftMagicNumbers.getMaterial(iblock.getBlock());
+-            }
+-
+-            // Fallback to any block
+-            if (mappedData == null) {
+-                Block block = materialToBlock.get(materialData);
+-                if (block != null) {
+-                    mappedData = CraftMagicNumbers.getMaterial(block);
+-                }
+-            }
+-        }
+-
+-        // Fallback to matching item
+-        if (!itemPriority && mappedData == null) {
+-            Item item = materialToItem.get(materialData);
+-            if (item != null) {
+-                mappedData = CraftMagicNumbers.getMaterial(item);
+-            }
+-        }
+-
+-        return (mappedData == null) ? Material.AIR : mappedData;
+-    }
+-
+-    public static Material[] values() {
+-        Material[] values = Material.values();
+-        return Arrays.copyOfRange(values, Material.LEGACY_AIR.ordinal(), values.length);
+-    }
+-
+-    public static Material valueOf(String name) {
+-        return (name.startsWith(Material.LEGACY_PREFIX)) ? Material.valueOf(name) : Material.valueOf(Material.LEGACY_PREFIX + name);
+-    }
+-
+-    public static Material getMaterial(String name) {
+-        return (name.startsWith(Material.LEGACY_PREFIX)) ? Material.getMaterial(name) : Material.getMaterial(Material.LEGACY_PREFIX + name);
+-    }
+-
+-    public static Material matchMaterial(String name) {
+-        return (name.startsWith(Material.LEGACY_PREFIX)) ? Material.matchMaterial(name) : Material.matchMaterial(Material.LEGACY_PREFIX + name);
+-    }
+-
+-    public static int ordinal(Material material) {
+-        Preconditions.checkArgument(material.isLegacy(), "ordinal on modern Material");
+-
+-        return material.ordinal() - Material.LEGACY_AIR.ordinal();
+-    }
+-
+-    public static String name(Material material) {
+-        return material.name().substring(Material.LEGACY_PREFIX.length());
+-    }
+-
+-    public static String toString(Material material) {
+-        return name(material);
+-    }
+-
+-    public static void init() {
+-        //
+-    }
+-
+-    static {
+-        System.err.println("Initializing Legacy Material Support. Unless you have legacy plugins and/or data this is a bug!");
+-        if (MinecraftServer.getServer() != null && MinecraftServer.getServer().isDebugging()) {
+-            new Exception().printStackTrace();
+-        }
+-
+-        SPAWN_EGGS.put((byte) 0, Material.PIG_SPAWN_EGG); // Will be fixed by updateMaterial if possible
+-
+-        SPAWN_EGGS.put((byte) EntityType.BAT.getTypeId(), Material.BAT_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.BLAZE.getTypeId(), Material.BLAZE_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.CAVE_SPIDER.getTypeId(), Material.CAVE_SPIDER_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.CHICKEN.getTypeId(), Material.CHICKEN_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.COD.getTypeId(), Material.COD_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.COW.getTypeId(), Material.COW_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.CREEPER.getTypeId(), Material.CREEPER_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.DOLPHIN.getTypeId(), Material.DOLPHIN_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.DONKEY.getTypeId(), Material.DONKEY_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.ELDER_GUARDIAN.getTypeId(), Material.ELDER_GUARDIAN_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.ENDERMAN.getTypeId(), Material.ENDERMAN_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.ENDERMITE.getTypeId(), Material.ENDERMITE_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.EVOKER.getTypeId(), Material.EVOKER_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.GHAST.getTypeId(), Material.GHAST_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.GUARDIAN.getTypeId(), Material.GUARDIAN_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.HORSE.getTypeId(), Material.HORSE_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.HUSK.getTypeId(), Material.HUSK_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.LLAMA.getTypeId(), Material.LLAMA_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.MAGMA_CUBE.getTypeId(), Material.MAGMA_CUBE_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.MUSHROOM_COW.getTypeId(), Material.MOOSHROOM_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.MULE.getTypeId(), Material.MULE_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.OCELOT.getTypeId(), Material.OCELOT_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.PARROT.getTypeId(), Material.PARROT_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.PIG.getTypeId(), Material.PIG_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.PHANTOM.getTypeId(), Material.PHANTOM_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.POLAR_BEAR.getTypeId(), Material.POLAR_BEAR_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.PUFFERFISH.getTypeId(), Material.PUFFERFISH_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.RABBIT.getTypeId(), Material.RABBIT_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.SALMON.getTypeId(), Material.SALMON_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.SHEEP.getTypeId(), Material.SHEEP_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.SHULKER.getTypeId(), Material.SHULKER_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.SILVERFISH.getTypeId(), Material.SILVERFISH_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.SKELETON.getTypeId(), Material.SKELETON_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.SKELETON_HORSE.getTypeId(), Material.SKELETON_HORSE_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.SLIME.getTypeId(), Material.SLIME_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.SPIDER.getTypeId(), Material.SPIDER_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.SQUID.getTypeId(), Material.SQUID_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.STRAY.getTypeId(), Material.STRAY_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.TROPICAL_FISH.getTypeId(), Material.TROPICAL_FISH_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.TURTLE.getTypeId(), Material.TURTLE_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.VEX.getTypeId(), Material.VEX_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.VILLAGER.getTypeId(), Material.VILLAGER_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.VINDICATOR.getTypeId(), Material.VINDICATOR_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.WITCH.getTypeId(), Material.WITCH_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.WITHER_SKELETON.getTypeId(), Material.WITHER_SKELETON_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.WOLF.getTypeId(), Material.WOLF_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.ZOMBIE.getTypeId(), Material.ZOMBIE_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.ZOMBIE_HORSE.getTypeId(), Material.ZOMBIE_HORSE_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.ZOMBIFIED_PIGLIN.getTypeId(), Material.ZOMBIFIED_PIGLIN_SPAWN_EGG);
+-        SPAWN_EGGS.put((byte) EntityType.ZOMBIE_VILLAGER.getTypeId(), Material.ZOMBIE_VILLAGER_SPAWN_EGG);
+-
+-        DispenserRegistry.init();
+-
+-        for (Material material : Material.values()) {
+-            if (!material.isLegacy()) {
+-                continue;
+-            }
+-
+-            // Handle blocks
+-            if (material.isBlock()) {
+-                for (byte data = 0; data < 16; data++) {
+-                    MaterialData matData = new MaterialData(material, data);
+-                    Dynamic blockTag = DataConverterFlattenData.b(material.getId() << 4 | data);
+-                    blockTag = DataConverterRegistry.a().update(DataConverterTypes.BLOCK_STATE, blockTag, 100, CraftMagicNumbers.INSTANCE.getDataVersion());
+-                    // TODO: better skull conversion, chests
+-                    if (blockTag.get("Name").asString("").contains("%%FILTER_ME%%")) {
+-                        continue;
+-                    }
+-
+-                    String name = blockTag.get("Name").asString("");
+-                    Block block = IRegistry.BLOCK.get(new MinecraftKey(name));
+-                    if (block == null) {
+-                        continue;
+-                    }
+-                    IBlockData blockData = block.getBlockData();
+-                    BlockStateList states = block.getStates();
+-
+-                    Optional<NBTTagCompound> propMap = blockTag.getElement("Properties").result();
+-                    if (propMap.isPresent()) {
+-                        NBTTagCompound properties = propMap.get();
+-                        for (String dataKey : properties.getKeys()) {
+-                            IBlockState state = states.a(dataKey);
+-
+-                            if (state == null) {
+-                                if (whitelistedStates.contains(dataKey)) {
+-                                    continue;
+-                                }
+-                                throw new IllegalStateException("No state for " + dataKey);
+-                            }
+-
+-                            Preconditions.checkState(!properties.getString(dataKey).isEmpty(), "Empty data string");
+-                            Optional opt = state.b(properties.getString(dataKey));
+-                            if (!opt.isPresent()) {
+-                                throw new IllegalStateException("No state value " + properties.getString(dataKey) + " for " + dataKey);
+-                            }
+-
+-                            blockData = blockData.set(state, (Comparable) opt.get());
+-                        }
+-                    }
+-
+-                    if (block == Blocks.AIR) {
+-                        continue;
+-                    }
+-
+-                    materialToData.put(matData, blockData);
+-                    if (!dataToMaterial.containsKey(blockData)) {
+-                        dataToMaterial.put(blockData, matData);
+-                    }
+-
+-                    materialToBlock.put(matData, block);
+-                    if (!blockToMaterial.containsKey(block)) {
+-                        blockToMaterial.put(block, matData);
+-                    }
+-                }
+-            }
+-
+-            // Handle items (and second fallback for blocks)
+-            int maxData = material.getMaxDurability() == 0 ? 16 : 1;
+-            // Manually do oldold spawn eggs
+-            if (material == Material.LEGACY_MONSTER_EGG) {
+-                maxData = 121; // Vilager + 1
+-            }
+-
+-            for (byte data = 0; data < maxData; data++) {
+-                // Manually skip invalid oldold spawn
+-                if (material == Material.LEGACY_MONSTER_EGG /*&& data != 0 && EntityType.fromId(data) == null*/) { // Mojang broke 18w19b
+-                    continue;
+-                }
+-                // Skip non item stacks for now (18w19b)
+-                if (DataConverterMaterialId.a(material.getId()) == null) {
+-                    continue;
+-                }
+-
+-                MaterialData matData = new MaterialData(material, data);
+-
+-                NBTTagCompound stack = new NBTTagCompound();
+-                stack.setInt("id", material.getId());
+-                stack.setShort("Damage", data);
+-
+-                Dynamic<NBTBase> converted = DataConverterRegistry.a().update(DataConverterTypes.ITEM_STACK, new Dynamic<NBTBase>(DynamicOpsNBT.a, stack), -1, CraftMagicNumbers.INSTANCE.getDataVersion());
+-
+-                String newId = converted.get("id").asString("");
+-                // Recover spawn eggs with invalid data
+-                if (newId.equals("minecraft:spawn_egg")) {
+-                    newId = "minecraft:pig_spawn_egg";
+-                }
+-
+-                // Preconditions.checkState(newId.contains("minecraft:"), "Unknown new material for " + matData);
+-                Item newMaterial = IRegistry.ITEM.get(new MinecraftKey(newId));
+-
+-                if (newMaterial == Items.AIR) {
+-                    continue;
+-                }
+-
+-                materialToItem.put(matData, newMaterial);
+-                if (!itemToMaterial.containsKey(newMaterial)) {
+-                    itemToMaterial.put(newMaterial, matData);
+-                }
+-            }
+-
+-            for (Map.Entry<Byte, Material> entry : SPAWN_EGGS.entrySet()) {
+-                MaterialData matData = new MaterialData(Material.LEGACY_MONSTER_EGG, entry.getKey());
+-                Item newMaterial = CraftMagicNumbers.getItem(entry.getValue());
+-
+-                materialToItem.put(matData, newMaterial);
+-                itemToMaterial.put(newMaterial, matData);
+-            }
+-        }
+-    }
+-
+-    public static void main(String[] args) {
+-        System.err.println("");
+-    }
+-}
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftLegacy.java b/src/main/java/org/bukkit/craftbukkit/util/CraftLegacy.java
+deleted file mode 100644
+index c8dde75de..000000000
+--- a/src/main/java/org/bukkit/craftbukkit/util/CraftLegacy.java
++++ /dev/null
+@@ -1,42 +0,0 @@
+-package org.bukkit.craftbukkit.util;
+-
+-import java.util.Arrays;
+-import org.bukkit.Material;
+-import org.bukkit.material.MaterialData;
+-
+-/**
+- * @deprecated legacy use only
+- */
+-@Deprecated
+-public final class CraftLegacy {
+-
+-    private CraftLegacy() {
+-        //
+-    }
+-
+-    public static Material fromLegacy(Material material) {
+-        if (material == null || !material.isLegacy()) {
+-            return material;
+-        }
+-
+-        return org.bukkit.craftbukkit.legacy.CraftLegacy.fromLegacy(material);
+-    }
+-
+-    public static Material fromLegacy(MaterialData materialData) {
+-        return org.bukkit.craftbukkit.legacy.CraftLegacy.fromLegacy(materialData);
+-    }
+-
+-    public static Material[] modern_values() {
+-        Material[] values = Material.values();
+-        return Arrays.copyOfRange(values, 0, Material.LEGACY_AIR.ordinal());
+-    }
+-
+-    public static int modern_ordinal(Material material) {
+-        if (material.isLegacy()) {
+-            // SPIGOT-4002: Fix for eclipse compiler manually compiling in default statements to lookupswitch
+-            throw new NoSuchFieldError("Legacy field ordinal: " + material);
+-        }
+-
+-        return material.ordinal();
+-    }
+-}
+diff --git a/src/test/java/org/bukkit/PerMaterialTest.java b/src/test/java/org/bukkit/PerMaterialTest.java
+index b99ad0faf..b5c4c76f4 100644
+--- a/src/test/java/org/bukkit/PerMaterialTest.java
++++ b/src/test/java/org/bukkit/PerMaterialTest.java
+@@ -43,13 +43,7 @@ public class PerMaterialTest extends AbstractTestingBase {
+ 
+     @Parameters(name = "{index}: {0}")
+     public static List<Object[]> data() {
+-        List<Object[]> list = Lists.newArrayList();
+-        for (Material material : Material.values()) {
+-            if (!material.isLegacy()) {
+-                list.add(new Object[] {material});
+-            }
+-        }
+-        return list;
++        return Lists.newArrayList();
+     }
+ 
+     @Parameter public Material material;
+@@ -86,17 +80,6 @@ public class PerMaterialTest extends AbstractTestingBase {
+         assertThat(material.isRecord(), is(CraftMagicNumbers.getItem(material) instanceof ItemRecord));
+     }
+ 
+-    @Test
+-    public void maxDurability() {
+-        if (INVALIDATED_MATERIALS.contains(material)) return;
+-
+-        if (material == Material.AIR) {
+-            assertThat((int) material.getMaxDurability(), is(0));
+-        } else if (material.isBlock()) {
+-            Item item = CraftMagicNumbers.getItem(material);
+-            assertThat((int) material.getMaxDurability(), is(item.getMaxDurability()));
+-        }
+-    }
+ 
+     @Test
+     public void maxStackSize() {
+@@ -178,15 +161,6 @@ public class PerMaterialTest extends AbstractTestingBase {
+         }
+     }
+ 
+-    @Test
+-    public void testDurability() {
+-        if (!material.isBlock()) {
+-            assertThat(material.getMaxDurability(), is((short) CraftMagicNumbers.getItem(material).getMaxDurability()));
+-        } else {
+-            assertThat(material.getMaxDurability(), is((short) 0));
+-        }
+-    }
+-
+     @Test
+     public void testBlock() {
+         if (material == Material.AIR) {
+diff --git a/src/test/java/org/bukkit/craftbukkit/legacy/EvilTest.java b/src/test/java/org/bukkit/craftbukkit/legacy/EvilTest.java
+deleted file mode 100644
+index 23e5d98cf..000000000
+--- a/src/test/java/org/bukkit/craftbukkit/legacy/EvilTest.java
++++ /dev/null
+@@ -1,23 +0,0 @@
+-package org.bukkit.craftbukkit.legacy;
+-
+-import org.bukkit.Material;
+-import org.junit.Assert;
+-import org.junit.Test;
+-
+-public class EvilTest {
+-
+-    @Test
+-    public void testFrom() {
+-        Assert.assertEquals(Material.LEGACY_STONE, CraftEvil.getMaterial(1));
+-    }
+-
+-    @Test
+-    public void testTo() {
+-        Assert.assertEquals(1, CraftEvil.getId(Material.LEGACY_STONE));
+-    }
+-
+-    @Test(expected = IllegalArgumentException.class)
+-    public void testIllegal() {
+-        Material.STONE.getId();
+-    }
+-}
+diff --git a/src/test/java/org/bukkit/craftbukkit/legacy/LegacyTest.java b/src/test/java/org/bukkit/craftbukkit/legacy/LegacyTest.java
+deleted file mode 100644
+index 5ce268bb2..000000000
+--- a/src/test/java/org/bukkit/craftbukkit/legacy/LegacyTest.java
++++ /dev/null
+@@ -1,128 +0,0 @@
+-package org.bukkit.craftbukkit.legacy;
+-
+-import java.util.Arrays;
+-import java.util.HashSet;
+-import java.util.Set;
+-import org.bukkit.Material;
+-import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+-import org.bukkit.material.MaterialData;
+-import org.bukkit.support.AbstractTestingBase;
+-import org.junit.Assert;
+-import org.junit.Test;
+-
+-public class LegacyTest extends AbstractTestingBase {
+-
+-    private final Set<Material> INVALIDATED_MATERIALS = new HashSet<>(Arrays.asList(Material.ACACIA_BUTTON, Material.ACACIA_PRESSURE_PLATE, Material.ACACIA_TRAPDOOR, Material.AIR, Material.ATTACHED_MELON_STEM, Material.ATTACHED_PUMPKIN_STEM,
+-            Material.BIRCH_BUTTON, Material.BIRCH_PRESSURE_PLATE, Material.BIRCH_TRAPDOOR, Material.BLACK_WALL_BANNER, Material.BLUE_WALL_BANNER, Material.BROWN_WALL_BANNER, Material.BUBBLE_COLUMN, Material.CAVE_AIR, Material.CREEPER_WALL_HEAD,
+-            Material.CYAN_WALL_BANNER, Material.DARK_OAK_BUTTON, Material.DARK_OAK_PRESSURE_PLATE, Material.DARK_OAK_TRAPDOOR, Material.DARK_PRISMARINE_SLAB, Material.DARK_PRISMARINE_STAIRS, Material.DEBUG_STICK, Material.DONKEY_SPAWN_EGG,
+-            Material.DRAGON_WALL_HEAD, Material.DRIED_KELP, Material.DRIED_KELP_BLOCK, Material.ELDER_GUARDIAN_SPAWN_EGG, Material.EVOKER_SPAWN_EGG, Material.GRAY_WALL_BANNER, Material.GREEN_WALL_BANNER, Material.HUSK_SPAWN_EGG,
+-            Material.JUNGLE_BUTTON, Material.JUNGLE_PRESSURE_PLATE, Material.JUNGLE_TRAPDOOR, Material.KELP, Material.KELP_PLANT, Material.LIGHT_BLUE_WALL_BANNER, Material.LIGHT_GRAY_WALL_BANNER, Material.LIME_WALL_BANNER, Material.LLAMA_SPAWN_EGG,
+-            Material.MAGENTA_WALL_BANNER, Material.MULE_SPAWN_EGG, Material.ORANGE_WALL_BANNER, Material.PARROT_SPAWN_EGG, Material.PHANTOM_SPAWN_EGG, Material.PINK_WALL_BANNER, Material.PLAYER_WALL_HEAD, Material.POLAR_BEAR_SPAWN_EGG,
+-            Material.POTTED_ACACIA_SAPLING, Material.POTTED_ALLIUM, Material.POTTED_AZURE_BLUET, Material.POTTED_BIRCH_SAPLING, Material.POTTED_BLUE_ORCHID, Material.POTTED_BROWN_MUSHROOM, Material.POTTED_DANDELION, Material.POTTED_DARK_OAK_SAPLING,
+-            Material.POTTED_DEAD_BUSH, Material.POTTED_FERN, Material.POTTED_JUNGLE_SAPLING, Material.POTTED_OAK_SAPLING, Material.POTTED_ORANGE_TULIP, Material.POTTED_OXEYE_DAISY, Material.POTTED_PINK_TULIP, Material.POTTED_POPPY,
+-            Material.POTTED_RED_MUSHROOM, Material.POTTED_RED_TULIP, Material.POTTED_SPRUCE_SAPLING, Material.POTTED_WHITE_TULIP, Material.PRISMARINE_BRICK_SLAB, Material.PRISMARINE_BRICK_STAIRS, Material.PRISMARINE_SLAB, Material.PRISMARINE_STAIRS,
+-            Material.PUMPKIN, Material.PURPLE_SHULKER_BOX, Material.PURPLE_WALL_BANNER, Material.RED_WALL_BANNER, Material.SEAGRASS, Material.SKELETON_HORSE_SPAWN_EGG, Material.SKELETON_WALL_SKULL, Material.SPRUCE_BUTTON, Material.SPRUCE_PRESSURE_PLATE, Material.SPRUCE_TRAPDOOR,
+-            Material.STRAY_SPAWN_EGG, Material.STRIPPED_ACACIA_LOG, Material.STRIPPED_BIRCH_LOG, Material.STRIPPED_DARK_OAK_LOG, Material.STRIPPED_JUNGLE_LOG, Material.STRIPPED_OAK_LOG, Material.STRIPPED_SPRUCE_LOG, Material.TALL_SEAGRASS,
+-            Material.TRIDENT, Material.TURTLE_EGG, Material.TURTLE_HELMET, Material.SCUTE, Material.TURTLE_SPAWN_EGG, Material.VEX_SPAWN_EGG, Material.VINDICATOR_SPAWN_EGG, Material.VOID_AIR, Material.WHITE_BED,
+-            Material.WITHER_SKELETON_SPAWN_EGG, Material.WITHER_SKELETON_WALL_SKULL, Material.YELLOW_WALL_BANNER, Material.ZOMBIE_HORSE_SPAWN_EGG, Material.ZOMBIE_VILLAGER_SPAWN_EGG, Material.ZOMBIE_WALL_HEAD,
+-            Material.COD_BUCKET, Material.COD_SPAWN_EGG, Material.PUFFERFISH_BUCKET, Material.PUFFERFISH_SPAWN_EGG, Material.SALMON_BUCKET, Material.SALMON_SPAWN_EGG,
+-            Material.TROPICAL_FISH_BUCKET, Material.DROWNED_SPAWN_EGG, Material.TROPICAL_FISH_SPAWN_EGG,
+-            Material.BLUE_ICE, Material.BRAIN_CORAL, Material.BRAIN_CORAL_BLOCK, Material.BRAIN_CORAL_FAN, Material.BUBBLE_CORAL, Material.BUBBLE_CORAL_BLOCK, Material.BUBBLE_CORAL_FAN, Material.CONDUIT, Material.DEAD_BRAIN_CORAL_BLOCK,
+-            Material.DEAD_BUBBLE_CORAL_BLOCK, Material.DEAD_FIRE_CORAL_BLOCK, Material.DEAD_HORN_CORAL_BLOCK, Material.DEAD_TUBE_CORAL_BLOCK, Material.DOLPHIN_SPAWN_EGG, Material.FIRE_CORAL, Material.FIRE_CORAL_BLOCK, Material.FIRE_CORAL_FAN,
+-            Material.HEART_OF_THE_SEA, Material.HORN_CORAL, Material.HORN_CORAL_BLOCK, Material.HORN_CORAL_FAN, Material.NAUTILUS_SHELL, Material.PHANTOM_MEMBRANE, Material.SEA_PICKLE, Material.TUBE_CORAL, Material.TUBE_CORAL_BLOCK,
+-            Material.TUBE_CORAL_FAN, Material.STRIPPED_ACACIA_WOOD, Material.STRIPPED_BIRCH_WOOD, Material.STRIPPED_DARK_OAK_WOOD, Material.STRIPPED_JUNGLE_WOOD, Material.STRIPPED_OAK_WOOD, Material.STRIPPED_SPRUCE_WOOD,
+-            Material.ACACIA_WOOD, Material.BIRCH_WOOD, Material.DARK_OAK_WOOD, Material.JUNGLE_WOOD, Material.OAK_WOOD, Material.SPRUCE_WOOD,
+-            Material.TUBE_CORAL_WALL_FAN, Material.BRAIN_CORAL_WALL_FAN, Material.BUBBLE_CORAL_WALL_FAN, Material.FIRE_CORAL_WALL_FAN, Material.HORN_CORAL_WALL_FAN, Material.DEAD_TUBE_CORAL_WALL_FAN, Material.DEAD_BRAIN_CORAL_WALL_FAN,
+-            Material.DEAD_BUBBLE_CORAL_WALL_FAN, Material.DEAD_FIRE_CORAL_WALL_FAN, Material.DEAD_HORN_CORAL_WALL_FAN, Material.DEAD_TUBE_CORAL_FAN, Material.DEAD_BRAIN_CORAL_FAN, Material.DEAD_BUBBLE_CORAL_FAN, Material.DEAD_FIRE_CORAL_FAN,
+-            Material.DEAD_HORN_CORAL_FAN, Material.DEAD_BRAIN_CORAL, Material.DEAD_BUBBLE_CORAL, Material.DEAD_FIRE_CORAL, Material.DEAD_HORN_CORAL, Material.DEAD_TUBE_CORAL,
+-            // 1.14
+-            Material.ACACIA_SIGN, Material.ACACIA_WALL_SIGN, Material.ANDESITE_SLAB, Material.ANDESITE_STAIRS, Material.ANDESITE_WALL, Material.BAMBOO, Material.BAMBOO_SAPLING, Material.BARREL, Material.BELL, Material.BIRCH_SIGN, Material.BIRCH_WALL_SIGN,
+-            Material.BLACK_DYE, Material.BLAST_FURNACE, Material.BLUE_DYE, Material.BRICK_WALL, Material.BROWN_DYE, Material.CAMPFIRE, Material.CARTOGRAPHY_TABLE, Material.CAT_SPAWN_EGG, Material.CORNFLOWER, Material.CREEPER_BANNER_PATTERN, Material.CROSSBOW,
+-            Material.DARK_OAK_SIGN, Material.DARK_OAK_WALL_SIGN, Material.DIORITE_SLAB, Material.DIORITE_STAIRS, Material.DIORITE_WALL, Material.END_STONE_BRICK_SLAB, Material.END_STONE_BRICK_STAIRS, Material.END_STONE_BRICK_WALL, Material.FLETCHING_TABLE,
+-            Material.FLOWER_BANNER_PATTERN, Material.GRANITE_SLAB, Material.GRANITE_STAIRS, Material.GRANITE_WALL, Material.GREEN_DYE, Material.GRINDSTONE, Material.RAVAGER_SPAWN_EGG, Material.JIGSAW, Material.JUNGLE_SIGN, Material.JUNGLE_WALL_SIGN,
+-            Material.LANTERN, Material.LECTERN, Material.LILY_OF_THE_VALLEY, Material.LOOM, Material.MOJANG_BANNER_PATTERN, Material.MOSSY_COBBLESTONE_SLAB, Material.MOSSY_COBBLESTONE_STAIRS, Material.MOSSY_STONE_BRICK_SLAB, Material.MOSSY_STONE_BRICK_STAIRS,
+-            Material.MOSSY_STONE_BRICK_WALL, Material.NETHER_BRICK_WALL, Material.OAK_SIGN, Material.OAK_WALL_SIGN, Material.PANDA_SPAWN_EGG, Material.PILLAGER_SPAWN_EGG, Material.POLISHED_ANDESITE_SLAB, Material.POLISHED_ANDESITE_STAIRS, Material.POLISHED_DIORITE_SLAB,
+-            Material.POLISHED_DIORITE_STAIRS, Material.POLISHED_GRANITE_SLAB, Material.POLISHED_GRANITE_STAIRS, Material.POTTED_BAMBOO, Material.POTTED_CORNFLOWER, Material.POTTED_LILY_OF_THE_VALLEY, Material.POTTED_WITHER_ROSE, Material.PRISMARINE_WALL, Material.RED_DYE,
+-            Material.RED_NETHER_BRICK_SLAB, Material.RED_NETHER_BRICK_STAIRS, Material.RED_NETHER_BRICK_WALL, Material.RED_SANDSTONE_WALL, Material.SANDSTONE_WALL, Material.SCAFFOLDING, Material.SKULL_BANNER_PATTERN, Material.SMITHING_TABLE, Material.SMOKER,
+-            Material.SMOOTH_QUARTZ_SLAB, Material.SMOOTH_QUARTZ_STAIRS, Material.SMOOTH_RED_SANDSTONE_SLAB, Material.SMOOTH_RED_SANDSTONE_STAIRS, Material.SMOOTH_SANDSTONE_SLAB, Material.SMOOTH_SANDSTONE_STAIRS, Material.STONE_SLAB, Material.SPRUCE_SIGN,
+-            Material.SPRUCE_WALL_SIGN, Material.STONECUTTER, Material.STONE_BRICK_WALL, Material.STONE_STAIRS, Material.SUSPICIOUS_STEW, Material.SWEET_BERRIES, Material.SWEET_BERRY_BUSH, Material.WHITE_DYE, Material.WITHER_ROSE, Material.YELLOW_DYE,
+-            Material.COMPOSTER, Material.TRADER_LLAMA_SPAWN_EGG, Material.WANDERING_TRADER_SPAWN_EGG, Material.FOX_SPAWN_EGG, Material.LEATHER_HORSE_ARMOR, Material.GLOBE_BANNER_PATTERN, Material.CUT_RED_SANDSTONE_SLAB, Material.CUT_SANDSTONE_SLAB,
+-            // 1.15
+-            Material.BEEHIVE, Material.BEE_NEST, Material.BEE_SPAWN_EGG, Material.HONEYCOMB, Material.HONEYCOMB_BLOCK, Material.HONEY_BLOCK, Material.HONEY_BOTTLE,
+-            // 1.16
+-            Material.ANCIENT_DEBRIS, Material.BASALT, Material.CRIMSON_BUTTON, Material.CRIMSON_DOOR, Material.CRIMSON_FENCE, Material.CRIMSON_FENCE_GATE, Material.CRIMSON_NYLIUM, Material.CRIMSON_PLANKS, Material.CRIMSON_PRESSURE_PLATE,
+-            Material.CRIMSON_ROOTS, Material.CRIMSON_SIGN, Material.CRIMSON_SLAB, Material.CRIMSON_STAIRS, Material.CRIMSON_STEM, Material.CRIMSON_TRAPDOOR, Material.CRIMSON_WALL_SIGN, Material.HOGLIN_SPAWN_EGG, Material.NETHERITE_AXE, Material.NETHERITE_BLOCK,
+-            Material.NETHERITE_BOOTS, Material.NETHERITE_CHESTPLATE, Material.NETHERITE_HELMET, Material.NETHERITE_HOE, Material.NETHERITE_INGOT, Material.NETHERITE_LEGGINGS, Material.NETHERITE_PICKAXE, Material.NETHERITE_SCRAP, Material.NETHERITE_SHOVEL,
+-            Material.NETHERITE_SWORD, Material.NETHER_SPROUTS, Material.PIGLIN_SPAWN_EGG, Material.SHROOMLIGHT, Material.SOUL_FIRE, Material.SOUL_LANTERN, Material.SOUL_TORCH, Material.SOUL_WALL_TORCH, Material.SOUL_SOIL, Material.STRIPPED_CRIMSON_STEM,
+-            Material.STRIPPED_WARPED_STEM, Material.WARPED_BUTTON, Material.WARPED_DOOR, Material.WARPED_FENCE, Material.WARPED_FENCE_GATE, Material.WARPED_FUNGUS, Material.WARPED_NYLIUM, Material.WARPED_PLANKS, Material.WARPED_PRESSURE_PLATE, Material.WARPED_ROOTS,
+-            Material.WARPED_SIGN, Material.WARPED_SLAB, Material.WARPED_STAIRS, Material.WARPED_STEM, Material.WARPED_TRAPDOOR, Material.WARPED_WALL_SIGN, Material.WARPED_WART_BLOCK, Material.WEEPING_VINES, Material.WEEPING_VINES_PLANT,
+-            Material.CRIMSON_FUNGUS, Material.CRIMSON_HYPHAE, Material.CRYING_OBSIDIAN, Material.NETHER_GOLD_ORE, Material.POLISHED_BASALT, Material.POTTED_CRIMSON_FUNGUS, Material.POTTED_CRIMSON_ROOTS, Material.POTTED_WARPED_FUNGUS, Material.POTTED_WARPED_ROOTS,
+-            Material.RESPAWN_ANCHOR, Material.SLIME_SPAWN_EGG, Material.STRIPPED_CRIMSON_HYPHAE, Material.STRIPPED_WARPED_HYPHAE, Material.TARGET, Material.TWISTING_VINES, Material.TWISTING_VINES_PLANT, Material.WARPED_FUNGUS, Material.WARPED_HYPHAE,
+-            Material.BLACKSTONE, Material.BLACKSTONE_SLAB, Material.BLACKSTONE_STAIRS, Material.BLACKSTONE_WALL, Material.CHISELED_NETHER_BRICKS, Material.CHISELED_POLISHED_BLACKSTONE, Material.CRACKED_NETHER_BRICKS, Material.CRACKED_POLISHED_BLACKSTONE_BRICKS,
+-            Material.GILDED_BLACKSTONE, Material.LODESTONE, Material.PIGLIN_BANNER_PATTERN, Material.POLISHED_BLACKSTONE, Material.POLISHED_BLACKSTONE_BRICKS, Material.POLISHED_BLACKSTONE_BRICK_SLAB, Material.POLISHED_BLACKSTONE_BRICK_STAIRS,
+-            Material.POLISHED_BLACKSTONE_BRICK_WALL, Material.POLISHED_BLACKSTONE_BUTTON, Material.POLISHED_BLACKSTONE_PRESSURE_PLATE, Material.POLISHED_BLACKSTONE_SLAB, Material.POLISHED_BLACKSTONE_STAIRS, Material.POLISHED_BLACKSTONE_WALL, Material.QUARTZ_BRICKS,
+-            Material.SOUL_CAMPFIRE, Material.STRIDER_SPAWN_EGG, Material.WARPED_FUNGUS_ON_A_STICK, Material.ZOGLIN_SPAWN_EGG, Material.CHAIN, Material.MUSIC_DISC_PIGSTEP,
+-            // 1.16.2
+-            Material.PIGLIN_BRUTE_SPAWN_EGG,
+-            //
+-            Material.LEGACY_AIR, Material.LEGACY_DEAD_BUSH, Material.LEGACY_BURNING_FURNACE, Material.LEGACY_WALL_SIGN, Material.LEGACY_REDSTONE_TORCH_OFF, Material.LEGACY_SKULL, Material.LEGACY_REDSTONE_COMPARATOR_ON, Material.LEGACY_WALL_BANNER, Material.LEGACY_MONSTER_EGG));
+-
+-    private final Set<Material> INVERSION_FAILS = new HashSet<>(Arrays.asList(Material.LEGACY_DOUBLE_STEP, Material.LEGACY_GLOWING_REDSTONE_ORE, Material.LEGACY_DIODE_BLOCK_ON, Material.LEGACY_REDSTONE_LAMP_ON, Material.LEGACY_WOOD_DOUBLE_STEP,
+-            Material.LEGACY_DAYLIGHT_DETECTOR_INVERTED, Material.LEGACY_DOUBLE_STONE_SLAB2, Material.LEGACY_PURPUR_DOUBLE_SLAB, Material.LEGACY_WHEAT, Material.LEGACY_SIGN, Material.LEGACY_WOOD_DOOR, Material.LEGACY_IRON_DOOR, Material.LEGACY_SUGAR_CANE,
+-            Material.LEGACY_CAKE, Material.LEGACY_BED, Material.LEGACY_DIODE, Material.LEGACY_NETHER_STALK, Material.LEGACY_BREWING_STAND_ITEM, Material.LEGACY_CAULDRON_ITEM, Material.LEGACY_REDSTONE_COMPARATOR, Material.LEGACY_SPRUCE_DOOR_ITEM,
+-            Material.LEGACY_BIRCH_DOOR_ITEM, Material.LEGACY_JUNGLE_DOOR_ITEM, Material.LEGACY_ACACIA_DOOR_ITEM, Material.LEGACY_DARK_OAK_DOOR_ITEM, Material.LEGACY_STATIONARY_LAVA, Material.LEGACY_STATIONARY_WATER));
+-
+-    @Test
+-    public void toLegacyMaterial() {
+-        for (Material material : Material.values()) {
+-            if (!INVALIDATED_MATERIALS.contains(material) && !material.isLegacy()) {
+-                MaterialData converted = CraftLegacy.toLegacyData(material);
+-
+-                Assert.assertNotEquals("Could not toLegacy " + material, Material.LEGACY_AIR, converted.getItemType());
+-
+-                if (!INVALIDATED_MATERIALS.contains(converted.getItemType())) {
+-                    Assert.assertNotEquals("Could not fromLegacy(toLegacy) " + converted + "(" + material + ")", Material.AIR, CraftLegacy.fromLegacy(converted));
+-                }
+-                if (!INVERSION_FAILS.contains(material)) {
+-                    Assert.assertEquals("Could not fromLegacy(toLegacy) " + converted + "(" + material + ")", material, CraftLegacy.fromLegacy(converted));
+-                }
+-            }
+-        }
+-
+-        Assert.assertEquals("Could not toLegacy Air", Material.LEGACY_AIR, CraftLegacy.toLegacy(Material.AIR));
+-    }
+-
+-    @Test
+-    public void fromLegacyMaterial() {
+-        for (Material material : Material.values()) {
+-            if (!INVALIDATED_MATERIALS.contains(material) && material.isLegacy()) {
+-                Material converted = CraftLegacy.fromLegacy(material);
+-                Assert.assertNotEquals("Could not fromLegacy " + material, Material.AIR, converted);
+-
+-                Assert.assertNotEquals("Could not toLegacy(fromLegacy) " + converted + "(" + material + ")", Material.AIR, CraftLegacy.toLegacy(converted));
+-                if (!INVERSION_FAILS.contains(material)) {
+-                    Assert.assertEquals("Could not toLegacy(fromLegacy) " + converted + "(" + material + ")", material, CraftLegacy.toLegacy(converted));
+-                }
+-            }
+-        }
+-
+-        Assert.assertEquals("Could not fromLegacy Air", Material.AIR, CraftLegacy.fromLegacy(Material.LEGACY_AIR));
+-    }
+-
+-    @Test
+-    public void testRestricted() {
+-        for (Material material : CraftLegacy.values()) {
+-            Assert.assertTrue("Must iterate only legacy materials", material.isLegacy());
+-        }
+-
+-        for (Material material : org.bukkit.craftbukkit.util.CraftLegacy.modern_values()) {
+-            Assert.assertFalse("Must iterate only modern materials", material.isLegacy());
+-        }
+-    }
+-
+-    @Test
+-    public void testManual() {
+-        Assert.assertEquals(Material.YELLOW_DYE, CraftMagicNumbers.INSTANCE.getMaterial("dandelion_yellow", 1631));
+-        Assert.assertEquals(Material.OAK_WALL_SIGN, CraftMagicNumbers.INSTANCE.getMaterial("wall_sign", 1631));
+-    }
+-}
+-- 
+2.29.2
+
