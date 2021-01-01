@@ -1,4 +1,4 @@
-From adcadc0d59ec622ffae5c508c30c4f520063979c Mon Sep 17 00:00:00 2001
+From 04312f3b33818e63bec06360550afd2e0d5f89f2 Mon Sep 17 00:00:00 2001
 From: Yannick Lamprecht <yannicklamprecht@live.de>
 Date: Fri, 1 Jan 2021 17:55:25 +0100
 Subject: [PATCH] rip out legacy classes
@@ -15972,7 +15972,7 @@ index 931ffa38..915830a5 100644
      Material getMaterial(String material, int version);
  
 diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/World.java
-index e6d2abf2..ab551e73 100644
+index 4df6482d..e473dd06 100644
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
 @@ -26,9 +26,7 @@ import org.bukkit.entity.LightningStrike;
@@ -16423,18 +16423,18 @@ index f124b35e..00000000
 - */
 -public interface LingeringPotion extends ThrownPotion { }
 diff --git a/src/main/java/org/bukkit/entity/Minecart.java b/src/main/java/org/bukkit/entity/Minecart.java
-index 95c79c5f..cd63eaff 100644
+index 53b042f8..4c16760f 100644
 --- a/src/main/java/org/bukkit/entity/Minecart.java
 +++ b/src/main/java/org/bukkit/entity/Minecart.java
-@@ -1,7 +1,6 @@
- package org.bukkit.entity;
+@@ -2,7 +2,6 @@ package org.bukkit.entity;
  
+ import org.bukkit.Material;
  import org.bukkit.block.data.BlockData;
 -import org.bukkit.material.MaterialData;
  import org.bukkit.util.Vector;
  import org.jetbrains.annotations.NotNull;
  import org.jetbrains.annotations.Nullable;
-@@ -96,23 +95,6 @@ public interface Minecart extends Vehicle {
+@@ -97,23 +96,6 @@ public interface Minecart extends Vehicle {
       */
      public void setDerailedVelocityMod(@NotNull Vector derailed);
  
@@ -16459,7 +16459,7 @@ index 95c79c5f..cd63eaff 100644
       * Sets the display block for this minecart.
       * Passing a null value will set the minecart to have no display block.
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index f7fd13dc..65672655 100644
+index ea5257cc..1a3a7f36 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
 @@ -403,18 +403,6 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
@@ -17406,7 +17406,7 @@ index 1d442dc1..10bdaf1a 100644
      @Override
      public FurnaceRecipe setInput(@NotNull Material input) {
 diff --git a/src/main/java/org/bukkit/inventory/ItemStack.java b/src/main/java/org/bukkit/inventory/ItemStack.java
-index ccd81fca..a53305ce 100644
+index 4f2520f7..05de6fd2 100644
 --- a/src/main/java/org/bukkit/inventory/ItemStack.java
 +++ b/src/main/java/org/bukkit/inventory/ItemStack.java
 @@ -14,7 +14,6 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
