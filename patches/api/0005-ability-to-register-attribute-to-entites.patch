@@ -1,4 +1,4 @@
-From d4585f20f34cb4ca2f182366b527ea65cb37211c Mon Sep 17 00:00:00 2001
+From 13d73cb66e8929868d576a035507eae5f2d38f95 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Sat, 24 Oct 2020 16:37:21 +0200
 Subject: [PATCH] ability to register attribute to entites
@@ -8,7 +8,7 @@ Subject: [PATCH] ability to register attribute to entites
  1 file changed, 10 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/attribute/Attributable.java b/src/main/java/org/bukkit/attribute/Attributable.java
-index 0ed96b5a..2ecea57c 100644
+index 0ed96b5a..d36c6094 100644
 --- a/src/main/java/org/bukkit/attribute/Attributable.java
 +++ b/src/main/java/org/bukkit/attribute/Attributable.java
 @@ -17,4 +17,14 @@ public interface Attributable {
@@ -16,7 +16,7 @@ index 0ed96b5a..2ecea57c 100644
      @Nullable
      AttributeInstance getAttribute(@NotNull Attribute attribute);
 +
-+    // CsPaper start
++    // Weeper start
 +    /**
 +     * Registers a generic attribute to that attributable instance.
 +     * Allows it to add attributes not registered by default to that entity.
@@ -24,7 +24,7 @@ index 0ed96b5a..2ecea57c 100644
 +     * @param attribute the generic attribute to register
 +     */
 +    void registerAttribute(@NotNull Attribute attribute);
-+    // CsPaper end
++    // Weeper end
  }
 -- 
 2.29.2
