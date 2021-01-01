@@ -1,28 +1,383 @@
-From 7322fa251714e78ad7d52ef879151f96911fbac9 Mon Sep 17 00:00:00 2001
+From 3a40a1533aec29d74399b16513c03c7c38be3546 Mon Sep 17 00:00:00 2001
 From: Yannick Lamprecht <yannicklamprecht@live.de>
 Date: Fri, 1 Jan 2021 19:00:36 +0100
 Subject: [PATCH] rip out legacy classes
 
 ---
- .../org/bukkit/craftbukkit/CraftParticle.java |   6 +-
+ .../net/minecraft/server/EntityHuman.java     |   6 +-
+ .../java/net/minecraft/server/EntityItem.java |  16 -
+ .../java/net/minecraft/server/ItemDye.java    |   7 +-
+ .../net/minecraft/server/LoginListener.java   |  26 +-
+ .../minecraft/server/PlayerConnection.java    |  84 +---
+ .../craftbukkit/CraftChunkSnapshot.java       |   7 -
+ .../org/bukkit/craftbukkit/CraftEffect.java   |   8 +-
+ .../org/bukkit/craftbukkit/CraftParticle.java |  12 +-
+ .../org/bukkit/craftbukkit/CraftServer.java   |  11 -
+ .../org/bukkit/craftbukkit/CraftWorld.java    |  28 +-
+ .../bukkit/craftbukkit/block/CraftBanner.java |   9 +-
+ .../bukkit/craftbukkit/block/CraftBlock.java  |  25 +-
+ .../craftbukkit/block/CraftBlockState.java    |  39 +-
+ .../craftbukkit/block/CraftShulkerBox.java    |   2 +-
+ .../bukkit/craftbukkit/block/CraftSign.java   |   5 +-
+ .../bukkit/craftbukkit/block/CraftSkull.java  |  59 ---
+ .../entity/CraftAbstractHorse.java            |   5 -
+ .../bukkit/craftbukkit/entity/CraftCat.java   |   5 +-
+ .../craftbukkit/entity/CraftDonkey.java       |   6 -
+ .../craftbukkit/entity/CraftEnderman.java     |  14 +-
+ .../craftbukkit/entity/CraftEvoker.java       |  10 -
+ .../bukkit/craftbukkit/entity/CraftHorse.java |  17 +-
+ .../craftbukkit/entity/CraftLivingEntity.java |  16 +-
+ .../bukkit/craftbukkit/entity/CraftLlama.java |   5 -
+ .../craftbukkit/entity/CraftMinecart.java     |  20 -
+ .../bukkit/craftbukkit/entity/CraftMule.java  |   6 -
+ .../craftbukkit/entity/CraftPlayer.java       |  10 +-
+ .../bukkit/craftbukkit/entity/CraftSheep.java |   5 +-
+ .../craftbukkit/entity/CraftShulker.java      |   7 +-
+ .../craftbukkit/entity/CraftSkeleton.java     |  10 -
+ .../entity/CraftSkeletonHorse.java            |   6 -
+ .../bukkit/craftbukkit/entity/CraftStray.java |   5 -
+ .../craftbukkit/entity/CraftTropicalFish.java |   9 +-
+ .../entity/CraftWitherSkeleton.java           |   5 -
+ .../bukkit/craftbukkit/entity/CraftWolf.java  |   5 +-
+ .../craftbukkit/entity/CraftZombieHorse.java  |   6 -
+ .../craftbukkit/generator/CraftChunkData.java |  22 -
+ .../craftbukkit/inventory/CraftInventory.java |   7 -
+ .../inventory/CraftItemFactory.java           |   3 -
+ .../craftbukkit/inventory/CraftItemStack.java |  12 +-
+ .../inventory/CraftMetaBanner.java            |  10 +-
+ .../inventory/CraftMetaBlockState.java        |   2 +-
+ .../craftbukkit/inventory/CraftMetaItem.java  |  13 +-
+ .../inventory/CraftMetaSpawnEgg.java          |   4 -
+ .../tags/DeprecatedContainerTagType.java      |  48 --
+ .../tags/DeprecatedCustomTagContainer.java    |  68 ---
+ .../tags/DeprecatedItemAdapterContext.java    |  24 -
+ .../inventory/tags/DeprecatedItemTagType.java |  34 --
  .../bukkit/craftbukkit/legacy/CraftEvil.java  | 106 -----
  .../craftbukkit/legacy/CraftLegacy.java       | 437 ------------------
+ .../CraftBlockProjectileSource.java           |  12 +-
+ .../craftbukkit/scoreboard/CraftTeam.java     |  74 ---
  .../bukkit/craftbukkit/util/CraftLegacy.java  |  42 --
+ .../craftbukkit/util/CraftMagicNumbers.java   | 150 +++---
+ src/test/java/org/bukkit/DyeColorsTest.java   |   6 +-
+ src/test/java/org/bukkit/MaterialTest.java    |   6 -
+ src/test/java/org/bukkit/ParticleTest.java    |   3 -
  src/test/java/org/bukkit/PerMaterialTest.java |  28 +-
+ .../DeprecatedItemMetaCustomValueTest.java    | 313 -------------
+ .../inventory/NMSCraftItemStackTest.java      |   1 -
  .../bukkit/craftbukkit/legacy/EvilTest.java   |  23 -
  .../bukkit/craftbukkit/legacy/LegacyTest.java | 128 -----
- 7 files changed, 2 insertions(+), 768 deletions(-)
+ .../bukkit/support/AbstractTestingBase.java   |   2 +-
+ 63 files changed, 178 insertions(+), 1916 deletions(-)
+ delete mode 100644 src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedContainerTagType.java
+ delete mode 100644 src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedCustomTagContainer.java
+ delete mode 100644 src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedItemAdapterContext.java
+ delete mode 100644 src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedItemTagType.java
  delete mode 100644 src/main/java/org/bukkit/craftbukkit/legacy/CraftEvil.java
  delete mode 100644 src/main/java/org/bukkit/craftbukkit/legacy/CraftLegacy.java
  delete mode 100644 src/main/java/org/bukkit/craftbukkit/util/CraftLegacy.java
+ delete mode 100644 src/test/java/org/bukkit/craftbukkit/inventory/DeprecatedItemMetaCustomValueTest.java
  delete mode 100644 src/test/java/org/bukkit/craftbukkit/legacy/EvilTest.java
  delete mode 100644 src/test/java/org/bukkit/craftbukkit/legacy/LegacyTest.java
 
+diff --git a/src/main/java/net/minecraft/server/EntityHuman.java b/src/main/java/net/minecraft/server/EntityHuman.java
+index 3ef463e13..1cf536d2a 100644
+--- a/src/main/java/net/minecraft/server/EntityHuman.java
++++ b/src/main/java/net/minecraft/server/EntityHuman.java
+@@ -795,11 +795,7 @@ public abstract class EntityHuman extends EntityLiving {
+                 return true;
+             }
+         }
+-
+-        if (this instanceof EntityPlayer) {
+-            return !team.hasPlayer(((EntityPlayer) this).getBukkitEntity());
+-        }
+-        return !team.hasPlayer(this.world.getServer().getOfflinePlayer(this.getName()));
++        return !team.hasEntry(this.getName());
+         // CraftBukkit end
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/EntityItem.java b/src/main/java/net/minecraft/server/EntityItem.java
+index d9a10215e..58168fba6 100644
+--- a/src/main/java/net/minecraft/server/EntityItem.java
++++ b/src/main/java/net/minecraft/server/EntityItem.java
+@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
+ // CraftBukkit start
+ import org.bukkit.Material; // Paper
+ import org.bukkit.event.entity.EntityPickupItemEvent;
+-import org.bukkit.event.player.PlayerPickupItemEvent;
+ // CraftBukkit end
+ import org.bukkit.event.player.PlayerAttemptPickupItemEvent; // Paper
+ 
+@@ -375,21 +374,6 @@ public class EntityItem extends Entity implements HopperPusher {
+ 
+             if (this.pickupDelay <= 0 && canHold > 0) {
+                 itemstack.setCount(canHold);
+-                // Call legacy event
+-                PlayerPickupItemEvent playerEvent = new PlayerPickupItemEvent((org.bukkit.entity.Player) entityhuman.getBukkitEntity(), (org.bukkit.entity.Item) this.getBukkitEntity(), remaining);
+-                playerEvent.setCancelled(!entityhuman.canPickUpLoot);
+-                this.world.getServer().getPluginManager().callEvent(playerEvent);
+-                flyAtPlayer = playerEvent.getFlyAtPlayer(); // Paper
+-                if (playerEvent.isCancelled()) {
+-                    itemstack.setCount(i); // SPIGOT-5294 - restore count
+-                    // Paper Start
+-                    if (flyAtPlayer) {
+-                        entityhuman.receive(this, i);
+-                    }
+-                    // Paper End
+-                    return;
+-                }
+-
+                 // Call newer event afterwards
+                 EntityPickupItemEvent entityEvent = new EntityPickupItemEvent((org.bukkit.entity.Player) entityhuman.getBukkitEntity(), (org.bukkit.entity.Item) this.getBukkitEntity(), remaining);
+                 entityEvent.setCancelled(!entityhuman.canPickUpLoot);
+diff --git a/src/main/java/net/minecraft/server/ItemDye.java b/src/main/java/net/minecraft/server/ItemDye.java
+index b885d6671..7b0bb8b0b 100644
+--- a/src/main/java/net/minecraft/server/ItemDye.java
++++ b/src/main/java/net/minecraft/server/ItemDye.java
+@@ -3,6 +3,7 @@ package net.minecraft.server;
+ import com.google.common.collect.Maps;
+ import java.util.Map;
+ 
++import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.event.entity.SheepDyeWoolEvent; // CraftBukkit
+ 
+ public class ItemDye extends Item {
+@@ -24,15 +25,15 @@ public class ItemDye extends Item {
+             if (entitysheep.isAlive() && !entitysheep.isSheared() && entitysheep.getColor() != this.b) {
+                 if (!entityhuman.world.isClientSide) {
+                     // CraftBukkit start
+-                    byte bColor = (byte) this.b.getColorIndex();
+-                    SheepDyeWoolEvent event = new SheepDyeWoolEvent((org.bukkit.entity.Sheep) entitysheep.getBukkitEntity(), org.bukkit.DyeColor.getByWoolData(bColor));
++                    SheepDyeWoolEvent event = new SheepDyeWoolEvent((org.bukkit.entity.Sheep) entitysheep.getBukkitEntity(),
++                        CraftMagicNumbers.fromNMS(this.b));
+                     entitysheep.world.getServer().getPluginManager().callEvent(event);
+ 
+                     if (event.isCancelled()) {
+                         return EnumInteractionResult.PASS;
+                     }
+ 
+-                    entitysheep.setColor(EnumColor.fromColorIndex((byte) event.getColor().getWoolData()));
++                    entitysheep.setColor(CraftMagicNumbers.toNMS(event.getColor()));
+                     // CraftBukkit end
+                     itemstack.subtract(1);
+                 }
+diff --git a/src/main/java/net/minecraft/server/LoginListener.java b/src/main/java/net/minecraft/server/LoginListener.java
+index c61cd50df..cb450b6dd 100644
+--- a/src/main/java/net/minecraft/server/LoginListener.java
++++ b/src/main/java/net/minecraft/server/LoginListener.java
+@@ -24,7 +24,6 @@ import org.apache.logging.log4j.Logger;
+ import org.bukkit.Bukkit;
+ import org.bukkit.craftbukkit.util.Waitable;
+ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+-import org.bukkit.event.player.PlayerPreLoginEvent;
+ // CraftBukkit end
+ import io.netty.buffer.Unpooled; // Paper
+ 
+@@ -319,28 +318,9 @@ public class LoginListener implements PacketLoginInListener {
+                             uniqueId = i.getId();
+                             // Paper end
+ 
+-                        if (PlayerPreLoginEvent.getHandlerList().getRegisteredListeners().length != 0) {
+-                            final PlayerPreLoginEvent event = new PlayerPreLoginEvent(playerName, address, uniqueId);
+-                            if (asyncEvent.getResult() != PlayerPreLoginEvent.Result.ALLOWED) {
+-                                event.disallow(asyncEvent.getResult(), asyncEvent.getKickMessage());
+-                            }
+-                            Waitable<PlayerPreLoginEvent.Result> waitable = new Waitable<PlayerPreLoginEvent.Result>() {
+-                                @Override
+-                                protected PlayerPreLoginEvent.Result evaluate() {
+-                                    server.getPluginManager().callEvent(event);
+-                                    return event.getResult();
+-                                }};
+-
+-                            LoginListener.this.server.processQueue.add(waitable);
+-                            if (waitable.get() != PlayerPreLoginEvent.Result.ALLOWED) {
+-                                disconnect(event.getKickMessage());
+-                                return;
+-                            }
+-                        } else {
+-                            if (asyncEvent.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
+-                                disconnect(asyncEvent.getKickMessage());
+-                                return;
+-                            }
++                        if (asyncEvent.getLoginResult() != AsyncPlayerPreLoginEvent.Result.ALLOWED) {
++                            disconnect(asyncEvent.getKickMessage());
++                            return;
+                         }
+                         // CraftBukkit end
+                         LoginListener.LOGGER.info("UUID of player {} is {}", LoginListener.this.i.getName(), LoginListener.this.i.getId());
+diff --git a/src/main/java/net/minecraft/server/PlayerConnection.java b/src/main/java/net/minecraft/server/PlayerConnection.java
+index 73241af66..9bea719c4 100644
+--- a/src/main/java/net/minecraft/server/PlayerConnection.java
++++ b/src/main/java/net/minecraft/server/PlayerConnection.java
+@@ -53,7 +53,6 @@ import org.bukkit.event.inventory.InventoryCreativeEvent;
+ import org.bukkit.event.inventory.InventoryType.SlotType;
+ import org.bukkit.event.player.AsyncPlayerChatEvent;
+ import org.bukkit.event.player.PlayerAnimationEvent;
+-import org.bukkit.event.player.PlayerChatEvent;
+ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+ import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+ import org.bukkit.event.player.PlayerInteractEntityEvent;
+@@ -1933,70 +1932,37 @@ public class PlayerConnection implements PacketListenerPlayIn {
+             AsyncPlayerChatEvent event = new AsyncPlayerChatEvent(async, player, s, new LazyPlayerSet(minecraftServer));
+             this.server.getPluginManager().callEvent(event);
+ 
+-            if (PlayerChatEvent.getHandlerList().getRegisteredListeners().length != 0) {
+-                // Evil plugins still listening to deprecated event
+-                final PlayerChatEvent queueEvent = new PlayerChatEvent(player, event.getMessage(), event.getFormat(), event.getRecipients());
+-                queueEvent.setCancelled(event.isCancelled());
+-                Waitable waitable = new Waitable() {
+-                    @Override
+-                    protected Object evaluate() {
+-                        org.bukkit.Bukkit.getPluginManager().callEvent(queueEvent);
++            if (event.isCancelled()) {
++                return;
++            }
+ 
+-                        if (queueEvent.isCancelled()) {
+-                            return null;
+-                        }
++            // Paper Start - (Meh) Support for vanilla world scoreboard name coloring
++            String displayName = event.getPlayer().getDisplayName();
++            if (this.player.getWorld().paperConfig.useVanillaScoreboardColoring) {
++                IChatBaseComponent nameFromTeam = ScoreboardTeam.a(this.player.getScoreboardTeam(),
++                    ((CraftPlayer) player).getHandle().getDisplayName());
++                // Explicitly add a RESET here, vanilla uses components for this now...
++                displayName = new net.md_5.bungee.api.chat.TextComponent(
++                    net.md_5.bungee.chat.ComponentSerializer
++                        .parse(IChatBaseComponent.ChatSerializer.componentToJson(nameFromTeam)))
++                    .toLegacyText() + org.bukkit.ChatColor.RESET;
++            }
+ 
+-                        String message = String.format(queueEvent.getFormat(), queueEvent.getPlayer().getDisplayName(), queueEvent.getMessage());
+-                        PlayerConnection.this.minecraftServer.console.sendMessage(message);
+-                        if (((LazyPlayerSet) queueEvent.getRecipients()).isLazy()) {
+-                            for (Object player : PlayerConnection.this.minecraftServer.getPlayerList().players) {
+-                                ((EntityPlayer) player).sendMessage(PlayerConnection.this.player.getUniqueID(), CraftChatMessage.fromString(message));
+-                            }
+-                        } else {
+-                            for (Player player : queueEvent.getRecipients()) {
+-                                player.sendMessage(PlayerConnection.this.player.getUniqueID(), message);
+-                            }
+-                        }
+-                        return null;
+-                    }};
+-                if (async) {
+-                    minecraftServer.processQueue.add(waitable);
+-                } else {
+-                    waitable.run();
+-                }
+-                try {
+-                    waitable.get();
+-                } catch (InterruptedException e) {
+-                    Thread.currentThread().interrupt(); // This is proper habit for java. If we aren't handling it, pass it on!
+-                } catch (ExecutionException e) {
+-                    throw new RuntimeException("Exception processing chat event", e.getCause());
++            s = String.format(event.getFormat(), displayName, event.getMessage());
++            // Paper end
++            minecraftServer.console.sendMessage(s);
++            if (((LazyPlayerSet) event.getRecipients()).isLazy()) {
++                for (Object recipient : minecraftServer.getPlayerList().players) {
++                    ((EntityPlayer) recipient)
++                        .sendMessage(PlayerConnection.this.player.getUniqueID(),
++                            CraftChatMessage.fromString(s));
+                 }
+             } else {
+-                if (event.isCancelled()) {
+-                    return;
+-                }
+-
+-                // Paper Start - (Meh) Support for vanilla world scoreboard name coloring
+-                String displayName = event.getPlayer().getDisplayName();
+-                if (this.player.getWorld().paperConfig.useVanillaScoreboardColoring) {
+-                    IChatBaseComponent nameFromTeam = ScoreboardTeam.a(this.player.getScoreboardTeam(), ((CraftPlayer) player).getHandle().getDisplayName());
+-                    // Explicitly add a RESET here, vanilla uses components for this now...
+-                    displayName = new net.md_5.bungee.api.chat.TextComponent(net.md_5.bungee.chat.ComponentSerializer.parse(IChatBaseComponent.ChatSerializer.componentToJson(nameFromTeam))).toLegacyText() + org.bukkit.ChatColor.RESET;
+-                }
+-
+-                s = String.format(event.getFormat(), displayName, event.getMessage());
+-                // Paper end
+-                minecraftServer.console.sendMessage(s);
+-                if (((LazyPlayerSet) event.getRecipients()).isLazy()) {
+-                    for (Object recipient : minecraftServer.getPlayerList().players) {
+-                        ((EntityPlayer) recipient).sendMessage(PlayerConnection.this.player.getUniqueID(), CraftChatMessage.fromString(s));
+-                    }
+-                } else {
+-                    for (Player recipient : event.getRecipients()) {
+-                        recipient.sendMessage(PlayerConnection.this.player.getUniqueID(), s);
+-                    }
++                for (Player recipient : event.getRecipients()) {
++                    recipient.sendMessage(PlayerConnection.this.player.getUniqueID(), s);
+                 }
+             }
++
+         }
+     }
+     // CraftBukkit end
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftChunkSnapshot.java b/src/main/java/org/bukkit/craftbukkit/CraftChunkSnapshot.java
+index db1edc07e..8c98caaab 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftChunkSnapshot.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftChunkSnapshot.java
+@@ -89,13 +89,6 @@ public class CraftChunkSnapshot implements ChunkSnapshot {
+         return CraftBlockData.fromData(blockids[y >> 4].a(x, y & 0xF, z));
+     }
+ 
+-    @Override
+-    public final int getData(int x, int y, int z) {
+-        CraftChunk.validateChunkCoordinates(x, y, z);
+-
+-        return CraftMagicNumbers.toLegacyData(blockids[y >> 4].a(x, y & 0xF, z));
+-    }
+-
+     @Override
+     public final int getBlockSkyLight(int x, int y, int z) {
+         CraftChunk.validateChunkCoordinates(x, y, z);
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftEffect.java b/src/main/java/org/bukkit/craftbukkit/CraftEffect.java
+index bc653300f..0eec69ea8 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftEffect.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftEffect.java
+@@ -2,13 +2,17 @@ package org.bukkit.craftbukkit;
+ 
+ import net.minecraft.server.Block;
+ import net.minecraft.server.Item;
++import net.minecraft.server.MinecraftServer;
++import net.minecraft.server.PotionRegistry;
++
+ import org.apache.commons.lang.Validate;
++import org.bukkit.Bukkit;
+ import org.bukkit.Color;
+ import org.bukkit.Effect;
+ import org.bukkit.Material;
+ import org.bukkit.block.BlockFace;
+ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+-import org.bukkit.potion.Potion;
++import org.bukkit.potion.PotionData;
+ 
+ public class CraftEffect {
+     public static <T> int getDataValue(Effect effect, T data) {
+@@ -18,7 +22,7 @@ public class CraftEffect {
+             datavalue = (Integer) data;
+             break;
+         case POTION_BREAK:
+-            datavalue = ((Potion) data).toDamageValue() & 0x3F;
++            datavalue = ((PotionData) data).getType().getEffectType().getId() & 0x3F;
+             break;
+         case INSTANT_POTION_BREAK:
+             datavalue = ((Color) data).asRGB();
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftParticle.java b/src/main/java/org/bukkit/craftbukkit/CraftParticle.java
-index 54800bbed..d88aa7c6c 100644
+index 54800bbed..18092602d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftParticle.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftParticle.java
-@@ -97,11 +97,7 @@ public enum CraftParticle {
+@@ -17,9 +17,7 @@ import org.bukkit.Particle;
+ import org.bukkit.block.data.BlockData;
+ import org.bukkit.craftbukkit.block.data.CraftBlockData;
+ import org.bukkit.craftbukkit.inventory.CraftItemStack;
+-import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.inventory.ItemStack;
+-import org.bukkit.material.MaterialData;
+ 
+ public enum CraftParticle {
+ 
+@@ -97,11 +95,7 @@ public enum CraftParticle {
      FALLING_OBSIDIAN_TEAR("falling_obsidian_tear"),
      LANDING_OBSIDIAN_TEAR("landing_obsidian_tear"),
      REVERSE_PORTAL("reverse_portal"),
@@ -35,6 +390,1505 @@ index 54800bbed..d88aa7c6c 100644
      private final MinecraftKey minecraftKey;
      private final Particle bukkit;
      private static final BiMap<Particle, MinecraftKey> particles;
+@@ -148,10 +142,6 @@ public enum CraftParticle {
+             ItemStack itemStack = (ItemStack) obj;
+             return new ParticleParamItem((net.minecraft.server.Particle<ParticleParamItem>) nms, CraftItemStack.asNMSCopy(itemStack));
+         }
+-        if (particle.getDataType() == MaterialData.class) {
+-            MaterialData data = (MaterialData) obj;
+-            return new ParticleParamBlock((net.minecraft.server.Particle<ParticleParamBlock>) nms, CraftMagicNumbers.getBlock(data));
+-        }
+         if (particle.getDataType() == BlockData.class) {
+             BlockData data = (BlockData) obj;
+             return new ParticleParamBlock((net.minecraft.server.Particle<ParticleParamBlock>) nms, ((CraftBlockData) data).getState());
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 326fc35b5..ba3e9d929 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -181,7 +181,6 @@ import org.bukkit.entity.Entity;
+ import org.bukkit.entity.Player;
+ import org.bukkit.event.command.UnknownCommandEvent; // Paper
+ import org.bukkit.event.inventory.InventoryType;
+-import org.bukkit.event.player.PlayerChatTabCompleteEvent;
+ import org.bukkit.event.server.BroadcastMessageEvent;
+ import org.bukkit.event.server.ServerLoadEvent;
+ import org.bukkit.event.server.TabCompleteEvent;
+@@ -217,7 +216,6 @@ import org.bukkit.plugin.SimpleServicesManager;
+ import org.bukkit.plugin.java.JavaPluginLoader;
+ import org.bukkit.plugin.messaging.Messenger;
+ import org.bukkit.plugin.messaging.StandardMessenger;
+-import org.bukkit.potion.Potion;
+ import org.bukkit.potion.PotionEffectType;
+ import org.bukkit.scheduler.BukkitWorker;
+ import org.bukkit.util.StringUtil;
+@@ -292,7 +290,6 @@ public final class CraftServer implements Server {
+         Enchantments.DAMAGE_ALL.getClass();
+         org.bukkit.enchantments.Enchantment.stopAcceptingRegistrations();
+ 
+-        Potion.setPotionBrewer(new CraftPotionBrewer());
+         MobEffects.BLINDNESS.getClass();
+         PotionEffectType.stopAcceptingRegistrations();
+         // Ugly hack :(
+@@ -1919,14 +1916,6 @@ public final class CraftServer implements Server {
+ 
+     public List<String> tabCompleteChat(Player player, String message) {
+         List<String> completions = new ArrayList<String>();
+-        PlayerChatTabCompleteEvent event = new PlayerChatTabCompleteEvent(player, message, completions);
+-        String token = event.getLastToken();
+-        for (Player p : getOnlinePlayers()) {
+-            if (player.canSee(p) && StringUtil.startsWithIgnoreCase(p.getName(), token)) {
+-                completions.add(p.getName());
+-            }
+-        }
+-        pluginManager.callEvent(event);
+ 
+         Iterator<?> it = completions.iterator();
+         while (it.hasNext()) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index b71316cce..13125aaf1 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -182,7 +182,6 @@ import org.bukkit.entity.IronGolem;
+ import org.bukkit.entity.ItemFrame;
+ import org.bukkit.entity.LeashHitch;
+ import org.bukkit.entity.LightningStrike;
+-import org.bukkit.entity.LingeringPotion;
+ import org.bukkit.entity.LivingEntity;
+ import org.bukkit.entity.Llama;
+ import org.bukkit.entity.LlamaSpit;
+@@ -227,7 +226,6 @@ import org.bukkit.entity.TNTPrimed;
+ import org.bukkit.entity.Tameable;
+ import org.bukkit.entity.ThrownExpBottle;
+ import org.bukkit.entity.ThrownPotion;
+-import org.bukkit.entity.TippedArrow;
+ import org.bukkit.entity.TraderLlama;
+ import org.bukkit.entity.Trident;
+ import org.bukkit.entity.TropicalFish;
+@@ -257,7 +255,6 @@ import org.bukkit.event.world.TimeSkipEvent;
+ import org.bukkit.generator.BlockPopulator;
+ import org.bukkit.generator.ChunkGenerator;
+ import org.bukkit.inventory.ItemStack;
+-import org.bukkit.material.MaterialData;
+ import org.bukkit.metadata.MetadataValue;
+ import org.bukkit.plugin.Plugin;
+ import org.bukkit.plugin.messaging.StandardMessenger;
+@@ -775,10 +772,7 @@ public class CraftWorld implements World {
+         Validate.notNull(clazz, "Can not spawn an arrow with no class");
+ 
+         EntityArrow arrow;
+-        if (TippedArrow.class.isAssignableFrom(clazz)) {
+-            arrow = EntityTypes.ARROW.a(world);
+-            ((EntityTippedArrow) arrow).setType(CraftPotionUtil.fromBukkit(new PotionData(PotionType.WATER, false, false)));
+-        } else if (SpectralArrow.class.isAssignableFrom(clazz)) {
++        if (SpectralArrow.class.isAssignableFrom(clazz)) {
+             arrow = EntityTypes.SPECTRAL_ARROW.a(world);
+         } else if (Trident.class.isAssignableFrom(clazz)) {
+             arrow = EntityTypes.TRIDENT.a(world);
+@@ -1581,12 +1575,6 @@ public class CraftWorld implements World {
+         return spawn(location, clazz, function, SpawnReason.CUSTOM);
+     }
+ 
+-    @Override
+-    public FallingBlock spawnFallingBlock(Location location, MaterialData data) throws IllegalArgumentException {
+-        Validate.notNull(data, "MaterialData cannot be null");
+-        return spawnFallingBlock(location, data.getItemType(), data.getData());
+-    }
+-
+     @Override
+     public FallingBlock spawnFallingBlock(Location location, org.bukkit.Material material, byte data) throws IllegalArgumentException {
+         Validate.notNull(location, "Location cannot be null");
+@@ -1642,10 +1630,7 @@ public class CraftWorld implements World {
+             } else if (Egg.class.isAssignableFrom(clazz)) {
+                 entity = new EntityEgg(world, x, y, z);
+             } else if (AbstractArrow.class.isAssignableFrom(clazz)) {
+-                if (TippedArrow.class.isAssignableFrom(clazz)) {
+-                    entity = EntityTypes.ARROW.a(world);
+-                    ((EntityTippedArrow) entity).setType(CraftPotionUtil.fromBukkit(new PotionData(PotionType.WATER, false, false)));
+-                } else if (SpectralArrow.class.isAssignableFrom(clazz)) {
++                if (SpectralArrow.class.isAssignableFrom(clazz)) {
+                     entity = EntityTypes.SPECTRAL_ARROW.a(world);
+                 } else if (Trident.class.isAssignableFrom(clazz)) {
+                     entity = EntityTypes.TRIDENT.a(world);
+@@ -1660,13 +1645,8 @@ public class CraftWorld implements World {
+                 entity = EntityTypes.ENDER_PEARL.a(world);
+                 entity.setPositionRotation(x, y, z, 0, 0);
+             } else if (ThrownPotion.class.isAssignableFrom(clazz)) {
+-                if (LingeringPotion.class.isAssignableFrom(clazz)) {
+-                    entity = new EntityPotion(world, x, y, z);
+-                    ((EntityPotion) entity).setItem(CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.LINGERING_POTION, 1)));
+-                } else {
+-                    entity = new EntityPotion(world, x, y, z);
+-                    ((EntityPotion) entity).setItem(CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.SPLASH_POTION, 1)));
+-                }
++                entity = new EntityPotion(world, x, y, z);
++                ((EntityPotion) entity).setItem(CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.SPLASH_POTION, 1)));
+             } else if (Fireball.class.isAssignableFrom(clazz)) {
+                 if (SmallFireball.class.isAssignableFrom(clazz)) {
+                     entity = EntityTypes.SMALL_FIREBALL.a(world);
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBanner.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBanner.java
+index 754205636..f5164a4a0 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBanner.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBanner.java
+@@ -14,6 +14,7 @@ import org.bukkit.block.Banner;
+ import org.bukkit.block.Block;
+ import org.bukkit.block.banner.Pattern;
+ import org.bukkit.block.banner.PatternType;
++import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ 
+ public class CraftBanner extends CraftBlockEntityState<TileEntityBanner> implements Banner {
+ 
+@@ -32,13 +33,13 @@ public class CraftBanner extends CraftBlockEntityState<TileEntityBanner> impleme
+     public void load(TileEntityBanner banner) {
+         super.load(banner);
+ 
+-        base = DyeColor.getByWoolData((byte) ((BlockBannerAbstract) this.data.getBlock()).getColor().getColorIndex());
++        base = CraftMagicNumbers.fromNMS(((BlockBannerAbstract) this.data.getBlock()).getColor());
+         patterns = new ArrayList<Pattern>();
+ 
+         if (banner.patterns != null) {
+             for (int i = 0; i < banner.patterns.size(); i++) {
+                 NBTTagCompound p = (NBTTagCompound) banner.patterns.get(i);
+-                patterns.add(new Pattern(DyeColor.getByWoolData((byte) p.getInt("Color")), PatternType.getByIdentifier(p.getString("Pattern"))));
++                patterns.add(new Pattern(CraftMagicNumbers.fromNMS(EnumColor.fromColorIndex((byte) p.getInt("Color"))), PatternType.getByIdentifier(p.getString("Pattern"))));
+             }
+         }
+     }
+@@ -93,13 +94,13 @@ public class CraftBanner extends CraftBlockEntityState<TileEntityBanner> impleme
+     public void applyTo(TileEntityBanner banner) {
+         super.applyTo(banner);
+ 
+-        banner.color = EnumColor.fromColorIndex(base.getWoolData());
++        banner.color = CraftMagicNumbers.toNMS(base);
+ 
+         NBTTagList newPatterns = new NBTTagList();
+ 
+         for (Pattern p : patterns) {
+             NBTTagCompound compound = new NBTTagCompound();
+-            compound.setInt("Color", p.getColor().getWoolData());
++            compound.setInt("Color", CraftMagicNumbers.toNMS(p.getColor()).getColorIndex());
+             compound.setString("Pattern", p.getPattern().getIdentifier());
+             newPatterns.add(compound);
+         }
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
+index 1a1445e31..aef06d7b8 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
+@@ -135,28 +135,6 @@ public class CraftBlock implements Block {
+         return getWorld().getChunkAt(this);
+     }
+ 
+-    public void setData(final byte data) {
+-        setData(data, 3);
+-    }
+-
+-    public void setData(final byte data, boolean applyPhysics) {
+-        if (applyPhysics) {
+-            setData(data, 3);
+-        } else {
+-            setData(data, 2);
+-        }
+-    }
+-
+-    private void setData(final byte data, int flag) {
+-        world.setTypeAndData(position, CraftMagicNumbers.getBlock(getType(), data), flag);
+-    }
+-
+-    @Override
+-    public byte getData() {
+-        IBlockData blockData = world.getType(position);
+-        return CraftMagicNumbers.toLegacyData(blockData);
+-    }
+-
+     @Override
+     public BlockData getBlockData() {
+         return CraftBlockData.fromData(getNMS());
+@@ -573,7 +551,8 @@ public class CraftBlock implements Block {
+ 
+         Block relative = getRelative(face);
+         if (relative.getType() == Material.REDSTONE_WIRE) {
+-            return Math.max(power, relative.getData()) > 0;
++
++            return Math.max(power, relative.getBlockPower()) > 0;
+         }
+ 
+         return power > 0;
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockState.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockState.java
+index 36d7de6e6..4da1efa16 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlockState.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlockState.java
+@@ -15,8 +15,7 @@ import org.bukkit.block.data.BlockData;
+ import org.bukkit.craftbukkit.CraftWorld;
+ import org.bukkit.craftbukkit.block.data.CraftBlockData;
+ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+-import org.bukkit.material.Attachable;
+-import org.bukkit.material.MaterialData;
++import org.bukkit.block.data.Attachable;
+ import org.bukkit.metadata.MetadataValue;
+ import org.bukkit.plugin.Plugin;
+ 
+@@ -102,27 +101,6 @@ public class CraftBlockState implements BlockState {
+         this.data = ((CraftBlockData) data).getState();
+     }
+ 
+-    @Override
+-    public void setData(final MaterialData data) {
+-        Material mat = CraftMagicNumbers.getMaterial(this.data).getItemType();
+-
+-        if ((mat == null) || (mat.getData() == null)) {
+-            this.data = CraftMagicNumbers.getBlock(data);
+-        } else {
+-            if ((data.getClass() == mat.getData()) || (data.getClass() == MaterialData.class)) {
+-                this.data = CraftMagicNumbers.getBlock(data);
+-            } else {
+-                throw new IllegalArgumentException("Provided data is not of type "
+-                        + mat.getData().getName() + ", found " + data.getClass().getName());
+-            }
+-        }
+-    }
+-
+-    @Override
+-    public MaterialData getData() {
+-        return CraftMagicNumbers.getMaterial(data);
+-    }
+-
+     @Override
+     public void setType(final Material type) {
+         Preconditions.checkArgument(type != null, "Material cannot be null");
+@@ -189,19 +167,9 @@ public class CraftBlockState implements BlockState {
+                 3
+         );
+ 
+-        // Update levers etc
+-        if (false && applyPhysics && getData() instanceof Attachable) { // Call does not map to new API
+-            world.getHandle().applyPhysics(position.shift(CraftBlock.blockFaceToNotch(((Attachable) getData()).getAttachedFace())), newBlock.getBlock());
+-        }
+-
+         return true;
+     }
+ 
+-    @Override
+-    public byte getRawData() {
+-        return CraftMagicNumbers.toLegacyData(data);
+-    }
+-
+     @Override
+     public Location getLocation() {
+         return new Location(world, getX(), getY(), getZ());
+@@ -221,11 +189,6 @@ public class CraftBlockState implements BlockState {
+         return loc;
+     }
+ 
+-    @Override
+-    public void setRawData(byte data) {
+-        this.data = CraftMagicNumbers.getBlock(getType(), data);
+-    }
+-
+     @Override
+     public boolean equals(Object obj) {
+         if (obj == null) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftShulkerBox.java b/src/main/java/org/bukkit/craftbukkit/block/CraftShulkerBox.java
+index 10bc0b094..6eda3d0a8 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftShulkerBox.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftShulkerBox.java
+@@ -41,7 +41,7 @@ public class CraftShulkerBox extends CraftLootable<TileEntityShulkerBox> impleme
+     public DyeColor getColor() {
+         net.minecraft.server.Block block = CraftMagicNumbers.getBlock(this.getType());
+ 
+-        return DyeColor.getByWoolData((byte) ((BlockShulkerBox) block).color.getColorIndex());
++        return CraftMagicNumbers.fromNMS(((BlockShulkerBox) block).color);
+     }
+ 
+     @Override
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java b/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java
+index 4a266b95a..e5314af09 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftSign.java
+@@ -9,6 +9,7 @@ import org.bukkit.Material;
+ import org.bukkit.block.Block;
+ import org.bukkit.block.Sign;
+ import org.bukkit.craftbukkit.util.CraftChatMessage;
++import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ 
+ public class CraftSign extends CraftBlockEntityState<TileEntitySign> implements Sign {
+ 
+@@ -61,12 +62,12 @@ public class CraftSign extends CraftBlockEntityState<TileEntitySign> implements
+ 
+     @Override
+     public DyeColor getColor() {
+-        return DyeColor.getByWoolData((byte) getSnapshot().getColor().getColorIndex());
++        return CraftMagicNumbers.fromNMS(getSnapshot().getColor());
+     }
+ 
+     @Override
+     public void setColor(DyeColor color) {
+-        getSnapshot().setColor(EnumColor.fromColorIndex(color.getWoolData()));
++        getSnapshot().setColor(CraftMagicNumbers.toNMS(color));
+     }
+ 
+     @Override
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftSkull.java b/src/main/java/org/bukkit/craftbukkit/block/CraftSkull.java
+index ecc32c2fb..1419e2528 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftSkull.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftSkull.java
+@@ -9,7 +9,6 @@ import net.minecraft.server.TileEntitySkull;
+ import org.bukkit.Bukkit;
+ import org.bukkit.Material;
+ import org.bukkit.OfflinePlayer;
+-import org.bukkit.SkullType;
+ import org.bukkit.block.Block;
+ import org.bukkit.block.BlockFace;
+ import org.bukkit.block.Skull;
+@@ -39,24 +38,6 @@ public class CraftSkull extends CraftBlockEntityState<TileEntitySkull> implement
+         profile = skull.gameProfile;
+     }
+ 
+-    static int getSkullType(SkullType type) {
+-        switch (type) {
+-            default:
+-            case SKELETON:
+-                return 0;
+-            case WITHER:
+-                return 1;
+-            case ZOMBIE:
+-                return 2;
+-            case PLAYER:
+-                return 3;
+-            case CREEPER:
+-                return 4;
+-            case DRAGON:
+-                return 5;
+-        }
+-    }
+-
+     @Override
+     public boolean hasOwner() {
+         return profile != null;
+@@ -138,44 +119,4 @@ public class CraftSkull extends CraftBlockEntityState<TileEntitySkull> implement
+         }
+         setBlockData(blockData);
+     }
+-
+-    @Override
+-    public SkullType getSkullType() {
+-        switch (getType()) {
+-            case SKELETON_SKULL:
+-            case SKELETON_WALL_SKULL:
+-                return SkullType.SKELETON;
+-            case WITHER_SKELETON_SKULL:
+-            case WITHER_SKELETON_WALL_SKULL:
+-                return SkullType.WITHER;
+-            case ZOMBIE_HEAD:
+-            case ZOMBIE_WALL_HEAD:
+-                return SkullType.ZOMBIE;
+-            case PLAYER_HEAD:
+-            case PLAYER_WALL_HEAD:
+-                return SkullType.PLAYER;
+-            case CREEPER_HEAD:
+-            case CREEPER_WALL_HEAD:
+-                return SkullType.CREEPER;
+-            case DRAGON_HEAD:
+-            case DRAGON_WALL_HEAD:
+-                return SkullType.DRAGON;
+-            default:
+-                throw new IllegalArgumentException("Unknown SkullType for " + getType());
+-        }
+-    }
+-
+-    @Override
+-    public void setSkullType(SkullType skullType) {
+-        throw new UnsupportedOperationException("Must change block type");
+-    }
+-
+-    @Override
+-    public void applyTo(TileEntitySkull skull) {
+-        super.applyTo(skull);
+-
+-        if (getSkullType() == SkullType.PLAYER) {
+-            skull.setGameProfile(profile);
+-        }
+-    }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftAbstractHorse.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftAbstractHorse.java
+index 218a2190d..b5442e9b2 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftAbstractHorse.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftAbstractHorse.java
+@@ -23,11 +23,6 @@ public abstract class CraftAbstractHorse extends CraftAnimals implements Abstrac
+         return (EntityHorseAbstract) entity;
+     }
+ 
+-    @Override
+-    public void setVariant(Horse.Variant variant) {
+-        throw new UnsupportedOperationException("Not supported.");
+-    }
+-
+     @Override
+     public int getDomestication() {
+         return getHandle().getTemper();
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftCat.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftCat.java
+index 836110b00..5954d5c73 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftCat.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftCat.java
+@@ -5,6 +5,7 @@ import net.minecraft.server.EntityCat;
+ import net.minecraft.server.EnumColor;
+ import org.bukkit.DyeColor;
+ import org.bukkit.craftbukkit.CraftServer;
++import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.entity.Cat;
+ import org.bukkit.entity.EntityType;
+ 
+@@ -43,11 +44,11 @@ public class CraftCat extends CraftTameableAnimal implements Cat {
+ 
+     @Override
+     public DyeColor getCollarColor() {
+-        return DyeColor.getByWoolData((byte) getHandle().getCollarColor().getColorIndex());
++        return CraftMagicNumbers.fromNMS(getHandle().getCollarColor());
+     }
+ 
+     @Override
+     public void setCollarColor(DyeColor color) {
+-        getHandle().setCollarColor(EnumColor.fromColorIndex(color.getWoolData()));
++        getHandle().setCollarColor(CraftMagicNumbers.toNMS(color));
+     }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftDonkey.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftDonkey.java
+index b4d74414a..ca963fa51 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftDonkey.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftDonkey.java
+@@ -4,7 +4,6 @@ import net.minecraft.server.EntityHorseDonkey;
+ import org.bukkit.craftbukkit.CraftServer;
+ import org.bukkit.entity.Donkey;
+ import org.bukkit.entity.EntityType;
+-import org.bukkit.entity.Horse.Variant;
+ 
+ public class CraftDonkey extends CraftChestedHorse implements Donkey {
+ 
+@@ -21,9 +20,4 @@ public class CraftDonkey extends CraftChestedHorse implements Donkey {
+     public EntityType getType() {
+         return EntityType.DONKEY;
+     }
+-
+-    @Override
+-    public Variant getVariant() {
+-        return Variant.DONKEY;
+-    }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEnderman.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEnderman.java
+index 0c5f35934..9fcbe4c92 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEnderman.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEnderman.java
+@@ -2,14 +2,12 @@ package org.bukkit.craftbukkit.entity;
+ 
+ import net.minecraft.server.EntityEnderman;
+ import net.minecraft.server.IBlockData;
+-import org.bukkit.Material;
+ import org.bukkit.block.data.BlockData;
+ import org.bukkit.craftbukkit.CraftServer;
+ import org.bukkit.craftbukkit.block.data.CraftBlockData;
+-import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.entity.Enderman;
+ import org.bukkit.entity.EntityType;
+-import org.bukkit.material.MaterialData;
++
+ 
+ public class CraftEnderman extends CraftMonster implements Enderman {
+     public CraftEnderman(CraftServer server, EntityEnderman entity) {
+@@ -17,11 +15,6 @@ public class CraftEnderman extends CraftMonster implements Enderman {
+     }
+ 
+     @Override public boolean teleportRandomly() { return getHandle().teleportRandomly(); } // Paper
+-    @Override
+-    public MaterialData getCarriedMaterial() {
+-        IBlockData blockData = getHandle().getCarried();
+-        return (blockData == null) ? Material.AIR.getNewData((byte) 0) : CraftMagicNumbers.getMaterial(blockData);
+-    }
+ 
+     @Override
+     public BlockData getCarriedBlock() {
+@@ -29,11 +22,6 @@ public class CraftEnderman extends CraftMonster implements Enderman {
+         return (blockData == null) ? null : CraftBlockData.fromData(blockData);
+     }
+ 
+-    @Override
+-    public void setCarriedMaterial(MaterialData data) {
+-        getHandle().setCarried(CraftMagicNumbers.getBlock(data));
+-    }
+-
+     @Override
+     public void setCarriedBlock(BlockData blockData) {
+         getHandle().setCarried(blockData == null ? null : ((CraftBlockData) blockData).getState());
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEvoker.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEvoker.java
+index bc397f34f..8da741808 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEvoker.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEvoker.java
+@@ -27,16 +27,6 @@ public class CraftEvoker extends CraftSpellcaster implements Evoker {
+         return EntityType.EVOKER;
+     }
+ 
+-    @Override
+-    public Evoker.Spell getCurrentSpell() {
+-        return Evoker.Spell.values()[getHandle().getSpell().ordinal()];
+-    }
+-
+-    @Override
+-    public void setCurrentSpell(Evoker.Spell spell) {
+-        getHandle().setSpell(spell == null ? EntityIllagerWizard.Spell.NONE : EntityIllagerWizard.Spell.a(spell.ordinal()));
+-    }
+-
+     // Paper start
+     @Override
+     public org.bukkit.entity.Sheep getWololoTarget() {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHorse.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHorse.java
+index 74396af5d..a19b2f887 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHorse.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHorse.java
+@@ -21,11 +21,6 @@ public class CraftHorse extends CraftAbstractHorse implements Horse {
+         return (EntityHorse) super.getHandle();
+     }
+ 
+-    @Override
+-    public Variant getVariant() {
+-        return Variant.HORSE;
+-    }
+-
+     @Override
+     public Color getColor() {
+         return Color.values()[getHandle().getColor().a()];
+@@ -48,16 +43,6 @@ public class CraftHorse extends CraftAbstractHorse implements Horse {
+         getHandle().setVariant(getHandle().getColor(), HorseStyle.a(style.ordinal()));
+     }
+ 
+-    @Override
+-    public boolean isCarryingChest() {
+-        return false;
+-    }
+-
+-    @Override
+-    public void setCarryingChest(boolean chest) {
+-        throw new UnsupportedOperationException("Not supported.");
+-    }
+-
+     @Override
+     public HorseInventory getInventory() {
+         return new CraftInventoryHorse(getHandle().inventoryChest);
+@@ -65,7 +50,7 @@ public class CraftHorse extends CraftAbstractHorse implements Horse {
+ 
+     @Override
+     public String toString() {
+-        return "CraftHorse{variant=" + getVariant() + ", owner=" + getOwner() + '}';
++        return "CraftHorse{owner=" + getOwner() + '}';
+     }
+ 
+     @Override
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+index 1e6f15769..a818ad8b1 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLivingEntity.java
+@@ -64,7 +64,6 @@ import org.bukkit.entity.Fireball;
+ import org.bukkit.entity.Firework;
+ import org.bukkit.entity.FishHook;
+ import org.bukkit.entity.HumanEntity;
+-import org.bukkit.entity.LingeringPotion;
+ import org.bukkit.entity.LivingEntity;
+ import org.bukkit.entity.LlamaSpit;
+ import org.bukkit.entity.Player;
+@@ -75,7 +74,6 @@ import org.bukkit.entity.Snowball;
+ import org.bukkit.entity.SpectralArrow;
+ import org.bukkit.entity.ThrownExpBottle;
+ import org.bukkit.entity.ThrownPotion;
+-import org.bukkit.entity.TippedArrow;
+ import org.bukkit.entity.Trident;
+ import org.bukkit.entity.WitherSkull;
+ import org.bukkit.entity.memory.MemoryKey;
+@@ -469,10 +467,7 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+             launch = new EntityEnderPearl(world, getHandle());
+             ((EntityProjectile) launch).a(getHandle(), getHandle().pitch, getHandle().yaw, 0.0F, 1.5F, 1.0F); // ItemEnderPearl
+         } else if (AbstractArrow.class.isAssignableFrom(projectile)) {
+-            if (TippedArrow.class.isAssignableFrom(projectile)) {
+-                launch = new EntityTippedArrow(world, getHandle());
+-                ((EntityTippedArrow) launch).setType(CraftPotionUtil.fromBukkit(new PotionData(PotionType.WATER, false, false)));
+-            } else if (SpectralArrow.class.isAssignableFrom(projectile)) {
++            if (SpectralArrow.class.isAssignableFrom(projectile)) {
+                 launch = new EntitySpectralArrow(world, getHandle());
+             } else if (Trident.class.isAssignableFrom(projectile)) {
+                 launch = new EntityThrownTrident(world, getHandle(), new net.minecraft.server.ItemStack(net.minecraft.server.Items.TRIDENT));
+@@ -481,13 +476,8 @@ public class CraftLivingEntity extends CraftEntity implements LivingEntity {
+             }
+             ((EntityArrow) launch).a(getHandle(), getHandle().pitch, getHandle().yaw, 0.0F, 3.0F, 1.0F); // ItemBow
+         } else if (ThrownPotion.class.isAssignableFrom(projectile)) {
+-            if (LingeringPotion.class.isAssignableFrom(projectile)) {
+-                launch = new EntityPotion(world, getHandle());
+-                ((EntityPotion) launch).setItem(CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.LINGERING_POTION, 1)));
+-            } else {
+-                launch = new EntityPotion(world, getHandle());
+-                ((EntityPotion) launch).setItem(CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.SPLASH_POTION, 1)));
+-            }
++            launch = new EntityPotion(world, getHandle());
++            ((EntityPotion) launch).setItem(CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.SPLASH_POTION, 1)));
+             ((EntityProjectile) launch).a(getHandle(), getHandle().pitch, getHandle().yaw, -20.0F, 0.5F, 1.0F); // ItemSplashPotion
+         } else if (ThrownExpBottle.class.isAssignableFrom(projectile)) {
+             launch = new EntityThrownExpBottle(world, getHandle());
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftLlama.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftLlama.java
+index 3f94c5a92..af61a5fe9 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftLlama.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftLlama.java
+@@ -51,11 +51,6 @@ public class CraftLlama extends CraftChestedHorse implements Llama, CraftRangedE
+         getHandle().loadChest();
+     }
+ 
+-    @Override
+-    public Horse.Variant getVariant() {
+-        return Horse.Variant.LLAMA;
+-    }
+-
+     @Override
+     public String toString() {
+         return "CraftLlama";
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftMinecart.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftMinecart.java
+index d23f994f5..8aec06d39 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftMinecart.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftMinecart.java
+@@ -6,9 +6,7 @@ import net.minecraft.server.IBlockData;
+ import org.bukkit.block.data.BlockData;
+ import org.bukkit.craftbukkit.CraftServer;
+ import org.bukkit.craftbukkit.block.data.CraftBlockData;
+-import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.entity.Minecart;
+-import org.bukkit.material.MaterialData;
+ import org.bukkit.util.Vector;
+ 
+ public abstract class CraftMinecart extends CraftVehicle implements Minecart {
+@@ -73,18 +71,6 @@ public abstract class CraftMinecart extends CraftVehicle implements Minecart {
+         return (EntityMinecartAbstract) entity;
+     }
+ 
+-    @Override
+-    public void setDisplayBlock(MaterialData material) {
+-        if (material != null) {
+-            IBlockData block = CraftMagicNumbers.getBlock(material);
+-            this.getHandle().setDisplayBlock(block);
+-        } else {
+-            // Set block to air (default) and set the flag to not have a display block.
+-            this.getHandle().setDisplayBlock(Blocks.AIR.getBlockData());
+-            this.getHandle().a(false);
+-        }
+-    }
+-
+     @Override
+     public void setDisplayBlockData(BlockData blockData) {
+         if (blockData != null) {
+@@ -97,12 +83,6 @@ public abstract class CraftMinecart extends CraftVehicle implements Minecart {
+         }
+     }
+ 
+-    @Override
+-    public MaterialData getDisplayBlock() {
+-        IBlockData blockData = getHandle().getDisplayBlock();
+-        return CraftMagicNumbers.getMaterial(blockData);
+-    }
+-
+     @Override
+     public BlockData getDisplayBlockData() {
+         IBlockData blockData = getHandle().getDisplayBlock();
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftMule.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftMule.java
+index cf9b3ac18..48938873e 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftMule.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftMule.java
+@@ -3,7 +3,6 @@ package org.bukkit.craftbukkit.entity;
+ import net.minecraft.server.EntityHorseMule;
+ import org.bukkit.craftbukkit.CraftServer;
+ import org.bukkit.entity.EntityType;
+-import org.bukkit.entity.Horse.Variant;
+ import org.bukkit.entity.Mule;
+ 
+ public class CraftMule extends CraftChestedHorse implements Mule {
+@@ -21,9 +20,4 @@ public class CraftMule extends CraftChestedHorse implements Mule {
+     public EntityType getType() {
+         return EntityType.MULE;
+     }
+-
+-    @Override
+-    public Variant getVariant() {
+-        return Variant.MULE;
+-    }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 58caa3240..cd19b8599 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -665,14 +665,6 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         playEffect(loc, effect, datavalue);
+     }
+ 
+-    @Override
+-    public void sendBlockChange(Location loc, Material material, byte data) {
+-        if (getHandle().playerConnection == null) return;
+-
+-        PacketPlayOutBlockChange packet = new PacketPlayOutBlockChange(new BlockPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()), CraftMagicNumbers.getBlock(material, data));
+-        getHandle().playerConnection.sendPacket(packet);
+-    }
+-
+     @Override
+     public void sendBlockChange(Location loc, BlockData block) {
+         if (getHandle().playerConnection == null) return;
+@@ -705,7 +697,7 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+         IChatBaseComponent[] components = CraftSign.sanitizeLines(lines);
+         TileEntitySign sign = new TileEntitySign();
+         sign.setPosition(new BlockPosition(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+-        sign.setColor(EnumColor.fromColorIndex(dyeColor.getWoolData()));
++        sign.setColor(CraftMagicNumbers.toNMS(dyeColor));
+         System.arraycopy(components, 0, sign.lines, 0, sign.lines.length);
+ 
+         getHandle().playerConnection.sendPacket(sign.getUpdatePacket());
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftSheep.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftSheep.java
+index fef86120d..612fd0705 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftSheep.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftSheep.java
+@@ -4,6 +4,7 @@ import net.minecraft.server.EntitySheep;
+ import net.minecraft.server.EnumColor;
+ import org.bukkit.DyeColor;
+ import org.bukkit.craftbukkit.CraftServer;
++import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.entity.EntityType;
+ import org.bukkit.entity.Sheep;
+ 
+@@ -14,12 +15,12 @@ public class CraftSheep extends CraftAnimals implements Sheep {
+ 
+     @Override
+     public DyeColor getColor() {
+-        return DyeColor.getByWoolData((byte) getHandle().getColor().getColorIndex());
++        return CraftMagicNumbers.fromNMS(getHandle().getColor());
+     }
+ 
+     @Override
+     public void setColor(DyeColor color) {
+-        getHandle().setColor(EnumColor.fromColorIndex(color.getWoolData()));
++        getHandle().setColor(CraftMagicNumbers.toNMS(color));
+     }
+ 
+     @Override
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftShulker.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftShulker.java
+index d18531378..bd40e4c94 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftShulker.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftShulker.java
+@@ -1,8 +1,11 @@
+ package org.bukkit.craftbukkit.entity;
+ 
+ import net.minecraft.server.EntityShulker;
++import net.minecraft.server.EnumColor;
++
+ import org.bukkit.DyeColor;
+ import org.bukkit.craftbukkit.CraftServer;
++import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.entity.EntityType;
+ import org.bukkit.entity.Shulker;
+ 
+@@ -29,11 +32,11 @@ public class CraftShulker extends CraftGolem implements Shulker {
+ 
+     @Override
+     public DyeColor getColor() {
+-        return DyeColor.getByWoolData(getHandle().getDataWatcher().get(EntityShulker.COLOR));
++        return CraftMagicNumbers.fromNMS(EnumColor.fromColorIndex(getHandle().getDataWatcher().get(EntityShulker.COLOR)));
+     }
+ 
+     @Override
+     public void setColor(DyeColor color) {
+-        getHandle().getDataWatcher().set(EntityShulker.COLOR, (color == null) ? 16 : color.getWoolData());
++        getHandle().getDataWatcher().set(EntityShulker.COLOR, (color == null) ? 16 : (byte)CraftMagicNumbers.toNMS(color).getColorIndex());
+     }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftSkeleton.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftSkeleton.java
+index 02df66ecf..d05f37e9a 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftSkeleton.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftSkeleton.java
+@@ -26,14 +26,4 @@ public class CraftSkeleton extends CraftMonster implements Skeleton, CraftRanged
+     public EntityType getType() {
+         return EntityType.SKELETON;
+     }
+-
+-    @Override
+-    public SkeletonType getSkeletonType() {
+-       return SkeletonType.NORMAL;
+-    }
+-
+-    @Override
+-    public void setSkeletonType(SkeletonType type) {
+-        throw new UnsupportedOperationException("Not supported.");
+-    }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftSkeletonHorse.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftSkeletonHorse.java
+index 2a7d1d4ec..f0beaa256 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftSkeletonHorse.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftSkeletonHorse.java
+@@ -3,7 +3,6 @@ package org.bukkit.craftbukkit.entity;
+ import net.minecraft.server.EntityHorseSkeleton;
+ import org.bukkit.craftbukkit.CraftServer;
+ import org.bukkit.entity.EntityType;
+-import org.bukkit.entity.Horse.Variant;
+ import org.bukkit.entity.SkeletonHorse;
+ 
+ public class CraftSkeletonHorse extends CraftAbstractHorse implements SkeletonHorse {
+@@ -22,11 +21,6 @@ public class CraftSkeletonHorse extends CraftAbstractHorse implements SkeletonHo
+         return EntityType.SKELETON_HORSE;
+     }
+ 
+-    @Override
+-    public Variant getVariant() {
+-        return Variant.SKELETON_HORSE;
+-    }
+-
+     // Paper start
+     @Override
+     public EntityHorseSkeleton getHandle() {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftStray.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftStray.java
+index 0fcb05bad..7fb8d3929 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftStray.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftStray.java
+@@ -20,9 +20,4 @@ public class CraftStray extends CraftSkeleton implements Stray {
+     public EntityType getType() {
+         return EntityType.STRAY;
+     }
+-
+-    @Override
+-    public SkeletonType getSkeletonType() {
+-        return SkeletonType.STRAY;
+-    }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftTropicalFish.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftTropicalFish.java
+index 9243381a2..83566da52 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftTropicalFish.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftTropicalFish.java
+@@ -3,8 +3,11 @@ package org.bukkit.craftbukkit.entity;
+ import java.util.HashMap;
+ import java.util.Map;
+ import net.minecraft.server.EntityTropicalFish;
++import net.minecraft.server.EnumColor;
++
+ import org.bukkit.DyeColor;
+ import org.bukkit.craftbukkit.CraftServer;
++import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.entity.EntityType;
+ import org.bukkit.entity.TropicalFish;
+ 
+@@ -100,15 +103,15 @@ public class CraftTropicalFish extends CraftFish implements TropicalFish {
+     }
+ 
+     public static int getData(DyeColor patternColor, DyeColor bodyColor, Pattern type) {
+-        return patternColor.getWoolData() << 24 | bodyColor.getWoolData() << 16 | CraftPattern.values()[type.ordinal()].getDataValue();
++        return CraftMagicNumbers.toNMS(patternColor).getColorIndex() << 24 | CraftMagicNumbers.toNMS(bodyColor).getColorIndex() << 16 | CraftPattern.values()[type.ordinal()].getDataValue();
+     }
+ 
+     public static DyeColor getPatternColor(int data) {
+-        return DyeColor.getByWoolData((byte) ((data >> 24) & 0xFF));
++        return CraftMagicNumbers.fromNMS(EnumColor.fromColorIndex((byte) ((data >> 24) & 0xFF)));
+     }
+ 
+     public static DyeColor getBodyColor(int data) {
+-        return DyeColor.getByWoolData((byte) ((data >> 16) & 0xFF));
++        return CraftMagicNumbers.fromNMS(EnumColor.fromColorIndex((byte) ((data >> 16) & 0xFF)));
+     }
+ 
+     public static Pattern getPattern(int data) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftWitherSkeleton.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftWitherSkeleton.java
+index 6fb1da7da..151b6973a 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftWitherSkeleton.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftWitherSkeleton.java
+@@ -20,9 +20,4 @@ public class CraftWitherSkeleton extends CraftSkeleton implements WitherSkeleton
+     public EntityType getType() {
+         return EntityType.WITHER_SKELETON;
+     }
+-
+-    @Override
+-    public SkeletonType getSkeletonType() {
+-        return SkeletonType.WITHER;
+-    }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftWolf.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftWolf.java
+index 5f3314feb..705dbbb2c 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftWolf.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftWolf.java
+@@ -4,6 +4,7 @@ import net.minecraft.server.EntityWolf;
+ import net.minecraft.server.EnumColor;
+ import org.bukkit.DyeColor;
+ import org.bukkit.craftbukkit.CraftServer;
++import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.entity.EntityType;
+ import org.bukkit.entity.Wolf;
+ 
+@@ -38,11 +39,11 @@ public class CraftWolf extends CraftTameableAnimal implements Wolf {
+ 
+     @Override
+     public DyeColor getCollarColor() {
+-        return DyeColor.getByWoolData((byte) getHandle().getCollarColor().getColorIndex());
++        return CraftMagicNumbers.fromNMS(getHandle().getCollarColor());
+     }
+ 
+     @Override
+     public void setCollarColor(DyeColor color) {
+-        getHandle().setCollarColor(EnumColor.fromColorIndex(color.getWoolData()));
++        getHandle().setCollarColor(CraftMagicNumbers.toNMS(color));
+     }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftZombieHorse.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftZombieHorse.java
+index 5b31b6816..c3947bf59 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftZombieHorse.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftZombieHorse.java
+@@ -3,7 +3,6 @@ package org.bukkit.craftbukkit.entity;
+ import net.minecraft.server.EntityHorseZombie;
+ import org.bukkit.craftbukkit.CraftServer;
+ import org.bukkit.entity.EntityType;
+-import org.bukkit.entity.Horse.Variant;
+ import org.bukkit.entity.ZombieHorse;
+ 
+ public class CraftZombieHorse extends CraftAbstractHorse implements ZombieHorse {
+@@ -21,9 +20,4 @@ public class CraftZombieHorse extends CraftAbstractHorse implements ZombieHorse
+     public EntityType getType() {
+         return EntityType.ZOMBIE_HORSE;
+     }
+-
+-    @Override
+-    public Variant getVariant() {
+-        return Variant.UNDEAD_HORSE;
+-    }
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/generator/CraftChunkData.java b/src/main/java/org/bukkit/craftbukkit/generator/CraftChunkData.java
+index 1510d8089..0e42907a5 100644
+--- a/src/main/java/org/bukkit/craftbukkit/generator/CraftChunkData.java
++++ b/src/main/java/org/bukkit/craftbukkit/generator/CraftChunkData.java
+@@ -10,9 +10,7 @@ import org.bukkit.Material;
+ import org.bukkit.World;
+ import org.bukkit.block.data.BlockData;
+ import org.bukkit.craftbukkit.block.data.CraftBlockData;
+-import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.generator.ChunkGenerator;
+-import org.bukkit.material.MaterialData;
+ 
+ /**
+  * Data to be used for the block types and data in a newly generated chunk.
+@@ -46,11 +44,6 @@ public final class CraftChunkData implements ChunkGenerator.ChunkData {
+         setBlock(x, y, z, material.createBlockData());
+     }
+ 
+-    @Override
+-    public void setBlock(int x, int y, int z, MaterialData material) {
+-        setBlock(x, y, z, CraftMagicNumbers.getBlock(material));
+-    }
+-
+     @Override
+     public void setBlock(int x, int y, int z, BlockData blockData) {
+         setBlock(x, y, z, ((CraftBlockData) blockData).getState());
+@@ -61,11 +54,6 @@ public final class CraftChunkData implements ChunkGenerator.ChunkData {
+         setRegion(xMin, yMin, zMin, xMax, yMax, zMax, material.createBlockData());
+     }
+ 
+-    @Override
+-    public void setRegion(int xMin, int yMin, int zMin, int xMax, int yMax, int zMax, MaterialData material) {
+-        setRegion(xMin, yMin, zMin, xMax, yMax, zMax, CraftMagicNumbers.getBlock(material));
+-    }
+-
+     @Override
+     public void setRegion(int xMin, int yMin, int zMin, int xMax, int yMax, int zMax, BlockData blockData) {
+         setRegion(xMin, yMin, zMin, xMax, yMax, zMax, ((CraftBlockData) blockData).getState());
+@@ -76,11 +64,6 @@ public final class CraftChunkData implements ChunkGenerator.ChunkData {
+         return getTypeId(x, y, z).getBukkitMaterial(); // Paper - optimise getType calls
+     }
+ 
+-    @Override
+-    public MaterialData getTypeAndData(int x, int y, int z) {
+-        return CraftMagicNumbers.getMaterial(getTypeId(x, y, z));
+-    }
+-
+     @Override
+     public BlockData getBlockData(int x, int y, int z) {
+         return CraftBlockData.fromData(getTypeId(x, y, z));
+@@ -135,11 +118,6 @@ public final class CraftChunkData implements ChunkGenerator.ChunkData {
+         }
+     }
+ 
+-    @Override
+-    public byte getData(int x, int y, int z) {
+-        return CraftMagicNumbers.toLegacyData(getTypeId(x, y, z));
+-    }
+-
+     private void setBlock(int x, int y, int z, IBlockData type) {
+         if (x != (x & 0xf) || y < 0 || y >= maxHeight || z != (z & 0xf)) {
+             return;
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventory.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventory.java
+index bba9bddc1..bc1364fed 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventory.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventory.java
+@@ -21,7 +21,6 @@ import net.minecraft.server.TileEntitySmoker;
+ import org.apache.commons.lang.Validate;
+ import org.bukkit.Location;
+ import org.bukkit.Material;
+-import org.bukkit.craftbukkit.util.CraftLegacy;
+ import org.bukkit.entity.HumanEntity;
+ import org.bukkit.event.inventory.InventoryType;
+ import org.bukkit.inventory.Inventory;
+@@ -102,7 +101,6 @@ public class CraftInventory implements Inventory {
+     @Override
+     public boolean contains(Material material) {
+         Validate.notNull(material, "Material cannot be null");
+-        material = CraftLegacy.fromLegacy(material);
+         for (ItemStack item : getStorageContents()) {
+             if (item != null && item.getType() == material) {
+                 return true;
+@@ -127,7 +125,6 @@ public class CraftInventory implements Inventory {
+     @Override
+     public boolean contains(Material material, int amount) {
+         Validate.notNull(material, "Material cannot be null");
+-        material = CraftLegacy.fromLegacy(material);
+         if (amount <= 0) {
+             return true;
+         }
+@@ -176,7 +173,6 @@ public class CraftInventory implements Inventory {
+     @Override
+     public HashMap<Integer, ItemStack> all(Material material) {
+         Validate.notNull(material, "Material cannot be null");
+-        material = CraftLegacy.fromLegacy(material);
+         HashMap<Integer, ItemStack> slots = new HashMap<Integer, ItemStack>();
+ 
+         ItemStack[] inventory = getStorageContents();
+@@ -206,7 +202,6 @@ public class CraftInventory implements Inventory {
+     @Override
+     public int first(Material material) {
+         Validate.notNull(material, "Material cannot be null");
+-        material = CraftLegacy.fromLegacy(material);
+         ItemStack[] inventory = getStorageContents();
+         for (int i = 0; i < inventory.length; i++) {
+             ItemStack item = inventory[i];
+@@ -261,7 +256,6 @@ public class CraftInventory implements Inventory {
+ 
+     public int firstPartial(Material material) {
+         Validate.notNull(material, "Material cannot be null");
+-        material = CraftLegacy.fromLegacy(material);
+         ItemStack[] inventory = getStorageContents();
+         for (int i = 0; i < inventory.length; i++) {
+             ItemStack item = inventory[i];
+@@ -418,7 +412,6 @@ public class CraftInventory implements Inventory {
+     @Override
+     public void remove(Material material) {
+         Validate.notNull(material, "Material cannot be null");
+-        material = CraftLegacy.fromLegacy(material);
+         ItemStack[] items = getStorageContents();
+         for (int i = 0; i < items.length; i++) {
+             if (items[i] != null && items[i].getType() == material) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
+index af84813c7..150d1d046 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemFactory.java
+@@ -4,7 +4,6 @@ import org.apache.commons.lang.Validate;
+ import org.bukkit.Color;
+ import org.bukkit.Material;
+ import org.bukkit.configuration.serialization.ConfigurationSerialization;
+-import org.bukkit.craftbukkit.util.CraftLegacy;
+ import org.bukkit.inventory.ItemFactory;
+ import org.bukkit.inventory.ItemStack;
+ import org.bukkit.inventory.meta.ItemMeta;
+@@ -31,7 +30,6 @@ public final class CraftItemFactory implements ItemFactory {
+ 
+     @Override
+     public boolean isApplicable(ItemMeta meta, Material type) {
+-        type = CraftLegacy.fromLegacy(type); // This may be called from legacy item stacks, try to get the right material
+         if (type == null || meta == null) {
+             return false;
+         }
+@@ -49,7 +47,6 @@ public final class CraftItemFactory implements ItemFactory {
+     }
+ 
+     private ItemMeta getItemMeta(Material material, CraftMetaItem meta) {
+-        material = CraftLegacy.fromLegacy(material); // This may be called from legacy item stacks, try to get the right material
+         switch (material) {
+         case AIR:
+             return null;
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
+index addb8ef99..759b6a170 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftItemStack.java
+@@ -11,13 +11,11 @@ import org.apache.commons.lang.Validate;
+ import org.bukkit.Material;
+ import org.bukkit.configuration.serialization.DelegateDeserialization;
+ import org.bukkit.craftbukkit.enchantments.CraftEnchantment;
+-import org.bukkit.craftbukkit.util.CraftLegacy;
+ import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.craftbukkit.util.CraftNamespacedKey;
+ import org.bukkit.enchantments.Enchantment;
+ import org.bukkit.inventory.ItemStack;
+ import org.bukkit.inventory.meta.ItemMeta;
+-import org.bukkit.material.MaterialData;
+ 
+ @DelegateDeserialization(ItemStack.class)
+ public final class CraftItemStack extends ItemStack {
+@@ -31,7 +29,7 @@ public final class CraftItemStack extends ItemStack {
+             return net.minecraft.server.ItemStack.b;
+         }
+ 
+-        Item item = CraftMagicNumbers.getItem(original.getType(), original.getDurability());
++        Item item = CraftMagicNumbers.getItem(original.getType());
+ 
+         if (item == null) {
+             return net.minecraft.server.ItemStack.b;
+@@ -105,11 +103,6 @@ public final class CraftItemStack extends ItemStack {
+         setItemMeta(itemMeta);
+     }
+ 
+-    @Override
+-    public MaterialData getData() {
+-        return handle != null ? CraftMagicNumbers.getMaterialData(handle.getItem()) : super.getData();
+-    }
+-
+     @Override
+     public Material getType() {
+         return handle != null ? CraftMagicNumbers.getMaterial(handle.getItem()) : Material.AIR;
+@@ -132,7 +125,6 @@ public final class CraftItemStack extends ItemStack {
+                 setItemMeta(handle, getItemMeta(handle));
+             }
+         }
+-        setData(null);
+     }
+ 
+     @Override
+@@ -561,7 +553,7 @@ public final class CraftItemStack extends ItemStack {
+         if (handle == null || that.handle == null) {
+             return false;
+         }
+-        Material comparisonType = CraftLegacy.fromLegacy(that.getType()); // This may be called from legacy item stacks, try to get the right material
++        Material comparisonType = that.getType();
+         if (!(comparisonType == getType() && getDurability() == that.getDurability())) {
+             return false;
+         }
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBanner.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBanner.java
+index 87a19622c..49c144cc3 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBanner.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBanner.java
+@@ -5,6 +5,8 @@ import com.google.common.collect.ImmutableMap;
+ import java.util.ArrayList;
+ import java.util.List;
+ import java.util.Map;
++
++import net.minecraft.server.EnumColor;
+ import net.minecraft.server.NBTTagCompound;
+ import net.minecraft.server.NBTTagList;
+ import org.bukkit.DyeColor;
+@@ -47,13 +49,13 @@ public class CraftMetaBanner extends CraftMetaItem implements BannerMeta {
+ 
+         NBTTagCompound entityTag = tag.getCompound("BlockEntityTag");
+ 
+-        base = entityTag.hasKey(BASE.NBT) ? DyeColor.getByWoolData((byte) entityTag.getInt(BASE.NBT)) : null;
++        base = entityTag.hasKey(BASE.NBT) ? CraftMagicNumbers.fromNMS(EnumColor.fromColorIndex((byte) entityTag.getInt(BASE.NBT))) : null;
+ 
+         if (entityTag.hasKey(PATTERNS.NBT)) {
+             NBTTagList patterns = entityTag.getList(PATTERNS.NBT, CraftMagicNumbers.NBT.TAG_COMPOUND);
+             for (int i = 0; i < Math.min(patterns.size(), 20); i++) {
+                 NBTTagCompound p = patterns.getCompound(i);
+-                DyeColor color = DyeColor.getByWoolData((byte) p.getInt(COLOR.NBT));
++                DyeColor color = CraftMagicNumbers.fromNMS(EnumColor.fromColorIndex((byte) p.getInt(COLOR.NBT)));
+                 PatternType pattern = PatternType.getByIdentifier(p.getString(PATTERN.NBT));
+ 
+                 if (color != null && pattern != null) {
+@@ -89,14 +91,14 @@ public class CraftMetaBanner extends CraftMetaItem implements BannerMeta {
+ 
+         NBTTagCompound entityTag = new NBTTagCompound();
+         if (base != null) {
+-            entityTag.setInt(BASE.NBT, base.getWoolData());
++            entityTag.setInt(BASE.NBT, CraftMagicNumbers.toNMS(base).getColorIndex());
+         }
+ 
+         NBTTagList newPatterns = new NBTTagList();
+ 
+         for (Pattern p : patterns) {
+             NBTTagCompound compound = new NBTTagCompound();
+-            compound.setInt(COLOR.NBT, p.getColor().getWoolData());
++            compound.setInt(COLOR.NBT, CraftMagicNumbers.toNMS(p.getColor()).getColorIndex());
+             compound.setString(PATTERN.NBT, p.getPattern().getIdentifier());
+             newPatterns.add(compound);
+         }
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBlockState.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBlockState.java
+index 852e793c0..5879fcd8b 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBlockState.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaBlockState.java
+@@ -709,7 +709,7 @@ public class CraftMetaBlockState extends CraftMetaItem implements BlockStateMeta
+         blockEntityTag = ((CraftBlockEntityState) blockState).getSnapshotNBT();
+         // Set shield base
+         if (material == Material.SHIELD) {
+-            blockEntityTag.setInt(CraftMetaBanner.BASE.NBT, ((CraftBanner) blockState).getBaseColor().getWoolData());
++            blockEntityTag.setInt(CraftMetaBanner.BASE.NBT, CraftMagicNumbers.toNMS(((CraftBanner) blockState).getBaseColor()).getColorIndex());
+         }
+     }
+ 
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
+index c981568c2..4dbb2b25f 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaItem.java
+@@ -63,7 +63,6 @@ import org.bukkit.craftbukkit.attribute.CraftAttributeInstance;
+ import org.bukkit.craftbukkit.attribute.CraftAttributeMap;
+ import org.bukkit.craftbukkit.block.data.CraftBlockData;
+ import org.bukkit.craftbukkit.inventory.CraftMetaItem.ItemMetaKey.Specific;
+-import org.bukkit.craftbukkit.inventory.tags.DeprecatedCustomTagContainer;
+ import org.bukkit.craftbukkit.persistence.CraftPersistentDataContainer;
+ import org.bukkit.craftbukkit.persistence.CraftPersistentDataTypeRegistry;
+ import org.bukkit.craftbukkit.util.CraftChatMessage;
+@@ -77,7 +76,6 @@ import org.bukkit.inventory.meta.BlockDataMeta;
+ import org.bukkit.inventory.meta.Damageable;
+ import org.bukkit.inventory.meta.ItemMeta;
+ import org.bukkit.inventory.meta.Repairable;
+-import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
+ import org.bukkit.persistence.PersistentDataContainer;
+ 
+ // Spigot start
+@@ -1212,11 +1210,6 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
+         return removed > 0;
+     }
+ 
+-    @Override
+-    public CustomItemTagContainer getCustomTagContainer() {
+-        return new DeprecatedCustomTagContainer(this.getPersistentDataContainer());
+-    }
+-
+     @Override
+     public PersistentDataContainer getPersistentDataContainer() {
+         return this.persistentDataContainer;
+@@ -1701,10 +1694,6 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
+ 
+     @Deprecated
+     private void legacyClearAndReplaceKeys(Collection<Namespaced> toUpdate, Collection<Material> beingSet) {
+-        if (beingSet.stream().anyMatch(Material::isLegacy)) {
+-            throw new IllegalArgumentException("Set must not contain any legacy materials!");
+-        }
+-
+         toUpdate.clear();
+         toUpdate.addAll(beingSet.stream().map(Material::getKey).collect(java.util.stream.Collectors.toSet()));
+     }
+@@ -1717,7 +1706,7 @@ class CraftMetaItem implements ItemMeta, Damageable, Repairable, BlockDataMeta {
+                 continue;
+             }
+ 
+-            Material material = Material.matchMaterial(key.toString(), false);
++            Material material = Material.matchMaterial(key.toString());
+             if (material != null) {
+                 mats.add(material);
+             }
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSpawnEgg.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSpawnEgg.java
+index 9509a44fa..2719cbf07 100644
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSpawnEgg.java
++++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftMetaSpawnEgg.java
+@@ -9,10 +9,8 @@ import org.bukkit.Location;
+ import org.bukkit.Material;
+ import org.bukkit.World;
+ import org.bukkit.configuration.serialization.DelegateDeserialization;
+-import org.bukkit.craftbukkit.util.CraftLegacy;
+ import org.bukkit.entity.EntityType;
+ import org.bukkit.inventory.meta.SpawnEggMeta;
+-import org.bukkit.material.MaterialData;
+ import org.bukkit.util.Vector;
+ import java.util.Map;
+ 
+@@ -298,8 +296,6 @@ public class CraftMetaSpawnEgg extends CraftMetaItem implements SpawnEggMeta {
+                 // Remove ID tag as it is now in the material
+                 entityTag.remove(ENTITY_ID.NBT);
+             }
+-
+-            return CraftLegacy.fromLegacy(new MaterialData(Material.LEGACY_MONSTER_EGG, (byte) spawnedType.getTypeId()));
+         }
+ 
+         return super.updateMaterial(material);
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedContainerTagType.java b/src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedContainerTagType.java
+deleted file mode 100644
+index b2d113b48..000000000
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedContainerTagType.java
++++ /dev/null
+@@ -1,48 +0,0 @@
+-package org.bukkit.craftbukkit.inventory.tags;
+-
+-import org.apache.commons.lang3.Validate;
+-import org.bukkit.craftbukkit.persistence.CraftPersistentDataContainer;
+-import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
+-import org.bukkit.inventory.meta.tags.ItemTagType;
+-import org.bukkit.persistence.PersistentDataAdapterContext;
+-import org.bukkit.persistence.PersistentDataContainer;
+-import org.bukkit.persistence.PersistentDataType;
+-
+-public final class DeprecatedContainerTagType<Z> implements PersistentDataType<PersistentDataContainer, Z> {
+-
+-    private final ItemTagType<CustomItemTagContainer, Z> deprecated;
+-
+-    DeprecatedContainerTagType(ItemTagType<CustomItemTagContainer, Z> deprecated) {
+-        this.deprecated = deprecated;
+-    }
+-
+-    @Override
+-    public Class<PersistentDataContainer> getPrimitiveType() {
+-        return PersistentDataContainer.class;
+-    }
+-
+-    @Override
+-    public Class<Z> getComplexType() {
+-        return deprecated.getComplexType();
+-    }
+-
+-    @Override
+-    public PersistentDataContainer toPrimitive(Z complex, PersistentDataAdapterContext context) {
+-        CustomItemTagContainer deprecated = this.deprecated.toPrimitive(complex, new DeprecatedItemAdapterContext(context));
+-        Validate.isInstanceOf(DeprecatedCustomTagContainer.class, deprecated, "Could not wrap deprecated API due to foreign CustomItemTagContainer implementation %s", deprecated.getClass().getSimpleName());
+-
+-        DeprecatedCustomTagContainer tagContainer = (DeprecatedCustomTagContainer) deprecated;
+-        PersistentDataContainer wrapped = tagContainer.getWrapped();
+-        Validate.isInstanceOf(CraftPersistentDataContainer.class, wrapped, "Could not wrap deprecated API due to wrong deprecation wrapper %s", deprecated.getClass().getSimpleName());
+-
+-        CraftPersistentDataContainer craftTagContainer = (CraftPersistentDataContainer) wrapped;
+-        return new CraftPersistentDataContainer(craftTagContainer.getRaw(), craftTagContainer.getDataTagTypeRegistry());
+-    }
+-
+-    @Override
+-    public Z fromPrimitive(PersistentDataContainer primitive, PersistentDataAdapterContext context) {
+-        Validate.isInstanceOf(CraftPersistentDataContainer.class, primitive, "Could not wrap deprecated API due to foreign PersistentMetadataContainer implementation %s", primitive.getClass().getSimpleName());
+-
+-        return this.deprecated.fromPrimitive(new DeprecatedCustomTagContainer(primitive), new DeprecatedItemAdapterContext(context));
+-    }
+-}
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedCustomTagContainer.java b/src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedCustomTagContainer.java
+deleted file mode 100644
+index 3ef217b08..000000000
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedCustomTagContainer.java
++++ /dev/null
+@@ -1,68 +0,0 @@
+-package org.bukkit.craftbukkit.inventory.tags;
+-
+-import java.util.Objects;
+-import org.bukkit.NamespacedKey;
+-import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
+-import org.bukkit.inventory.meta.tags.ItemTagAdapterContext;
+-import org.bukkit.inventory.meta.tags.ItemTagType;
+-import org.bukkit.persistence.PersistentDataContainer;
+-
+-/**
+- * The {@link DeprecatedCustomTagContainer} is a simply wrapper implementation
+- * that wraps the new api to still be usable with the old api parts.
+- */
+-@SuppressWarnings("unchecked")
+-public final class DeprecatedCustomTagContainer implements CustomItemTagContainer {
+-
+-    private final PersistentDataContainer wrapped;
+-
+-    public DeprecatedCustomTagContainer(PersistentDataContainer wrapped) {
+-        this.wrapped = wrapped;
+-    }
+-
+-    @Override
+-    public <T, Z> void setCustomTag(NamespacedKey key, ItemTagType<T, Z> type, Z value) {
+-        if (Objects.equals(CustomItemTagContainer.class, type.getPrimitiveType())) {
+-            wrapped.set(key, new DeprecatedContainerTagType<>((ItemTagType<CustomItemTagContainer, Z>) type), value);
+-        } else {
+-            wrapped.set(key, new DeprecatedItemTagType<>(type), value);
+-        }
+-    }
+-
+-    @Override
+-    public <T, Z> boolean hasCustomTag(NamespacedKey key, ItemTagType<T, Z> type) {
+-        if (Objects.equals(CustomItemTagContainer.class, type.getPrimitiveType())) {
+-            return wrapped.has(key, new DeprecatedContainerTagType<>((ItemTagType<CustomItemTagContainer, Z>) type));
+-        } else {
+-            return wrapped.has(key, new DeprecatedItemTagType<>(type));
+-        }
+-    }
+-
+-    @Override
+-    public <T, Z> Z getCustomTag(NamespacedKey key, ItemTagType<T, Z> type) {
+-        if (Objects.equals(CustomItemTagContainer.class, type.getPrimitiveType())) {
+-            return wrapped.get(key, new DeprecatedContainerTagType<>((ItemTagType<CustomItemTagContainer, Z>) type));
+-        } else {
+-            return wrapped.get(key, new DeprecatedItemTagType<>(type));
+-        }
+-    }
+-
+-    @Override
+-    public void removeCustomTag(NamespacedKey key) {
+-        wrapped.remove(key);
+-    }
+-
+-    @Override
+-    public boolean isEmpty() {
+-        return wrapped.isEmpty();
+-    }
+-
+-    @Override
+-    public ItemTagAdapterContext getAdapterContext() {
+-        return new DeprecatedItemAdapterContext(this.wrapped.getAdapterContext());
+-    }
+-
+-    public PersistentDataContainer getWrapped() {
+-        return wrapped;
+-    }
+-}
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedItemAdapterContext.java b/src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedItemAdapterContext.java
+deleted file mode 100644
+index e8bb75e9f..000000000
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedItemAdapterContext.java
++++ /dev/null
+@@ -1,24 +0,0 @@
+-package org.bukkit.craftbukkit.inventory.tags;
+-
+-import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
+-import org.bukkit.inventory.meta.tags.ItemTagAdapterContext;
+-import org.bukkit.persistence.PersistentDataAdapterContext;
+-
+-public final class DeprecatedItemAdapterContext implements ItemTagAdapterContext {
+-
+-    private final PersistentDataAdapterContext context;
+-
+-    public DeprecatedItemAdapterContext(PersistentDataAdapterContext context) {
+-        this.context = context;
+-    }
+-
+-    /**
+-     * Creates a new and empty tag container instance.
+-     *
+-     * @return the fresh container instance
+-     */
+-    @Override
+-    public CustomItemTagContainer newTagContainer() {
+-        return new DeprecatedCustomTagContainer(context.newPersistentDataContainer());
+-    }
+-}
+diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedItemTagType.java b/src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedItemTagType.java
+deleted file mode 100644
+index 3e3d3804e..000000000
+--- a/src/main/java/org/bukkit/craftbukkit/inventory/tags/DeprecatedItemTagType.java
++++ /dev/null
+@@ -1,34 +0,0 @@
+-package org.bukkit.craftbukkit.inventory.tags;
+-
+-import org.bukkit.inventory.meta.tags.ItemTagType;
+-import org.bukkit.persistence.PersistentDataAdapterContext;
+-import org.bukkit.persistence.PersistentDataType;
+-
+-public final class DeprecatedItemTagType<T, Z> implements PersistentDataType<T, Z> {
+-
+-    private final ItemTagType<T, Z> deprecated;
+-
+-    public DeprecatedItemTagType(ItemTagType<T, Z> deprecated) {
+-        this.deprecated = deprecated;
+-    }
+-
+-    @Override
+-    public Class<T> getPrimitiveType() {
+-        return deprecated.getPrimitiveType();
+-    }
+-
+-    @Override
+-    public Class<Z> getComplexType() {
+-        return deprecated.getComplexType();
+-    }
+-
+-    @Override
+-    public T toPrimitive(Z complex, PersistentDataAdapterContext context) {
+-        return this.deprecated.toPrimitive(complex, new DeprecatedItemAdapterContext(context));
+-    }
+-
+-    @Override
+-    public Z fromPrimitive(T primitive, PersistentDataAdapterContext context) {
+-        return this.deprecated.fromPrimitive(primitive, new DeprecatedItemAdapterContext(context));
+-    }
+-}
 diff --git a/src/main/java/org/bukkit/craftbukkit/legacy/CraftEvil.java b/src/main/java/org/bukkit/craftbukkit/legacy/CraftEvil.java
 deleted file mode 100644
 index afb706fc8..000000000
@@ -590,6 +2444,165 @@ index b14333ce9..000000000
 -        System.err.println("");
 -    }
 -}
+diff --git a/src/main/java/org/bukkit/craftbukkit/projectiles/CraftBlockProjectileSource.java b/src/main/java/org/bukkit/craftbukkit/projectiles/CraftBlockProjectileSource.java
+index 459a08984..e989ae2c6 100644
+--- a/src/main/java/org/bukkit/craftbukkit/projectiles/CraftBlockProjectileSource.java
++++ b/src/main/java/org/bukkit/craftbukkit/projectiles/CraftBlockProjectileSource.java
+@@ -30,14 +30,12 @@ import org.bukkit.entity.AbstractArrow;
+ import org.bukkit.entity.Egg;
+ import org.bukkit.entity.EnderPearl;
+ import org.bukkit.entity.Fireball;
+-import org.bukkit.entity.LingeringPotion;
+ import org.bukkit.entity.Projectile;
+ import org.bukkit.entity.SmallFireball;
+ import org.bukkit.entity.Snowball;
+ import org.bukkit.entity.SpectralArrow;
+ import org.bukkit.entity.ThrownExpBottle;
+ import org.bukkit.entity.ThrownPotion;
+-import org.bukkit.entity.TippedArrow;
+ import org.bukkit.entity.WitherSkull;
+ import org.bukkit.inventory.ItemStack;
+ import org.bukkit.potion.PotionData;
+@@ -83,18 +81,10 @@ public class CraftBlockProjectileSource implements BlockProjectileSource {
+         } else if (ThrownExpBottle.class.isAssignableFrom(projectile)) {
+             launch = new EntityThrownExpBottle(world, iposition.getX(), iposition.getY(), iposition.getZ());
+         } else if (ThrownPotion.class.isAssignableFrom(projectile)) {
+-            if (LingeringPotion.class.isAssignableFrom(projectile)) {
+-                launch = new EntityPotion(world, iposition.getX(), iposition.getY(), iposition.getZ());
+-                ((EntityPotion) launch).setItem(CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.LINGERING_POTION, 1)));
+-            } else {
+                 launch = new EntityPotion(world, iposition.getX(), iposition.getY(), iposition.getZ());
+                 ((EntityPotion) launch).setItem(CraftItemStack.asNMSCopy(new ItemStack(org.bukkit.Material.SPLASH_POTION, 1)));
+-            }
+         } else if (AbstractArrow.class.isAssignableFrom(projectile)) {
+-            if (TippedArrow.class.isAssignableFrom(projectile)) {
+-                launch = new EntityTippedArrow(world, iposition.getX(), iposition.getY(), iposition.getZ());
+-                ((EntityTippedArrow) launch).setType(CraftPotionUtil.fromBukkit(new PotionData(PotionType.WATER, false, false)));
+-            } else if (SpectralArrow.class.isAssignableFrom(projectile)) {
++            if (SpectralArrow.class.isAssignableFrom(projectile)) {
+                 launch = new EntitySpectralArrow(world, iposition.getX(), iposition.getY(), iposition.getZ());
+             } else {
+                 launch = new EntityTippedArrow(world, iposition.getX(), iposition.getY(), iposition.getZ());
+diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
+index f715db80b..af288289b 100644
+--- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
++++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
+@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
+ import org.bukkit.ChatColor;
+ import org.bukkit.OfflinePlayer;
+ import org.bukkit.craftbukkit.util.CraftChatMessage;
+-import org.bukkit.scoreboard.NameTagVisibility;
+ import org.bukkit.scoreboard.Team;
+ 
+ public final class CraftTeam extends CraftScoreboardComponent implements Team { // Paper package private -> public
+@@ -125,31 +124,6 @@ public final class CraftTeam extends CraftScoreboardComponent implements Team {
+         team.setCanSeeFriendlyInvisibles(enabled);
+     }
+ 
+-    @Override
+-    public NameTagVisibility getNameTagVisibility() throws IllegalArgumentException {
+-        CraftScoreboard scoreboard = checkState();
+-
+-        return notchToBukkit(team.getNameTagVisibility());
+-    }
+-
+-    @Override
+-    public void setNameTagVisibility(NameTagVisibility visibility) throws IllegalArgumentException {
+-        CraftScoreboard scoreboard = checkState();
+-
+-        team.setNameTagVisibility(bukkitToNotch(visibility));
+-    }
+-
+-    @Override
+-    public Set<OfflinePlayer> getPlayers() throws IllegalStateException {
+-        CraftScoreboard scoreboard = checkState();
+-
+-        ImmutableSet.Builder<OfflinePlayer> players = ImmutableSet.builder();
+-        for (String playerName : team.getPlayerNameSet()) {
+-            players.add(Bukkit.getOfflinePlayer(playerName));
+-        }
+-        return players.build();
+-    }
+-
+     @Override
+     public Set<String> getEntries() throws IllegalStateException {
+         CraftScoreboard scoreboard = checkState();
+@@ -168,12 +142,6 @@ public final class CraftTeam extends CraftScoreboardComponent implements Team {
+         return team.getPlayerNameSet().size();
+     }
+ 
+-    @Override
+-    public void addPlayer(OfflinePlayer player) throws IllegalStateException, IllegalArgumentException {
+-        Validate.notNull(player, "OfflinePlayer cannot be null");
+-        addEntry(player.getName());
+-    }
+-
+     @Override
+     public void addEntry(String entry) throws IllegalStateException, IllegalArgumentException {
+         Validate.notNull(entry, "Entry cannot be null");
+@@ -182,12 +150,6 @@ public final class CraftTeam extends CraftScoreboardComponent implements Team {
+         scoreboard.board.addPlayerToTeam(entry, team);
+     }
+ 
+-    @Override
+-    public boolean removePlayer(OfflinePlayer player) throws IllegalStateException, IllegalArgumentException {
+-        Validate.notNull(player, "OfflinePlayer cannot be null");
+-        return removeEntry(player.getName());
+-    }
+-
+     @Override
+     public boolean removeEntry(String entry) throws IllegalStateException, IllegalArgumentException {
+         Validate.notNull(entry, "Entry cannot be null");
+@@ -201,12 +163,6 @@ public final class CraftTeam extends CraftScoreboardComponent implements Team {
+         return true;
+     }
+ 
+-    @Override
+-    public boolean hasPlayer(OfflinePlayer player) throws IllegalArgumentException, IllegalStateException {
+-        Validate.notNull(player, "OfflinePlayer cannot be null");
+-        return hasEntry(player.getName());
+-    }
+-
+     @Override
+     public boolean hasEntry(String entry) throws IllegalArgumentException, IllegalStateException {
+         Validate.notNull(entry, "Entry cannot be null"); // Paper
+@@ -258,36 +214,6 @@ public final class CraftTeam extends CraftScoreboardComponent implements Team {
+         }
+     }
+ 
+-    public static EnumNameTagVisibility bukkitToNotch(NameTagVisibility visibility) {
+-        switch (visibility) {
+-            case ALWAYS:
+-                return EnumNameTagVisibility.ALWAYS;
+-            case NEVER:
+-                return EnumNameTagVisibility.NEVER;
+-            case HIDE_FOR_OTHER_TEAMS:
+-                return EnumNameTagVisibility.HIDE_FOR_OTHER_TEAMS;
+-            case HIDE_FOR_OWN_TEAM:
+-                return EnumNameTagVisibility.HIDE_FOR_OWN_TEAM;
+-            default:
+-                throw new IllegalArgumentException("Unknown visibility level " + visibility);
+-        }
+-    }
+-
+-    public static NameTagVisibility notchToBukkit(EnumNameTagVisibility visibility) {
+-        switch (visibility) {
+-            case ALWAYS:
+-                return NameTagVisibility.ALWAYS;
+-            case NEVER:
+-                return NameTagVisibility.NEVER;
+-            case HIDE_FOR_OTHER_TEAMS:
+-                return NameTagVisibility.HIDE_FOR_OTHER_TEAMS;
+-            case HIDE_FOR_OWN_TEAM:
+-                return NameTagVisibility.HIDE_FOR_OWN_TEAM;
+-            default:
+-                throw new IllegalArgumentException("Unknown visibility level " + visibility);
+-        }
+-    }
+-
+     @Override
+     CraftScoreboard checkState() throws IllegalStateException {
+         if (getScoreboard().board.getTeam(team.getName()) == null) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftLegacy.java b/src/main/java/org/bukkit/craftbukkit/util/CraftLegacy.java
 deleted file mode 100644
 index c8dde75de..000000000
@@ -638,6 +2651,301 @@ index c8dde75de..000000000
 -        return material.ordinal();
 -    }
 -}
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+index 0f7f1503d..cc19e80c8 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
+@@ -24,6 +24,7 @@ import net.minecraft.server.ChatDeserializer;
+ import net.minecraft.server.DataConverterRegistry;
+ import net.minecraft.server.DataConverterTypes;
+ import net.minecraft.server.DynamicOpsNBT;
++import net.minecraft.server.EnumColor;
+ import net.minecraft.server.FluidType;
+ import net.minecraft.server.IBlockData;
+ import net.minecraft.server.IRegistry;
+@@ -38,6 +39,7 @@ import net.minecraft.server.NBTTagString;
+ import net.minecraft.server.SavedFile;
+ import net.minecraft.server.SharedConstants;
+ import org.bukkit.Bukkit;
++import org.bukkit.DyeColor;
+ import org.bukkit.Fluid;
+ import org.bukkit.Material;
+ import org.bukkit.NamespacedKey;
+@@ -45,12 +47,9 @@ import org.bukkit.Registry;
+ import org.bukkit.UnsafeValues;
+ import org.bukkit.advancement.Advancement;
+ import org.bukkit.block.data.BlockData;
+-import org.bukkit.craftbukkit.block.CraftBlock;
+ import org.bukkit.craftbukkit.block.data.CraftBlockData;
+ import org.bukkit.craftbukkit.inventory.CraftItemStack;
+-import org.bukkit.craftbukkit.legacy.CraftLegacy;
+ import org.bukkit.inventory.ItemStack;
+-import org.bukkit.material.MaterialData;
+ import org.bukkit.plugin.InvalidPluginException;
+ import org.bukkit.plugin.PluginDescriptionFile;
+ 
+@@ -60,29 +59,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
+ 
+     private CraftMagicNumbers() {}
+ 
+-    public static IBlockData getBlock(MaterialData material) {
+-        return getBlock(material.getItemType(), material.getData());
+-    }
+-
+-    public static IBlockData getBlock(Material material, byte data) {
+-        return CraftLegacy.fromLegacyData(CraftLegacy.toLegacy(material), data);
+-    }
+-
+-    public static MaterialData getMaterial(IBlockData data) {
+-        return CraftLegacy.toLegacy(getMaterial(data.getBlock())).getNewData(toLegacyData(data));
+-    }
+ 
+-    public static Item getItem(Material material, short data) {
+-        if (material.isLegacy()) {
+-            return CraftLegacy.fromLegacyData(CraftLegacy.toLegacy(material), data);
+-        }
+-
+-        return getItem(material);
+-    }
+-
+-    public static MaterialData getMaterialData(Item item) {
+-        return CraftLegacy.toLegacyData(getMaterial(item));
+-    }
+ 
+     // ========================================================================
+     private static final Map<Block, Material> BLOCK_MATERIAL = new HashMap<>();
+@@ -106,10 +83,6 @@ public final class CraftMagicNumbers implements UnsafeValues {
+         }
+ 
+         for (Material material : Material.values()) {
+-            if (material.isLegacy()) {
+-                continue;
+-            }
+-
+             MinecraftKey key = key(material);
+             IRegistry.ITEM.getOptional(key).ifPresent((item) -> {
+                 MATERIAL_ITEM.put(material, item);
+@@ -136,18 +109,10 @@ public final class CraftMagicNumbers implements UnsafeValues {
+     }
+ 
+     public static Item getItem(Material material) {
+-        if (material != null && material.isLegacy()) {
+-            material = CraftLegacy.fromLegacy(material);
+-        }
+-
+         return MATERIAL_ITEM.get(material);
+     }
+ 
+     public static Block getBlock(Material material) {
+-        if (material != null && material.isLegacy()) {
+-            material = CraftLegacy.fromLegacy(material);
+-        }
+-
+         return MATERIAL_BLOCK.get(material);
+     }
+ 
+@@ -166,34 +131,7 @@ public final class CraftMagicNumbers implements UnsafeValues {
+     }
+     // Paper end
+ 
+-    public static byte toLegacyData(IBlockData data) {
+-        return CraftLegacy.toLegacyData(data);
+-    }
+-
+-    @Override
+-    public Material toLegacy(Material material) {
+-        return CraftLegacy.toLegacy(material);
+-    }
+-
+-    @Override
+-    public Material fromLegacy(Material material) {
+-        return CraftLegacy.fromLegacy(material);
+-    }
+-
+-    @Override
+-    public Material fromLegacy(MaterialData material) {
+-        return CraftLegacy.fromLegacy(material);
+-    }
+ 
+-    @Override
+-    public Material fromLegacy(MaterialData material, boolean itemPriority) {
+-        return CraftLegacy.fromLegacy(material, itemPriority);
+-    }
+-
+-    @Override
+-    public BlockData fromLegacy(Material material, byte data) {
+-        return CraftBlockData.fromData(getBlock(material, data));
+-    }
+ 
+     @Override
+     public Material getMaterial(String material, int version) {
+@@ -320,13 +258,6 @@ public final class CraftMagicNumbers implements UnsafeValues {
+             if (pluginIndex < minimumIndex) {
+                 throw new InvalidPluginException("Plugin API version " + pdf.getAPIVersion() + " is lower than the minimum allowed version. Please update or replace it.");
+             }
+-        } else {
+-            if (minimumIndex == -1) {
+-                CraftLegacy.init();
+-                Bukkit.getLogger().log(Level.WARNING, "Legacy plugin " + pdf.getFullName() + " does not specify an api-version.");
+-            } else {
+-                throw new InvalidPluginException("Plugin API version " + pdf.getAPIVersion() + " is lower than the minimum allowed version. Please update or replace it.");
+-            }
+         }
+     }
+ 
+@@ -416,6 +347,83 @@ public final class CraftMagicNumbers implements UnsafeValues {
+         return net.minecraft.server.EntityTypes.getByName(type.getName()).map(net.minecraft.server.EntityTypes::getDescriptionId).orElse(null);
+     }
+ 
++    public static net.minecraft.server.EnumColor toNMS(DyeColor dyeColor){
++        switch (dyeColor){
++            case WHITE:
++                return EnumColor.WHITE;
++            case ORANGE:
++                return EnumColor.ORANGE;
++            case MAGENTA:
++                return EnumColor.MAGENTA;
++            case LIGHT_BLUE:
++                return EnumColor.LIGHT_BLUE;
++            case YELLOW:
++                return EnumColor.YELLOW;
++            case LIME:
++                return EnumColor.LIME;
++            case PINK:
++                return EnumColor.PINK;
++            case GRAY:
++                return EnumColor.GRAY;
++            case LIGHT_GRAY:
++                return EnumColor.LIGHT_GRAY;
++            case CYAN:
++                return EnumColor.CYAN;
++            case PURPLE:
++                return EnumColor.PURPLE;
++            case BLUE:
++                return EnumColor.BLUE;
++            case BROWN:
++                return EnumColor.BROWN;
++            case GREEN:
++                return EnumColor.GREEN;
++            case RED:
++                return EnumColor.RED;
++            case BLACK:
++                return EnumColor.BLACK;
++        }
++        throw new IllegalStateException("Case not present");
++    }
++
++    public static DyeColor fromNMS(net.minecraft.server.EnumColor enumColor){
++        switch (enumColor){
++            case WHITE:
++                return DyeColor.WHITE;
++            case ORANGE:
++                return DyeColor.ORANGE;
++            case MAGENTA:
++                return DyeColor.MAGENTA;
++            case LIGHT_BLUE:
++                return DyeColor.LIGHT_BLUE;
++            case YELLOW:
++                return DyeColor.YELLOW;
++            case LIME:
++                return DyeColor.LIME;
++            case PINK:
++                return DyeColor.PINK;
++            case GRAY:
++                return DyeColor.GRAY;
++            case LIGHT_GRAY:
++                return DyeColor.LIGHT_GRAY;
++            case CYAN:
++                return DyeColor.CYAN;
++            case PURPLE:
++                return DyeColor.PURPLE;
++            case BLUE:
++                return DyeColor.BLUE;
++            case BROWN:
++                return DyeColor.BROWN;
++            case GREEN:
++                return DyeColor.GREEN;
++            case RED:
++                return DyeColor.RED;
++            case BLACK:
++                return DyeColor.BLACK;
++        }
++        throw new IllegalStateException("Case not present");
++    }
++
++
+     public int nextEntityId() {
+         return net.minecraft.server.Entity.nextEntityId();
+     }
+diff --git a/src/test/java/org/bukkit/DyeColorsTest.java b/src/test/java/org/bukkit/DyeColorsTest.java
+index 9bd05a702..65b7e193e 100644
+--- a/src/test/java/org/bukkit/DyeColorsTest.java
++++ b/src/test/java/org/bukkit/DyeColorsTest.java
+@@ -5,6 +5,8 @@ import static org.junit.Assert.*;
+ import java.util.ArrayList;
+ import java.util.List;
+ import net.minecraft.server.EnumColor;
++
++import org.bukkit.craftbukkit.util.CraftMagicNumbers;
+ import org.bukkit.support.AbstractTestingBase;
+ import org.junit.Test;
+ import org.junit.runner.RunWith;
+@@ -29,7 +31,7 @@ public class DyeColorsTest extends AbstractTestingBase {
+     @Test
+     public void checkColor() {
+         Color color = dye.getColor();
+-        float[] nmsColorArray = EnumColor.fromColorIndex(dye.getWoolData()).getColor();
++        float[] nmsColorArray = CraftMagicNumbers.toNMS(dye).getColor();
+         Color nmsColor = Color.fromRGB((int) (nmsColorArray[0] * 255), (int) (nmsColorArray[1] * 255), (int) (nmsColorArray[2] * 255));
+         assertThat(color, is(nmsColor));
+     }
+@@ -37,7 +39,7 @@ public class DyeColorsTest extends AbstractTestingBase {
+     @Test
+     public void checkFireworkColor() {
+         Color color = dye.getFireworkColor();
+-        int nmsColor = EnumColor.fromColorIndex(dye.getWoolData()).getFireworksColor();
++        int nmsColor = CraftMagicNumbers.toNMS(dye).getFireworksColor();
+         assertThat(color, is(Color.fromRGB(nmsColor)));
+     }
+ }
+diff --git a/src/test/java/org/bukkit/MaterialTest.java b/src/test/java/org/bukkit/MaterialTest.java
+index f72559894..d1477041c 100644
+--- a/src/test/java/org/bukkit/MaterialTest.java
++++ b/src/test/java/org/bukkit/MaterialTest.java
+@@ -64,12 +64,6 @@ public class MaterialTest extends AbstractTestingBase {
+                 .filter(block -> !block.isItem())
+                 .forEach(expectedOrder::add);
+ 
+-        // Then legacy materials in order of ID
+-        Arrays.stream(Material.values())
+-                .filter(Material::isLegacy)
+-                .sorted(Comparator.comparingInt(Material::getId))
+-                .forEach(expectedOrder::add);
+-
+         assertArrayEquals(expectedOrder.toArray(), Material.values());
+     }
+ }
+diff --git a/src/test/java/org/bukkit/ParticleTest.java b/src/test/java/org/bukkit/ParticleTest.java
+index 33701c812..937366dee 100644
+--- a/src/test/java/org/bukkit/ParticleTest.java
++++ b/src/test/java/org/bukkit/ParticleTest.java
+@@ -5,7 +5,6 @@ import org.bukkit.block.data.BlockData;
+ import org.bukkit.craftbukkit.CraftParticle;
+ import org.bukkit.craftbukkit.block.data.CraftBlockData;
+ import org.bukkit.inventory.ItemStack;
+-import org.bukkit.material.MaterialData;
+ import org.bukkit.support.AbstractTestingBase;
+ import org.junit.Assert;
+ import org.junit.Test;
+@@ -18,8 +17,6 @@ public class ParticleTest extends AbstractTestingBase {
+             Object data = null;
+             if (bukkit.getDataType().equals(ItemStack.class)) {
+                 data = new ItemStack(Material.STONE);
+-            } else if (bukkit.getDataType() == MaterialData.class) {
+-                data = new MaterialData(Material.LEGACY_STONE);
+             } else if (bukkit.getDataType() == Particle.DustOptions.class) {
+                 data = new Particle.DustOptions(Color.BLACK, 0);
+             } else if (bukkit.getDataType() == BlockData.class) {
 diff --git a/src/test/java/org/bukkit/PerMaterialTest.java b/src/test/java/org/bukkit/PerMaterialTest.java
 index b99ad0faf..b5c4c76f4 100644
 --- a/src/test/java/org/bukkit/PerMaterialTest.java
@@ -691,6 +2999,337 @@ index b99ad0faf..b5c4c76f4 100644
      @Test
      public void testBlock() {
          if (material == Material.AIR) {
+diff --git a/src/test/java/org/bukkit/craftbukkit/inventory/DeprecatedItemMetaCustomValueTest.java b/src/test/java/org/bukkit/craftbukkit/inventory/DeprecatedItemMetaCustomValueTest.java
+deleted file mode 100644
+index 0ab65ac73..000000000
+--- a/src/test/java/org/bukkit/craftbukkit/inventory/DeprecatedItemMetaCustomValueTest.java
++++ /dev/null
+@@ -1,313 +0,0 @@
+-package org.bukkit.craftbukkit.inventory;
+-
+-import static org.junit.Assert.*;
+-import java.io.StringReader;
+-import java.lang.reflect.Array;
+-import java.nio.ByteBuffer;
+-import java.util.Map;
+-import java.util.UUID;
+-import net.minecraft.server.NBTTagCompound;
+-import org.bukkit.Bukkit;
+-import org.bukkit.Material;
+-import org.bukkit.NamespacedKey;
+-import org.bukkit.configuration.file.YamlConfiguration;
+-import org.bukkit.inventory.ItemStack;
+-import org.bukkit.inventory.meta.ItemMeta;
+-import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
+-import org.bukkit.inventory.meta.tags.ItemTagAdapterContext;
+-import org.bukkit.inventory.meta.tags.ItemTagType;
+-import org.bukkit.support.AbstractTestingBase;
+-import org.junit.Before;
+-import org.junit.Test;
+-
+-public class DeprecatedItemMetaCustomValueTest extends AbstractTestingBase {
+-
+-    private static NamespacedKey VALID_KEY;
+-
+-    @Before
+-    public void setup() {
+-        VALID_KEY = new NamespacedKey("test", "validkey");
+-    }
+-
+-    /*
+-        Sets a test
+-     */
+-    @Test(expected = IllegalArgumentException.class)
+-    public void testSetNoAdapter() {
+-        ItemMeta itemMeta = createNewItemMeta();
+-        itemMeta.getCustomTagContainer().setCustomTag(VALID_KEY, new PrimitiveTagType<>(boolean.class), true);
+-    }
+-
+-    /*
+-        Contains a tag
+-     */
+-    @Test(expected = IllegalArgumentException.class)
+-    public void testHasNoAdapter() {
+-        ItemMeta itemMeta = createNewItemMeta();
+-        itemMeta.getCustomTagContainer().setCustomTag(VALID_KEY, ItemTagType.INTEGER, 1); // We gotta set this so we at least try to compare it
+-        itemMeta.getCustomTagContainer().hasCustomTag(VALID_KEY, new PrimitiveTagType<>(boolean.class));
+-    }
+-
+-    /*
+-        Getting a tag
+-     */
+-    @Test(expected = IllegalArgumentException.class)
+-    public void testGetNoAdapter() {
+-        ItemMeta itemMeta = createNewItemMeta();
+-        itemMeta.getCustomTagContainer().setCustomTag(VALID_KEY, ItemTagType.INTEGER, 1); //We gotta set this so we at least try to compare it
+-        itemMeta.getCustomTagContainer().getCustomTag(VALID_KEY, new PrimitiveTagType<>(boolean.class));
+-    }
+-
+-    @Test(expected = IllegalArgumentException.class)
+-    public void testGetWrongType() {
+-        ItemMeta itemMeta = createNewItemMeta();
+-        itemMeta.getCustomTagContainer().setCustomTag(VALID_KEY, ItemTagType.INTEGER, 1);
+-        itemMeta.getCustomTagContainer().getCustomTag(VALID_KEY, ItemTagType.STRING);
+-    }
+-
+-    @Test
+-    public void testDifferentNamespace() {
+-        NamespacedKey namespacedKeyA = new NamespacedKey("plugin-a", "damage");
+-        NamespacedKey namespacedKeyB = new NamespacedKey("plugin-b", "damage");
+-
+-        ItemMeta meta = createNewItemMeta();
+-        meta.getCustomTagContainer().setCustomTag(namespacedKeyA, ItemTagType.LONG, 15L);
+-        meta.getCustomTagContainer().setCustomTag(namespacedKeyB, ItemTagType.LONG, 160L);
+-
+-        assertEquals(15L, (long) meta.getCustomTagContainer().getCustomTag(namespacedKeyA, ItemTagType.LONG));
+-        assertEquals(160L, (long) meta.getCustomTagContainer().getCustomTag(namespacedKeyB, ItemTagType.LONG));
+-    }
+-
+-    private ItemMeta createNewItemMeta() {
+-        return Bukkit.getItemFactory().getItemMeta(Material.DIAMOND_PICKAXE);
+-    }
+-
+-    private NamespacedKey requestKey(String keyName) {
+-        return new NamespacedKey("test-plugin", keyName.toLowerCase());
+-    }
+-
+-    /*
+-        Removing a tag
+-     */
+-    @Test
+-    public void testNBTTagStoring() {
+-        CraftMetaItem itemMeta = createComplexItemMeta();
+-
+-        NBTTagCompound compound = new NBTTagCompound();
+-        itemMeta.applyToItem(compound);
+-
+-        assertEquals(itemMeta, new CraftMetaItem(compound));
+-    }
+-
+-    @Test
+-    public void testMapStoring() {
+-        CraftMetaItem itemMeta = createComplexItemMeta();
+-
+-        Map<String, Object> serialize = itemMeta.serialize();
+-        assertEquals(itemMeta, new CraftMetaItem(serialize));
+-    }
+-
+-    @Test
+-    public void testYAMLStoring() {
+-        ItemStack stack = new ItemStack(Material.DIAMOND);
+-        CraftMetaItem meta = createComplexItemMeta();
+-        stack.setItemMeta(meta);
+-
+-        YamlConfiguration configuration = new YamlConfiguration();
+-        configuration.set("testpath", stack);
+-
+-        String configValue = configuration.saveToString();
+-        YamlConfiguration loadedConfig = YamlConfiguration.loadConfiguration(new StringReader(configValue));
+-
+-        assertEquals(stack, loadedConfig.getSerializable("testpath", ItemStack.class));
+-        assertNotEquals(new ItemStack(Material.DIAMOND), loadedConfig.getSerializable("testpath", ItemStack.class));
+-    }
+-
+-    @Test
+-    public void testCorrectType() {
+-        ItemStack stack = new ItemStack(Material.DIAMOND);
+-        CraftMetaItem meta = createComplexItemMeta();
+-
+-        meta.getCustomTagContainer().setCustomTag(requestKey("int"), ItemTagType.STRING, "1");
+-        meta.getCustomTagContainer().setCustomTag(requestKey("double"), ItemTagType.STRING, "1.33");
+-        stack.setItemMeta(meta);
+-
+-        YamlConfiguration configuration = new YamlConfiguration();
+-        configuration.set("testpath", stack);
+-
+-        String configValue = configuration.saveToString();
+-        YamlConfiguration loadedConfig = YamlConfiguration.loadConfiguration(new StringReader(configValue));
+-        ItemStack newStack = loadedConfig.getSerializable("testpath", ItemStack.class);
+-
+-        assertTrue(newStack.getItemMeta().getCustomTagContainer().hasCustomTag(requestKey("int"), ItemTagType.STRING));
+-        assertEquals(newStack.getItemMeta().getCustomTagContainer().getCustomTag(requestKey("int"), ItemTagType.STRING), "1");
+-
+-        assertTrue(newStack.getItemMeta().getCustomTagContainer().hasCustomTag(requestKey("double"), ItemTagType.STRING));
+-        assertEquals(newStack.getItemMeta().getCustomTagContainer().getCustomTag(requestKey("double"), ItemTagType.STRING), "1.33");
+-    }
+-
+-    private CraftMetaItem createComplexItemMeta() {
+-        CraftMetaItem itemMeta = (CraftMetaItem) createNewItemMeta();
+-        itemMeta.setDisplayName("Item Display Name");
+-
+-        itemMeta.getCustomTagContainer().setCustomTag(requestKey("custom-long"), ItemTagType.LONG, 4L); //Add random primitive values
+-        itemMeta.getCustomTagContainer().setCustomTag(requestKey("custom-byte-array"), ItemTagType.BYTE_ARRAY, new byte[]{
+-            0, 1, 2, 10
+-        });
+-        itemMeta.getCustomTagContainer().setCustomTag(requestKey("custom-string"), ItemTagType.STRING, "Hello there world");
+-        itemMeta.getCustomTagContainer().setCustomTag(requestKey("custom-int"), ItemTagType.INTEGER, 3);
+-        itemMeta.getCustomTagContainer().setCustomTag(requestKey("custom-double"), ItemTagType.DOUBLE, 3.123);
+-
+-        CustomItemTagContainer innerContainer = itemMeta.getCustomTagContainer().getAdapterContext().newTagContainer(); //Add a inner container
+-        innerContainer.setCustomTag(VALID_KEY, ItemTagType.LONG, 5L);
+-        itemMeta.getCustomTagContainer().setCustomTag(requestKey("custom-inner-compound"), ItemTagType.TAG_CONTAINER, innerContainer);
+-        return itemMeta;
+-    }
+-
+-    /*
+-        Test complex object storage
+-     */
+-    @Test
+-    public void storeUUIDOnItemTest() {
+-        ItemMeta itemMeta = createNewItemMeta();
+-        UUIDItemTagType uuidItemTagType = new UUIDItemTagType();
+-        UUID uuid = UUID.fromString("434eea72-22a6-4c61-b5ef-945874a5c478");
+-
+-        itemMeta.getCustomTagContainer().setCustomTag(VALID_KEY, uuidItemTagType, uuid);
+-        assertTrue(itemMeta.getCustomTagContainer().hasCustomTag(VALID_KEY, uuidItemTagType));
+-        assertEquals(uuid, itemMeta.getCustomTagContainer().getCustomTag(VALID_KEY, uuidItemTagType));
+-    }
+-
+-    @Test
+-    public void encapsulatedContainers() {
+-        NamespacedKey innerKey = new NamespacedKey("plugin-a", "inner");
+-
+-        ItemMeta meta = createNewItemMeta();
+-        ItemTagAdapterContext context = meta.getCustomTagContainer().getAdapterContext();
+-
+-        CustomItemTagContainer thirdContainer = context.newTagContainer();
+-        thirdContainer.setCustomTag(VALID_KEY, ItemTagType.LONG, 3L);
+-
+-        CustomItemTagContainer secondContainer = context.newTagContainer();
+-        secondContainer.setCustomTag(VALID_KEY, ItemTagType.LONG, 2L);
+-        secondContainer.setCustomTag(innerKey, ItemTagType.TAG_CONTAINER, thirdContainer);
+-
+-        meta.getCustomTagContainer().setCustomTag(VALID_KEY, ItemTagType.LONG, 1L);
+-        meta.getCustomTagContainer().setCustomTag(innerKey, ItemTagType.TAG_CONTAINER, secondContainer);
+-
+-        assertEquals(3L, meta.getCustomTagContainer()
+-                .getCustomTag(innerKey, ItemTagType.TAG_CONTAINER)
+-                .getCustomTag(innerKey, ItemTagType.TAG_CONTAINER)
+-                .getCustomTag(VALID_KEY, ItemTagType.LONG).longValue());
+-
+-        assertEquals(2L, meta.getCustomTagContainer()
+-                .getCustomTag(innerKey, ItemTagType.TAG_CONTAINER)
+-                .getCustomTag(VALID_KEY, ItemTagType.LONG).longValue());
+-
+-        assertEquals(1L, meta.getCustomTagContainer()
+-                .getCustomTag(VALID_KEY, ItemTagType.LONG).longValue());
+-    }
+-
+-    class UUIDItemTagType implements ItemTagType<byte[], UUID> {
+-
+-        @Override
+-        public Class<byte[]> getPrimitiveType() {
+-            return byte[].class;
+-        }
+-
+-        @Override
+-        public Class<UUID> getComplexType() {
+-            return UUID.class;
+-        }
+-
+-        @Override
+-        public byte[] toPrimitive(UUID complex, ItemTagAdapterContext context) {
+-            ByteBuffer bb = ByteBuffer.wrap(new byte[16]);
+-            bb.putLong(complex.getMostSignificantBits());
+-            bb.putLong(complex.getLeastSignificantBits());
+-            return bb.array();
+-        }
+-
+-        @Override
+-        public UUID fromPrimitive(byte[] primitive, ItemTagAdapterContext context) {
+-            ByteBuffer bb = ByteBuffer.wrap(primitive);
+-            long firstLong = bb.getLong();
+-            long secondLong = bb.getLong();
+-            return new UUID(firstLong, secondLong);
+-        }
+-    }
+-
+-    @Test
+-    public void testPrimitiveCustomTags() {
+-        ItemMeta itemMeta = createNewItemMeta();
+-
+-        testPrimitiveCustomTag(itemMeta, ItemTagType.BYTE, (byte) 1);
+-        testPrimitiveCustomTag(itemMeta, ItemTagType.SHORT, (short) 1);
+-        testPrimitiveCustomTag(itemMeta, ItemTagType.INTEGER, 1);
+-        testPrimitiveCustomTag(itemMeta, ItemTagType.LONG, 1L);
+-        testPrimitiveCustomTag(itemMeta, ItemTagType.FLOAT, 1.34F);
+-        testPrimitiveCustomTag(itemMeta, ItemTagType.DOUBLE, 151.123);
+-
+-        testPrimitiveCustomTag(itemMeta, ItemTagType.STRING, "test");
+-
+-        testPrimitiveCustomTag(itemMeta, ItemTagType.BYTE_ARRAY, new byte[]{
+-            1, 4, 2, Byte.MAX_VALUE
+-        });
+-        testPrimitiveCustomTag(itemMeta, ItemTagType.INTEGER_ARRAY, new int[]{
+-            1, 4, 2, Integer.MAX_VALUE
+-        });
+-        testPrimitiveCustomTag(itemMeta, ItemTagType.LONG_ARRAY, new long[]{
+-            1L, 4L, 2L, Long.MAX_VALUE
+-        });
+-    }
+-
+-    private <T, Z> void testPrimitiveCustomTag(ItemMeta meta, ItemTagType<T, Z> type, Z value) {
+-        NamespacedKey tagKey = new NamespacedKey("test", String.valueOf(type.hashCode()));
+-
+-        meta.getCustomTagContainer().setCustomTag(tagKey, type, value);
+-        assertTrue(meta.getCustomTagContainer().hasCustomTag(tagKey, type));
+-
+-        Z foundValue = meta.getCustomTagContainer().getCustomTag(tagKey, type);
+-        if (foundValue.getClass().isArray()) { // Compare arrays using reflection access
+-            int length = Array.getLength(foundValue);
+-            int originalLength = Array.getLength(value);
+-            for (int i = 0; i < length && i < originalLength; i++) {
+-                assertEquals(Array.get(value, i), Array.get(foundValue, i));
+-            }
+-        } else {
+-            assertEquals(foundValue, value);
+-        }
+-
+-        meta.getCustomTagContainer().removeCustomTag(tagKey);
+-        assertFalse(meta.getCustomTagContainer().hasCustomTag(tagKey, type));
+-    }
+-
+-    class PrimitiveTagType<T> implements ItemTagType<T, T> {
+-
+-        private final Class<T> primitiveType;
+-
+-        PrimitiveTagType(Class<T> primitiveType) {
+-            this.primitiveType = primitiveType;
+-        }
+-
+-        @Override
+-        public Class<T> getPrimitiveType() {
+-            return primitiveType;
+-        }
+-
+-        @Override
+-        public Class<T> getComplexType() {
+-            return primitiveType;
+-        }
+-
+-        @Override
+-        public T toPrimitive(T complex, ItemTagAdapterContext context) {
+-            return complex;
+-        }
+-
+-        @Override
+-        public T fromPrimitive(T primitive, ItemTagAdapterContext context) {
+-            return primitive;
+-        }
+-    }
+-}
+diff --git a/src/test/java/org/bukkit/craftbukkit/inventory/NMSCraftItemStackTest.java b/src/test/java/org/bukkit/craftbukkit/inventory/NMSCraftItemStackTest.java
+index 5f5781230..22f8f4e9c 100644
+--- a/src/test/java/org/bukkit/craftbukkit/inventory/NMSCraftItemStackTest.java
++++ b/src/test/java/org/bukkit/craftbukkit/inventory/NMSCraftItemStackTest.java
+@@ -19,7 +19,6 @@ public class NMSCraftItemStackTest extends AbstractTestingBase {
+         assertThat(clone.getAmount(), is(itemStack.getAmount()));
+         assertThat(clone.getDurability(), is(itemStack.getDurability()));
+         assertThat(clone.getEnchantments(), is(itemStack.getEnchantments()));
+-        assertThat(clone.getData(), is(itemStack.getData()));
+         assertThat(clone, is(itemStack));
+     }
+ 
 diff --git a/src/test/java/org/bukkit/craftbukkit/legacy/EvilTest.java b/src/test/java/org/bukkit/craftbukkit/legacy/EvilTest.java
 deleted file mode 100644
 index 23e5d98cf..000000000
@@ -854,6 +3493,19 @@ index 5ce268bb2..000000000
 -        Assert.assertEquals(Material.OAK_WALL_SIGN, CraftMagicNumbers.INSTANCE.getMaterial("wall_sign", 1631));
 -    }
 -}
+diff --git a/src/test/java/org/bukkit/support/AbstractTestingBase.java b/src/test/java/org/bukkit/support/AbstractTestingBase.java
+index 75a5c0818..fa3ff3182 100644
+--- a/src/test/java/org/bukkit/support/AbstractTestingBase.java
++++ b/src/test/java/org/bukkit/support/AbstractTestingBase.java
+@@ -49,7 +49,7 @@ public abstract class AbstractTestingBase {
+ 
+         ImmutableList.Builder<Material> builder = ImmutableList.builder();
+         for (Material m : Material.values()) {
+-            if (m.isLegacy() || CraftMagicNumbers.getItem(m) == null) {
++            if (CraftMagicNumbers.getItem(m) == null) {
+                 builder.add(m);
+             }
+         }
 -- 
 2.29.2
 

@@ -1,19 +1,21 @@
-From 96995ad4677af9845572e24f8b2305bf39da932b Mon Sep 17 00:00:00 2001
+From 2ea654a50d589f6553e793ad554913597c76adce Mon Sep 17 00:00:00 2001
 From: Yannick Lamprecht <yannicklamprecht@live.de>
 Date: Fri, 1 Jan 2021 17:55:25 +0100
 Subject: [PATCH] rip out legacy classes
 
 ---
  .../destroystokyo/paper/MaterialSetTag.java   |     6 +-
- src/main/java/org/bukkit/DyeColor.java        |    24 -
+ src/main/java/org/bukkit/ChunkSnapshot.java   |    12 -
+ src/main/java/org/bukkit/DyeColor.java        |   106 +-
  src/main/java/org/bukkit/Effect.java          |     4 +-
  src/main/java/org/bukkit/EntityEffect.java    |     4 +-
- src/main/java/org/bukkit/Material.java        | 15304 +++++++---------
+ src/main/java/org/bukkit/Material.java        | 15306 +++++++---------
  src/main/java/org/bukkit/Particle.java        |     7 +-
  src/main/java/org/bukkit/Registry.java        |     2 +-
  src/main/java/org/bukkit/SkullType.java       |    15 -
  src/main/java/org/bukkit/UnsafeValues.java    |    11 -
  src/main/java/org/bukkit/World.java           |    21 +-
+ src/main/java/org/bukkit/block/Block.java     |     9 -
  .../java/org/bukkit/block/BlockState.java     |    30 -
  src/main/java/org/bukkit/block/Skull.java     |    21 -
  .../enchantments/EnchantmentTarget.java       |     4 +-
@@ -24,6 +26,7 @@ Subject: [PATCH] rip out legacy classes
  src/main/java/org/bukkit/entity/Horse.java    |    46 -
  .../org/bukkit/entity/LingeringPotion.java    |     8 -
  src/main/java/org/bukkit/entity/Minecart.java |    18 -
+ src/main/java/org/bukkit/entity/Player.java   |    12 -
  src/main/java/org/bukkit/entity/Skeleton.java |    40 -
  .../java/org/bukkit/entity/SplashPotion.java  |     9 -
  .../java/org/bukkit/entity/TippedArrow.java   |     8 -
@@ -34,7 +37,7 @@ Subject: [PATCH] rip out legacy classes
  .../event/player/PlayerPickupArrowEvent.java  |     3 +-
  .../event/player/PlayerPickupItemEvent.java   |    91 -
  .../event/player/PlayerPreLoginEvent.java     |   166 -
- .../org/bukkit/generator/ChunkGenerator.java  |    42 -
+ .../org/bukkit/generator/ChunkGenerator.java  |    56 -
  .../org/bukkit/inventory/FurnaceRecipe.java   |    38 +-
  .../java/org/bukkit/inventory/ItemStack.java  |    83 +-
  .../org/bukkit/inventory/ShapedRecipe.java    |    14 -
@@ -111,7 +114,7 @@ Subject: [PATCH] rip out legacy classes
  src/test/java/org/bukkit/MaterialTest.java    |    18 -
  .../event/PlayerChatTabCompleteEventTest.java |    26 -
  .../bukkit/materials/MaterialDataTest.java    |   427 -
- 107 files changed, 6825 insertions(+), 17605 deletions(-)
+ 110 files changed, 6844 insertions(+), 17717 deletions(-)
  delete mode 100644 src/main/java/org/bukkit/SkullType.java
  delete mode 100644 src/main/java/org/bukkit/entity/LingeringPotion.java
  delete mode 100644 src/main/java/org/bukkit/entity/SplashPotion.java
@@ -222,11 +225,129 @@ index c91ea2a0..275bfdf4 100644
          if (size != actual) {
              throw new IllegalStateException(label + " - Expected " + size + " materials, got " + actual);
          }
+diff --git a/src/main/java/org/bukkit/ChunkSnapshot.java b/src/main/java/org/bukkit/ChunkSnapshot.java
+index c51c73b6..757b46ce 100644
+--- a/src/main/java/org/bukkit/ChunkSnapshot.java
++++ b/src/main/java/org/bukkit/ChunkSnapshot.java
+@@ -56,18 +56,6 @@ public interface ChunkSnapshot {
+     @NotNull
+     BlockData getBlockData(int x, int y, int z);
+ 
+-    /**
+-     * Get block data for block at corresponding coordinate in the chunk
+-     *
+-     * @param x 0-15
+-     * @param y 0-255
+-     * @param z 0-15
+-     * @return 0-15
+-     * @deprecated Magic value
+-     */
+-    @Deprecated
+-    int getData(int x, int y, int z);
+-
+     /**
+      * Get sky light level for block at corresponding coordinate in the chunk
+      *
 diff --git a/src/main/java/org/bukkit/DyeColor.java b/src/main/java/org/bukkit/DyeColor.java
-index bd213cab..fb03abc7 100644
+index bd213cab..447c0363 100644
 --- a/src/main/java/org/bukkit/DyeColor.java
 +++ b/src/main/java/org/bukkit/DyeColor.java
-@@ -91,30 +91,6 @@ public enum DyeColor {
+@@ -13,108 +13,78 @@ public enum DyeColor {
+     /**
+      * Represents white dye.
+      */
+-    WHITE(0x0, 0xF, Color.fromRGB(0xF9FFFE), Color.fromRGB(0xF0F0F0)),
++    WHITE(Color.fromRGB(0xF9FFFE), Color.fromRGB(0xF0F0F0)),
+     /**
+      * Represents orange dye.
+      */
+-    ORANGE(0x1, 0xE, Color.fromRGB(0xF9801D), Color.fromRGB(0xEB8844)),
++    ORANGE(Color.fromRGB(0xF9801D), Color.fromRGB(0xEB8844)),
+     /**
+      * Represents magenta dye.
+      */
+-    MAGENTA(0x2, 0xD, Color.fromRGB(0xC74EBD), Color.fromRGB(0xC354CD)),
++    MAGENTA(Color.fromRGB(0xC74EBD), Color.fromRGB(0xC354CD)),
+     /**
+      * Represents light blue dye.
+      */
+-    LIGHT_BLUE(0x3, 0xC, Color.fromRGB(0x3AB3DA), Color.fromRGB(0x6689D3)),
++    LIGHT_BLUE(Color.fromRGB(0x3AB3DA), Color.fromRGB(0x6689D3)),
+     /**
+      * Represents yellow dye.
+      */
+-    YELLOW(0x4, 0xB, Color.fromRGB(0xFED83D), Color.fromRGB(0xDECF2A)),
++    YELLOW(Color.fromRGB(0xFED83D), Color.fromRGB(0xDECF2A)),
+     /**
+      * Represents lime dye.
+      */
+-    LIME(0x5, 0xA, Color.fromRGB(0x80C71F), Color.fromRGB(0x41CD34)),
++    LIME(Color.fromRGB(0x80C71F), Color.fromRGB(0x41CD34)),
+     /**
+      * Represents pink dye.
+      */
+-    PINK(0x6, 0x9, Color.fromRGB(0xF38BAA), Color.fromRGB(0xD88198)),
++    PINK(Color.fromRGB(0xF38BAA), Color.fromRGB(0xD88198)),
+     /**
+      * Represents gray dye.
+      */
+-    GRAY(0x7, 0x8, Color.fromRGB(0x474F52), Color.fromRGB(0x434343)),
++    GRAY(Color.fromRGB(0x474F52), Color.fromRGB(0x434343)),
+     /**
+      * Represents light gray dye.
+      */
+-    LIGHT_GRAY(0x8, 0x7, Color.fromRGB(0x9D9D97), Color.fromRGB(0xABABAB)),
++    LIGHT_GRAY(Color.fromRGB(0x9D9D97), Color.fromRGB(0xABABAB)),
+     /**
+      * Represents cyan dye.
+      */
+-    CYAN(0x9, 0x6, Color.fromRGB(0x169C9C), Color.fromRGB(0x287697)),
++    CYAN(Color.fromRGB(0x169C9C), Color.fromRGB(0x287697)),
+     /**
+      * Represents purple dye.
+      */
+-    PURPLE(0xA, 0x5, Color.fromRGB(0x8932B8), Color.fromRGB(0x7B2FBE)),
++    PURPLE(Color.fromRGB(0x8932B8), Color.fromRGB(0x7B2FBE)),
+     /**
+      * Represents blue dye.
+      */
+-    BLUE(0xB, 0x4, Color.fromRGB(0x3C44AA), Color.fromRGB(0x253192)),
++    BLUE(Color.fromRGB(0x3C44AA), Color.fromRGB(0x253192)),
+     /**
+      * Represents brown dye.
+      */
+-    BROWN(0xC, 0x3, Color.fromRGB(0x835432), Color.fromRGB(0x51301A)),
++    BROWN(Color.fromRGB(0x835432), Color.fromRGB(0x51301A)),
+     /**
+      * Represents green dye.
+      */
+-    GREEN(0xD, 0x2, Color.fromRGB(0x5E7C16), Color.fromRGB(0x3B511A)),
++    GREEN(Color.fromRGB(0x5E7C16), Color.fromRGB(0x3B511A)),
+     /**
+      * Represents red dye.
+      */
+-    RED(0xE, 0x1, Color.fromRGB(0xB02E26), Color.fromRGB(0xB3312C)),
++    RED(Color.fromRGB(0xB02E26), Color.fromRGB(0xB3312C)),
+     /**
+      * Represents black dye.
+      */
+-    BLACK(0xF, 0x0, Color.fromRGB(0x1D1D21), Color.fromRGB(0x1E1B1B));
++    BLACK(Color.fromRGB(0x1D1D21), Color.fromRGB(0x1E1B1B));
+ 
+-    private final byte woolData;
+-    private final byte dyeData;
+     private final Color color;
+     private final Color firework;
+-    private static final DyeColor[] BY_WOOL_DATA;
+-    private static final DyeColor[] BY_DYE_DATA;
+     private static final Map<Color, DyeColor> BY_COLOR;
+     private static final Map<Color, DyeColor> BY_FIREWORK;
+ 
+-    private DyeColor(final int woolData, final int dyeData, /*@NotNull*/ Color color, /*@NotNull*/ Color firework) {
+-        this.woolData = (byte) woolData;
+-        this.dyeData = (byte) dyeData;
++    private DyeColor(/*@NotNull*/ Color color, /*@NotNull*/ Color firework) {
+         this.color = color;
          this.firework = firework;
      }
  
@@ -257,6 +378,66 @@ index bd213cab..fb03abc7 100644
      /**
       * Gets the color that this dye represents.
       *
+@@ -135,44 +105,6 @@ public enum DyeColor {
+         return firework;
+     }
+ 
+-    /**
+-     * Gets the DyeColor with the given wool data value.
+-     *
+-     * @param data Wool data value to fetch
+-     * @return The {@link DyeColor} representing the given value, or null if
+-     *     it doesn't exist
+-     * @see #getByDyeData(byte)
+-     * @deprecated Magic value
+-     */
+-    @Deprecated
+-    @Nullable
+-    public static DyeColor getByWoolData(final byte data) {
+-        int i = 0xff & data;
+-        if (i >= BY_WOOL_DATA.length) {
+-            return null;
+-        }
+-        return BY_WOOL_DATA[i];
+-    }
+-
+-    /**
+-     * Gets the DyeColor with the given dye data value.
+-     *
+-     * @param data Dye data value to fetch
+-     * @return The {@link DyeColor} representing the given value, or null if
+-     *     it doesn't exist
+-     * @see #getByWoolData(byte)
+-     * @deprecated Magic value
+-     */
+-    @Deprecated
+-    @Nullable
+-    public static DyeColor getByDyeData(final byte data) {
+-        int i = 0xff & data;
+-        if (i >= BY_DYE_DATA.length) {
+-            return null;
+-        }
+-        return BY_DYE_DATA[i];
+-    }
+-
+     /**
+      * Gets the DyeColor with the given color value.
+      *
+@@ -211,14 +143,10 @@ public enum DyeColor {
+     }
+ 
+     static {
+-        BY_WOOL_DATA = values();
+-        BY_DYE_DATA = values();
+         ImmutableMap.Builder<Color, DyeColor> byColor = ImmutableMap.builder();
+         ImmutableMap.Builder<Color, DyeColor> byFirework = ImmutableMap.builder();
+ 
+         for (DyeColor color : values()) {
+-            BY_WOOL_DATA[color.woolData & 0xff] = color;
+-            BY_DYE_DATA[color.dyeData & 0xff] = color;
+             byColor.put(color.getColor(), color);
+             byFirework.put(color.getFireworkColor(), color);
+         }
 diff --git a/src/main/java/org/bukkit/Effect.java b/src/main/java/org/bukkit/Effect.java
 index d0c812c7..e893dac8 100644
 --- a/src/main/java/org/bukkit/Effect.java
@@ -308,18 +489,23 @@ index 0d8ee0cb..ce69589a 100644
       * Rabbit jumping.
       */
 diff --git a/src/main/java/org/bukkit/Material.java b/src/main/java/org/bukkit/Material.java
-index 4ba991b7..aca061c7 100644
+index 4ba991b7..1a864eb2 100644
 --- a/src/main/java/org/bukkit/Material.java
 +++ b/src/main/java/org/bukkit/Material.java
-@@ -1,7 +1,6 @@
+@@ -1,10 +1,11 @@
  package org.bukkit;
  
  import com.google.common.collect.Maps;
 -import java.lang.reflect.Constructor;
++
  import java.util.Locale;
  import java.util.Map;
  import java.util.function.Consumer;
-@@ -79,7 +78,6 @@ import org.bukkit.block.data.type.TripwireHook;
++
+ import org.apache.commons.lang.Validate;
+ import org.bukkit.block.data.Ageable;
+ import org.bukkit.block.data.AnaloguePowerable;
+@@ -79,7 +80,6 @@ import org.bukkit.block.data.type.TripwireHook;
  import org.bukkit.block.data.type.TurtleEgg;
  import org.bukkit.block.data.type.Wall;
  import org.bukkit.block.data.type.WallSign;
@@ -327,7 +513,7 @@ index 4ba991b7..aca061c7 100644
  import org.jetbrains.annotations.NotNull;
  import org.jetbrains.annotations.Nullable;
  
-@@ -88,8561 +86,6871 @@ import org.jetbrains.annotations.Nullable;
+@@ -88,8561 +88,6871 @@ import org.jetbrains.annotations.Nullable;
   */
  @SuppressWarnings({"DeprecatedIsStillUsed", "deprecation"}) // Paper
  public enum Material implements Keyed {
@@ -3767,7 +3953,7 @@ index 4ba991b7..aca061c7 100644
 +  /**
 +   * BlockData: {@link Snowable}
 +   */
-+  GRASS_BLOCK( Snowable.class),
++  GRASS_BLOCK(Snowable.class),
 +  DIRT,
 +  COARSE_DIRT,
 +  /**
@@ -3820,39 +4006,39 @@ index 4ba991b7..aca061c7 100644
 +  /**
 +   * BlockData: {@link Orientable}
 +   */
-+  OAK_LOG( Orientable.class),
++  OAK_LOG(Orientable.class),
 +  /**
 +   * BlockData: {@link Orientable}
 +   */
-+  SPRUCE_LOG( Orientable.class),
++  SPRUCE_LOG(Orientable.class),
 +  /**
 +   * BlockData: {@link Orientable}
 +   */
-+  BIRCH_LOG( Orientable.class),
++  BIRCH_LOG(Orientable.class),
 +  /**
 +   * BlockData: {@link Orientable}
 +   */
-+  JUNGLE_LOG( Orientable.class),
++  JUNGLE_LOG(Orientable.class),
 +  /**
 +   * BlockData: {@link Orientable}
 +   */
-+  ACACIA_LOG( Orientable.class),
++  ACACIA_LOG(Orientable.class),
 +  /**
 +   * BlockData: {@link Orientable}
 +   */
-+  DARK_OAK_LOG( Orientable.class),
++  DARK_OAK_LOG(Orientable.class),
 +  /**
 +   * BlockData: {@link Orientable}
 +   */
-+  CRIMSON_STEM( Orientable.class),
++  CRIMSON_STEM(Orientable.class),
 +  /**
 +   * BlockData: {@link Orientable}
 +   */
-+  WARPED_STEM( Orientable.class),
++  WARPED_STEM(Orientable.class),
 +  /**
 +   * BlockData: {@link Orientable}
 +   */
-+  STRIPPED_OAK_LOG( Orientable.class),
++  STRIPPED_OAK_LOG(Orientable.class),
 +  /**
 +   * BlockData: {@link Orientable}
 +   */
@@ -5667,8 +5853,8 @@ index 4ba991b7..aca061c7 100644
 +  ZOMBIFIED_PIGLIN_SPAWN_EGG,
 +  EXPERIENCE_BOTTLE,
 +  FIRE_CHARGE,
-+  WRITABLE_BOOK( 1),
-+  WRITTEN_BOOK( 16),
++  WRITABLE_BOOK(1),
++  WRITTEN_BOOK(16),
 +  EMERALD,
 +  ITEM_FRAME,
 +  FLOWER_POT,
@@ -5681,53 +5867,53 @@ index 4ba991b7..aca061c7 100644
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  SKELETON_SKULL( Rotatable.class),
++  SKELETON_SKULL(Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  WITHER_SKELETON_SKULL( Rotatable.class),
++  WITHER_SKELETON_SKULL(Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  PLAYER_HEAD( Rotatable.class),
++  PLAYER_HEAD(Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  ZOMBIE_HEAD( Rotatable.class),
++  ZOMBIE_HEAD(Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  CREEPER_HEAD( Rotatable.class),
++  CREEPER_HEAD(Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  DRAGON_HEAD( Rotatable.class),
-+  CARROT_ON_A_STICK( 1),
-+  WARPED_FUNGUS_ON_A_STICK( 1),
++  DRAGON_HEAD(Rotatable.class),
++  CARROT_ON_A_STICK(1),
++  WARPED_FUNGUS_ON_A_STICK(1),
 +  NETHER_STAR,
 +  PUMPKIN_PIE,
 +  FIREWORK_ROCKET,
 +  FIREWORK_STAR,
-+  ENCHANTED_BOOK( 1),
++  ENCHANTED_BOOK(1),
 +  NETHER_BRICK,
 +  QUARTZ,
-+  TNT_MINECART( 1),
-+  HOPPER_MINECART( 1),
++  TNT_MINECART(1),
++  HOPPER_MINECART(1),
 +  PRISMARINE_SHARD,
 +  PRISMARINE_CRYSTALS,
 +  RABBIT,
 +  COOKED_RABBIT,
-+  RABBIT_STEW( 1),
++  RABBIT_STEW(1),
 +  RABBIT_FOOT,
 +  RABBIT_HIDE,
-+  ARMOR_STAND( 16),
-+  IRON_HORSE_ARMOR( 1),
-+  GOLDEN_HORSE_ARMOR( 1),
-+  DIAMOND_HORSE_ARMOR( 1),
++  ARMOR_STAND(16),
++  IRON_HORSE_ARMOR(1),
++  GOLDEN_HORSE_ARMOR(1),
++  DIAMOND_HORSE_ARMOR(1),
 +  LEATHER_HORSE_ARMOR(1),
 +  LEAD,
 +  NAME_TAG,
-+  COMMAND_BLOCK_MINECART( 1),
++  COMMAND_BLOCK_MINECART(1),
 +  MUTTON,
 +  COOKED_MUTTON,
 +  /**
@@ -5745,51 +5931,51 @@ index 4ba991b7..aca061c7 100644
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  LIGHT_BLUE_BANNER( 16, Rotatable.class),
++  LIGHT_BLUE_BANNER(16, Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  YELLOW_BANNER( 16, Rotatable.class),
++  YELLOW_BANNER(16, Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  LIME_BANNER( 16, Rotatable.class),
++  LIME_BANNER(16, Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  PINK_BANNER( 16, Rotatable.class),
++  PINK_BANNER(16, Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  GRAY_BANNER( 16, Rotatable.class),
++  GRAY_BANNER(16, Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  LIGHT_GRAY_BANNER( 16, Rotatable.class),
++  LIGHT_GRAY_BANNER(16, Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  CYAN_BANNER( 16, Rotatable.class),
++  CYAN_BANNER(16, Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  PURPLE_BANNER( 16, Rotatable.class),
++  PURPLE_BANNER(16, Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  BLUE_BANNER( 16, Rotatable.class),
++  BLUE_BANNER(16, Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  BROWN_BANNER( 16, Rotatable.class),
++  BROWN_BANNER(16, Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  GREEN_BANNER( 16, Rotatable.class),
++  GREEN_BANNER(16, Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
-+  RED_BANNER( 16, Rotatable.class),
++  RED_BANNER(16, Rotatable.class),
 +  /**
 +   * BlockData: {@link Rotatable}
 +   */
@@ -5799,88 +5985,88 @@ index 4ba991b7..aca061c7 100644
 +  POPPED_CHORUS_FRUIT,
 +  BEETROOT,
 +  BEETROOT_SEEDS,
-+  BEETROOT_SOUP( 1),
++  BEETROOT_SOUP(1),
 +  DRAGON_BREATH,
-+  SPLASH_POTION( 1),
++  SPLASH_POTION(1),
 +  SPECTRAL_ARROW,
 +  TIPPED_ARROW,
-+  LINGERING_POTION( 1),
-+  SHIELD( 1),
-+  ELYTRA( 1),
-+  SPRUCE_BOAT( 1),
-+  BIRCH_BOAT( 1),
-+  JUNGLE_BOAT( 1),
-+  ACACIA_BOAT( 1),
-+  DARK_OAK_BOAT( 1),
-+  TOTEM_OF_UNDYING( 1),
++  LINGERING_POTION(1),
++  SHIELD(1),
++  ELYTRA(1),
++  SPRUCE_BOAT(1),
++  BIRCH_BOAT(1),
++  JUNGLE_BOAT(1),
++  ACACIA_BOAT(1),
++  DARK_OAK_BOAT(1),
++  TOTEM_OF_UNDYING(1),
 +  SHULKER_SHELL,
 +  IRON_NUGGET,
-+  KNOWLEDGE_BOOK( 1),
-+  DEBUG_STICK( 1),
-+  MUSIC_DISC_13( 1),
-+  MUSIC_DISC_CAT( 1),
-+  MUSIC_DISC_BLOCKS( 1),
-+  MUSIC_DISC_CHIRP( 1),
-+  MUSIC_DISC_FAR( 1),
-+  MUSIC_DISC_MALL( 1),
-+  MUSIC_DISC_MELLOHI( 1),
-+  MUSIC_DISC_STAL( 1),
-+  MUSIC_DISC_STRAD( 1),
-+  MUSIC_DISC_WARD( 1),
-+  MUSIC_DISC_11( 1),
-+  MUSIC_DISC_WAIT( 1),
-+  MUSIC_DISC_PIGSTEP( 1),
-+  TRIDENT( 1),
++  KNOWLEDGE_BOOK(1),
++  DEBUG_STICK(1),
++  MUSIC_DISC_13(1),
++  MUSIC_DISC_CAT(1),
++  MUSIC_DISC_BLOCKS(1),
++  MUSIC_DISC_CHIRP(1),
++  MUSIC_DISC_FAR(1),
++  MUSIC_DISC_MALL(1),
++  MUSIC_DISC_MELLOHI(1),
++  MUSIC_DISC_STAL(1),
++  MUSIC_DISC_STRAD(1),
++  MUSIC_DISC_WARD(1),
++  MUSIC_DISC_11(1),
++  MUSIC_DISC_WAIT(1),
++  MUSIC_DISC_PIGSTEP(1),
++  TRIDENT(1),
 +  PHANTOM_MEMBRANE,
 +  NAUTILUS_SHELL,
 +  HEART_OF_THE_SEA,
 +  CROSSBOW(1),
-+  SUSPICIOUS_STEW( 1),
++  SUSPICIOUS_STEW(1),
 +  /**
 +   * BlockData: {@link Directional}
 +   */
 +  LOOM(Directional.class),
-+  FLOWER_BANNER_PATTERN( 1),
-+  CREEPER_BANNER_PATTERN( 1),
-+  SKULL_BANNER_PATTERN( 1),
-+  MOJANG_BANNER_PATTERN( 1),
-+  GLOBE_BANNER_PATTERN( 1),
-+  PIGLIN_BANNER_PATTERN( 1),
++  FLOWER_BANNER_PATTERN(1),
++  CREEPER_BANNER_PATTERN(1),
++  SKULL_BANNER_PATTERN(1),
++  MOJANG_BANNER_PATTERN(1),
++  GLOBE_BANNER_PATTERN(1),
++  PIGLIN_BANNER_PATTERN(1),
 +  /**
 +   * BlockData: {@link Levelled}
 +   */
-+  COMPOSTER( Levelled.class),
++  COMPOSTER(Levelled.class),
 +  /**
 +   * BlockData: {@link Directional}
 +   */
-+  BARREL( Directional.class),
++  BARREL(Directional.class),
 +  /**
 +   * BlockData: {@link Furnace}
 +   */
-+  SMOKER( Furnace.class),
++  SMOKER(Furnace.class),
 +  /**
 +   * BlockData: {@link Furnace}
 +   */
-+  BLAST_FURNACE( Furnace.class),
++  BLAST_FURNACE(Furnace.class),
 +  CARTOGRAPHY_TABLE,
 +  FLETCHING_TABLE,
 +  /**
 +   * BlockData: {@link Grindstone}
 +   */
-+  GRINDSTONE( Grindstone.class),
++  GRINDSTONE(Grindstone.class),
 +  /**
 +   * BlockData: {@link Lectern}
 +   */
-+  LECTERN( Lectern.class),
++  LECTERN(Lectern.class),
 +  SMITHING_TABLE,
 +  /**
 +   * BlockData: {@link Directional}
 +   */
-+  STONECUTTER( Directional.class),
++  STONECUTTER(Directional.class),
 +  /**
 +   * BlockData: {@link Bell}
 +   */
-+  BELL( Bell.class),
++  BELL(Bell.class),
 +  /**
 +   * BlockData: {@link Lantern}
 +   */
@@ -5903,12 +6089,12 @@ index 4ba991b7..aca061c7 100644
 +  /**
 +   * BlockData: {@link Beehive}
 +   */
-+  BEE_NEST( Beehive.class),
++  BEE_NEST(Beehive.class),
 +  /**
 +   * BlockData: {@link Beehive}
 +   */
 +  BEEHIVE(Beehive.class),
-+  HONEY_BOTTLE( 16),
++  HONEY_BOTTLE(16),
 +  HONEY_BLOCK,
 +  HONEYCOMB_BLOCK,
 +  LODESTONE,
@@ -5923,11 +6109,11 @@ index 4ba991b7..aca061c7 100644
 +  /**
 +   * BlockData: {@link Slab}
 +   */
-+  BLACKSTONE_SLAB( Slab.class),
++  BLACKSTONE_SLAB(Slab.class),
 +  /**
 +   * BlockData: {@link Stairs}
 +   */
-+  BLACKSTONE_STAIRS( Stairs.class),
++  BLACKSTONE_STAIRS(Stairs.class),
 +  GILDED_BLACKSTONE,
 +  POLISHED_BLACKSTONE,
 +  /**
@@ -5937,17 +6123,17 @@ index 4ba991b7..aca061c7 100644
 +  /**
 +   * BlockData: {@link Stairs}
 +   */
-+  POLISHED_BLACKSTONE_STAIRS( Stairs.class),
++  POLISHED_BLACKSTONE_STAIRS(Stairs.class),
 +  CHISELED_POLISHED_BLACKSTONE,
 +  POLISHED_BLACKSTONE_BRICKS,
 +  /**
 +   * BlockData: {@link Slab}
 +   */
-+  POLISHED_BLACKSTONE_BRICK_SLAB( Slab.class),
++  POLISHED_BLACKSTONE_BRICK_SLAB(Slab.class),
 +  /**
 +   * BlockData: {@link Stairs}
 +   */
-+  POLISHED_BLACKSTONE_BRICK_STAIRS( Stairs.class),
++  POLISHED_BLACKSTONE_BRICK_STAIRS(Stairs.class),
 +  CRACKED_POLISHED_BLACKSTONE_BRICKS,
 +  /**
 +   * BlockData: {@link RespawnAnchor}
@@ -5956,7 +6142,7 @@ index 4ba991b7..aca061c7 100644
 +  /**
 +   * BlockData: {@link Levelled}
 +   */
-+  WATER( Levelled.class),
++  WATER(Levelled.class),
 +  /**
 +   * BlockData: {@link Levelled}
 +   */
@@ -5964,7 +6150,7 @@ index 4ba991b7..aca061c7 100644
 +  /**
 +   * BlockData: {@link Bisected}
 +   */
-+  TALL_SEAGRASS( Bisected.class),
++  TALL_SEAGRASS(Bisected.class),
 +  /**
 +   * BlockData: {@link PistonHead}
 +   */
@@ -15831,6 +16017,26 @@ index e6d2abf2..ab551e73 100644
      /**
       * Spawn a {@link FallingBlock} entity at the given {@link Location} of
       * the specified {@link Material}. The material dictates what is falling.
+diff --git a/src/main/java/org/bukkit/block/Block.java b/src/main/java/org/bukkit/block/Block.java
+index 0c72d00a..1895bfee 100644
+--- a/src/main/java/org/bukkit/block/Block.java
++++ b/src/main/java/org/bukkit/block/Block.java
+@@ -32,15 +32,6 @@ import org.jetbrains.annotations.Nullable;
+  */
+ public interface Block extends Metadatable {
+ 
+-    /**
+-     * Gets the metadata for this block
+-     *
+-     * @return block specific metadata
+-     * @deprecated Magic value
+-     */
+-    @Deprecated
+-    byte getData();
+-
+     /**
+      * Gets the complete block data for this block
+      *
 diff --git a/src/main/java/org/bukkit/block/BlockState.java b/src/main/java/org/bukkit/block/BlockState.java
 index 631cbf2b..70b1233f 100644
 --- a/src/main/java/org/bukkit/block/BlockState.java
@@ -16251,6 +16457,29 @@ index 95c79c5f..cd63eaff 100644
      /**
       * Sets the display block for this minecart.
       * Passing a null value will set the minecart to have no display block.
+diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
+index f7fd13dc..65672655 100644
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -403,18 +403,6 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+      */
+     public <T> void playEffect(@NotNull Location loc, @NotNull Effect effect, @Nullable T data);
+ 
+-    /**
+-     * Send a block change. This fakes a block change packet for a user at a
+-     * certain location. This will not actually change the world in any way.
+-     *
+-     * @param loc The location of the changed block
+-     * @param material The new block
+-     * @param data The block data
+-     * @deprecated Magic value
+-     */
+-    @Deprecated
+-    public void sendBlockChange(@NotNull Location loc, @NotNull Material material, byte data);
+-
+     /**
+      * Send a block change. This fakes a block change packet for a user at a
+      * certain location. This will not actually change the world in any way.
 diff --git a/src/main/java/org/bukkit/entity/Skeleton.java b/src/main/java/org/bukkit/entity/Skeleton.java
 index 1c367f78..b0065c4e 100644
 --- a/src/main/java/org/bukkit/entity/Skeleton.java
@@ -17010,7 +17239,7 @@ index fb066251..00000000
 -    }
 -}
 diff --git a/src/main/java/org/bukkit/generator/ChunkGenerator.java b/src/main/java/org/bukkit/generator/ChunkGenerator.java
-index 5ba77d40..090253f7 100644
+index 5ba77d40..ccbba29d 100644
 --- a/src/main/java/org/bukkit/generator/ChunkGenerator.java
 +++ b/src/main/java/org/bukkit/generator/ChunkGenerator.java
 @@ -10,7 +10,6 @@ import org.bukkit.World;
@@ -17083,6 +17312,26 @@ index 5ba77d40..090253f7 100644
          /**
           * Get the type and data of the block at x, y, z.
           *
+@@ -378,19 +336,5 @@ public abstract class ChunkGenerator {
+          */
+         @NotNull
+         public BlockData getBlockData(int x, int y, int z);
+-
+-        /**
+-         * Get the block data at x,y,z in the chunk data.
+-         *
+-         * Getting blocks outside the chunk's bounds returns 0.
+-         *
+-         * @param x the x location in the chunk from 0-15 inclusive
+-         * @param y the y location in the chunk from 0 (inclusive) - maxHeight (exclusive)
+-         * @param z the z location in the chunk from 0-15 inclusive
+-         * @return the block data value or air if x, y or z are outside the chunk's bounds
+-         * @deprecated Uses magic values
+-         */
+-        @Deprecated
+-        public byte getData(int x, int y, int z);
+     }
+ }
 diff --git a/src/main/java/org/bukkit/inventory/FurnaceRecipe.java b/src/main/java/org/bukkit/inventory/FurnaceRecipe.java
 index 1d442dc1..10bdaf1a 100644
 --- a/src/main/java/org/bukkit/inventory/FurnaceRecipe.java
