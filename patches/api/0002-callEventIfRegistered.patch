@@ -1,17 +1,17 @@
-From 9b4c54bdb8a6f8aaa52ef514d15d44503f9173a7 Mon Sep 17 00:00:00 2001
+From ea47f817c3b1db5492c82a1b4e20329e4c609178 Mon Sep 17 00:00:00 2001
 From: Yannick Lamprecht <yannicklamprecht@live.de>
 Date: Fri, 1 Jan 2021 14:51:40 +0100
 Subject: [PATCH] callEventIfRegistered
 
 ---
- src/main/java/org/bukkit/event/Event.java | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ src/main/java/org/bukkit/event/Event.java | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
 diff --git a/src/main/java/org/bukkit/event/Event.java b/src/main/java/org/bukkit/event/Event.java
-index 8ec56cd6..e6eb1e69 100644
+index 8ec56cd6..03f5aa30 100644
 --- a/src/main/java/org/bukkit/event/Event.java
 +++ b/src/main/java/org/bukkit/event/Event.java
-@@ -49,6 +49,24 @@ public abstract class Event {
+@@ -49,6 +49,19 @@ public abstract class Event {
              return true;
          }
      }
@@ -26,12 +26,7 @@ index 8ec56cd6..e6eb1e69 100644
 +        if (getHandlers().getRegisteredListeners().length == 0) {
 +            return true;
 +        }
-+        org.bukkit.Bukkit.getPluginManager().callEvent(this);
-+        if (this instanceof Cancellable) {
-+            return !((Cancellable) this).isCancelled();
-+        } else {
-+            return true;
-+        }
++        return callEvent();
 +    }
      // Paper end
  
