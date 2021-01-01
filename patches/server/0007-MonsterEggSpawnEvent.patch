@@ -1,26 +1,17 @@
-From d6665cafbef8d0a91a4eb55d8d33ecd9d52fb97f Mon Sep 17 00:00:00 2001
+From f1d6e81605b8fba005721bf07108fc52ccdb2d71 Mon Sep 17 00:00:00 2001
 From: Yannick Lamprecht <yannicklamprecht@live.de>
 Date: Fri, 1 Jan 2021 16:45:28 +0100
 Subject: [PATCH] MonsterEggSpawnEvent
 
 ---
- .../java/net/minecraft/server/EntityTypes.java  | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ .../java/net/minecraft/server/EntityTypes.java    | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
 diff --git a/src/main/java/net/minecraft/server/EntityTypes.java b/src/main/java/net/minecraft/server/EntityTypes.java
-index bf914dc5e..68a465829 100644
+index bf914dc5e..7c78b645e 100644
 --- a/src/main/java/net/minecraft/server/EntityTypes.java
 +++ b/src/main/java/net/minecraft/server/EntityTypes.java
-@@ -10,6 +10,8 @@ import java.util.stream.Stream;
- import javax.annotation.Nullable;
- import org.apache.logging.log4j.LogManager;
- import org.apache.logging.log4j.Logger;
-+import org.bukkit.craftbukkit.CraftServer;
-+import org.bukkit.craftbukkit.entity.CraftEntity;
- 
- public class EntityTypes<T extends Entity> {
- 
-@@ -177,6 +179,21 @@ public class EntityTypes<T extends Entity> {
+@@ -177,6 +177,21 @@ public class EntityTypes<T extends Entity> {
  
      @Nullable
      public Entity spawnCreature(WorldServer worldserver, @Nullable ItemStack itemstack, @Nullable EntityHuman entityhuman, BlockPosition blockposition, EnumMobSpawn enummobspawn, boolean flag, boolean flag1) {
@@ -31,7 +22,7 @@ index bf914dc5e..68a465829 100644
 +                de.craftstuebchen.weepermc.event.MonsterEggSpawnEvent monsterEggSpawnEvent = new de.craftstuebchen.weepermc.event.MonsterEggSpawnEvent(
 +                    entityhuman.getBukkitEntity(), t0.getBukkitEntity(), itemstack.asBukkitCopy());
 +                if (monsterEggSpawnEvent.callEventIfRegistered()) {
-+                    Entity t1 = ((CraftEntity)monsterEggSpawnEvent.getEntity()).getHandle();
++                    Entity t1 = ((org.bukkit.craftbukkit.entity.CraftEntity)monsterEggSpawnEvent.getEntity()).getHandle();
 +                    worldserver.addAllEntities(t1, org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.SPAWNER_EGG);
 +                    return !t1.dead ? t1 : null; // Don't return an entity when CreatureSpawnEvent is canceled
 +                    // CraftBukkit end
