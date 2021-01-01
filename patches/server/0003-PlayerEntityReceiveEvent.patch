@@ -1,4 +1,4 @@
-From 206d141723e65c625f38575e6dbd382bacadf159 Mon Sep 17 00:00:00 2001
+From 96682572423da205319060edbcf2fbb6abd39c14 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 12 Oct 2020 23:11:41 +0200
 Subject: [PATCH] PlayerEntityReceiveEvent
@@ -9,17 +9,17 @@ Subject: [PATCH] PlayerEntityReceiveEvent
  2 files changed, 23 insertions(+), 1 deletion(-)
 
 diff --git a/src/main/java/net/minecraft/server/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
-index 4efc40c01..6843f9e49 100644
+index 4efc40c01..8a7ff63ce 100644
 --- a/src/main/java/net/minecraft/server/EntityTrackerEntry.java
 +++ b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
 @@ -17,6 +17,10 @@ import org.bukkit.entity.Player;
  import org.bukkit.event.player.PlayerVelocityEvent;
  // CraftBukkit end
  
-+// CsPaper  start
++// Weeper  start
 +import org.bukkit.craftbukkit.event.CraftEventFactory;
 +import org.bukkit.event.packet.PlayerEntityReceiveEvent;
-+// CsPaper  end
++// Weeper  end
  public class EntityTrackerEntry {
  
      private static final Logger LOGGER = LogManager.getLogger();
@@ -28,12 +28,12 @@ index 4efc40c01..6843f9e49 100644
  
          this.headYaw = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
 -        consumer.accept(packet);
-+        // CsPaper start
++        // Weeper start
 +        PlayerEntityReceiveEvent playerEntityReceiveEvent = CraftEventFactory.callPlayerEntityReceiveEvent(this.tracker, entityplayer);
 +        if (!playerEntityReceiveEvent.isCancelled()) {
 +            consumer.accept(packet);
 +        }
-+        // CsPaper end
++        // Weeper end
          if (!this.tracker.getDataWatcher().d()) {
              consumer.accept(new PacketPlayOutEntityMetadata(this.tracker.getId(), this.tracker.getDataWatcher(), true));
          }
