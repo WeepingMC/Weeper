@@ -1,4 +1,4 @@
-From e940c0246fe5f5b8006217d62b85718a5a96e724 Mon Sep 17 00:00:00 2001
+From 9da71c3ba217f72a2ce68f880ab5ca4e838fee34 Mon Sep 17 00:00:00 2001
 From: Techcable <techcable@techcable.net>
 Date: Sun, 20 Dec 2020 14:21:32 +0100
 Subject: [PATCH] Fix hopper lag by making entities look for hoppers.
@@ -31,18 +31,18 @@ Co-authored-by: Yannick Lamprecht <yannicklamprecht@live.de>
  create mode 100644 src/main/java/io/papermc/paper/HopperPusher.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index ae5ed3bd0..e868a350c 100644
+index 3542746c4..cd40669b0 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -709,4 +709,9 @@ public class PaperWorldConfig {
-     private void fixCuringExploit() {
-         fixCuringZombieVillagerDiscountExploit = getBoolean("game-mechanics.fix-curing-zombie-villager-discount-exploit", fixCuringZombieVillagerDiscountExploit);
+@@ -714,4 +714,9 @@ public class PaperWorldConfig {
+     private void disableMobSpawnerSpawnEggTransformation() {
+         disableMobSpawnerSpawnEggTransformation = getBoolean("game-mechanics.disable-mob-spawner-spawn-egg-transformation", disableMobSpawnerSpawnEggTransformation);
      }
 +
-+  public boolean isHopperPushBased;
-+  private void isHopperPushBased() {
-+    isHopperPushBased = getBoolean("hopper.push-based", true);
-+  }
++    public boolean isHopperPushBased;
++    private void isHopperPushBased() {
++        isHopperPushBased = getBoolean("hopper.push-based", true);
++    }
  }
 diff --git a/src/main/java/io/papermc/paper/HopperHelper.java b/src/main/java/io/papermc/paper/HopperHelper.java
 new file mode 100644
