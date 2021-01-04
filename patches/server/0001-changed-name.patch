@@ -1,4 +1,4 @@
-From 52c12b9f818ebd535bb4a75001c3b31a21ba0a56 Mon Sep 17 00:00:00 2001
+From 277c9118e250b25b274d3d5fa42937f24b5740e8 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 5 Oct 2020 19:09:35 +0200
 Subject: [PATCH] changed name
@@ -11,7 +11,7 @@ Subject: [PATCH] changed name
  4 files changed, 12 insertions(+), 13 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index 80f165291..c9c8e9cee 100644
+index f641d2a79..29ef16564 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,11 +1,10 @@
@@ -61,10 +61,10 @@ index 80f165291..c9c8e9cee 100644
          <plugins>
              <plugin>
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 172fc9ef9..3ac69e18e 100644
+index a7cd98a7c..8a64e3ca8 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1449,7 +1449,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
+@@ -1444,7 +1444,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
      }
  
      public String getServerModName() {

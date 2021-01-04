@@ -1,4 +1,4 @@
-From 9da71c3ba217f72a2ce68f880ab5ca4e838fee34 Mon Sep 17 00:00:00 2001
+From 525978c76433982f379dd7ea32fe2623806696f1 Mon Sep 17 00:00:00 2001
 From: Techcable <techcable@techcable.net>
 Date: Sun, 20 Dec 2020 14:21:32 +0100
 Subject: [PATCH] Fix hopper lag by making entities look for hoppers.
@@ -31,10 +31,10 @@ Co-authored-by: Yannick Lamprecht <yannicklamprecht@live.de>
  create mode 100644 src/main/java/io/papermc/paper/HopperPusher.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 3542746c4..cd40669b0 100644
+index 80409c4b5..62f183bd6 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -714,4 +714,9 @@ public class PaperWorldConfig {
+@@ -731,4 +731,9 @@ public class PaperWorldConfig {
      private void disableMobSpawnerSpawnEggTransformation() {
          disableMobSpawnerSpawnEggTransformation = getBoolean("game-mechanics.disable-mob-spawner-spawn-egg-transformation", disableMobSpawnerSpawnEggTransformation);
      }
