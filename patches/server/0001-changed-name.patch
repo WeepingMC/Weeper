@@ -1,17 +1,17 @@
-From 277c9118e250b25b274d3d5fa42937f24b5740e8 Mon Sep 17 00:00:00 2001
+From f3eb663ca70fc6a51d9475872f62776f44139861 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 5 Oct 2020 19:09:35 +0200
 Subject: [PATCH] changed name
 
 ---
- pom.xml                                       | 19 +++++++++----------
+ pom.xml                                       | 23 +++++++++----------
  .../net/minecraft/server/MinecraftServer.java |  2 +-
  .../org/bukkit/craftbukkit/CraftServer.java   |  2 +-
  .../bukkit/craftbukkit/util/Versioning.java   |  2 +-
- 4 files changed, 12 insertions(+), 13 deletions(-)
+ 4 files changed, 14 insertions(+), 15 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index f641d2a79..29ef16564 100644
+index f641d2a79..44ea1d63d 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,11 +1,10 @@
@@ -29,7 +29,14 @@ index f641d2a79..29ef16564 100644
  
      <properties>
          <!-- <skipTests>true</skipTests> Paper - This [was] not going to end well -->
-@@ -18,16 +17,16 @@
+@@ -13,21 +12,21 @@
+         <api.version>unknown</api.version>
+         <minecraft.version>1.16.4</minecraft.version>
+         <minecraft_version>1_16_R3</minecraft_version>
+-        <maven.compiler.source>1.8</maven.compiler.source>
+-        <maven.compiler.target>1.8</maven.compiler.target>
++        <maven.compiler.source>11</maven.compiler.source>
++        <maven.compiler.target>11</maven.compiler.target>
      </properties>
  
      <parent>
@@ -100,5 +107,5 @@ index 674096cab..752c0570b 100644
  
          if (stream != null) {
 -- 
-2.29.2
+2.30.0
 
