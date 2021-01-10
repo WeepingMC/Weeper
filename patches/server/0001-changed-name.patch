@@ -1,4 +1,4 @@
-From f3eb663ca70fc6a51d9475872f62776f44139861 Mon Sep 17 00:00:00 2001
+From 3d4439c67cea51e305db9d814c86698dde20b142 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 5 Oct 2020 19:09:35 +0200
 Subject: [PATCH] changed name
@@ -94,7 +94,7 @@ index dc7de2b59..d432e1cbf 100644
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 674096cab..752c0570b 100644
+index 674096cab..b0b99b68e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
@@ -102,7 +102,7 @@ index 674096cab..752c0570b 100644
          String result = "Unknown-Version";
  
 -        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.destroystokyo.paper/paper-api/pom.properties");
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/de.craftstuebchen.paper/Weeper-api/pom.properties");
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/de.craftstuebchen.weeper/weeper-api/pom.properties");
          Properties properties = new Properties();
  
          if (stream != null) {
