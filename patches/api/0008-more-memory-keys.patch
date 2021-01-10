@@ -1,14 +1,14 @@
-From 445e33b166445179b8b5edb0269a80ff8e1994c6 Mon Sep 17 00:00:00 2001
+From 21428e5c73c026c188d74343c61d8a0f01d9d3a3 Mon Sep 17 00:00:00 2001
 From: Yannick Lamprecht <yannicklamprecht@live.de>
 Date: Sun, 3 Jan 2021 15:16:43 +0100
 Subject: [PATCH] more memory keys
 
 ---
- .../org/bukkit/entity/memory/MemoryKey.java   | 88 ++++++++++++++++++-
- 1 file changed, 87 insertions(+), 1 deletion(-)
+ .../org/bukkit/entity/memory/MemoryKey.java   | 126 +++++++++++++++++-
+ 1 file changed, 125 insertions(+), 1 deletion(-)
 
 diff --git a/src/main/java/org/bukkit/entity/memory/MemoryKey.java b/src/main/java/org/bukkit/entity/memory/MemoryKey.java
-index 905d5f6d..a65c5ddd 100644
+index 905d5f6d..61a5a936 100644
 --- a/src/main/java/org/bukkit/entity/memory/MemoryKey.java
 +++ b/src/main/java/org/bukkit/entity/memory/MemoryKey.java
 @@ -8,6 +8,20 @@ import java.util.UUID;
@@ -72,7 +72,7 @@ index 905d5f6d..a65c5ddd 100644
      @NotNull
      @Override
      public NamespacedKey getKey() {
-@@ -44,6 +79,13 @@ public final class MemoryKey<T> implements Keyed {
+@@ -44,21 +79,110 @@ public final class MemoryKey<T> implements Keyed {
          return tClass;
      }
  
@@ -85,10 +85,56 @@ index 905d5f6d..a65c5ddd 100644
 +
      private static final Map<NamespacedKey, MemoryKey> MEMORY_KEYS = new HashMap<>();
      //
++    /**
++     * Where this villager's bed is or where the piglin brute's patrol point is.
++     */
      public static final MemoryKey<Location> HOME = new MemoryKey<>(NamespacedKey.minecraft("home"), Location.class);
-@@ -59,6 +101,50 @@ public final class MemoryKey<T> implements Keyed {
+     public static final MemoryKey<Location> POTENTIAL_JOB_SITE = new MemoryKey<>(NamespacedKey.minecraft("potential_job_site"), Location.class);
++    /**
++     * Where this villager's job site block is.
++     */
+     public static final MemoryKey<Location> JOB_SITE = new MemoryKey<>(NamespacedKey.minecraft("job_site"), Location.class);
++    /**
++     * Where this villager's meeting point is.
++     *
++     */
+     public static final MemoryKey<Location> MEETING_POINT = new MemoryKey<>(NamespacedKey.minecraft("meeting_point"), Location.class);
++
+     public static final MemoryKey<Boolean> GOLEM_DETECTED_RECENTLY = new MemoryKey<>(NamespacedKey.minecraft("golem_detected_recently"), Boolean.class);
++    /**
++     * The tick that the villager last slept in a bed.
++     */
+     public static final MemoryKey<Long> LAST_SLEPT = new MemoryKey<>(NamespacedKey.minecraft("last_slept"), Long.class);
++    /**
++     * The tick that the villager last woke up from a bed.
++     */
+     public static final MemoryKey<Long> LAST_WOKEN = new MemoryKey<>(NamespacedKey.minecraft("last_woken"), Long.class);
++    /**
++     * The tick that the villager last worked at their job site.
++     */
+     public static final MemoryKey<Long> LAST_WORKED_AT_POI = new MemoryKey<>(NamespacedKey.minecraft("last_worked_at_poi"), Long.class);
++
++    /**
++     * Optional. If the axolotl is pretending to be dead.
++     */
++    public static final MemoryKey<Long> PLAY_DEAD_TICKS = new MemoryKey<>(NamespacedKey.minecraft("play_dead_ticks"), Long.class);
++
+     public static final MemoryKey<Boolean> UNIVERSAL_ANGER = new MemoryKey<>(NamespacedKey.minecraft("universal_anger"), Boolean.class);
++    /**
++     * The target of this piglin or this piglin brute.
++     */
+     public static final MemoryKey<UUID> ANGRY_AT = new MemoryKey<>(NamespacedKey.minecraft("angry_at"), UUID.class);
++    /**
++     * If the piglin is admiring an item.
++     */
      public static final MemoryKey<Boolean> ADMIRING_ITEM = new MemoryKey<>(NamespacedKey.minecraft("admiring_item"), Boolean.class);
++    /**
++     * If the piglin can admire an item at this moment, set when being converting, when hurt or after just admiring an item.
++     */
      public static final MemoryKey<Boolean> ADMIRING_DISABLED = new MemoryKey<>(NamespacedKey.minecraft("admiring_disabled"), Boolean.class);
++    /**
++     * If the piglin just hunted, and as such, won't for a while. Set after hunting or spawning in a bastion remnant.
++     */
      public static final MemoryKey<Boolean> HUNTED_RECENTLY = new MemoryKey<>(NamespacedKey.minecraft("hunted_recently"), Boolean.class);
 +    // Weeper start
 +    public static final MemoryKey<Long> HEARD_BELL_TIME = new MemoryKey<>("heard_bell_time"){};
