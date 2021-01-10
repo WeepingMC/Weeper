@@ -1,4 +1,4 @@
-From 525978c76433982f379dd7ea32fe2623806696f1 Mon Sep 17 00:00:00 2001
+From 0ac2a47c8e262651c21d5f2b7dfe062191e5ce76 Mon Sep 17 00:00:00 2001
 From: Techcable <techcable@techcable.net>
 Date: Sun, 20 Dec 2020 14:21:32 +0100
 Subject: [PATCH] Fix hopper lag by making entities look for hoppers.
@@ -31,12 +31,12 @@ Co-authored-by: Yannick Lamprecht <yannicklamprecht@live.de>
  create mode 100644 src/main/java/io/papermc/paper/HopperPusher.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 80409c4b5..62f183bd6 100644
+index c46d5d6aa..0700c1f6b 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -731,4 +731,9 @@ public class PaperWorldConfig {
-     private void disableMobSpawnerSpawnEggTransformation() {
-         disableMobSpawnerSpawnEggTransformation = getBoolean("game-mechanics.disable-mob-spawner-spawn-egg-transformation", disableMobSpawnerSpawnEggTransformation);
+@@ -759,4 +759,9 @@ public class PaperWorldConfig {
+             EnumDifficulty.class
+         );
      }
 +
 +    public boolean isHopperPushBased;
@@ -353,5 +353,5 @@ index d432de40e..8f81c0911 100644
  
      private static boolean a(IHopper ihopper, IInventory iinventory, int i, EnumDirection enumdirection) {// Paper - method unused as logic is inlined above
 -- 
-2.29.2
+2.30.0
 
