@@ -1,37 +1,38 @@
-From 3d4439c67cea51e305db9d814c86698dde20b142 Mon Sep 17 00:00:00 2001
+From b2bdd45853178a13421c2d62b632795be89b0f2b Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 5 Oct 2020 19:09:35 +0200
 Subject: [PATCH] changed name
 
 ---
- pom.xml                                       | 23 +++++++++----------
+ pom.xml                                       | 24 +++++++++----------
  .../net/minecraft/server/MinecraftServer.java |  2 +-
  .../org/bukkit/craftbukkit/CraftServer.java   |  2 +-
  .../bukkit/craftbukkit/util/Versioning.java   |  2 +-
- 4 files changed, 14 insertions(+), 15 deletions(-)
+ 4 files changed, 15 insertions(+), 15 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index f641d2a79..44ea1d63d 100644
+index 9ba379b7e..17b9916e5 100644
 --- a/pom.xml
 +++ b/pom.xml
-@@ -1,11 +1,10 @@
+@@ -1,11 +1,11 @@
  <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
      <modelVersion>4.0.0</modelVersion>
 -    <artifactId>paper</artifactId>
 +    <artifactId>weeper-server</artifactId>
      <packaging>jar</packaging>
--    <version>1.16.4-R0.1-SNAPSHOT</version>
+-    <version>1.16.5-R0.1-SNAPSHOT</version>
 -    <name>Paper</name>
 -    <url>https://papermc.io</url>
 +    <name>weeper-server</name>
 +    <url>https://crafstuebchen.de</url>
++
  
      <properties>
          <!-- <skipTests>true</skipTests> Paper - This [was] not going to end well -->
-@@ -13,21 +12,21 @@
-         <api.version>unknown</api.version>
-         <minecraft.version>1.16.4</minecraft.version>
+@@ -14,21 +14,21 @@
+         <bt.name>git</bt.name>
+         <minecraft.version>1.16.5</minecraft.version>
          <minecraft_version>1_16_R3</minecraft_version>
 -        <maven.compiler.source>1.8</maven.compiler.source>
 -        <maven.compiler.target>1.8</maven.compiler.target>
@@ -45,7 +46,7 @@ index f641d2a79..44ea1d63d 100644
 -        <version>dev-SNAPSHOT</version>
 +        <groupId>de.craftstuebchen.weeper</groupId>
 +        <artifactId>weeper-parent</artifactId>
-+        <version>1.16.4-R0.1-SNAPSHOT</version>
++        <version>1.16.5-R0.1-SNAPSHOT</version>
          <relativePath>../pom.xml</relativePath>
      </parent>
  
@@ -58,7 +59,7 @@ index f641d2a79..44ea1d63d 100644
              <version>${project.version}</version>
              <scope>compile</scope>
          </dependency>
-@@ -165,7 +164,7 @@
+@@ -173,7 +173,7 @@
  
      <!-- This builds a completely 'ready to start' jar with all dependencies inside -->
      <build>
@@ -68,10 +69,10 @@ index f641d2a79..44ea1d63d 100644
          <plugins>
              <plugin>
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index a7cd98a7c..8a64e3ca8 100644
+index 8c384171c..c380e34ae 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1444,7 +1444,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
+@@ -1448,7 +1448,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
      }
  
      public String getServerModName() {
@@ -81,7 +82,7 @@ index a7cd98a7c..8a64e3ca8 100644
  
      public CrashReport b(CrashReport crashreport) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index dc7de2b59..d432e1cbf 100644
+index 9ad6ea5ef..7fc19b8e6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -232,7 +232,7 @@ import javax.annotation.Nullable; // Paper
