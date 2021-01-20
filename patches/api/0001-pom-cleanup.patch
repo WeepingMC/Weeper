@@ -1,4 +1,4 @@
-From 72c68c80f6c554d62b9b230fbfd1ebb7b91e9bcc Mon Sep 17 00:00:00 2001
+From 28f051551fdc32c61e786ce45c42d76d82e7b22f Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 5 Oct 2020 18:22:56 +0200
 Subject: [PATCH] pom cleanup
@@ -9,7 +9,7 @@ get rid of snapshot in favour or nexus repo
  1 file changed, 8 insertions(+), 11 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index 1c33b1f4..f0b4a2d4 100644
+index 6c6ae6b4..3e0d1ddd 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,26 +1,23 @@
@@ -23,13 +23,13 @@ index 1c33b1f4..f0b4a2d4 100644
 -        <version>dev-SNAPSHOT</version>
 +        <groupId>de.craftstuebchen.weeper</groupId>
 +        <artifactId>weeper-parent</artifactId>
-+        <version>1.16.4-R0.1-SNAPSHOT</version>
++        <version>1.16.5-R0.1-SNAPSHOT</version>
 +        <relativePath>../pom.xml</relativePath>
      </parent>
  
 -    <groupId>com.destroystokyo.paper</groupId>
 -    <artifactId>paper-api</artifactId>
--    <version>1.16.4-R0.1-SNAPSHOT</version>
+-    <version>1.16.5-R0.1-SNAPSHOT</version>
 +    <artifactId>weeper-api</artifactId>
      <packaging>jar</packaging>
  
