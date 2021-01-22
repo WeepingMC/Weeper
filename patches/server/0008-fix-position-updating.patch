@@ -1,0 +1,25 @@
+From 8c6984d990fd13bce4f14462a7984e2c25849fd0 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Fri, 22 Jan 2021 20:30:43 +0100
+Subject: [PATCH] fix position updating
+
+---
+ src/main/java/net/minecraft/server/EntityArrow.java | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/main/java/net/minecraft/server/EntityArrow.java b/src/main/java/net/minecraft/server/EntityArrow.java
+index 1e7f5957d..c72fa17bd 100644
+--- a/src/main/java/net/minecraft/server/EntityArrow.java
++++ b/src/main/java/net/minecraft/server/EntityArrow.java
+@@ -154,6 +154,8 @@ public abstract class EntityArrow extends IProjectile {
+                 if (object != null && ((MovingObjectPosition) object).getType() == MovingObjectPosition.EnumMovingObjectType.ENTITY) {
+                     Entity entity = ((MovingObjectPositionEntity) object).getEntity();
+                     Entity entity1 = this.getShooter();
++                    Vec3D position = movingobjectpositionentity.pos;
++                    this.setPosition(position.x, position.y, position.z);
+ 
+                     if (entity instanceof EntityHuman && entity1 instanceof EntityHuman && !((EntityHuman) entity1).a((EntityHuman) entity)) {
+                         object = null;
+-- 
+2.30.0
+
