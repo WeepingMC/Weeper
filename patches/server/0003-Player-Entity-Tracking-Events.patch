@@ -1,4 +1,4 @@
-From 9efe8efc83213b322d0e08a1393de1dc0c455d08 Mon Sep 17 00:00:00 2001
+From be14a895b6f5474cc09e6c41bb77cd647ddda34a Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 12 Oct 2020 23:11:41 +0200
 Subject: [PATCH] Player Entity Tracking Events
@@ -9,7 +9,7 @@ Subject: [PATCH] Player Entity Tracking Events
  2 files changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
-index 7240b885d..0fc7bdfbc 100644
+index baa82134d..f7848123f 100644
 --- a/src/main/java/net/minecraft/server/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/server/EntityPlayer.java
 @@ -18,6 +18,7 @@ import java.util.UUID;
@@ -31,7 +31,7 @@ index 7240b885d..0fc7bdfbc 100644
              }
              // Paper end
  
-@@ -1738,6 +1741,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -1743,6 +1746,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
      public void c(Entity entity) {
          if (entity instanceof EntityHuman) {
              this.playerConnection.sendPacket(new PacketPlayOutEntityDestroy(new int[]{entity.getId()}));
@@ -40,7 +40,7 @@ index 7240b885d..0fc7bdfbc 100644
              this.removeQueue.add((Integer) entity.getId()); // CraftBukkit - decompile error
          }
 diff --git a/src/main/java/net/minecraft/server/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
-index 4efc40c01..37ab4f192 100644
+index 3960a975e..ebcf0911d 100644
 --- a/src/main/java/net/minecraft/server/EntityTrackerEntry.java
 +++ b/src/main/java/net/minecraft/server/EntityTrackerEntry.java
 @@ -2,9 +2,9 @@ package net.minecraft.server;
@@ -68,5 +68,5 @@ index 4efc40c01..37ab4f192 100644
              consumer.accept(new PacketPlayOutEntityMetadata(this.tracker.getId(), this.tracker.getDataWatcher(), true));
          }
 -- 
-2.29.2
+2.30.0
 

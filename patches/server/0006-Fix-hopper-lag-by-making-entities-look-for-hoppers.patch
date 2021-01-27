@@ -1,4 +1,4 @@
-From a8c149cc10d3b3bbac6bfe1b27a79a068407f349 Mon Sep 17 00:00:00 2001
+From 8c81b9afa9fa6e3fe2d53c77331645c8bc166afa Mon Sep 17 00:00:00 2001
 From: Techcable <techcable@techcable.net>
 Date: Sun, 20 Dec 2020 14:21:32 +0100
 Subject: [PATCH] Fix hopper lag by making entities look for hoppers.
@@ -31,12 +31,12 @@ Co-authored-by: Yannick Lamprecht <yannicklamprecht@live.de>
  create mode 100644 src/main/java/io/papermc/paper/HopperPusher.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 4735dcba3..0603a8b12 100644
+index ac96011d4..1bfb72640 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -794,4 +794,9 @@ public class PaperWorldConfig {
-             if (value != -1) entityPerChunkSaveLimits.put(type, value);
-         });
+@@ -799,4 +799,9 @@ public class PaperWorldConfig {
+     private void enderDragonsDeathAlwaysPlacesDragonEgg() {
+         enderDragonsDeathAlwaysPlacesDragonEgg = getBoolean("ender-dragons-death-always-places-dragon-egg", enderDragonsDeathAlwaysPlacesDragonEgg);
      }
 +
 +    public boolean isHopperPushBased;
