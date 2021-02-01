@@ -1,0 +1,117 @@
+From 6134da9bbebada70bc2316a90db26d2390bced47 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Mon, 1 Feb 2021 02:33:26 +0100
+Subject: [PATCH] player abilities
+
+---
+ .../packet/CraftPacketConversion.java         | 24 +++++++++++++++++++
+ .../packet/CraftPacketStepBuilder.java        | 14 +++++++++++
+ 2 files changed, 38 insertions(+)
+
+diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java
+index 298a5f0da..9bc2d29a5 100644
+--- a/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java
++++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java
+@@ -3,6 +3,7 @@ package de.craftstuebchen.weepermc.packet;
+ import com.mojang.datafixers.util.Pair;
+ 
+ import de.craftstuebchen.weepermc.packet.options.Animation;
++import de.craftstuebchen.weepermc.packet.options.PlayerAbility;
+ import de.craftstuebchen.weepermc.packet.options.TeamMode;
+ import net.minecraft.server.EnumItemSlot;
+ import net.minecraft.server.ItemStack;
+@@ -13,6 +14,7 @@ import org.bukkit.inventory.EquipmentSlot;
+ 
+ import de.craftstuebchen.weepermc.packet.options.EntityStatus;
+ import de.craftstuebchen.weepermc.packet.options.ProfileAction;
++import net.minecraft.server.PlayerAbilities;
+ 
+ import java.util.ArrayList;
+ import java.util.EnumMap;
+@@ -132,4 +134,26 @@ public final class CraftPacketConversion {
+         }
+         throw new UnsupportedOperationException("Invalid case!");
+     }
++
++    static PlayerAbilities mapPlayerAbilities(Set<PlayerAbility> playerAbilities) {
++        PlayerAbilities playerAbilitiesNMS = new PlayerAbilities();
++
++        for (PlayerAbility playerAbilitiy : playerAbilities) {
++            switch (playerAbilitiy) {
++                case INVULNERABLE:
++                    playerAbilitiesNMS.isInvulnerable = true;
++                    break;
++                case FLYING:
++                    playerAbilitiesNMS.isFlying = true;
++                    break;
++                case ALLOW_FLYING:
++                    playerAbilitiesNMS.canFly = true;
++                    break;
++                case CREATIVE_MODE_INSTANT_BREAK:
++                    playerAbilitiesNMS.canInstantlyBuild = true;
++                    break;
++            }
++        }
++        return playerAbilitiesNMS;
++    }
+ }
+diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java
+index af23cfe47..950ad4593 100644
+--- a/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java
++++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java
+@@ -7,6 +7,7 @@ import com.mojang.datafixers.util.Pair;
+ 
+ import de.craftstuebchen.weepermc.packet.ChainablePacketStep.DelayPacketStep;
+ import de.craftstuebchen.weepermc.packet.ChainablePacketStep.NmsPacketStep;
++import de.craftstuebchen.weepermc.packet.options.PlayerAbility;
+ import net.minecraft.server.BlockPosition;
+ import net.minecraft.server.DataWatcher;
+ import net.minecraft.server.DataWatcherObject;
+@@ -15,6 +16,7 @@ import net.minecraft.server.EntityPose;
+ import net.minecraft.server.EntityTypes;
+ import net.minecraft.server.EnumGamemode;
+ import net.minecraft.server.Packet;
++import net.minecraft.server.PacketPlayOutAbilities;
+ import net.minecraft.server.PacketPlayOutAnimation;
+ import net.minecraft.server.PacketPlayOutBlockBreakAnimation;
+ import net.minecraft.server.PacketPlayOutEntity;
+@@ -27,6 +29,7 @@ import net.minecraft.server.PacketPlayOutNamedEntitySpawn;
+ import net.minecraft.server.PacketPlayOutPlayerInfo;
+ import net.minecraft.server.PacketPlayOutScoreboardTeam;
+ import net.minecraft.server.PacketPlayOutSpawnEntity;
++import net.minecraft.server.PlayerAbilities;
+ import net.minecraft.server.Vec3D;
+ import org.bukkit.Location;
+ import org.bukkit.block.data.BlockData;
+@@ -50,10 +53,12 @@ import java.util.Collection;
+ import java.util.Collections;
+ import java.util.List;
+ import java.util.Optional;
++import java.util.Set;
+ import java.util.UUID;
+ import java.util.concurrent.TimeUnit;
+ 
+ import static de.craftstuebchen.weepermc.packet.CraftPacketConversion.from;
++import static de.craftstuebchen.weepermc.packet.CraftPacketConversion.mapPlayerAbilities;
+ 
+ import javax.annotation.Nonnull;
+ 
+@@ -225,6 +230,15 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+         return this;
+     }
+ 
++    @Override
++    public PacketStepBuilder playerAbilities(@Nonnull Set<PlayerAbility> playerAbilities, float flySpeed, float fieldOfViewModifier) {
++        PlayerAbilities playerAbilitiesNMS = mapPlayerAbilities(playerAbilities);
++        playerAbilitiesNMS.flySpeed = flySpeed;
++        playerAbilitiesNMS.walkSpeed = fieldOfViewModifier;
++        initial.setNext(of(new PacketPlayOutAbilities(playerAbilitiesNMS)));
++        return this;
++    }
++
+     @Override
+     public void send(@Nonnull Collection<? extends Player> players){
+         initial.execute(players);
+-- 
+2.30.0
+

@@ -1,0 +1,63 @@
+From 2c44b3e3e5c27f720f88e5efc94f0c9104795c6f Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Mon, 1 Feb 2021 02:32:49 +0100
+Subject: [PATCH] player abilities
+
+---
+ .../weepermc/packet/PacketStepBuilder.java          | 13 +++++++++++++
+ .../weepermc/packet/options/PlayerAbility.java      |  5 +++++
+ 2 files changed, 18 insertions(+)
+ create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/options/PlayerAbility.java
+
+diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/PacketStepBuilder.java b/src/main/java/de/craftstuebchen/weepermc/packet/PacketStepBuilder.java
+index 02b2cf87..79844410 100644
+--- a/src/main/java/de/craftstuebchen/weepermc/packet/PacketStepBuilder.java
++++ b/src/main/java/de/craftstuebchen/weepermc/packet/PacketStepBuilder.java
+@@ -11,6 +11,7 @@ import org.bukkit.inventory.EquipmentSlot;
+ import org.bukkit.inventory.ItemStack;
+ import de.craftstuebchen.weepermc.packet.options.Animation;
+ import de.craftstuebchen.weepermc.packet.options.EntityMetaBuilder;
++import de.craftstuebchen.weepermc.packet.options.PlayerAbility;
+ import de.craftstuebchen.weepermc.packet.options.ProfileAction;
+ import de.craftstuebchen.weepermc.packet.options.TeamMode;
+ import org.bukkit.plugin.java.JavaPlugin;
+@@ -19,6 +20,7 @@ import org.bukkit.util.Vector;
+ import org.jetbrains.annotations.NotNull;
+ 
+ import java.util.Collection;
++import java.util.Set;
+ import java.util.UUID;
+ import java.util.concurrent.TimeUnit;
+ 
+@@ -78,6 +80,17 @@ public interface PacketStepBuilder {
+     @NotNull
+     PacketStepBuilder withMeta(int entityId, @NotNull EntityMetaBuilder metaBuilder);
+ 
++    /**
++     * sets the player abilities
++     *
++     * @param playerAbilities [Invulnerable, Flying, Allow Flying, Creative Mode (Instant Break)]
++     * @param flySpeed 0.05 by default.
++     * @param fieldOfViewModifier Modifies the field of view, like a speed potion. A Notchian server will use the same value as the movement speed sent in the Entity Properties packet, which defaults to 0.1 for players.
++     * @return builder
++     */
++    @NotNull
++    PacketStepBuilder playerAbilities(@NotNull Set<PlayerAbility> playerAbilities, float flySpeed, float fieldOfViewModifier);
++
+     default void send(){
+         send(Bukkit.getOnlinePlayers());
+     }
+diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/options/PlayerAbility.java b/src/main/java/de/craftstuebchen/weepermc/packet/options/PlayerAbility.java
+new file mode 100644
+index 00000000..1f6d2f98
+--- /dev/null
++++ b/src/main/java/de/craftstuebchen/weepermc/packet/options/PlayerAbility.java
+@@ -0,0 +1,5 @@
++package de.craftstuebchen.weepermc.packet.options;
++
++public enum PlayerAbility {
++  ALLOW_FLYING, CREATIVE_MODE_INSTANT_BREAK, FLYING, INVULNERABLE
++}
+-- 
+2.30.0
+
