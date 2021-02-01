@@ -1,4 +1,4 @@
-From b2bdd45853178a13421c2d62b632795be89b0f2b Mon Sep 17 00:00:00 2001
+From 9a781a57f8e59d195d4198ca54d56cda4926edb2 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 5 Oct 2020 19:09:35 +0200
 Subject: [PATCH] changed name
@@ -69,10 +69,10 @@ index 9ba379b7e..17b9916e5 100644
          <plugins>
              <plugin>
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 8c384171c..c380e34ae 100644
+index ccf2d0b09..2ed510b2c 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1448,7 +1448,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
+@@ -1450,7 +1450,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
      }
  
      public String getServerModName() {
