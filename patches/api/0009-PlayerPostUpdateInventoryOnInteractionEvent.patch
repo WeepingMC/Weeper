@@ -1,0 +1,52 @@
+From 5756a57d0105a3317c755af8b95a82beebdaf26a Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Wed, 3 Feb 2021 13:55:36 +0100
+Subject: [PATCH] PlayerPostUpdateInventoryOnInteractionEvent
+
+---
+ ...PostUpdateInventoryOnInteractionEvent.java | 33 +++++++++++++++++++
+ 1 file changed, 33 insertions(+)
+ create mode 100644 src/main/java/de/craftstuebchen/weepermc/event/PlayerPostUpdateInventoryOnInteractionEvent.java
+
+diff --git a/src/main/java/de/craftstuebchen/weepermc/event/PlayerPostUpdateInventoryOnInteractionEvent.java b/src/main/java/de/craftstuebchen/weepermc/event/PlayerPostUpdateInventoryOnInteractionEvent.java
+new file mode 100644
+index 00000000..666b153f
+--- /dev/null
++++ b/src/main/java/de/craftstuebchen/weepermc/event/PlayerPostUpdateInventoryOnInteractionEvent.java
+@@ -0,0 +1,33 @@
++package de.craftstuebchen.weepermc.event;
++
++import org.bukkit.entity.Player;
++import org.bukkit.event.HandlerList;
++import org.bukkit.event.player.PlayerEvent;
++import org.bukkit.inventory.PlayerInventory;
++import org.jetbrains.annotations.NotNull;
++
++public class PlayerPostUpdateInventoryOnInteractionEvent extends PlayerEvent {
++
++  private static final HandlerList handlerList = new HandlerList();
++
++  private final PlayerInventory playerInventory;
++
++  public PlayerPostUpdateInventoryOnInteractionEvent(@NotNull Player who, @NotNull PlayerInventory playerInventory) {
++    super(who);
++    this.playerInventory = playerInventory;
++  }
++
++  public PlayerInventory getPlayerInventory() {
++    return playerInventory;
++  }
++
++  @NotNull
++  @Override
++  public HandlerList getHandlers() {
++    return handlerList;
++  }
++
++  public static HandlerList getHandlerList(){
++    return handlerList;
++  }
++}
+-- 
+2.30.0
+
