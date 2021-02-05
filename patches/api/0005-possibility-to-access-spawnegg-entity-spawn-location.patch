@@ -1,4 +1,4 @@
-From be28d706f2b91ab9029966dbf5308cfc52c23abc Mon Sep 17 00:00:00 2001
+From c4dcb36ba3d49a6a5cbc88339e98962bc840e764 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 19 Oct 2020 16:38:35 +0200
 Subject: [PATCH] possibility to access spawnegg entity spawn location
@@ -38,5 +38,5 @@ index 9ae84de4..b96f512c 100644
      @Override
      SpawnEggMeta clone();
 -- 
-2.29.2
+2.30.0
 

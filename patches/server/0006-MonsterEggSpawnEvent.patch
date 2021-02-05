@@ -1,4 +1,4 @@
-From f1d6e81605b8fba005721bf07108fc52ccdb2d71 Mon Sep 17 00:00:00 2001
+From 9e4b065fd2fd4c9b9dcee21a3a1d4fc15eb8e75f Mon Sep 17 00:00:00 2001
 From: Yannick Lamprecht <yannicklamprecht@live.de>
 Date: Fri, 1 Jan 2021 16:45:28 +0100
 Subject: [PATCH] MonsterEggSpawnEvent
@@ -34,5 +34,5 @@ index bf914dc5e..7c78b645e 100644
      }
  
 -- 
-2.29.2
+2.30.0
 
