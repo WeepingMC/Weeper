@@ -1,4 +1,4 @@
-From 9a781a57f8e59d195d4198ca54d56cda4926edb2 Mon Sep 17 00:00:00 2001
+From 4f6f03024842734d7c4c37378f7e479c36ec097a Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 5 Oct 2020 19:09:35 +0200
 Subject: [PATCH] changed name
@@ -82,10 +82,10 @@ index ccf2d0b09..2ed510b2c 100644
  
      public CrashReport b(CrashReport crashreport) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 9ad6ea5ef..7fc19b8e6 100644
+index 85023c68a..0fbb4865e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -232,7 +232,7 @@ import javax.annotation.Nullable; // Paper
+@@ -231,7 +231,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
