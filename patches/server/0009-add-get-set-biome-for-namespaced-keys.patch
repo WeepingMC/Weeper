@@ -1,0 +1,319 @@
+From a0611561141845c2e329026f4abf1eda365e4a73 Mon Sep 17 00:00:00 2001
+From: Thonk <30448663+ExcessiveAmountsOfZombies@users.noreply.github.com>
+Date: Sun, 13 Dec 2020 23:12:42 -0600
+Subject: [PATCH] add get/set biome for namespaced keys
+
+---
+ .../java/net/minecraft/server/IRegistry.java  | 10 ++--
+ .../net/minecraft/server/IRegistryCustom.java | 53 +++++++++----------
+ .../net/minecraft/server/WorldServer.java     |  1 +
+ .../org/bukkit/craftbukkit/CraftWorld.java    | 23 ++++++++
+ .../bukkit/craftbukkit/block/CraftBlock.java  | 24 +++++++++
+ 5 files changed, 79 insertions(+), 32 deletions(-)
+
+diff --git a/src/main/java/net/minecraft/server/IRegistry.java b/src/main/java/net/minecraft/server/IRegistry.java
+index 6c7caef36..b4a67c359 100644
+--- a/src/main/java/net/minecraft/server/IRegistry.java
++++ b/src/main/java/net/minecraft/server/IRegistry.java
+@@ -156,7 +156,7 @@ public abstract class IRegistry<T> implements Codec<T>, Keyable, Registry<T> {
+     public static final ResourceKey<IRegistry<StructureFeature<?, ?>>> av = a("worldgen/configured_structure_feature");
+     public static final ResourceKey<IRegistry<ProcessorList>> aw = a("worldgen/processor_list");
+     public static final ResourceKey<IRegistry<WorldGenFeatureDefinedStructurePoolTemplate>> ax = a("worldgen/template_pool");
+-    public static final ResourceKey<IRegistry<BiomeBase>> ay = a("worldgen/biome");
++    public static final ResourceKey<IRegistry<BiomeBase>> ay = a("worldgen/biome"); public static ResourceKey<IRegistry<BiomeBase>> getBiomeKeys() { return ay; } // paper - OBFhelper
+     public static final ResourceKey<IRegistry<WorldGenSurface<?>>> az = a("worldgen/surface_builder");
+     public static final IRegistry<WorldGenSurface<?>> SURFACE_BUILDER = a(IRegistry.az, () -> {
+         return WorldGenSurface.v;
+@@ -266,9 +266,9 @@ public abstract class IRegistry<T> implements Codec<T>, Keyable, Registry<T> {
+         MinecraftKey minecraftkey = resourcekey.a();
+ 
+         IRegistry.a.put(minecraftkey, supplier);
+-        IRegistryWritable<R> iregistrywritable = IRegistry.e;
++        IRegistryWritable<R> iregistrywritable = (IRegistryWritable<R>) IRegistry.e; // Paper - decompile fix
+ 
+-        return (IRegistryWritable) iregistrywritable.a(resourcekey, (Object) r0, lifecycle);
++        return (R) iregistrywritable.a((ResourceKey<R>) resourcekey, r0, lifecycle); // Paper - decompile fix
+     }
+ 
+     protected IRegistry(ResourceKey<? extends IRegistry<T>> resourcekey, Lifecycle lifecycle) {
+@@ -355,11 +355,11 @@ public abstract class IRegistry<T> implements Codec<T>, Keyable, Registry<T> {
+     }
+ 
+     public static <V, T extends V> T a(IRegistry<V> iregistry, MinecraftKey minecraftkey, T t0) {
+-        return ((IRegistryWritable) iregistry).a(ResourceKey.a(iregistry.b, minecraftkey), t0, Lifecycle.stable());
++        return (T) ((IRegistryWritable) iregistry).a(ResourceKey.a(iregistry.b, minecraftkey), t0, Lifecycle.stable()); // Paper - decompile fix
+     }
+ 
+     public static <V, T extends V> T a(IRegistry<V> iregistry, int i, String s, T t0) {
+-        return ((IRegistryWritable) iregistry).a(i, ResourceKey.a(iregistry.b, new MinecraftKey(s)), t0, Lifecycle.stable());
++        return (T) ((IRegistryWritable) iregistry).a(i, ResourceKey.a(iregistry.b, new MinecraftKey(s)), t0, Lifecycle.stable()); // Paper - decompile fix
+     }
+ 
+     static {
+diff --git a/src/main/java/net/minecraft/server/IRegistryCustom.java b/src/main/java/net/minecraft/server/IRegistryCustom.java
+index a8f5d6c02..647d46a1c 100644
+--- a/src/main/java/net/minecraft/server/IRegistryCustom.java
++++ b/src/main/java/net/minecraft/server/IRegistryCustom.java
+@@ -21,8 +21,8 @@ import org.apache.logging.log4j.Logger;
+ public abstract class IRegistryCustom {
+ 
+     private static final Logger LOGGER = LogManager.getLogger();
+-    private static final Map<ResourceKey<? extends IRegistry<?>>, IRegistryCustom.a<?>> b = (Map) SystemUtils.a(() -> {
+-        Builder<ResourceKey<? extends IRegistry<?>>, IRegistryCustom.a<?>> builder = ImmutableMap.builder();
++    private static final Map<ResourceKey<? extends IRegistry<?>>, a<?>> b = (Map) SystemUtils.a(() -> {
++        Builder<ResourceKey<? extends IRegistry<?>>, a<?>> builder = ImmutableMap.builder();
+ 
+         a(builder, IRegistry.K, DimensionManager.d, DimensionManager.d);
+         a(builder, IRegistry.ay, BiomeBase.b, BiomeBase.c);
+@@ -35,8 +35,8 @@ public abstract class IRegistryCustom {
+         a(builder, IRegistry.ar, GeneratorSettingBase.a);
+         return builder.build();
+     });
+-    private static final IRegistryCustom.Dimension c = (IRegistryCustom.Dimension) SystemUtils.a(() -> {
+-        IRegistryCustom.Dimension iregistrycustom_dimension = new IRegistryCustom.Dimension();
++    private static final Dimension c = (Dimension) SystemUtils.a(() -> {
++        Dimension iregistrycustom_dimension = new Dimension();
+ 
+         DimensionManager.a(iregistrycustom_dimension);
+         IRegistryCustom.b.keySet().stream().filter((resourcekey) -> {
+@@ -56,26 +56,27 @@ public abstract class IRegistryCustom {
+             return new IllegalStateException("Missing registry: " + resourcekey);
+         });
+     }
++    public <E> IRegistryWritable<E> getRegistry(ResourceKey<? extends IRegistry<E>> resourcekey) { return b(resourcekey); } // Paper - OBFHELPER
+ 
+     public IRegistry<DimensionManager> a() {
+         return this.b(IRegistry.K);
+     }
+ 
+-    private static <E> void a(Builder<ResourceKey<? extends IRegistry<?>>, IRegistryCustom.a<?>> builder, ResourceKey<? extends IRegistry<E>> resourcekey, Codec<E> codec) {
+-        builder.put(resourcekey, new IRegistryCustom.a<>(resourcekey, codec, (Codec) null));
++    private static <E> void a(Builder<ResourceKey<? extends IRegistry<?>>, a<?>> builder, ResourceKey<? extends IRegistry<E>> resourcekey, Codec<E> codec) {
++        builder.put(resourcekey, new a<>(resourcekey, codec, (Codec) null));
+     }
+ 
+-    private static <E> void a(Builder<ResourceKey<? extends IRegistry<?>>, IRegistryCustom.a<?>> builder, ResourceKey<? extends IRegistry<E>> resourcekey, Codec<E> codec, Codec<E> codec1) {
+-        builder.put(resourcekey, new IRegistryCustom.a<>(resourcekey, codec, codec1));
++    private static <E> void a(Builder<ResourceKey<? extends IRegistry<?>>, a<?>> builder, ResourceKey<? extends IRegistry<E>> resourcekey, Codec<E> codec, Codec<E> codec1) {
++        builder.put(resourcekey, new a<>(resourcekey, codec, codec1));
+     }
+ 
+-    public static IRegistryCustom.Dimension b() {
+-        IRegistryCustom.Dimension iregistrycustom_dimension = new IRegistryCustom.Dimension();
++    public static Dimension b() {
++        Dimension iregistrycustom_dimension = new Dimension();
+         RegistryReadOps.b.a registryreadops_b_a = new RegistryReadOps.b.a();
+         Iterator iterator = IRegistryCustom.b.values().iterator();
+ 
+         while (iterator.hasNext()) {
+-            IRegistryCustom.a<?> iregistrycustom_a = (IRegistryCustom.a) iterator.next();
++            a<?> iregistrycustom_a = (a) iterator.next();
+ 
+             a(iregistrycustom_dimension, registryreadops_b_a, iregistrycustom_a);
+         }
+@@ -84,7 +85,7 @@ public abstract class IRegistryCustom {
+         return iregistrycustom_dimension;
+     }
+ 
+-    private static <E> void a(IRegistryCustom.Dimension iregistrycustom_dimension, RegistryReadOps.b.a registryreadops_b_a, IRegistryCustom.a<E> iregistrycustom_a) {
++    private static <E> void a(Dimension iregistrycustom_dimension, RegistryReadOps.b.a registryreadops_b_a, a<E> iregistrycustom_a) {
+         ResourceKey<? extends IRegistry<E>> resourcekey = iregistrycustom_a.a();
+         boolean flag = !resourcekey.equals(IRegistry.ar) && !resourcekey.equals(IRegistry.K);
+         IRegistry<E> iregistry = IRegistryCustom.c.b(resourcekey);
+@@ -104,8 +105,8 @@ public abstract class IRegistryCustom {
+ 
+     }
+ 
+-    private static <R extends IRegistry<?>> void a(IRegistryCustom.Dimension iregistrycustom_dimension, ResourceKey<R> resourcekey) {
+-        IRegistry<R> iregistry = RegistryGeneration.b;
++    private static <R extends IRegistry<?>> void a(Dimension iregistrycustom_dimension, ResourceKey<R> resourcekey) {
++        IRegistry<R> iregistry = (IRegistry<R>) RegistryGeneration.b; // paper - decompile fix
+         IRegistry<?> iregistry1 = (IRegistry) iregistry.a(resourcekey);
+ 
+         if (iregistry1 == null) {
+@@ -115,7 +116,7 @@ public abstract class IRegistryCustom {
+         }
+     }
+ 
+-    private static <E> void a(IRegistryCustom.Dimension iregistrycustom_dimension, IRegistry<E> iregistry) {
++    private static <E> void a(Dimension iregistrycustom_dimension, IRegistry<E> iregistry) {
+         IRegistryWritable<E> iregistrywritable = (IRegistryWritable) iregistrycustom_dimension.a(iregistry.f()).orElseThrow(() -> {
+             return new IllegalStateException("Missing registry: " + iregistry.f());
+         });
+@@ -130,18 +131,18 @@ public abstract class IRegistryCustom {
+ 
+     }
+ 
+-    public static void a(IRegistryCustom.Dimension iregistrycustom_dimension, RegistryReadOps<?> registryreadops) {
++    public static void a(Dimension iregistrycustom_dimension, RegistryReadOps<?> registryreadops) {
+         Iterator iterator = IRegistryCustom.b.values().iterator();
+ 
+         while (iterator.hasNext()) {
+-            IRegistryCustom.a<?> iregistrycustom_a = (IRegistryCustom.a) iterator.next();
++            a<?> iregistrycustom_a = (a) iterator.next();
+ 
+             a(registryreadops, iregistrycustom_dimension, iregistrycustom_a);
+         }
+ 
+     }
+ 
+-    private static <E> void a(RegistryReadOps<?> registryreadops, IRegistryCustom.Dimension iregistrycustom_dimension, IRegistryCustom.a<E> iregistrycustom_a) {
++    private static <E> void a(RegistryReadOps<?> registryreadops, Dimension iregistrycustom_dimension, a<E> iregistrycustom_a) {
+         ResourceKey<? extends IRegistry<E>> resourcekey = iregistrycustom_a.a();
+         RegistryMaterials<E> registrymaterials = (RegistryMaterials) Optional.ofNullable(iregistrycustom_dimension.b.get(resourcekey)).map((registrymaterials1) -> {
+             return registrymaterials1;
+@@ -157,10 +158,10 @@ public abstract class IRegistryCustom {
+ 
+     public static final class Dimension extends IRegistryCustom {
+ 
+-        public static final Codec<IRegistryCustom.Dimension> a = d();
++        public static final Codec<Dimension> a = d();
+         private final Map<? extends ResourceKey<? extends IRegistry<?>>, ? extends RegistryMaterials<?>> b;
+ 
+-        private static <E> Codec<IRegistryCustom.Dimension> d() {
++        private static <E> Codec<Dimension> d() {
+             Codec<ResourceKey<? extends IRegistry<E>>> codec = MinecraftKey.a.xmap(ResourceKey::a, ResourceKey::a);
+             Codec<RegistryMaterials<E>> codec1 = codec.partialDispatch("type", (registrymaterials) -> {
+                 return DataResult.success(registrymaterials.f());
+@@ -174,8 +175,8 @@ public abstract class IRegistryCustom {
+             return a(unboundedmapcodec);
+         }
+ 
+-        private static <K extends ResourceKey<? extends IRegistry<?>>, V extends RegistryMaterials<?>> Codec<IRegistryCustom.Dimension> a(UnboundedMapCodec<K, V> unboundedmapcodec) {
+-            return unboundedmapcodec.xmap(IRegistryCustom.Dimension::new, (iregistrycustom_dimension) -> {
++        private static <K extends ResourceKey<? extends IRegistry<?>>, V extends RegistryMaterials<?>> Codec<Dimension> a(UnboundedMapCodec<K, V> unboundedmapcodec) {
++            return unboundedmapcodec.xmap(Dimension::new, (iregistrycustom_dimension) -> {
+                 return (ImmutableMap) iregistrycustom_dimension.b.entrySet().stream().filter((entry) -> {
+                     return ((IRegistryCustom.a) IRegistryCustom.b.get(entry.getKey())).d();
+                 }).collect(ImmutableMap.toImmutableMap(Entry::getKey, Entry::getValue));
+@@ -191,7 +192,7 @@ public abstract class IRegistryCustom {
+         }
+ 
+         public Dimension() {
+-            this((Map) IRegistryCustom.b.keySet().stream().collect(Collectors.toMap(Function.identity(), IRegistryCustom.Dimension::d)));
++            this((Map) IRegistryCustom.b.keySet().stream().collect(Collectors.toMap(Function.identity(), Dimension::d)));
+         }
+ 
+         private Dimension(Map<? extends ResourceKey<? extends IRegistry<?>>, ? extends RegistryMaterials<?>> map) {
+@@ -199,14 +200,12 @@ public abstract class IRegistryCustom {
+         }
+ 
+         private static <E> RegistryMaterials<?> d(ResourceKey<? extends IRegistry<?>> resourcekey) {
+-            return new RegistryMaterials<>(resourcekey, Lifecycle.stable());
++            return new RegistryMaterials(resourcekey, Lifecycle.stable()); // Paper - decompile fix
+         }
+ 
+         @Override
+         public <E> Optional<IRegistryWritable<E>> a(ResourceKey<? extends IRegistry<E>> resourcekey) {
+-            return Optional.ofNullable(this.b.get(resourcekey)).map((registrymaterials) -> {
+-                return registrymaterials;
+-            });
++            return Optional.ofNullable((IRegistryWritable<E>) this.b.get(resourcekey)); // Paper - decompile fix
+         }
+     }
+ 
+diff --git a/src/main/java/net/minecraft/server/WorldServer.java b/src/main/java/net/minecraft/server/WorldServer.java
+index 2b94c195d..d80b61142 100644
+--- a/src/main/java/net/minecraft/server/WorldServer.java
++++ b/src/main/java/net/minecraft/server/WorldServer.java
+@@ -1771,6 +1771,7 @@ public class WorldServer extends World implements GeneratorAccessSeed {
+     public IRegistryCustom r() {
+         return this.server.getCustomRegistry();
+     }
++    public IRegistryCustom getCustomRegistry() { return r(); } // Paper - OBFHELPER
+ 
+     public WorldPersistentData getWorldPersistentData() {
+         return this.getChunkProvider().getWorldPersistentData();
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index 22eba9372..b5fe27c0a 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -103,6 +103,7 @@ import org.bukkit.Effect;
+ import org.bukkit.FluidCollisionMode;
+ import org.bukkit.GameRule;
+ import org.bukkit.Location;
++import org.bukkit.NamespacedKey;
+ import org.bukkit.Particle;
+ import org.bukkit.Raid;
+ import org.bukkit.Sound;
+@@ -1092,6 +1093,28 @@ public class CraftWorld implements World {
+         return CraftBlock.biomeBaseToBiome(getHandle().r().b(IRegistry.ay), this.world.getBiome(x >> 2, y >> 2, z >> 2));
+     }
+ 
++    // Paper start
++    @Override
++    public NamespacedKey getBiomeKey(int x, int y, int z) {
++        return CraftBlock.biomeBaseToKey(getHandle().getCustomRegistry().getRegistry(IRegistry.getBiomeKeys()), this.world.getBiome(x >> 2, y >> 2, z >> 2));
++    }
++
++
++    @Override
++    public void setBiome(int x, int y, int z, NamespacedKey key) {
++        BiomeBase base = CraftBlock.biomeToBiomeBase(getHandle().getCustomRegistry().getRegistry(IRegistry.getBiomeKeys()), key);
++        BlockPosition pos = new BlockPosition(x, 0, z);
++        if (this.world.isLoaded(pos) && base != null) {
++            net.minecraft.server.Chunk chunk = this.world.getChunkAtWorldCoords(pos);
++
++            if (chunk != null) {
++                chunk.getBiomeIndex().setBiome(x >> 2, y >> 2, z >> 2, base);
++
++                chunk.markDirty(); // SPIGOT-2890
++            }
++        }
++    }
++    // paper end
+     @Override
+     public void setBiome(int x, int z, Biome bio) {
+         for (int y = 0; y < getMaxHeight(); y++) {
+diff --git a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
+index 1a1445e31..091616ef2 100644
+--- a/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
++++ b/src/main/java/org/bukkit/craftbukkit/block/CraftBlock.java
+@@ -33,6 +33,7 @@ import org.bukkit.Chunk;
+ import org.bukkit.FluidCollisionMode;
+ import org.bukkit.Location;
+ import org.bukkit.Material;
++import org.bukkit.NamespacedKey;
+ import org.bukkit.Registry;
+ import org.bukkit.World;
+ import org.bukkit.block.Biome;
+@@ -503,6 +504,16 @@ public class CraftBlock implements Block {
+         return getWorld().getBiome(getX(), getY(), getZ());
+     }
+ 
++    // Paper start
++    public NamespacedKey getBiomeKey() {
++        return getWorld().getBiomeKey(getX(), getY(), getZ());
++    }
++
++    @Override
++    public void setBiome(NamespacedKey key) {
++        getWorld().setBiome(getX(), getY(), getZ(), key);
++    }
++    // Paper end
+     @Override
+     public void setBiome(Biome bio) {
+         getWorld().setBiome(getX(), getY(), getZ(), bio);
+@@ -515,6 +526,19 @@ public class CraftBlock implements Block {
+ 
+         return Registry.BIOME.get(CraftNamespacedKey.fromMinecraft(registry.getKey(base)));
+     }
++    // Paper start
++    public static NamespacedKey biomeBaseToKey(IRegistry<BiomeBase> registry, BiomeBase base) {
++        if (base == null) {
++            return null;
++        }
++
++        return CraftNamespacedKey.fromMinecraft(registry.getKey(base));
++    }
++
++    public static BiomeBase biomeToBiomeBase(IRegistry<BiomeBase> registry, NamespacedKey key) {
++        return registry.get(CraftNamespacedKey.toMinecraft(key));
++    }
++    // Paper end
+ 
+     public static BiomeBase biomeToBiomeBase(IRegistry<BiomeBase> registry, Biome bio) {
+         if (bio == null) {
+-- 
+2.30.0
+
