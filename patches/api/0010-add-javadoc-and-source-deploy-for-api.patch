@@ -1,0 +1,77 @@
+From 61128ba0e52408bf8868bfe26963c9498fd64bf8 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Thu, 18 Feb 2021 19:05:34 +0100
+Subject: [PATCH] add javadoc and source deploy for api
+
+---
+ pom.xml | 54 +++++++++++++++++++++++++++++++++++++++++-------------
+ 1 file changed, 41 insertions(+), 13 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index 3e0d1ddd..7caac0d0 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -233,19 +233,47 @@
+                     </properties>
+                 </configuration>
+             </plugin>
+-            <plugin>
+-                <groupId>org.apache.maven.plugins</groupId>
+-                <artifactId>maven-javadoc-plugin</artifactId>
+-                <version>3.2.0</version>
+-                <configuration>
+-                    <links>
+-                        <link>https://guava.dev/releases/21.0/api/docs/</link>
+-                        <link>https://javadoc.io/doc/org.yaml/snakeyaml/1.27/</link>
+-                        <link>https://javadoc.io/doc/org.jetbrains/annotations-java5/20.1.0/</link>
+-                        <link>https://javadoc.io/doc/net.md-5/bungeecord-chat/1.16-R0.4/</link>
+-                    </links>
+-                </configuration>
+-            </plugin>
++          <plugin>
++            <artifactId>maven-source-plugin</artifactId>
++            <executions>
++              <execution>
++                <id>attach-sources</id>
++                <phase>deploy</phase>
++                <goals><goal>jar-no-fork</goal></goals>
++              </execution>
++            </executions>
++          </plugin>
++          <plugin>
++            <!-- explicitly define maven-deploy-plugin after other to force exec order -->
++            <artifactId>maven-deploy-plugin</artifactId>
++            <executions>
++              <execution>
++                <id>deploy</id>
++                <phase>deploy</phase>
++                <goals><goal>deploy</goal></goals>
++              </execution>
++            </executions>
++          </plugin>
++          <plugin>
++            <groupId>org.apache.maven.plugins</groupId>
++            <artifactId>maven-javadoc-plugin</artifactId>
++            <version>3.2.0</version>
++            <executions>
++              <execution>
++                <id>attach-javadocs</id>
++                <phase>deploy</phase>
++                <goals><goal>jar</goal></goals>
++              </execution>
++            </executions>
++            <configuration>
++              <links>
++                <link>https://guava.dev/releases/21.0/api/docs/</link>
++                <link>https://javadoc.io/doc/org.yaml/snakeyaml/1.27/</link>
++                <link>https://javadoc.io/doc/org.jetbrains/annotations-java5/20.1.0/</link>
++                <link>https://javadoc.io/doc/net.md-5/bungeecord-chat/1.16-R0.4/</link>
++              </links>
++            </configuration>
++          </plugin>
+         </plugins>
+     </build>
+ 
+-- 
+2.30.1
+
