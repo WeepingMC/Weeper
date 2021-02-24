@@ -1,4 +1,4 @@
-From a82b495248e9155659788b0da6dce5db635f274c Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Techcable <techcable@techcable.net>
 Date: Sun, 20 Dec 2020 14:21:32 +0100
 Subject: [PATCH] Fix hopper lag by making entities look for hoppers.
@@ -19,22 +19,12 @@ This patch may causes a decrease in the performance of dropped items,
 which is why it can be disabled in the configuration.
 
 Co-authored-by: Yannick Lamprecht <yannicklamprecht@live.de>
----
- .../destroystokyo/paper/PaperWorldConfig.java |  5 ++
- .../java/io/papermc/paper/HopperHelper.java   | 26 +++++++
- .../java/io/papermc/paper/HopperPusher.java   | 71 +++++++++++++++++++
- .../java/net/minecraft/server/EntityItem.java | 13 +++-
- .../server/EntityMinecartContainer.java       | 24 ++++++-
- .../minecraft/server/TileEntityHopper.java    | 46 ++++++++++--
- 6 files changed, 178 insertions(+), 7 deletions(-)
- create mode 100644 src/main/java/io/papermc/paper/HopperHelper.java
- create mode 100644 src/main/java/io/papermc/paper/HopperPusher.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 0776e6834..33e5e1c71 100644
+index 0776e68340b0510cc99084bea80791d562dfea40..c9079359f637cac9c36c0302bc0d407e54c1acd5 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -804,4 +804,9 @@ public class PaperWorldConfig {
+@@ -804,4 +804,14 @@ public class PaperWorldConfig {
      private void setUpdatePathfindingOnBlockUpdate() {
          updatePathfindingOnBlockUpdate = getBoolean("update-pathfinding-on-block-update", this.updatePathfindingOnBlockUpdate);
      }
@@ -43,118 +33,115 @@ index 0776e6834..33e5e1c71 100644
 +    private void isHopperPushBased() {
 +        isHopperPushBased = getBoolean("hopper.push-based", true);
 +    }
++
++    public int entitySearchForHopperDelay;
++    private void entitySearchForHopperDelay() {
++        entitySearchForHopperDelay = getInt("hopper.entity-search-for-hopper-delay", 200);
++    }
  }
-diff --git a/src/main/java/io/papermc/paper/HopperHelper.java b/src/main/java/io/papermc/paper/HopperHelper.java
-new file mode 100644
-index 000000000..b6ed59e80
---- /dev/null
-+++ b/src/main/java/io/papermc/paper/HopperHelper.java
-@@ -0,0 +1,26 @@
-+package io.papermc.paper;
-+
-+import net.minecraft.server.BlockPosition;
-+import net.minecraft.server.Blocks;
-+import net.minecraft.server.IInventory;
-+import net.minecraft.server.TileEntity;
-+import net.minecraft.server.TileEntityHopper;
-+import net.minecraft.server.World;
-+
-+public class HopperHelper {
-+
-+  public static TileEntityHopper getHopper(World world, BlockPosition pos) {
-+    if (world.getType(pos).getBlock() != Blocks.HOPPER) {
-+      return null;
-+    }
-+    TileEntity tileEntity = world.getTileEntity(pos);
-+    if (tileEntity instanceof TileEntityHopper) {
-+      return (TileEntityHopper) tileEntity;
-+    }
-+    return null;
-+  }
-+
-+  public static IInventory getInventory(World world, BlockPosition position) {
-+    return TileEntityHopper.a(world, position.getX(), position.getY(), position.getZ());
-+  }
-+}
 diff --git a/src/main/java/io/papermc/paper/HopperPusher.java b/src/main/java/io/papermc/paper/HopperPusher.java
 new file mode 100644
-index 000000000..ad8ce0d48
+index 0000000000000000000000000000000000000000..8dff63d32718343d80e17837fa947fbacee7664e
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/HopperPusher.java
-@@ -0,0 +1,71 @@
+@@ -0,0 +1,95 @@
 +package io.papermc.paper;
 +
 +import net.minecraft.server.AxisAlignedBB;
 +import net.minecraft.server.BlockPosition;
++import net.minecraft.server.Blocks;
 +import net.minecraft.server.Entity;
++import net.minecraft.server.MinecraftServer;
++import net.minecraft.server.TileEntity;
 +import net.minecraft.server.TileEntityHopper;
 +import net.minecraft.server.World;
 +
 +public interface HopperPusher {
 +
 +    default TileEntityHopper findHopper() {
-+        BlockPosition pos = new BlockPosition(locX(), locY(), locZ());
-+        int startX = pos.getX() - 1;
-+        int endX = pos.getX() + 1;
-+        int startY = Math.max(0, pos.getY() - 1);
-+        int endY = Math.min(255, pos.getY() + 1);
-+        int startZ = pos.getZ() - 1;
-+        int endZ = pos.getZ() + 1;
-+        for (int x = startX; x <= endX; x++) {
-+            for (int y = startY; y <= endY; y++) {
-+                for (int z = startZ; z <= endZ; z++) {
-+                    BlockPosition adjacentPos = new BlockPosition(x, y, z);
-+                    TileEntityHopper hopper = HopperHelper.getHopper(getWorld(), adjacentPos);
-+                    if (hopper == null) {
-+                        continue; // Avoid playing with the bounding boxes, if at all possible
-+                    }
-+                    AxisAlignedBB hopperBoundingBox = hopper.getHopperLookupBoundingBox();
-+                    if (hopperBoundingBox.intersects(this
-+                        .getBoundingBox())) {
-+                        return hopper;
-+                    }
-+                }
-+            }
++        BlockPosition pos = new BlockPosition(((Entity) this).locX(), ((Entity) this).locY(), ((Entity) this).locZ()).down();
++        TileEntityHopper hopper = getHopper(((Entity) this).getWorld(), pos);
++        if (hopper == null) {
++            return null;
++        }
++        AxisAlignedBB hopperBoundingBox = hopper.getHopperLookupBoundingBox();
++        if (hopperBoundingBox.intersects(((Entity) this)
++            .getBoundingBox())) {
++            return hopper;
 +        }
 +        return null;
 +    }
 +
 +    boolean acceptItem(TileEntityHopper hopper);
 +
-+
 +    default boolean tryPutInHopper() {
-+        if (!getWorld().paperConfig.isHopperPushBased) {
++        if (!((Entity) this).getWorld().paperConfig.isHopperPushBased) {
 +            return false;
 +        }
-+        TileEntityHopper hopper = findHopper();
++        CheckData checkData = getCheckData();
++        TileEntityHopper hopper = null;
++        if(!hasMoved()){
++            if (checkData.getHopperPosition() != null) {
++                hopper = getHopper(((Entity) this).getWorld(), checkData.getHopperPosition());
++            }
++        }
++        if(hopper == null && waitedLongEnoughOrMoved(checkData)) {
++            hopper = findHopper();
++            if (hopper != null) {
++                checkData.setHopperPosition(hopper.getBlockPosition());
++            }
++            checkData.updateLastChecked();
++        }
 +        return hopper != null && hopper.canAcceptItems() && acceptItem(hopper);
 +    }
 +
-+
-+    AxisAlignedBB getBoundingBox();
-+
-+
-+    World getWorld();
-+
-+    // Default implementations for entities
-+
-+
-+    default double locX() {
-+        return ((Entity) this).locX();
++    default boolean waitedLongEnoughOrMoved(CheckData checkData){
++        return hasMoved() ||
++            net.minecraft.server.MinecraftServer.currentTick - checkData.getLastChecked() > ((Entity) this).getWorld().paperConfig.entitySearchForHopperDelay;
 +    }
 +
-+
-+    default double locY() {
-+        return ((Entity) this).locY();
++    default boolean hasMoved(){
++        Entity entity = (Entity) this;
++        return (entity.locX() == entity.lastX && entity.locY() == entity.lastY && entity.locZ() == entity.lastZ);
 +    }
 +
++    static TileEntityHopper getHopper(World world, BlockPosition pos) {
++        if (world.getType(pos).getBlock() != Blocks.HOPPER) {
++            return null;
++        }
++        TileEntity tileEntity = world.getTileEntity(pos);
++        if (tileEntity instanceof TileEntityHopper) {
++            return (TileEntityHopper) tileEntity;
++        }
++        return null;
++    }
 +
-+    default double locZ() {
-+        return ((Entity) this).locZ();
++    CheckData getCheckData();
++
++    class CheckData {
++
++        private long lastChecked;
++        private BlockPosition hopperPosition;
++
++        public void updateLastChecked() {
++            lastChecked = MinecraftServer.currentTick;
++        }
++
++        public long getLastChecked() {
++            return lastChecked;
++        }
++
++        public void setHopperPosition(BlockPosition hopperPosition) {
++            this.hopperPosition = hopperPosition;
++        }
++
++        public BlockPosition getHopperPosition() {
++            return hopperPosition;
++        }
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/EntityItem.java b/src/main/java/net/minecraft/server/EntityItem.java
-index f41aaa762..d9a10215e 100644
+index f41aaa7623c052b9f4044898d1bdee898c03057a..d6ea2fd0207fea505608abd25601c6b2002ef935 100644
 --- a/src/main/java/net/minecraft/server/EntityItem.java
 +++ b/src/main/java/net/minecraft/server/EntityItem.java
 @@ -12,7 +12,9 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -168,21 +155,27 @@ index f41aaa762..d9a10215e 100644
  
      private static final DataWatcherObject<ItemStack> ITEM = DataWatcher.a(EntityItem.class, DataWatcherRegistry.g);
      public int age;
-@@ -42,6 +44,13 @@ public class EntityItem extends Entity {
+@@ -42,6 +44,19 @@ public class EntityItem extends Entity {
          this.setItemStack(itemstack);
      }
  
 +    // Paper start
 +    @Override
 +    public boolean acceptItem(TileEntityHopper hopper) {
-+      return TileEntityHopper.a(hopper, this);
++      return TileEntityHopper.canPickupItem(hopper, this);
++    }
++
++    private final HopperPusher.CheckData checkData = new CheckData();
++    @Override
++    public CheckData getCheckData() {
++        return checkData;
 +    }
 +    // Paper end
 +
      @Override
      protected boolean playStepSound() {
          return false;
-@@ -58,6 +67,7 @@ public class EntityItem extends Entity {
+@@ -58,6 +73,7 @@ public class EntityItem extends Entity {
              this.die();
          } else {
              super.tick();
@@ -190,7 +183,7 @@ index f41aaa762..d9a10215e 100644
              // CraftBukkit start - Use wall time for pickup and despawn timers
              int elapsedTicks = MinecraftServer.currentTick - this.lastTick;
              if (this.pickupDelay != 32767) this.pickupDelay -= elapsedTicks;
-@@ -151,6 +161,7 @@ public class EntityItem extends Entity {
+@@ -151,6 +167,7 @@ public class EntityItem extends Entity {
      // Spigot start - copied from above
      @Override
      public void inactiveTick() {
@@ -199,10 +192,10 @@ index f41aaa762..d9a10215e 100644
          int elapsedTicks = MinecraftServer.currentTick - this.lastTick;
          if (this.pickupDelay != 32767) this.pickupDelay -= elapsedTicks;
 diff --git a/src/main/java/net/minecraft/server/EntityMinecartContainer.java b/src/main/java/net/minecraft/server/EntityMinecartContainer.java
-index 574838bd3..6d46cd472 100644
+index 574838bd33a46e464ff7d801345613a3351f487f..9001718066370c9f9fbcae2a9f5003202f6f7006 100644
 --- a/src/main/java/net/minecraft/server/EntityMinecartContainer.java
 +++ b/src/main/java/net/minecraft/server/EntityMinecartContainer.java
-@@ -8,9 +8,11 @@ import org.bukkit.Location;
+@@ -8,9 +8,10 @@ import org.bukkit.Location;
  import org.bukkit.craftbukkit.entity.CraftHumanEntity;
  import org.bukkit.entity.HumanEntity;
  import org.bukkit.inventory.InventoryHolder;
@@ -210,12 +203,11 @@ index 574838bd3..6d46cd472 100644
  // CraftBukkit end
  
 -public abstract class EntityMinecartContainer extends EntityMinecartAbstract implements IInventory, ITileInventory {
-+public abstract class EntityMinecartContainer extends EntityMinecartAbstract implements IInventory, ITileInventory,
-+    HopperPusher {
++public abstract class EntityMinecartContainer extends EntityMinecartAbstract implements IInventory, ITileInventory, HopperPusher {
  
      private NonNullList<ItemStack> items;
      private boolean c;
-@@ -45,6 +47,26 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
+@@ -45,6 +46,31 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
          return null;
      }
  
@@ -236,38 +228,35 @@ index 574838bd3..6d46cd472 100644
 +        super.inactiveTick();
 +        tryPutInHopper();
 +    }
-+    // Paper end
 +
++    private final HopperPusher.CheckData checkData = new CheckData();
++    @Override
++    public CheckData getCheckData() {
++        return checkData;
++    }
++    // Paper end
 +
      @Override
      public int getMaxStackSize() {
          return maxStack;
 diff --git a/src/main/java/net/minecraft/server/TileEntityHopper.java b/src/main/java/net/minecraft/server/TileEntityHopper.java
-index d432de40e..8f81c0911 100644
+index d432de40eba2767f4ced4d9c642c9d2033acd0ea..985d8eb16e22e399c6511d63472ed2b15eb5e357 100644
 --- a/src/main/java/net/minecraft/server/TileEntityHopper.java
 +++ b/src/main/java/net/minecraft/server/TileEntityHopper.java
-@@ -14,6 +14,7 @@ import org.bukkit.entity.HumanEntity;
- import org.bukkit.event.inventory.InventoryMoveItemEvent;
- import org.bukkit.event.inventory.InventoryPickupItemEvent;
- import org.bukkit.inventory.Inventory;
-+import io.papermc.paper.HopperHelper; // Paper
- // CraftBukkit end
- 
- public class TileEntityHopper extends TileEntityLootable implements IHopper, ITickable {
-@@ -58,6 +59,12 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -58,6 +58,12 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
          this.j = -1;
      }
  
 +    // Paper start
 +    public boolean canAcceptItems() {
-+        return !this.m() && !this.j() && this.getBlock().get(BlockHopper.ENABLED);
++        return !this.hasCooldown() && !this.isInventoryFull() && this.getBlock().get(BlockHopper.ENABLED);
 +    }
 +    // Paper end
 +
      @Override
      public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
          super.load(iblockdata, nbttagcompound);
-@@ -117,7 +124,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -117,7 +123,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
                  boolean result = this.a(() -> {
                      return a((IHopper) this);
                  });
@@ -276,11 +265,19 @@ index d432de40e..8f81c0911 100644
                      this.setCooldown(this.world.spigotConfig.hopperCheck);
                  }
                  // Spigot end
-@@ -322,13 +329,27 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -152,6 +158,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+         }
      }
-     // Paper end
  
-+    // Paper start
++    private final boolean isInventoryFull() { return j(); } // Paper - OBFHELPER
+     private boolean j() {
+         Iterator iterator = this.items.iterator();
+ 
+@@ -320,10 +327,20 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+             ((EntityMinecartHopper) hopper).setCooldown(hopper.getWorld().spigotConfig.hopperTransfer / 2);
+         }
+     }
++
 +    public AxisAlignedBB getHopperLookupBoundingBox() {
 +        // Change this if b(IHopper) ever changes
 +        return getHopperLookupBoundingBox(this.getX(), this.getY() + 1.0D, this.getZ());
@@ -290,23 +287,15 @@ index d432de40e..8f81c0911 100644
 +        // Change this if the above ever changes
 +        return new AxisAlignedBB(d0 - 0.5D, d1 - 0.5D, d2 - 0.5D, d0 + 0.5D, d1 + 0.5D, d2 + 0.5D);
 +    }
-+ // Paper end
-+
-+
-+
+     // Paper end
+ 
      private boolean k() {
 -        IInventory iinventory = this.l();
-+        IInventory iinventory = HopperHelper.getInventory(getWorld(), getPosition().shift((this.getBlock().get(BlockHopper.FACING)))); // Paper - use hopper helper
++        IInventory iinventory = getInventory(getWorld(), getPosition().shift((this.getBlock().get(BlockHopper.FACING)))); // Paper
  
          if (iinventory == null) {
              return false;
-         } else {
--            EnumDirection enumdirection = ((EnumDirection) this.getBlock().get(BlockHopper.FACING)).opposite();
-+            EnumDirection enumdirection = ((EnumDirection) this.getBlock().get(BlockHopper.FACING)).opposite(); // Paper
- 
-             if (this.b(iinventory, enumdirection)) {
-                 return false;
-@@ -431,13 +452,27 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -431,8 +448,21 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
      }
  
      public static boolean a(IHopper ihopper) {
@@ -317,9 +306,9 @@ index d432de40e..8f81c0911 100644
 +            && ihopper instanceof TileEntityHopper) {
 +            BlockPosition pos = ((TileEntityHopper) ihopper).getPosition()
 +                .up(); // Only pull from a above, because everything else comes to us
-+            iinventory = HopperHelper.getInventory(ihopper.getWorld(), pos);
++            iinventory = getInventory(ihopper.getWorld(), pos);
 +        } else {
-+            iinventory = b(ihopper); // Use old behavior for BB entity searching
++            iinventory = getSourceInventory(ihopper); // Use old behavior for BB entity searching
 +        }
 +        return acceptItem(ihopper, iinventory);
 +    }
@@ -329,13 +318,7 @@ index d432de40e..8f81c0911 100644
          if (iinventory != null) {
              EnumDirection enumdirection = EnumDirection.DOWN;
  
-             // Paper start - optimize hoppers and remove streams
-             skipPullModeEventFire = skipHopperEvents;
-+
-             return !c(iinventory, enumdirection) && anyMatch(iinventory, enumdirection, (item, i) -> {
-                 // Logic copied from below to avoid extra getItem calls
-                 if (!item.isEmpty() && canTakeItem(iinventory, item, i, enumdirection)) {
-@@ -447,7 +482,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -447,7 +477,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
                  }
              });
              // Paper end
@@ -344,7 +327,7 @@ index d432de40e..8f81c0911 100644
              Iterator iterator = c(ihopper).iterator();
  
              EntityItem entityitem;
-@@ -462,6 +497,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -462,6 +492,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
  
              return true;
          }
@@ -352,6 +335,35 @@ index d432de40e..8f81c0911 100644
      }
  
      private static boolean a(IHopper ihopper, IInventory iinventory, int i, EnumDirection enumdirection) {// Paper - method unused as logic is inlined above
--- 
-2.30.0
-
+@@ -511,6 +542,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+         return false;
+     }
+ 
++    public final static boolean canPickupItem(IInventory iinventory, EntityItem entityitem) { return a(iinventory, entityitem); } // Paper - OBFHELPER
+     public static boolean a(IInventory iinventory, EntityItem entityitem) {
+         boolean flag = false;
+         // CraftBukkit start
+@@ -616,6 +648,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+         return b(this.getWorld(), this.position.shift(enumdirection));
+     }
+ 
++    @Nullable public static final IInventory getSourceInventory(IHopper ihopper) { return b(ihopper); } // Paper - OBFHELPER
+     @Nullable
+     public static IInventory b(IHopper ihopper) {
+         return a(ihopper.getWorld(), ihopper.x(), ihopper.z() + 1.0D, ihopper.A());
+@@ -637,6 +670,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+         return a(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, true); // Paper
+     }
+ 
++    @Nullable public static IInventory getInventory(World world, BlockPosition position) { return a(world, position.getX(), position.getY(), position.getZ()); } // Paper - OBFHELPER
+     @Nullable
+     public static IInventory a(World world, double d0, double d1, double d2) { return a(world, d0, d1, d2, false); } // Paper - overload to default false
+     public static IInventory a(World world, double d0, double d1, double d2, boolean optimizeEntities) { // Paper
+@@ -693,6 +727,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+         this.j = i;
+     }
+ 
++    private final boolean hasCooldown() { return m(); } // Paper - OBFHELPER
+     private boolean m() {
+         return this.j > 0;
+     }
