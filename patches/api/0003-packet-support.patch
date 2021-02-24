@@ -1,4 +1,4 @@
-From d26c724f1842887115863622000e31533701bbe4 Mon Sep 17 00:00:00 2001
+From 0388f7b9be76a1209f30b4165fc139ef4a3be25f Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Thu, 11 Jun 2020 18:15:12 +0200
 Subject: [PATCH] packet support
@@ -26,7 +26,7 @@ Subject: [PATCH] packet support
  create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/options/TeamMode.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/SkinParts.java b/src/main/java/com/destroystokyo/paper/SkinParts.java
-index 4a0c3940..4cc4dbf4 100644
+index 4a0c39405..4cc4dbf4a 100644
 --- a/src/main/java/com/destroystokyo/paper/SkinParts.java
 +++ b/src/main/java/com/destroystokyo/paper/SkinParts.java
 @@ -1,5 +1,7 @@
@@ -63,7 +63,7 @@ index 4a0c3940..4cc4dbf4 100644
  }
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/PacketPipeline.java b/src/main/java/de/craftstuebchen/weepermc/packet/PacketPipeline.java
 new file mode 100644
-index 00000000..e0c6ebbf
+index 000000000..e0c6ebbf4
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/PacketPipeline.java
 @@ -0,0 +1,26 @@
@@ -95,7 +95,7 @@ index 00000000..e0c6ebbf
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/PacketStep.java b/src/main/java/de/craftstuebchen/weepermc/packet/PacketStep.java
 new file mode 100644
-index 00000000..de3549ee
+index 000000000..de3549eec
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/PacketStep.java
 @@ -0,0 +1,9 @@
@@ -110,7 +110,7 @@ index 00000000..de3549ee
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/PacketStepBuilder.java b/src/main/java/de/craftstuebchen/weepermc/packet/PacketStepBuilder.java
 new file mode 100644
-index 00000000..02b2cf87
+index 000000000..02b2cf871
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/PacketStepBuilder.java
 @@ -0,0 +1,86 @@
@@ -202,7 +202,7 @@ index 00000000..02b2cf87
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/options/Animation.java b/src/main/java/de/craftstuebchen/weepermc/packet/options/Animation.java
 new file mode 100644
-index 00000000..89a0183a
+index 000000000..89a0183a2
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/options/Animation.java
 @@ -0,0 +1,10 @@
@@ -218,7 +218,7 @@ index 00000000..89a0183a
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/options/EntityMetaBuilder.java b/src/main/java/de/craftstuebchen/weepermc/packet/options/EntityMetaBuilder.java
 new file mode 100644
-index 00000000..b77731f7
+index 000000000..b77731f77
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/options/EntityMetaBuilder.java
 @@ -0,0 +1,20 @@
@@ -244,7 +244,7 @@ index 00000000..b77731f7
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/options/EntityStatus.java b/src/main/java/de/craftstuebchen/weepermc/packet/options/EntityStatus.java
 new file mode 100644
-index 00000000..3ed0868f
+index 000000000..3ed0868ff
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/options/EntityStatus.java
 @@ -0,0 +1,11 @@
@@ -261,7 +261,7 @@ index 00000000..3ed0868f
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/options/ProfileAction.java b/src/main/java/de/craftstuebchen/weepermc/packet/options/ProfileAction.java
 new file mode 100644
-index 00000000..dc7804c0
+index 000000000..dc7804c03
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/options/ProfileAction.java
 @@ -0,0 +1,9 @@
@@ -276,7 +276,7 @@ index 00000000..dc7804c0
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/options/TeamMode.java b/src/main/java/de/craftstuebchen/weepermc/packet/options/TeamMode.java
 new file mode 100644
-index 00000000..deef0436
+index 000000000..deef04368
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/options/TeamMode.java
 @@ -0,0 +1,9 @@
@@ -290,10 +290,10 @@ index 00000000..deef0436
 +    REMOVE_PLAYERS_FROM_TEAM
 +}
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index fecd7b14..0320ad99 100644
+index 68101a322..ffb15255f 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -1811,6 +1811,15 @@ public final class Bukkit {
+@@ -1925,6 +1925,15 @@ public final class Bukkit {
      public static com.destroystokyo.paper.entity.ai.MobGoals getMobGoals() {
          return server.getMobGoals();
      }
@@ -310,10 +310,10 @@ index fecd7b14..0320ad99 100644
  
      @NotNull
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 8e01e1bb..73fe4eb1 100644
+index a79fa08b9..a5ca1eabe 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1581,5 +1581,12 @@ public interface Server extends PluginMessageRecipient {
+@@ -1687,5 +1687,12 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      @NotNull
      com.destroystokyo.paper.entity.ai.MobGoals getMobGoals();
@@ -327,5 +327,5 @@ index 8e01e1bb..73fe4eb1 100644
      // Paper end
  }
 -- 
-2.29.2
+2.30.1
 

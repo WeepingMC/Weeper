@@ -1,4 +1,4 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From 6dee18d9096f29ab89547737f9bee192c86be6a1 Mon Sep 17 00:00:00 2001
 From: Techcable <techcable@techcable.net>
 Date: Sun, 20 Dec 2020 14:21:32 +0100
 Subject: [PATCH] Fix hopper lag by making entities look for hoppers.
@@ -19,9 +19,17 @@ This patch may causes a decrease in the performance of dropped items,
 which is why it can be disabled in the configuration.
 
 Co-authored-by: Yannick Lamprecht <yannicklamprecht@live.de>
+---
+ .../destroystokyo/paper/PaperWorldConfig.java | 10 ++
+ .../java/io/papermc/paper/HopperPusher.java   | 95 +++++++++++++++++++
+ .../java/net/minecraft/server/EntityItem.java | 19 +++-
+ .../server/EntityMinecartContainer.java       | 28 +++++-
+ .../minecraft/server/TileEntityHopper.java    | 43 ++++++++-
+ 5 files changed, 189 insertions(+), 6 deletions(-)
+ create mode 100644 src/main/java/io/papermc/paper/HopperPusher.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 0776e68340b0510cc99084bea80791d562dfea40..c9079359f637cac9c36c0302bc0d407e54c1acd5 100644
+index 0776e6834..c9079359f 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -804,4 +804,14 @@ public class PaperWorldConfig {
@@ -41,7 +49,7 @@ index 0776e68340b0510cc99084bea80791d562dfea40..c9079359f637cac9c36c0302bc0d407e
  }
 diff --git a/src/main/java/io/papermc/paper/HopperPusher.java b/src/main/java/io/papermc/paper/HopperPusher.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..8dff63d32718343d80e17837fa947fbacee7664e
+index 000000000..8dff63d32
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/HopperPusher.java
 @@ -0,0 +1,95 @@
@@ -141,7 +149,7 @@ index 0000000000000000000000000000000000000000..8dff63d32718343d80e17837fa947fba
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/EntityItem.java b/src/main/java/net/minecraft/server/EntityItem.java
-index f41aaa7623c052b9f4044898d1bdee898c03057a..d6ea2fd0207fea505608abd25601c6b2002ef935 100644
+index f41aaa762..d6ea2fd02 100644
 --- a/src/main/java/net/minecraft/server/EntityItem.java
 +++ b/src/main/java/net/minecraft/server/EntityItem.java
 @@ -12,7 +12,9 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -192,7 +200,7 @@ index f41aaa7623c052b9f4044898d1bdee898c03057a..d6ea2fd0207fea505608abd25601c6b2
          int elapsedTicks = MinecraftServer.currentTick - this.lastTick;
          if (this.pickupDelay != 32767) this.pickupDelay -= elapsedTicks;
 diff --git a/src/main/java/net/minecraft/server/EntityMinecartContainer.java b/src/main/java/net/minecraft/server/EntityMinecartContainer.java
-index 574838bd33a46e464ff7d801345613a3351f487f..9001718066370c9f9fbcae2a9f5003202f6f7006 100644
+index 574838bd3..900171806 100644
 --- a/src/main/java/net/minecraft/server/EntityMinecartContainer.java
 +++ b/src/main/java/net/minecraft/server/EntityMinecartContainer.java
 @@ -8,9 +8,10 @@ import org.bukkit.Location;
@@ -240,7 +248,7 @@ index 574838bd33a46e464ff7d801345613a3351f487f..9001718066370c9f9fbcae2a9f500320
      public int getMaxStackSize() {
          return maxStack;
 diff --git a/src/main/java/net/minecraft/server/TileEntityHopper.java b/src/main/java/net/minecraft/server/TileEntityHopper.java
-index d432de40eba2767f4ced4d9c642c9d2033acd0ea..985d8eb16e22e399c6511d63472ed2b15eb5e357 100644
+index d432de40e..985d8eb16 100644
 --- a/src/main/java/net/minecraft/server/TileEntityHopper.java
 +++ b/src/main/java/net/minecraft/server/TileEntityHopper.java
 @@ -58,6 +58,12 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
@@ -367,3 +375,6 @@ index d432de40eba2767f4ced4d9c642c9d2033acd0ea..985d8eb16e22e399c6511d63472ed2b1
      private boolean m() {
          return this.j > 0;
      }
+-- 
+2.30.1
+

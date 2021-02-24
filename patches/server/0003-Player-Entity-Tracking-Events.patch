@@ -1,4 +1,4 @@
-From 2a8cde8bdfa9f86f74f797d823030b0dd803e31d Mon Sep 17 00:00:00 2001
+From 39c7089d48f37b6a17e49c4a1fc43594fd296865 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 12 Oct 2020 23:11:41 +0200
 Subject: [PATCH] Player Entity Tracking Events
@@ -9,7 +9,7 @@ Subject: [PATCH] Player Entity Tracking Events
  2 files changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/EntityPlayer.java b/src/main/java/net/minecraft/server/EntityPlayer.java
-index a9a409eeb..5a8227be6 100644
+index d51925612..bba30a7b7 100644
 --- a/src/main/java/net/minecraft/server/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/server/EntityPlayer.java
 @@ -18,6 +18,7 @@ import java.util.UUID;
@@ -20,7 +20,7 @@ index a9a409eeb..5a8227be6 100644
  import org.apache.logging.log4j.LogManager;
  import org.apache.logging.log4j.Logger;
  
-@@ -480,7 +481,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -483,7 +484,9 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
  
              Integer integer;
              while (j < i && (integer = this.removeQueue.poll()) != null) {
@@ -31,7 +31,7 @@ index a9a409eeb..5a8227be6 100644
              }
              // Paper end
  
-@@ -1761,6 +1764,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -1763,6 +1766,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
      public void c(Entity entity) {
          if (entity instanceof EntityHuman) {
              this.playerConnection.sendPacket(new PacketPlayOutEntityDestroy(new int[]{entity.getId()}));
@@ -68,5 +68,5 @@ index 3960a975e..ebcf0911d 100644
              consumer.accept(new PacketPlayOutEntityMetadata(this.tracker.getId(), this.tracker.getDataWatcher(), true));
          }
 -- 
-2.30.0
+2.30.1
 

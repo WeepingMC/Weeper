@@ -1,4 +1,4 @@
-From f6b71a9a44a22b6a6ebd1f7341f09c6d834f1bd7 Mon Sep 17 00:00:00 2001
+From 9ea1b8a845076ef252dfda46217bedf320e03639 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Sun, 7 Jun 2020 16:32:16 +0200
 Subject: [PATCH] packet support
@@ -810,10 +810,10 @@ index 9a48a4e90..91a5dd2fb 100644
          private final int b;
          private final EnumGamemode c;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 0fbb4865e..834d2e981 100644
+index c18aac769..fd9907c5f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2422,5 +2422,11 @@ public final class CraftServer implements Server {
+@@ -2482,5 +2482,11 @@ public final class CraftServer implements Server {
      public com.destroystokyo.paper.entity.ai.MobGoals getMobGoals() {
          return mobGoals;
      }
@@ -826,7 +826,7 @@ index 0fbb4865e..834d2e981 100644
      // Paper end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-index b298fbd66..1a085aeb1 100644
+index 52eba9ca4..af99b6a82 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 @@ -21,7 +21,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
@@ -839,7 +839,7 @@ index b298fbd66..1a085aeb1 100644
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-index 0315ea5ad..f715db80b 100644
+index 4d9b5d7cd..c2e70c5ce 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 @@ -13,14 +13,20 @@ import org.bukkit.craftbukkit.util.CraftChatMessage;
@@ -866,5 +866,5 @@ index 0315ea5ad..f715db80b 100644
      public String getName() throws IllegalStateException {
          CraftScoreboard scoreboard = checkState();
 -- 
-2.30.0
+2.30.1
 
