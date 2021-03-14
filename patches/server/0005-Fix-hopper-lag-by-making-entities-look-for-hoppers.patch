@@ -1,4 +1,4 @@
-From 6dee18d9096f29ab89547737f9bee192c86be6a1 Mon Sep 17 00:00:00 2001
+From 8fd6a1d9a9710980d5705f9561d4316b3973e773 Mon Sep 17 00:00:00 2001
 From: Techcable <techcable@techcable.net>
 Date: Sun, 20 Dec 2020 14:21:32 +0100
 Subject: [PATCH] Fix hopper lag by making entities look for hoppers.
@@ -29,12 +29,12 @@ Co-authored-by: Yannick Lamprecht <yannicklamprecht@live.de>
  create mode 100644 src/main/java/io/papermc/paper/HopperPusher.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 0776e6834..c9079359f 100644
+index fd675585c..b8e3673c3 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -804,4 +804,14 @@ public class PaperWorldConfig {
-     private void setUpdatePathfindingOnBlockUpdate() {
-         updatePathfindingOnBlockUpdate = getBoolean("update-pathfinding-on-block-update", this.updatePathfindingOnBlockUpdate);
+@@ -815,4 +815,14 @@ public class PaperWorldConfig {
+     private void allowUsingSignsInsideSpawnProtection() {
+         allowUsingSignsInsideSpawnProtection = getBoolean("allow-using-signs-inside-spawn-protection", allowUsingSignsInsideSpawnProtection);
      }
 +
 +    public boolean isHopperPushBased;
@@ -149,10 +149,10 @@ index 000000000..8dff63d32
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/EntityItem.java b/src/main/java/net/minecraft/server/EntityItem.java
-index f41aaa762..d6ea2fd02 100644
+index 5dfb54e17..aa48b3dba 100644
 --- a/src/main/java/net/minecraft/server/EntityItem.java
 +++ b/src/main/java/net/minecraft/server/EntityItem.java
-@@ -12,7 +12,9 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
+@@ -13,7 +13,9 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
  // CraftBukkit end
  import org.bukkit.event.player.PlayerAttemptPickupItemEvent; // Paper
  
@@ -163,7 +163,7 @@ index f41aaa762..d6ea2fd02 100644
  
      private static final DataWatcherObject<ItemStack> ITEM = DataWatcher.a(EntityItem.class, DataWatcherRegistry.g);
      public int age;
-@@ -42,6 +44,19 @@ public class EntityItem extends Entity {
+@@ -43,6 +45,19 @@ public class EntityItem extends Entity {
          this.setItemStack(itemstack);
      }
  
@@ -183,7 +183,7 @@ index f41aaa762..d6ea2fd02 100644
      @Override
      protected boolean playStepSound() {
          return false;
-@@ -58,6 +73,7 @@ public class EntityItem extends Entity {
+@@ -59,6 +74,7 @@ public class EntityItem extends Entity {
              this.die();
          } else {
              super.tick();
@@ -191,7 +191,7 @@ index f41aaa762..d6ea2fd02 100644
              // CraftBukkit start - Use wall time for pickup and despawn timers
              int elapsedTicks = MinecraftServer.currentTick - this.lastTick;
              if (this.pickupDelay != 32767) this.pickupDelay -= elapsedTicks;
-@@ -151,6 +167,7 @@ public class EntityItem extends Entity {
+@@ -152,6 +168,7 @@ public class EntityItem extends Entity {
      // Spigot start - copied from above
      @Override
      public void inactiveTick() {
@@ -200,10 +200,10 @@ index f41aaa762..d6ea2fd02 100644
          int elapsedTicks = MinecraftServer.currentTick - this.lastTick;
          if (this.pickupDelay != 32767) this.pickupDelay -= elapsedTicks;
 diff --git a/src/main/java/net/minecraft/server/EntityMinecartContainer.java b/src/main/java/net/minecraft/server/EntityMinecartContainer.java
-index 574838bd3..900171806 100644
+index 8e13aebb7..2625d3f5d 100644
 --- a/src/main/java/net/minecraft/server/EntityMinecartContainer.java
 +++ b/src/main/java/net/minecraft/server/EntityMinecartContainer.java
-@@ -8,9 +8,10 @@ import org.bukkit.Location;
+@@ -9,9 +9,10 @@ import org.bukkit.Location;
  import org.bukkit.craftbukkit.entity.CraftHumanEntity;
  import org.bukkit.entity.HumanEntity;
  import org.bukkit.inventory.InventoryHolder;
@@ -215,7 +215,7 @@ index 574838bd3..900171806 100644
  
      private NonNullList<ItemStack> items;
      private boolean c;
-@@ -45,6 +46,31 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
+@@ -46,6 +47,31 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
          return null;
      }
  

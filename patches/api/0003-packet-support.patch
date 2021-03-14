@@ -1,4 +1,4 @@
-From 0388f7b9be76a1209f30b4165fc139ef4a3be25f Mon Sep 17 00:00:00 2001
+From b402b5611896d7ca0feaee17dfb11fe151dac6e7 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Thu, 11 Jun 2020 18:15:12 +0200
 Subject: [PATCH] packet support
@@ -290,10 +290,10 @@ index 000000000..deef04368
 +    REMOVE_PLAYERS_FROM_TEAM
 +}
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index 68101a322..ffb15255f 100644
+index 5f7208196..42f5f9d38 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -1925,6 +1925,15 @@ public final class Bukkit {
+@@ -1937,6 +1937,15 @@ public final class Bukkit {
      public static com.destroystokyo.paper.entity.ai.MobGoals getMobGoals() {
          return server.getMobGoals();
      }
@@ -310,10 +310,10 @@ index 68101a322..ffb15255f 100644
  
      @NotNull
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index a79fa08b9..a5ca1eabe 100644
+index f3e27d2d0..35fff0654 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1687,5 +1687,12 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -1698,5 +1698,12 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      @NotNull
      com.destroystokyo.paper.entity.ai.MobGoals getMobGoals();
