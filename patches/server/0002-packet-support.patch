@@ -1,4 +1,4 @@
-From c57d17697b5b7cd177fe50fa45453e8bc312574e Mon Sep 17 00:00:00 2001
+From c2883dd109d2d41e87e5493f8ffb2bd9f6efbe8e Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Sun, 7 Jun 2020 16:32:16 +0200
 Subject: [PATCH] packet support
@@ -7,19 +7,20 @@ Subject: [PATCH] packet support
  .../destroystokyo/paper/PaperSkinParts.java   |  55 ++++
  .../weepermc/packet/ChainablePacketStep.java  |  96 +++++++
  .../packet/CraftEntityMetaBuilder.java        |  49 ++++
- .../packet/CraftPacketConversion.java         | 135 ++++++++++
+ .../packet/CraftPacketConversion.java         | 137 ++++++++++
  .../weepermc/packet/CraftPacketPipeline.java  |  48 ++++
- .../packet/CraftPacketStepBuilder.java        | 236 ++++++++++++++++++
- .../server/PacketPlayOutAnimation.java        |   7 +
- .../PacketPlayOutEntityHeadRotation.java      |   7 +
- .../server/PacketPlayOutEntityMetadata.java   |   6 +
- .../server/PacketPlayOutEntityTeleport.java   |  11 +
- .../server/PacketPlayOutNamedEntitySpawn.java |  12 +
- .../server/PacketPlayOutPlayerInfo.java       |   9 +-
+ .../packet/CraftPacketStepBuilder.java        | 240 ++++++++++++++++++
+ .../protocol/game/PacketPlayOutAnimation.java |   8 +
+ .../game/PacketPlayOutEntityHeadRotation.java |   8 +
+ .../game/PacketPlayOutEntityMetadata.java     |   8 +
+ .../game/PacketPlayOutEntityTeleport.java     |  13 +
+ .../game/PacketPlayOutNamedEntitySpawn.java   |  13 +
+ .../game/PacketPlayOutPlayerInfo.java         |  11 +-
+ .../server/level/EntityTrackerEntry.java      |  55 ++++
  .../org/bukkit/craftbukkit/CraftServer.java   |   6 +
  .../scoreboard/CraftScoreboard.java           |   2 +-
  .../craftbukkit/scoreboard/CraftTeam.java     |  10 +-
- 15 files changed, 685 insertions(+), 4 deletions(-)
+ 16 files changed, 755 insertions(+), 4 deletions(-)
  create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java
  create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/CraftEntityMetaBuilder.java
  create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java
@@ -92,13 +93,13 @@ index b6f4400df..89d5bfe73 100644
  }
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java b/src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java
 new file mode 100644
-index 000000000..c376446c9
+index 000000000..63167487a
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java
 @@ -0,0 +1,96 @@
 +package de.craftstuebchen.weepermc.packet;
 +
-+import net.minecraft.server.Packet;
++import net.minecraft.network.protocol.Packet;
 +
 +import org.bukkit.Bukkit;
 +import org.bukkit.craftbukkit.entity.CraftPlayer;
@@ -194,19 +195,19 @@ index 000000000..c376446c9
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftEntityMetaBuilder.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftEntityMetaBuilder.java
 new file mode 100644
-index 000000000..b582c8518
+index 000000000..2ef56dfa3
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftEntityMetaBuilder.java
 @@ -0,0 +1,49 @@
 +package de.craftstuebchen.weepermc.packet;
 +
 +import net.md_5.bungee.api.chat.BaseComponent;
-+import net.minecraft.server.DataWatcher;
-+import net.minecraft.server.DataWatcherObject;
-+import net.minecraft.server.DataWatcherRegistry;
-+import net.minecraft.server.IChatBaseComponent;
++import net.minecraft.network.chat.IChatBaseComponent;
++import net.minecraft.network.syncher.DataWatcher;
++import net.minecraft.network.syncher.DataWatcherObject;
 +import de.craftstuebchen.weepermc.packet.options.EntityMetaBuilder;
 +import de.craftstuebchen.weepermc.packet.options.EntityStatus;
++import net.minecraft.network.syncher.DataWatcherRegistry;
 +
 +import java.util.ArrayList;
 +import java.util.List;
@@ -249,25 +250,27 @@ index 000000000..b582c8518
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java
 new file mode 100644
-index 000000000..298a5f0da
+index 000000000..472c365b8
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java
-@@ -0,0 +1,135 @@
+@@ -0,0 +1,137 @@
 +package de.craftstuebchen.weepermc.packet;
 +
 +import com.mojang.datafixers.util.Pair;
 +
 +import de.craftstuebchen.weepermc.packet.options.Animation;
 +import de.craftstuebchen.weepermc.packet.options.TeamMode;
-+import net.minecraft.server.EnumItemSlot;
-+import net.minecraft.server.ItemStack;
-+import net.minecraft.server.PacketPlayOutPlayerInfo;
++import net.minecraft.network.protocol.game.PacketPlayOutPlayerInfo;
 +
 +import org.bukkit.craftbukkit.inventory.CraftItemStack;
 +import org.bukkit.inventory.EquipmentSlot;
 +
 +import de.craftstuebchen.weepermc.packet.options.EntityStatus;
 +import de.craftstuebchen.weepermc.packet.options.ProfileAction;
++import net.minecraft.world.entity.EnumItemSlot;
++import net.minecraft.world.entity.player.PlayerAbilities;
++import net.minecraft.world.item.ItemStack;
++
 +
 +import java.util.ArrayList;
 +import java.util.EnumMap;
@@ -390,7 +393,7 @@ index 000000000..298a5f0da
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketPipeline.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketPipeline.java
 new file mode 100644
-index 000000000..71d9ec3b3
+index 000000000..b623ee695
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketPipeline.java
 @@ -0,0 +1,48 @@
@@ -407,7 +410,7 @@ index 000000000..71d9ec3b3
 +import com.destroystokyo.paper.SkinParts.Builder;
 +
 +import de.craftstuebchen.weepermc.packet.options.EntityMetaBuilder;
-+import net.minecraft.server.Scoreboard;
++import net.minecraft.world.scores.Scoreboard;
 +
 +public class CraftPacketPipeline implements PacketPipeline {
 +
@@ -444,10 +447,10 @@ index 000000000..71d9ec3b3
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java
 new file mode 100644
-index 000000000..af23cfe47
+index 000000000..95a802e00
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java
-@@ -0,0 +1,236 @@
+@@ -0,0 +1,240 @@
 +package de.craftstuebchen.weepermc.packet;
 +
 +import com.destroystokyo.paper.profile.CraftPlayerProfile;
@@ -457,27 +460,7 @@ index 000000000..af23cfe47
 +
 +import de.craftstuebchen.weepermc.packet.ChainablePacketStep.DelayPacketStep;
 +import de.craftstuebchen.weepermc.packet.ChainablePacketStep.NmsPacketStep;
-+import net.minecraft.server.BlockPosition;
-+import net.minecraft.server.DataWatcher;
-+import net.minecraft.server.DataWatcherObject;
-+import net.minecraft.server.DataWatcherRegistry;
-+import net.minecraft.server.EntityPose;
-+import net.minecraft.server.EntityTypes;
-+import net.minecraft.server.EnumGamemode;
-+import net.minecraft.server.Packet;
-+import net.minecraft.server.PacketPlayOutAnimation;
-+import net.minecraft.server.PacketPlayOutBlockBreakAnimation;
-+import net.minecraft.server.PacketPlayOutEntity;
-+import net.minecraft.server.PacketPlayOutEntityDestroy;
-+import net.minecraft.server.PacketPlayOutEntityEquipment;
-+import net.minecraft.server.PacketPlayOutEntityHeadRotation;
-+import net.minecraft.server.PacketPlayOutEntityMetadata;
-+import net.minecraft.server.PacketPlayOutEntityTeleport;
-+import net.minecraft.server.PacketPlayOutNamedEntitySpawn;
-+import net.minecraft.server.PacketPlayOutPlayerInfo;
-+import net.minecraft.server.PacketPlayOutScoreboardTeam;
-+import net.minecraft.server.PacketPlayOutSpawnEntity;
-+import net.minecraft.server.Vec3D;
++import de.craftstuebchen.weepermc.packet.options.PlayerAbility;
 +import org.bukkit.Location;
 +import org.bukkit.block.data.BlockData;
 +import org.bukkit.craftbukkit.inventory.CraftItemStack;
@@ -491,6 +474,30 @@ index 000000000..af23cfe47
 +import de.craftstuebchen.weepermc.packet.options.EntityMetaBuilder;
 +import de.craftstuebchen.weepermc.packet.options.ProfileAction;
 +import de.craftstuebchen.weepermc.packet.options.TeamMode;
++import net.minecraft.core.BlockPosition;
++import net.minecraft.network.protocol.Packet;
++import net.minecraft.network.protocol.game.PacketPlayOutAbilities;
++import net.minecraft.network.protocol.game.PacketPlayOutAnimation;
++import net.minecraft.network.protocol.game.PacketPlayOutBlockBreakAnimation;
++import net.minecraft.network.protocol.game.PacketPlayOutEntity;
++import net.minecraft.network.protocol.game.PacketPlayOutEntityDestroy;
++import net.minecraft.network.protocol.game.PacketPlayOutEntityEquipment;
++import net.minecraft.network.protocol.game.PacketPlayOutEntityHeadRotation;
++import net.minecraft.network.protocol.game.PacketPlayOutEntityMetadata;
++import net.minecraft.network.protocol.game.PacketPlayOutEntityTeleport;
++import net.minecraft.network.protocol.game.PacketPlayOutNamedEntitySpawn;
++import net.minecraft.network.protocol.game.PacketPlayOutPlayerInfo;
++import net.minecraft.network.protocol.game.PacketPlayOutScoreboardTeam;
++import net.minecraft.network.protocol.game.PacketPlayOutSpawnEntity;
++import net.minecraft.network.syncher.DataWatcher;
++import net.minecraft.network.syncher.DataWatcherObject;
++import net.minecraft.network.syncher.DataWatcherRegistry;
++import net.minecraft.world.entity.EntityPose;
++import net.minecraft.world.entity.EntityTypes;
++import net.minecraft.world.entity.player.PlayerAbilities;
++import net.minecraft.world.level.EnumGamemode;
++import net.minecraft.world.phys.Vec3D;
++
 +import org.bukkit.plugin.java.JavaPlugin;
 +import org.bukkit.scoreboard.Team;
 +import org.bukkit.util.Vector;
@@ -684,11 +691,19 @@ index 000000000..af23cfe47
 +        return new ChainablePacketStep(new NmsPacketStep(packet));
 +    }
 +}
-diff --git a/src/main/java/net/minecraft/server/PacketPlayOutAnimation.java b/src/main/java/net/minecraft/server/PacketPlayOutAnimation.java
-index 0d0311823..ee1133ec0 100644
---- a/src/main/java/net/minecraft/server/PacketPlayOutAnimation.java
-+++ b/src/main/java/net/minecraft/server/PacketPlayOutAnimation.java
-@@ -14,6 +14,13 @@ public class PacketPlayOutAnimation implements Packet<PacketListenerPlayOut> {
+diff --git a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutAnimation.java b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutAnimation.java
+index 874b57c24..59cab42c7 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutAnimation.java
++++ b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutAnimation.java
+@@ -5,6 +5,7 @@ import net.minecraft.network.PacketDataSerializer;
+ import net.minecraft.network.protocol.Packet;
+ import net.minecraft.world.entity.Entity;
+ 
++
+ public class PacketPlayOutAnimation implements Packet<PacketListenerPlayOut> {
+ 
+     private int a;
+@@ -17,6 +18,13 @@ public class PacketPlayOutAnimation implements Packet<PacketListenerPlayOut> {
          this.b = i;
      }
  
@@ -702,11 +717,19 @@ index 0d0311823..ee1133ec0 100644
      @Override
      public void a(PacketDataSerializer packetdataserializer) throws IOException {
          this.a = packetdataserializer.i();
-diff --git a/src/main/java/net/minecraft/server/PacketPlayOutEntityHeadRotation.java b/src/main/java/net/minecraft/server/PacketPlayOutEntityHeadRotation.java
-index 62e85edfa..383daecb2 100644
---- a/src/main/java/net/minecraft/server/PacketPlayOutEntityHeadRotation.java
-+++ b/src/main/java/net/minecraft/server/PacketPlayOutEntityHeadRotation.java
-@@ -14,6 +14,13 @@ public class PacketPlayOutEntityHeadRotation implements Packet<PacketListenerPla
+diff --git a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityHeadRotation.java b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityHeadRotation.java
+index cb14309f1..ff9e9bb3a 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityHeadRotation.java
++++ b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityHeadRotation.java
+@@ -5,6 +5,7 @@ import net.minecraft.network.PacketDataSerializer;
+ import net.minecraft.network.protocol.Packet;
+ import net.minecraft.world.entity.Entity;
+ 
++
+ public class PacketPlayOutEntityHeadRotation implements Packet<PacketListenerPlayOut> {
+ 
+     private int a;
+@@ -17,6 +18,13 @@ public class PacketPlayOutEntityHeadRotation implements Packet<PacketListenerPla
          this.b = b0;
      }
  
@@ -720,11 +743,19 @@ index 62e85edfa..383daecb2 100644
      @Override
      public void a(PacketDataSerializer packetdataserializer) throws IOException {
          this.a = packetdataserializer.i();
-diff --git a/src/main/java/net/minecraft/server/PacketPlayOutEntityMetadata.java b/src/main/java/net/minecraft/server/PacketPlayOutEntityMetadata.java
-index 39f5e7389..c931ab1a0 100644
---- a/src/main/java/net/minecraft/server/PacketPlayOutEntityMetadata.java
-+++ b/src/main/java/net/minecraft/server/PacketPlayOutEntityMetadata.java
-@@ -10,6 +10,12 @@ public class PacketPlayOutEntityMetadata implements Packet<PacketListenerPlayOut
+diff --git a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityMetadata.java b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityMetadata.java
+index 650823c6f..fa12062a8 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityMetadata.java
++++ b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityMetadata.java
+@@ -6,6 +6,7 @@ import net.minecraft.network.PacketDataSerializer;
+ import net.minecraft.network.protocol.Packet;
+ import net.minecraft.network.syncher.DataWatcher;
+ 
++
+ public class PacketPlayOutEntityMetadata implements Packet<PacketListenerPlayOut> {
+ 
+     private int a;
+@@ -13,6 +14,13 @@ public class PacketPlayOutEntityMetadata implements Packet<PacketListenerPlayOut
  
      public PacketPlayOutEntityMetadata() {}
  
@@ -734,17 +765,26 @@ index 39f5e7389..c931ab1a0 100644
 +        this.b = datawatcherItemList;
 +    }
 +    // Paper - end
++
      public PacketPlayOutEntityMetadata(int i, DataWatcher datawatcher, boolean flag) {
          this.a = i;
          if (flag) {
-diff --git a/src/main/java/net/minecraft/server/PacketPlayOutEntityTeleport.java b/src/main/java/net/minecraft/server/PacketPlayOutEntityTeleport.java
-index 6a815c11f..dc7f353a9 100644
---- a/src/main/java/net/minecraft/server/PacketPlayOutEntityTeleport.java
-+++ b/src/main/java/net/minecraft/server/PacketPlayOutEntityTeleport.java
-@@ -23,6 +23,17 @@ public class PacketPlayOutEntityTeleport implements Packet<PacketListenerPlayOut
-         this.f = (byte) ((int) (entity.pitch * 256.0F / 360.0F));
+diff --git a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityTeleport.java b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityTeleport.java
+index d72ac54bd..53f466291 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityTeleport.java
++++ b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityTeleport.java
+@@ -5,6 +5,7 @@ import net.minecraft.network.PacketDataSerializer;
+ import net.minecraft.network.protocol.Packet;
+ import net.minecraft.world.entity.Entity;
+ 
++
+ public class PacketPlayOutEntityTeleport implements Packet<PacketListenerPlayOut> {
+ 
+     private int a;
+@@ -27,6 +28,18 @@ public class PacketPlayOutEntityTeleport implements Packet<PacketListenerPlayOut
          this.g = entity.isOnGround();
      }
+ 
 +    // Paper start
 +    public PacketPlayOutEntityTeleport(int entityId, org.bukkit.Location location, boolean isOnGround) {
 +        this.a = entityId;
@@ -756,14 +796,20 @@ index 6a815c11f..dc7f353a9 100644
 +        this.g = isOnGround;
 +    }
 +    // Paper end
- 
++
      @Override
      public void a(PacketDataSerializer packetdataserializer) throws IOException {
-diff --git a/src/main/java/net/minecraft/server/PacketPlayOutNamedEntitySpawn.java b/src/main/java/net/minecraft/server/PacketPlayOutNamedEntitySpawn.java
-index fc0197c46..39a9896e7 100644
---- a/src/main/java/net/minecraft/server/PacketPlayOutNamedEntitySpawn.java
-+++ b/src/main/java/net/minecraft/server/PacketPlayOutNamedEntitySpawn.java
-@@ -25,6 +25,18 @@ public class PacketPlayOutNamedEntitySpawn implements Packet<PacketListenerPlayO
+         this.a = packetdataserializer.i();
+diff --git a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutNamedEntitySpawn.java b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutNamedEntitySpawn.java
+index fc897db28..849f43557 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutNamedEntitySpawn.java
++++ b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutNamedEntitySpawn.java
+@@ -1,3 +1,4 @@
++
+ package net.minecraft.network.protocol.game;
+ 
+ import java.io.IOException;
+@@ -28,6 +29,18 @@ public class PacketPlayOutNamedEntitySpawn implements Packet<PacketListenerPlayO
          this.g = (byte) ((int) (entityhuman.pitch * 256.0F / 360.0F));
      }
  
@@ -782,14 +828,23 @@ index fc0197c46..39a9896e7 100644
      @Override
      public void a(PacketDataSerializer packetdataserializer) throws IOException {
          this.a = packetdataserializer.i();
-diff --git a/src/main/java/net/minecraft/server/PacketPlayOutPlayerInfo.java b/src/main/java/net/minecraft/server/PacketPlayOutPlayerInfo.java
-index 9a48a4e90..91a5dd2fb 100644
---- a/src/main/java/net/minecraft/server/PacketPlayOutPlayerInfo.java
-+++ b/src/main/java/net/minecraft/server/PacketPlayOutPlayerInfo.java
-@@ -16,6 +16,13 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
+diff --git a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutPlayerInfo.java b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutPlayerInfo.java
+index 2758cf87f..3a317271a 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutPlayerInfo.java
++++ b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutPlayerInfo.java
+@@ -14,6 +14,7 @@ import net.minecraft.network.protocol.Packet;
+ import net.minecraft.server.level.EntityPlayer;
+ import net.minecraft.world.level.EnumGamemode;
+ 
++
+ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
+ 
+     private PacketPlayOutPlayerInfo.EnumPlayerInfoAction a;
+@@ -21,6 +22,14 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
  
      public PacketPlayOutPlayerInfo() {}
  
++
 +    // Paper start
 +    public PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction packetplayoutplayerinfo_enumplayerinfoaction, List<PlayerInfoData> playerInfoData){
 +        this.a = packetplayoutplayerinfo_enumplayerinfoaction;
@@ -800,7 +855,7 @@ index 9a48a4e90..91a5dd2fb 100644
      public PacketPlayOutPlayerInfo(PacketPlayOutPlayerInfo.EnumPlayerInfoAction packetplayoutplayerinfo_enumplayerinfoaction, EntityPlayer... aentityplayer) {
          this.a = packetplayoutplayerinfo_enumplayerinfoaction;
          EntityPlayer[] aentityplayer1 = aentityplayer;
-@@ -167,7 +174,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
+@@ -172,7 +181,7 @@ public class PacketPlayOutPlayerInfo implements Packet<PacketListenerPlayOut> {
          return MoreObjects.toStringHelper(this).add("action", this.a).add("entries", this.b).toString();
      }
  
@@ -809,8 +864,72 @@ index 9a48a4e90..91a5dd2fb 100644
  
          private final int b;
          private final EnumGamemode c;
+diff --git a/src/main/java/net/minecraft/server/level/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/level/EntityTrackerEntry.java
+index f65eb0168..927bbb28f 100644
+--- a/src/main/java/net/minecraft/server/level/EntityTrackerEntry.java
++++ b/src/main/java/net/minecraft/server/level/EntityTrackerEntry.java
+@@ -442,4 +442,59 @@ public class EntityTrackerEntry {
+         }
+ 
+     }
++
++    public static SkinParts.Builder newBuilder(){
++        return new Builder();
++    }
++
++    public static class Builder implements SkinParts.Builder{
++        private int raw = 0;
++
++        private static final int CAPE = 0x01;
++        private static final int JACKET = 0x02;
++        private static final int LEFT_SLEEVE = 0x04;
++        private static final int RIGHT_SLEEVE = 0x08;
++        private static final int LEFT_PANTS = 0x10;
++        private static final int RIGHT_PANTS = 0x20;
++        private static final int HAT = 0x40;
++
++        public Builder withCape(){
++            raw |= CAPE;
++            return this;
++        }
++
++        public Builder withJacket(){
++            raw |= JACKET;
++            return this;
++        }
++
++        public Builder withLeftSleeve(){
++            raw |= LEFT_SLEEVE;
++            return this;
++        }
++
++        public Builder withRightSleeve(){
++            raw |= RIGHT_SLEEVE;
++            return this;
++        }
++
++        public Builder withLeftPants(){
++            raw |= LEFT_PANTS;
++            return this;
++        }
++
++        public Builder withRightPants(){
++            raw |= RIGHT_PANTS;
++            return this;
++        }
++
++        public Builder withHat(){
++            raw |= HAT;
++            return this;
++        }
++
++        public SkinParts build(){
++            return new PaperSkinParts(raw);
++        }
++    }
+ }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 95d87b461..d6f3fc5d4 100644
+index 669bf8117..0b97f8675 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -2491,5 +2491,11 @@ public final class CraftServer implements Server {
@@ -826,7 +945,7 @@ index 95d87b461..d6f3fc5d4 100644
      // Paper end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-index 5a6de5e5a..d27f40222 100644
+index 88bc3fbfa..30329c5e7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 @@ -21,7 +21,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
@@ -839,7 +958,7 @@ index 5a6de5e5a..d27f40222 100644
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-index 2b75210cd..7a21beeaf 100644
+index d637c2941..92855cfb5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 @@ -15,14 +15,20 @@ import org.bukkit.scoreboard.Team;

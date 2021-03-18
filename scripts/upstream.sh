@@ -2,11 +2,13 @@
 # get base dir regardless of execution location
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
-	DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
-	SOURCE="$(readlink "$SOURCE")"
-	[[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+    DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+    SOURCE="$(readlink "$SOURCE")"
+    [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
-. $(dirname "$SOURCE")/init.sh
+. $(dirname $SOURCE)/init.sh
+
+git submodule update --init --recursive
 
 if [[ "$1" == up* ]]; then
 	(
@@ -26,11 +28,11 @@ cd "Paper-Server" || exit
 mcVer=$(mvn -o org.apache.maven.plugins:maven-help-plugin:2.1.1:evaluate -Dexpression=minecraft_version | sed -n -e '/^\[.*\]/ !{ /^[0-9]/ { p; q } }')
 
 basedir
-. $basedir/scripts/importmcdev.sh
+. "$basedir"/scripts/importmcdev.sh
 
-minecraftversion=$(cat $basedir/Paper/work/BuildData/info.json | grep minecraftVersion | cut -d '"' -f 4)
+minecraftversion=$(cat "$basedir"/Paper/work/BuildData/info.json | grep minecraftVersion | cut -d '"' -f 4)
 version=$(echo -e "Paper: $paperVer\nmc-dev:$importedmcdev")
-tag="${minecraftversion}-${mcVer}-$(echo -e "$version" | shasum | awk '{print $1}')"
+tag="${minecraftversion}-${mcVer}-$(echo -e $version | shasum | awk '{print $1}')"
 echo "$tag" > "$basedir"/current-paper
 
 "$basedir"/scripts/generatesources.sh

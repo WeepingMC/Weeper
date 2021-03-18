@@ -1,4 +1,4 @@
-From 0a0814d1ecab70f867da4628bf44bd0be3f442c6 Mon Sep 17 00:00:00 2001
+From 49823af178241bc737953e391d2679be036b4955 Mon Sep 17 00:00:00 2001
 From: Yannick Lamprecht <yannicklamprecht@live.de>
 Date: Fri, 1 Jan 2021 16:40:22 +0100
 Subject: [PATCH] MonsterEggSpawnEvent
@@ -10,7 +10,7 @@ Subject: [PATCH] MonsterEggSpawnEvent
 
 diff --git a/src/main/java/de/craftstuebchen/weepermc/event/MonsterEggSpawnEvent.java b/src/main/java/de/craftstuebchen/weepermc/event/MonsterEggSpawnEvent.java
 new file mode 100644
-index 00000000..b29f3df6
+index 000000000..b29f3df63
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/event/MonsterEggSpawnEvent.java
 @@ -0,0 +1,83 @@
@@ -98,5 +98,5 @@ index 00000000..b29f3df6
 +  }
 +}
 -- 
-2.30.0
+2.30.1
 

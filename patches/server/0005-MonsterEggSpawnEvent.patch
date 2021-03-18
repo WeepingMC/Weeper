@@ -1,17 +1,17 @@
-From 9e4b065fd2fd4c9b9dcee21a3a1d4fc15eb8e75f Mon Sep 17 00:00:00 2001
+From 9560308d8d8ce828021ed8fc7117f9415c144ac9 Mon Sep 17 00:00:00 2001
 From: Yannick Lamprecht <yannicklamprecht@live.de>
 Date: Fri, 1 Jan 2021 16:45:28 +0100
 Subject: [PATCH] MonsterEggSpawnEvent
 
 ---
- .../java/net/minecraft/server/EntityTypes.java    | 15 +++++++++++++++
+ .../net/minecraft/world/entity/EntityTypes.java   | 15 +++++++++++++++
  1 file changed, 15 insertions(+)
 
-diff --git a/src/main/java/net/minecraft/server/EntityTypes.java b/src/main/java/net/minecraft/server/EntityTypes.java
-index bf914dc5e..7c78b645e 100644
---- a/src/main/java/net/minecraft/server/EntityTypes.java
-+++ b/src/main/java/net/minecraft/server/EntityTypes.java
-@@ -177,6 +177,21 @@ public class EntityTypes<T extends Entity> {
+diff --git a/src/main/java/net/minecraft/world/entity/EntityTypes.java b/src/main/java/net/minecraft/world/entity/EntityTypes.java
+index f2cf33d42..fefa4954e 100644
+--- a/src/main/java/net/minecraft/world/entity/EntityTypes.java
++++ b/src/main/java/net/minecraft/world/entity/EntityTypes.java
+@@ -308,6 +308,21 @@ public class EntityTypes<T extends Entity> {
  
      @Nullable
      public Entity spawnCreature(WorldServer worldserver, @Nullable ItemStack itemstack, @Nullable EntityHuman entityhuman, BlockPosition blockposition, EnumMobSpawn enummobspawn, boolean flag, boolean flag1) {
@@ -34,5 +34,5 @@ index bf914dc5e..7c78b645e 100644
      }
  
 -- 
-2.30.0
+2.30.1
 

@@ -1,4 +1,4 @@
-From 8fd6a1d9a9710980d5705f9561d4316b3973e773 Mon Sep 17 00:00:00 2001
+From fcd200e860293ed2237e5a3dbc4a0141e0f1029e Mon Sep 17 00:00:00 2001
 From: Techcable <techcable@techcable.net>
 Date: Sun, 20 Dec 2020 14:21:32 +0100
 Subject: [PATCH] Fix hopper lag by making entities look for hoppers.
@@ -21,15 +21,15 @@ which is why it can be disabled in the configuration.
 Co-authored-by: Yannick Lamprecht <yannicklamprecht@live.de>
 ---
  .../destroystokyo/paper/PaperWorldConfig.java | 10 ++
- .../java/io/papermc/paper/HopperPusher.java   | 95 +++++++++++++++++++
- .../java/net/minecraft/server/EntityItem.java | 19 +++-
- .../server/EntityMinecartContainer.java       | 28 +++++-
- .../minecraft/server/TileEntityHopper.java    | 43 ++++++++-
- 5 files changed, 189 insertions(+), 6 deletions(-)
+ .../java/io/papermc/paper/HopperPusher.java   | 96 +++++++++++++++++++
+ .../world/entity/item/EntityItem.java         | 20 +++-
+ .../vehicle/EntityMinecartContainer.java      | 29 +++++-
+ .../level/block/entity/TileEntityHopper.java  | 43 ++++++++-
+ 5 files changed, 192 insertions(+), 6 deletions(-)
  create mode 100644 src/main/java/io/papermc/paper/HopperPusher.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index fd675585c..b8e3673c3 100644
+index 921253a06..06ed2cf5e 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 @@ -815,4 +815,14 @@ public class PaperWorldConfig {
@@ -49,20 +49,21 @@ index fd675585c..b8e3673c3 100644
  }
 diff --git a/src/main/java/io/papermc/paper/HopperPusher.java b/src/main/java/io/papermc/paper/HopperPusher.java
 new file mode 100644
-index 000000000..8dff63d32
+index 000000000..b30166bc0
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/HopperPusher.java
-@@ -0,0 +1,95 @@
+@@ -0,0 +1,96 @@
 +package io.papermc.paper;
 +
-+import net.minecraft.server.AxisAlignedBB;
-+import net.minecraft.server.BlockPosition;
-+import net.minecraft.server.Blocks;
-+import net.minecraft.server.Entity;
++import net.minecraft.world.level.World;
++import net.minecraft.world.level.block.entity.TileEntity;
++import net.minecraft.world.level.block.entity.TileEntityHopper;
++import net.minecraft.world.phys.AxisAlignedBB;
++import net.minecraft.core.BlockPosition;
++import net.minecraft.world.level.block.Blocks;
++import net.minecraft.world.entity.Entity;
 +import net.minecraft.server.MinecraftServer;
-+import net.minecraft.server.TileEntity;
-+import net.minecraft.server.TileEntityHopper;
-+import net.minecraft.server.World;
++
 +
 +public interface HopperPusher {
 +
@@ -148,11 +149,19 @@ index 000000000..8dff63d32
 +        }
 +    }
 +}
-diff --git a/src/main/java/net/minecraft/server/EntityItem.java b/src/main/java/net/minecraft/server/EntityItem.java
-index 5dfb54e17..aa48b3dba 100644
---- a/src/main/java/net/minecraft/server/EntityItem.java
-+++ b/src/main/java/net/minecraft/server/EntityItem.java
-@@ -13,7 +13,9 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
+diff --git a/src/main/java/net/minecraft/world/entity/item/EntityItem.java b/src/main/java/net/minecraft/world/entity/item/EntityItem.java
+index 575833807..830dbff3c 100644
+--- a/src/main/java/net/minecraft/world/entity/item/EntityItem.java
++++ b/src/main/java/net/minecraft/world/entity/item/EntityItem.java
+@@ -29,6 +29,7 @@ import net.minecraft.world.item.Item;
+ import net.minecraft.world.item.ItemStack;
+ import net.minecraft.world.item.Items;
+ import net.minecraft.world.level.World;
++import net.minecraft.world.level.block.entity.TileEntityHopper;
+ import net.minecraft.world.phys.Vec3D;
+ 
+ // CraftBukkit start
+@@ -39,7 +40,9 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
  // CraftBukkit end
  import org.bukkit.event.player.PlayerAttemptPickupItemEvent; // Paper
  
@@ -163,7 +172,7 @@ index 5dfb54e17..aa48b3dba 100644
  
      private static final DataWatcherObject<ItemStack> ITEM = DataWatcher.a(EntityItem.class, DataWatcherRegistry.g);
      public int age;
-@@ -43,6 +45,19 @@ public class EntityItem extends Entity {
+@@ -69,6 +72,19 @@ public class EntityItem extends Entity {
          this.setItemStack(itemstack);
      }
  
@@ -183,7 +192,7 @@ index 5dfb54e17..aa48b3dba 100644
      @Override
      protected boolean playStepSound() {
          return false;
-@@ -59,6 +74,7 @@ public class EntityItem extends Entity {
+@@ -85,6 +101,7 @@ public class EntityItem extends Entity {
              this.die();
          } else {
              super.tick();
@@ -191,7 +200,7 @@ index 5dfb54e17..aa48b3dba 100644
              // CraftBukkit start - Use wall time for pickup and despawn timers
              int elapsedTicks = MinecraftServer.currentTick - this.lastTick;
              if (this.pickupDelay != 32767) this.pickupDelay -= elapsedTicks;
-@@ -152,6 +168,7 @@ public class EntityItem extends Entity {
+@@ -178,6 +195,7 @@ public class EntityItem extends Entity {
      // Spigot start - copied from above
      @Override
      public void inactiveTick() {
@@ -199,11 +208,19 @@ index 5dfb54e17..aa48b3dba 100644
          // CraftBukkit start - Use wall time for pickup and despawn timers
          int elapsedTicks = MinecraftServer.currentTick - this.lastTick;
          if (this.pickupDelay != 32767) this.pickupDelay -= elapsedTicks;
-diff --git a/src/main/java/net/minecraft/server/EntityMinecartContainer.java b/src/main/java/net/minecraft/server/EntityMinecartContainer.java
-index 8e13aebb7..2625d3f5d 100644
---- a/src/main/java/net/minecraft/server/EntityMinecartContainer.java
-+++ b/src/main/java/net/minecraft/server/EntityMinecartContainer.java
-@@ -9,9 +9,10 @@ import org.bukkit.Location;
+diff --git a/src/main/java/net/minecraft/world/entity/vehicle/EntityMinecartContainer.java b/src/main/java/net/minecraft/world/entity/vehicle/EntityMinecartContainer.java
+index 0166d11cb..242d3b188 100644
+--- a/src/main/java/net/minecraft/world/entity/vehicle/EntityMinecartContainer.java
++++ b/src/main/java/net/minecraft/world/entity/vehicle/EntityMinecartContainer.java
+@@ -24,6 +24,7 @@ import net.minecraft.world.inventory.Container;
+ import net.minecraft.world.item.ItemStack;
+ import net.minecraft.world.level.GameRules;
+ import net.minecraft.world.level.World;
++import net.minecraft.world.level.block.entity.TileEntityHopper;
+ import net.minecraft.world.level.storage.loot.LootTable;
+ import net.minecraft.world.level.storage.loot.LootTableInfo;
+ import net.minecraft.world.level.storage.loot.parameters.LootContextParameterSets;
+@@ -35,9 +36,10 @@ import org.bukkit.Location;
  import org.bukkit.craftbukkit.entity.CraftHumanEntity;
  import org.bukkit.entity.HumanEntity;
  import org.bukkit.inventory.InventoryHolder;
@@ -215,7 +232,7 @@ index 8e13aebb7..2625d3f5d 100644
  
      private NonNullList<ItemStack> items;
      private boolean c;
-@@ -46,6 +47,31 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
+@@ -72,6 +74,31 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
          return null;
      }
  
@@ -247,11 +264,11 @@ index 8e13aebb7..2625d3f5d 100644
      @Override
      public int getMaxStackSize() {
          return maxStack;
-diff --git a/src/main/java/net/minecraft/server/TileEntityHopper.java b/src/main/java/net/minecraft/server/TileEntityHopper.java
-index d432de40e..985d8eb16 100644
---- a/src/main/java/net/minecraft/server/TileEntityHopper.java
-+++ b/src/main/java/net/minecraft/server/TileEntityHopper.java
-@@ -58,6 +58,12 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+diff --git a/src/main/java/net/minecraft/world/level/block/entity/TileEntityHopper.java b/src/main/java/net/minecraft/world/level/block/entity/TileEntityHopper.java
+index 537dc52e5..c76cd906f 100644
+--- a/src/main/java/net/minecraft/world/level/block/entity/TileEntityHopper.java
++++ b/src/main/java/net/minecraft/world/level/block/entity/TileEntityHopper.java
+@@ -86,6 +86,12 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
          this.j = -1;
      }
  
@@ -264,7 +281,7 @@ index d432de40e..985d8eb16 100644
      @Override
      public void load(IBlockData iblockdata, NBTTagCompound nbttagcompound) {
          super.load(iblockdata, nbttagcompound);
-@@ -117,7 +123,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -145,7 +151,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
                  boolean result = this.a(() -> {
                      return a((IHopper) this);
                  });
@@ -273,7 +290,7 @@ index d432de40e..985d8eb16 100644
                      this.setCooldown(this.world.spigotConfig.hopperCheck);
                  }
                  // Spigot end
-@@ -152,6 +158,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -180,6 +186,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
          }
      }
  
@@ -281,7 +298,7 @@ index d432de40e..985d8eb16 100644
      private boolean j() {
          Iterator iterator = this.items.iterator();
  
-@@ -320,10 +327,20 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -348,10 +355,20 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
              ((EntityMinecartHopper) hopper).setCooldown(hopper.getWorld().spigotConfig.hopperTransfer / 2);
          }
      }
@@ -303,7 +320,7 @@ index d432de40e..985d8eb16 100644
  
          if (iinventory == null) {
              return false;
-@@ -431,8 +448,21 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -459,8 +476,21 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
      }
  
      public static boolean a(IHopper ihopper) {
@@ -326,7 +343,7 @@ index d432de40e..985d8eb16 100644
          if (iinventory != null) {
              EnumDirection enumdirection = EnumDirection.DOWN;
  
-@@ -447,7 +477,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -475,7 +505,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
                  }
              });
              // Paper end
@@ -335,7 +352,7 @@ index d432de40e..985d8eb16 100644
              Iterator iterator = c(ihopper).iterator();
  
              EntityItem entityitem;
-@@ -462,6 +492,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -490,6 +520,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
  
              return true;
          }
@@ -343,7 +360,7 @@ index d432de40e..985d8eb16 100644
      }
  
      private static boolean a(IHopper ihopper, IInventory iinventory, int i, EnumDirection enumdirection) {// Paper - method unused as logic is inlined above
-@@ -511,6 +542,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -539,6 +570,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
          return false;
      }
  
@@ -351,7 +368,7 @@ index d432de40e..985d8eb16 100644
      public static boolean a(IInventory iinventory, EntityItem entityitem) {
          boolean flag = false;
          // CraftBukkit start
-@@ -616,6 +648,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -644,6 +676,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
          return b(this.getWorld(), this.position.shift(enumdirection));
      }
  
@@ -359,7 +376,7 @@ index d432de40e..985d8eb16 100644
      @Nullable
      public static IInventory b(IHopper ihopper) {
          return a(ihopper.getWorld(), ihopper.x(), ihopper.z() + 1.0D, ihopper.A());
-@@ -637,6 +670,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -665,6 +698,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
          return a(world, (double) blockposition.getX() + 0.5D, (double) blockposition.getY() + 0.5D, (double) blockposition.getZ() + 0.5D, true); // Paper
      }
  
@@ -367,7 +384,7 @@ index d432de40e..985d8eb16 100644
      @Nullable
      public static IInventory a(World world, double d0, double d1, double d2) { return a(world, d0, d1, d2, false); } // Paper - overload to default false
      public static IInventory a(World world, double d0, double d1, double d2, boolean optimizeEntities) { // Paper
-@@ -693,6 +727,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
+@@ -721,6 +755,7 @@ public class TileEntityHopper extends TileEntityLootable implements IHopper, ITi
          this.j = i;
      }
  

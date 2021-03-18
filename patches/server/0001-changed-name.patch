@@ -1,17 +1,17 @@
-From 6c1f4a9e29f986f310a9448d9713af872f883c5b Mon Sep 17 00:00:00 2001
+From fd4e8d87c9cfb7fad4b6c1e7ed062d4b2516a900 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 5 Oct 2020 19:09:35 +0200
 Subject: [PATCH] changed name
 
 ---
- pom.xml                                       | 24 +++++++++----------
+ pom.xml                                       | 27 ++++++++++---------
  .../net/minecraft/server/MinecraftServer.java |  2 +-
  .../org/bukkit/craftbukkit/CraftServer.java   |  2 +-
  .../bukkit/craftbukkit/util/Versioning.java   |  2 +-
- 4 files changed, 15 insertions(+), 15 deletions(-)
+ 4 files changed, 18 insertions(+), 15 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index 9ba379b7e..17b9916e5 100644
+index 25ec9c4f8..5b0c23854 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,11 +1,11 @@
@@ -59,7 +59,7 @@ index 9ba379b7e..17b9916e5 100644
              <version>${project.version}</version>
              <scope>compile</scope>
          </dependency>
-@@ -173,7 +173,7 @@
+@@ -153,7 +153,7 @@
  
      <!-- This builds a completely 'ready to start' jar with all dependencies inside -->
      <build>
@@ -68,11 +68,21 @@ index 9ba379b7e..17b9916e5 100644
          <defaultGoal>clean install</defaultGoal> <!-- Paper -->
          <plugins>
              <plugin>
+@@ -319,6 +319,9 @@
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-compiler-plugin</artifactId>
+                 <version>3.8.1</version>
++                <configuration>
++                    <forceJavacCompilerUse>true</forceJavacCompilerUse>
++                </configuration>
+                 <dependencies>
+                     <dependency>
+                         <groupId>org.codehaus.plexus</groupId>
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index c572ef283..8ed6657dc 100644
+index c372e6897..df9208c0c 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1457,7 +1457,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
+@@ -1569,7 +1569,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
      }
  
      public String getServerModName() {
@@ -82,7 +92,7 @@ index c572ef283..8ed6657dc 100644
  
      public CrashReport b(CrashReport crashreport) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 1398b1840..95d87b461 100644
+index 03b8d67a5..669bf8117 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -232,7 +232,7 @@ import javax.annotation.Nullable; // Paper
