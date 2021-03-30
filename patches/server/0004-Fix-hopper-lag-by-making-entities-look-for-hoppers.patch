@@ -1,4 +1,4 @@
-From fcd200e860293ed2237e5a3dbc4a0141e0f1029e Mon Sep 17 00:00:00 2001
+From f08c12820586a1101c7e13af7debc14f124f4c0c Mon Sep 17 00:00:00 2001
 From: Techcable <techcable@techcable.net>
 Date: Sun, 20 Dec 2020 14:21:32 +0100
 Subject: [PATCH] Fix hopper lag by making entities look for hoppers.
@@ -20,19 +20,19 @@ which is why it can be disabled in the configuration.
 
 Co-authored-by: Yannick Lamprecht <yannicklamprecht@live.de>
 ---
- .../destroystokyo/paper/PaperWorldConfig.java | 10 ++
- .../java/io/papermc/paper/HopperPusher.java   | 96 +++++++++++++++++++
- .../world/entity/item/EntityItem.java         | 20 +++-
- .../vehicle/EntityMinecartContainer.java      | 29 +++++-
- .../level/block/entity/TileEntityHopper.java  | 43 ++++++++-
- 5 files changed, 192 insertions(+), 6 deletions(-)
+ .../destroystokyo/paper/PaperWorldConfig.java |  5 ++
+ .../java/io/papermc/paper/HopperPusher.java   | 50 +++++++++++++++++++
+ .../world/entity/item/EntityItem.java         | 14 +++++-
+ .../vehicle/EntityMinecartContainer.java      | 23 ++++++++-
+ .../level/block/entity/TileEntityHopper.java  | 43 ++++++++++++++--
+ 5 files changed, 129 insertions(+), 6 deletions(-)
  create mode 100644 src/main/java/io/papermc/paper/HopperPusher.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-index 921253a06..06ed2cf5e 100644
+index 921253a06..536ab7fa4 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperWorldConfig.java
-@@ -815,4 +815,14 @@ public class PaperWorldConfig {
+@@ -815,4 +815,9 @@ public class PaperWorldConfig {
      private void allowUsingSignsInsideSpawnProtection() {
          allowUsingSignsInsideSpawnProtection = getBoolean("allow-using-signs-inside-spawn-protection", allowUsingSignsInsideSpawnProtection);
      }
@@ -41,18 +41,13 @@ index 921253a06..06ed2cf5e 100644
 +    private void isHopperPushBased() {
 +        isHopperPushBased = getBoolean("hopper.push-based", true);
 +    }
-+
-+    public int entitySearchForHopperDelay;
-+    private void entitySearchForHopperDelay() {
-+        entitySearchForHopperDelay = getInt("hopper.entity-search-for-hopper-delay", 200);
-+    }
  }
 diff --git a/src/main/java/io/papermc/paper/HopperPusher.java b/src/main/java/io/papermc/paper/HopperPusher.java
 new file mode 100644
-index 000000000..b30166bc0
+index 000000000..24f8de578
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/HopperPusher.java
-@@ -0,0 +1,96 @@
+@@ -0,0 +1,50 @@
 +package io.papermc.paper;
 +
 +import net.minecraft.world.level.World;
@@ -62,7 +57,6 @@ index 000000000..b30166bc0
 +import net.minecraft.core.BlockPosition;
 +import net.minecraft.world.level.block.Blocks;
 +import net.minecraft.world.entity.Entity;
-+import net.minecraft.server.MinecraftServer;
 +
 +
 +public interface HopperPusher {
@@ -87,32 +81,11 @@ index 000000000..b30166bc0
 +        if (!((Entity) this).getWorld().paperConfig.isHopperPushBased) {
 +            return false;
 +        }
-+        CheckData checkData = getCheckData();
-+        TileEntityHopper hopper = null;
-+        if(!hasMoved()){
-+            if (checkData.getHopperPosition() != null) {
-+                hopper = getHopper(((Entity) this).getWorld(), checkData.getHopperPosition());
-+            }
-+        }
-+        if(hopper == null && waitedLongEnoughOrMoved(checkData)) {
-+            hopper = findHopper();
-+            if (hopper != null) {
-+                checkData.setHopperPosition(hopper.getBlockPosition());
-+            }
-+            checkData.updateLastChecked();
-+        }
++
++        TileEntityHopper hopper = findHopper();
 +        return hopper != null && hopper.canAcceptItems() && acceptItem(hopper);
 +    }
 +
-+    default boolean waitedLongEnoughOrMoved(CheckData checkData){
-+        return hasMoved() ||
-+            net.minecraft.server.MinecraftServer.currentTick - checkData.getLastChecked() > ((Entity) this).getWorld().paperConfig.entitySearchForHopperDelay;
-+    }
-+
-+    default boolean hasMoved(){
-+        Entity entity = (Entity) this;
-+        return (entity.locX() == entity.lastX && entity.locY() == entity.lastY && entity.locZ() == entity.lastZ);
-+    }
 +
 +    static TileEntityHopper getHopper(World world, BlockPosition pos) {
 +        if (world.getType(pos).getBlock() != Blocks.HOPPER) {
@@ -124,33 +97,9 @@ index 000000000..b30166bc0
 +        }
 +        return null;
 +    }
-+
-+    CheckData getCheckData();
-+
-+    class CheckData {
-+
-+        private long lastChecked;
-+        private BlockPosition hopperPosition;
-+
-+        public void updateLastChecked() {
-+            lastChecked = MinecraftServer.currentTick;
-+        }
-+
-+        public long getLastChecked() {
-+            return lastChecked;
-+        }
-+
-+        public void setHopperPosition(BlockPosition hopperPosition) {
-+            this.hopperPosition = hopperPosition;
-+        }
-+
-+        public BlockPosition getHopperPosition() {
-+            return hopperPosition;
-+        }
-+    }
 +}
 diff --git a/src/main/java/net/minecraft/world/entity/item/EntityItem.java b/src/main/java/net/minecraft/world/entity/item/EntityItem.java
-index 575833807..830dbff3c 100644
+index 575833807..998456357 100644
 --- a/src/main/java/net/minecraft/world/entity/item/EntityItem.java
 +++ b/src/main/java/net/minecraft/world/entity/item/EntityItem.java
 @@ -29,6 +29,7 @@ import net.minecraft.world.item.Item;
@@ -172,7 +121,7 @@ index 575833807..830dbff3c 100644
  
      private static final DataWatcherObject<ItemStack> ITEM = DataWatcher.a(EntityItem.class, DataWatcherRegistry.g);
      public int age;
-@@ -69,6 +72,19 @@ public class EntityItem extends Entity {
+@@ -69,6 +72,13 @@ public class EntityItem extends Entity {
          this.setItemStack(itemstack);
      }
  
@@ -181,18 +130,12 @@ index 575833807..830dbff3c 100644
 +    public boolean acceptItem(TileEntityHopper hopper) {
 +      return TileEntityHopper.canPickupItem(hopper, this);
 +    }
-+
-+    private final HopperPusher.CheckData checkData = new CheckData();
-+    @Override
-+    public CheckData getCheckData() {
-+        return checkData;
-+    }
 +    // Paper end
 +
      @Override
      protected boolean playStepSound() {
          return false;
-@@ -85,6 +101,7 @@ public class EntityItem extends Entity {
+@@ -85,6 +95,7 @@ public class EntityItem extends Entity {
              this.die();
          } else {
              super.tick();
@@ -200,7 +143,7 @@ index 575833807..830dbff3c 100644
              // CraftBukkit start - Use wall time for pickup and despawn timers
              int elapsedTicks = MinecraftServer.currentTick - this.lastTick;
              if (this.pickupDelay != 32767) this.pickupDelay -= elapsedTicks;
-@@ -178,6 +195,7 @@ public class EntityItem extends Entity {
+@@ -178,6 +189,7 @@ public class EntityItem extends Entity {
      // Spigot start - copied from above
      @Override
      public void inactiveTick() {
@@ -209,7 +152,7 @@ index 575833807..830dbff3c 100644
          int elapsedTicks = MinecraftServer.currentTick - this.lastTick;
          if (this.pickupDelay != 32767) this.pickupDelay -= elapsedTicks;
 diff --git a/src/main/java/net/minecraft/world/entity/vehicle/EntityMinecartContainer.java b/src/main/java/net/minecraft/world/entity/vehicle/EntityMinecartContainer.java
-index 0166d11cb..242d3b188 100644
+index 0166d11cb..777af10aa 100644
 --- a/src/main/java/net/minecraft/world/entity/vehicle/EntityMinecartContainer.java
 +++ b/src/main/java/net/minecraft/world/entity/vehicle/EntityMinecartContainer.java
 @@ -24,6 +24,7 @@ import net.minecraft.world.inventory.Container;
@@ -232,7 +175,7 @@ index 0166d11cb..242d3b188 100644
  
      private NonNullList<ItemStack> items;
      private boolean c;
-@@ -72,6 +74,31 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
+@@ -72,6 +74,25 @@ public abstract class EntityMinecartContainer extends EntityMinecartAbstract imp
          return null;
      }
  
@@ -252,12 +195,6 @@ index 0166d11cb..242d3b188 100644
 +    public void inactiveTick() {
 +        super.inactiveTick();
 +        tryPutInHopper();
-+    }
-+
-+    private final HopperPusher.CheckData checkData = new CheckData();
-+    @Override
-+    public CheckData getCheckData() {
-+        return checkData;
 +    }
 +    // Paper end
 +
@@ -393,5 +330,5 @@ index 537dc52e5..c76cd906f 100644
          return this.j > 0;
      }
 -- 
-2.30.1
+2.31.0
 
