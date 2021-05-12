@@ -1,11 +1,11 @@
-From 9b8735afc1c42fcaab1befb590c354b007f087a0 Mon Sep 17 00:00:00 2001
+From 24de52a25d7073e1e9234c1c0b61a3a84c3e554f Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Sun, 7 Jun 2020 16:32:16 +0200
 Subject: [PATCH] packet support
 
 ---
  .../destroystokyo/paper/PaperSkinParts.java   |  55 ++++
- .../weepermc/packet/ChainablePacketStep.java  |  96 +++++++
+ .../weepermc/packet/ChainablePacketStep.java  |  97 +++++++
  .../packet/CraftEntityMetaBuilder.java        |  49 ++++
  .../packet/CraftPacketConversion.java         | 137 ++++++++++
  .../weepermc/packet/CraftPacketPipeline.java  |  48 ++++
@@ -20,7 +20,7 @@ Subject: [PATCH] packet support
  .../org/bukkit/craftbukkit/CraftServer.java   |   6 +
  .../scoreboard/CraftScoreboard.java           |   2 +-
  .../craftbukkit/scoreboard/CraftTeam.java     |  10 +-
- 16 files changed, 755 insertions(+), 4 deletions(-)
+ 16 files changed, 756 insertions(+), 4 deletions(-)
  create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java
  create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/CraftEntityMetaBuilder.java
  create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java
@@ -93,10 +93,10 @@ index b6f4400df3..89d5bfe735 100644
  }
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java b/src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java
 new file mode 100644
-index 0000000000..63167487aa
+index 0000000000..87f5047978
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java
-@@ -0,0 +1,96 @@
+@@ -0,0 +1,97 @@
 +package de.craftstuebchen.weepermc.packet;
 +
 +import net.minecraft.network.protocol.Packet;
@@ -105,6 +105,7 @@ index 0000000000..63167487aa
 +import org.bukkit.craftbukkit.entity.CraftPlayer;
 +import org.bukkit.entity.Player;
 +import org.bukkit.plugin.java.JavaPlugin;
++import org.jetbrains.annotations.NotNull;
 +
 +import java.util.Collection;
 +import java.util.concurrent.TimeUnit;
@@ -113,7 +114,7 @@ index 0000000000..63167487aa
 +
 +public class ChainablePacketStep implements PacketStep {
 +
-+    private ChainablePacketStep next;
++    protected ChainablePacketStep next;
 +    private final PacketStep current;
 +
 +    public ChainablePacketStep(){
@@ -179,16 +180,16 @@ index 0000000000..63167487aa
 +
 +        public DelayPacketStep(@Nonnull JavaPlugin javaPlugin, long delay,
 +            @Nonnull TimeUnit timeUnit) {
-+            super(null);
++            super();
 +            this.javaPlugin = javaPlugin;
 +            this.delay = delay;
 +            this.timeUnit = timeUnit;
 +        }
 +
 +        @Override
-+        public void executeAll(@Nonnull Collection<? extends Player> players) {
++        protected void executeNext(@NotNull Collection<? extends Player> players) {
 +            Bukkit.getScheduler().runTaskLater(javaPlugin, () -> {
-+                executeNext(players);
++                super.executeNext(players);
 +            }, 20 * timeUnit.toSeconds(delay));
 +        }
 +    }
