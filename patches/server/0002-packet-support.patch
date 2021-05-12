@@ -1,4 +1,4 @@
-From c2883dd109d2d41e87e5493f8ffb2bd9f6efbe8e Mon Sep 17 00:00:00 2001
+From 9b8735afc1c42fcaab1befb590c354b007f087a0 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Sun, 7 Jun 2020 16:32:16 +0200
 Subject: [PATCH] packet support
@@ -28,7 +28,7 @@ Subject: [PATCH] packet support
  create mode 100644 src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
-index b6f4400df..89d5bfe73 100644
+index b6f4400df3..89d5bfe735 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
 @@ -71,4 +71,59 @@ public class PaperSkinParts implements SkinParts {
@@ -93,7 +93,7 @@ index b6f4400df..89d5bfe73 100644
  }
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java b/src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java
 new file mode 100644
-index 000000000..63167487a
+index 0000000000..63167487aa
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/ChainablePacketStep.java
 @@ -0,0 +1,96 @@
@@ -195,7 +195,7 @@ index 000000000..63167487a
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftEntityMetaBuilder.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftEntityMetaBuilder.java
 new file mode 100644
-index 000000000..2ef56dfa3
+index 0000000000..2ef56dfa3f
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftEntityMetaBuilder.java
 @@ -0,0 +1,49 @@
@@ -250,7 +250,7 @@ index 000000000..2ef56dfa3
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java
 new file mode 100644
-index 000000000..472c365b8
+index 0000000000..472c365b80
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketConversion.java
 @@ -0,0 +1,137 @@
@@ -393,7 +393,7 @@ index 000000000..472c365b8
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketPipeline.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketPipeline.java
 new file mode 100644
-index 000000000..b623ee695
+index 0000000000..b623ee695f
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketPipeline.java
 @@ -0,0 +1,48 @@
@@ -447,7 +447,7 @@ index 000000000..b623ee695
 +}
 diff --git a/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java
 new file mode 100644
-index 000000000..95a802e00
+index 0000000000..95a802e00b
 --- /dev/null
 +++ b/src/main/java/de/craftstuebchen/weepermc/packet/CraftPacketStepBuilder.java
 @@ -0,0 +1,240 @@
@@ -692,7 +692,7 @@ index 000000000..95a802e00
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutAnimation.java b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutAnimation.java
-index 874b57c24..59cab42c7 100644
+index 874b57c247..59cab42c78 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutAnimation.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutAnimation.java
 @@ -5,6 +5,7 @@ import net.minecraft.network.PacketDataSerializer;
@@ -718,7 +718,7 @@ index 874b57c24..59cab42c7 100644
      public void a(PacketDataSerializer packetdataserializer) throws IOException {
          this.a = packetdataserializer.i();
 diff --git a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityHeadRotation.java b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityHeadRotation.java
-index cb14309f1..ff9e9bb3a 100644
+index cb14309f11..ff9e9bb3a6 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityHeadRotation.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityHeadRotation.java
 @@ -5,6 +5,7 @@ import net.minecraft.network.PacketDataSerializer;
@@ -744,7 +744,7 @@ index cb14309f1..ff9e9bb3a 100644
      public void a(PacketDataSerializer packetdataserializer) throws IOException {
          this.a = packetdataserializer.i();
 diff --git a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityMetadata.java b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityMetadata.java
-index 650823c6f..fa12062a8 100644
+index 650823c6f9..fa12062a8f 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityMetadata.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityMetadata.java
 @@ -6,6 +6,7 @@ import net.minecraft.network.PacketDataSerializer;
@@ -770,7 +770,7 @@ index 650823c6f..fa12062a8 100644
          this.a = i;
          if (flag) {
 diff --git a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityTeleport.java b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityTeleport.java
-index d72ac54bd..53f466291 100644
+index d72ac54bdb..53f4662919 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityTeleport.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutEntityTeleport.java
 @@ -5,6 +5,7 @@ import net.minecraft.network.PacketDataSerializer;
@@ -801,7 +801,7 @@ index d72ac54bd..53f466291 100644
      public void a(PacketDataSerializer packetdataserializer) throws IOException {
          this.a = packetdataserializer.i();
 diff --git a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutNamedEntitySpawn.java b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutNamedEntitySpawn.java
-index fc897db28..849f43557 100644
+index fc897db288..849f43557e 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutNamedEntitySpawn.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutNamedEntitySpawn.java
 @@ -1,3 +1,4 @@
@@ -829,7 +829,7 @@ index fc897db28..849f43557 100644
      public void a(PacketDataSerializer packetdataserializer) throws IOException {
          this.a = packetdataserializer.i();
 diff --git a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutPlayerInfo.java b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutPlayerInfo.java
-index 2758cf87f..3a317271a 100644
+index 2758cf87fe..3a317271af 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutPlayerInfo.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/PacketPlayOutPlayerInfo.java
 @@ -14,6 +14,7 @@ import net.minecraft.network.protocol.Packet;
@@ -865,10 +865,10 @@ index 2758cf87f..3a317271a 100644
          private final int b;
          private final EnumGamemode c;
 diff --git a/src/main/java/net/minecraft/server/level/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/level/EntityTrackerEntry.java
-index f65eb0168..927bbb28f 100644
+index 1df8fb8cb3..e867d0e4b0 100644
 --- a/src/main/java/net/minecraft/server/level/EntityTrackerEntry.java
 +++ b/src/main/java/net/minecraft/server/level/EntityTrackerEntry.java
-@@ -442,4 +442,59 @@ public class EntityTrackerEntry {
+@@ -441,4 +441,59 @@ public class EntityTrackerEntry {
          }
  
      }
@@ -929,7 +929,7 @@ index f65eb0168..927bbb28f 100644
 +    }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 669bf8117..0b97f8675 100644
+index 669bf8117b..0b97f86758 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -2491,5 +2491,11 @@ public final class CraftServer implements Server {
@@ -945,7 +945,7 @@ index 669bf8117..0b97f8675 100644
      // Paper end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-index 88bc3fbfa..30329c5e7 100644
+index 88bc3fbfa3..30329c5e74 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 @@ -21,7 +21,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
@@ -958,7 +958,7 @@ index 88bc3fbfa..30329c5e7 100644
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-index d637c2941..92855cfb5 100644
+index d637c2941a..92855cfb55 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 @@ -15,14 +15,20 @@ import org.bukkit.scoreboard.Team;
@@ -985,5 +985,5 @@ index d637c2941..92855cfb5 100644
      public String getName() throws IllegalStateException {
          CraftScoreboard scoreboard = checkState();
 -- 
-2.30.1
+2.31.1
 

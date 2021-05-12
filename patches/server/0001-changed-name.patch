@@ -1,4 +1,4 @@
-From fd4e8d87c9cfb7fad4b6c1e7ed062d4b2516a900 Mon Sep 17 00:00:00 2001
+From 1fbdb88c8ad944a0d6be344a7188e5bf69715234 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 5 Oct 2020 19:09:35 +0200
 Subject: [PATCH] changed name
@@ -11,7 +11,7 @@ Subject: [PATCH] changed name
  4 files changed, 18 insertions(+), 15 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index 25ec9c4f8..5b0c23854 100644
+index ab57297272..2722b334be 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,11 +1,11 @@
@@ -30,7 +30,7 @@ index 25ec9c4f8..5b0c23854 100644
  
      <properties>
          <!-- <skipTests>true</skipTests> Paper - This [was] not going to end well -->
-@@ -14,21 +14,21 @@
+@@ -14,14 +14,14 @@
          <bt.name>git</bt.name>
          <minecraft.version>1.16.5</minecraft.version>
          <minecraft_version>1_16_R3</minecraft_version>
@@ -50,6 +50,8 @@ index 25ec9c4f8..5b0c23854 100644
          <relativePath>../pom.xml</relativePath>
      </parent>
  
+@@ -39,8 +39,8 @@
+ 
      <dependencies>
          <dependency>
 -            <groupId>com.destroystokyo.paper</groupId>
@@ -59,7 +61,7 @@ index 25ec9c4f8..5b0c23854 100644
              <version>${project.version}</version>
              <scope>compile</scope>
          </dependency>
-@@ -153,7 +153,7 @@
+@@ -160,7 +160,7 @@
  
      <!-- This builds a completely 'ready to start' jar with all dependencies inside -->
      <build>
@@ -68,7 +70,7 @@ index 25ec9c4f8..5b0c23854 100644
          <defaultGoal>clean install</defaultGoal> <!-- Paper -->
          <plugins>
              <plugin>
-@@ -319,6 +319,9 @@
+@@ -328,6 +328,9 @@
                  <groupId>org.apache.maven.plugins</groupId>
                  <artifactId>maven-compiler-plugin</artifactId>
                  <version>3.8.1</version>
@@ -79,10 +81,10 @@ index 25ec9c4f8..5b0c23854 100644
                      <dependency>
                          <groupId>org.codehaus.plexus</groupId>
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index c372e6897..df9208c0c 100644
+index 61712ae515..2b550d9823 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1569,7 +1569,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
+@@ -1579,7 +1579,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
      }
  
      public String getServerModName() {
@@ -92,7 +94,7 @@ index c372e6897..df9208c0c 100644
  
      public CrashReport b(CrashReport crashreport) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 03b8d67a5..669bf8117 100644
+index 03b8d67a5f..669bf8117b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -232,7 +232,7 @@ import javax.annotation.Nullable; // Paper
@@ -105,7 +107,7 @@ index 03b8d67a5..669bf8117 100644
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 674096cab..b0b99b68e 100644
+index 674096cab1..b0b99b68ef 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
@@ -118,5 +120,5 @@ index 674096cab..b0b99b68e 100644
  
          if (stream != null) {
 -- 
-2.30.1
+2.31.1
 

@@ -1,4 +1,4 @@
-From 17197db9284e27f9fda5c0132f1d6a2fd60af1ad Mon Sep 17 00:00:00 2001
+From c1474c8053001ef6a04362e578499b441dbdd03d Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 12 Oct 2020 23:11:41 +0200
 Subject: [PATCH] Player Entity Tracking Events
@@ -9,7 +9,7 @@ Subject: [PATCH] Player Entity Tracking Events
  2 files changed, 13 insertions(+), 3 deletions(-)
 
 diff --git a/src/main/java/net/minecraft/server/level/EntityPlayer.java b/src/main/java/net/minecraft/server/level/EntityPlayer.java
-index 37c9b5fd7..fec1bff1e 100644
+index 1161605d9f..1bcf6afcac 100644
 --- a/src/main/java/net/minecraft/server/level/EntityPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/EntityPlayer.java
 @@ -141,6 +141,7 @@ import net.minecraft.world.scores.ScoreboardTeamBase;
@@ -31,7 +31,7 @@ index 37c9b5fd7..fec1bff1e 100644
              }
              // Paper end
  
-@@ -1893,6 +1896,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
+@@ -1894,6 +1897,7 @@ public class EntityPlayer extends EntityHuman implements ICrafting {
      public void c(Entity entity) {
          if (entity instanceof EntityHuman) {
              this.playerConnection.sendPacket(new PacketPlayOutEntityDestroy(new int[]{entity.getId()}));
@@ -40,7 +40,7 @@ index 37c9b5fd7..fec1bff1e 100644
              this.removeQueue.add((Integer) entity.getId()); // CraftBukkit - decompile error
          }
 diff --git a/src/main/java/net/minecraft/server/level/EntityTrackerEntry.java b/src/main/java/net/minecraft/server/level/EntityTrackerEntry.java
-index 927bbb28f..a1083711a 100644
+index e867d0e4b0..3030967dee 100644
 --- a/src/main/java/net/minecraft/server/level/EntityTrackerEntry.java
 +++ b/src/main/java/net/minecraft/server/level/EntityTrackerEntry.java
 @@ -1,10 +1,12 @@
@@ -57,7 +57,7 @@ index 927bbb28f..a1083711a 100644
  import java.util.Iterator;
  import java.util.List;
  import java.util.Set;
-@@ -311,7 +313,11 @@ public class EntityTrackerEntry {
+@@ -310,7 +312,11 @@ public class EntityTrackerEntry {
          Packet<?> packet = this.tracker.P();
  
          this.headYaw = MathHelper.d(this.tracker.getHeadRotation() * 256.0F / 360.0F);
@@ -71,5 +71,5 @@ index 927bbb28f..a1083711a 100644
              consumer.accept(new PacketPlayOutEntityMetadata(this.tracker.getId(), this.tracker.getDataWatcher(), true));
          }
 -- 
-2.30.1
+2.31.1
 
