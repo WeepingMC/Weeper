@@ -1,4 +1,4 @@
-From 24de52a25d7073e1e9234c1c0b61a3a84c3e554f Mon Sep 17 00:00:00 2001
+From 21bd79a6025152c1bfcb7672fb3924a07849e8e7 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Sun, 7 Jun 2020 16:32:16 +0200
 Subject: [PATCH] packet support
@@ -930,10 +930,10 @@ index 1df8fb8cb3..e867d0e4b0 100644
 +    }
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 669bf8117b..0b97f86758 100644
+index ad87b7510e..aa60e9eefe 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2491,5 +2491,11 @@ public final class CraftServer implements Server {
+@@ -2498,5 +2498,11 @@ public final class CraftServer implements Server {
      public com.destroystokyo.paper.entity.ai.MobGoals getMobGoals() {
          return mobGoals;
      }
@@ -946,7 +946,7 @@ index 669bf8117b..0b97f86758 100644
      // Paper end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-index 88bc3fbfa3..30329c5e74 100644
+index 3dfb6ad1ed..d576e0f4b2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 @@ -21,7 +21,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {

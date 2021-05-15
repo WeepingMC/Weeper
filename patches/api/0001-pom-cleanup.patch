@@ -1,4 +1,4 @@
-From 28f051551fdc32c61e786ce45c42d76d82e7b22f Mon Sep 17 00:00:00 2001
+From e0f3561a371aac11e667d6e870346e68bcd01c8d Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 5 Oct 2020 18:22:56 +0200
 Subject: [PATCH] pom cleanup
@@ -9,7 +9,7 @@ get rid of snapshot in favour or nexus repo
  1 file changed, 8 insertions(+), 11 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index 6c6ae6b4..3e0d1ddd 100644
+index 73fbd5d5a..70a0ac9e0 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,26 +1,23 @@
@@ -45,8 +45,8 @@ index 6c6ae6b4..3e0d1ddd 100644
 +        <maven.compiler.source>11</maven.compiler.source>
 +        <maven.compiler.target>11</maven.compiler.target>
          <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+         <adventure.version>4.7.0</adventure.version> <!-- Paper - When updating this make sure to update the linked JavaDocs on the homepage as well! -->
      </properties>
- 
 -- 
-2.30.0
+2.31.1
 

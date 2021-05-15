@@ -1,4 +1,4 @@
-From ca70e1c7d3720e04d6c32bcf4882cf5b90ca475f Mon Sep 17 00:00:00 2001
+From bd55c824cf01ea03d8edfafd704702ca6edcd027 Mon Sep 17 00:00:00 2001
 From: Yannick Lamprecht <yannicklamprecht@live.de>
 Date: Thu, 18 Feb 2021 19:05:34 +0100
 Subject: [PATCH] add javadoc and source deploy for api
@@ -8,10 +8,10 @@ Subject: [PATCH] add javadoc and source deploy for api
  1 file changed, 41 insertions(+)
 
 diff --git a/pom.xml b/pom.xml
-index 97651d5f9..d9f1666ed 100644
+index 70a0ac9e0..e72d26f66 100644
 --- a/pom.xml
 +++ b/pom.xml
-@@ -266,6 +266,47 @@
+@@ -286,6 +286,47 @@
                      </links>
                  </configuration>
              </plugin>
@@ -60,5 +60,5 @@ index 97651d5f9..d9f1666ed 100644
      </build>
  
 -- 
-2.30.1
+2.31.1
 
