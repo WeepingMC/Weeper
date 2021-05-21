@@ -1,4 +1,4 @@
-From ab112bdc6b1b967ce6b1ee4f76dbc012bc093b9e Mon Sep 17 00:00:00 2001
+From f7b9e8b89d1a4dfacc7764c8e0d3d799ce3c6249 Mon Sep 17 00:00:00 2001
 From: ysl3000 <yannicklamprecht@live.de>
 Date: Mon, 5 Oct 2020 19:09:35 +0200
 Subject: [PATCH] changed name
@@ -11,7 +11,7 @@ Subject: [PATCH] changed name
  4 files changed, 18 insertions(+), 15 deletions(-)
 
 diff --git a/pom.xml b/pom.xml
-index 7434663b94..bdf0a88c62 100644
+index 1a9204c869..1c143c4613 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -1,11 +1,11 @@
@@ -61,7 +61,7 @@ index 7434663b94..bdf0a88c62 100644
              <version>${project.version}</version>
              <scope>compile</scope>
          </dependency>
-@@ -192,7 +192,7 @@
+@@ -187,7 +187,7 @@
  
      <!-- This builds a completely 'ready to start' jar with all dependencies inside -->
      <build>
@@ -70,7 +70,7 @@ index 7434663b94..bdf0a88c62 100644
          <defaultGoal>clean install</defaultGoal> <!-- Paper -->
          <plugins>
              <plugin>
-@@ -386,6 +386,9 @@
+@@ -381,6 +381,9 @@
                  <groupId>org.apache.maven.plugins</groupId>
                  <artifactId>maven-compiler-plugin</artifactId>
                  <version>3.8.1</version>
@@ -81,10 +81,10 @@ index 7434663b94..bdf0a88c62 100644
                      <dependency>
                          <groupId>org.codehaus.plexus</groupId>
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 35bb4d0b9e..f6607d7a1d 100644
+index 848219f43b..a216ddd7a1 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1580,7 +1580,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
+@@ -1582,7 +1582,7 @@ public abstract class MinecraftServer extends IAsyncTaskHandlerReentrant<TickTas
      }
  
      public String getServerModName() {
@@ -94,10 +94,10 @@ index 35bb4d0b9e..f6607d7a1d 100644
  
      public CrashReport b(CrashReport crashreport) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 6cc8eb04f4..ad87b7510e 100644
+index ff79c13bc7..d0df1567ef 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -232,7 +232,7 @@ import javax.annotation.Nullable; // Paper
+@@ -230,7 +230,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
