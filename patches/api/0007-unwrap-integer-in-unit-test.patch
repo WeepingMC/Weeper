@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 19 Jun 2021 21:42:49 +0200
+Subject: [PATCH] unwrap integer in unit test
+
+
+diff --git a/src/test/java/org/bukkit/metadata/FixedMetadataValueTest.java b/src/test/java/org/bukkit/metadata/FixedMetadataValueTest.java
+index e8cea99fd0eb966e60b0a8e1ebceca6dce6ff50a..71fe1a9925298744573b33fd9803303cf84f6ccb 100644
+--- a/src/test/java/org/bukkit/metadata/FixedMetadataValueTest.java
++++ b/src/test/java/org/bukkit/metadata/FixedMetadataValueTest.java
+@@ -11,15 +11,15 @@ public class FixedMetadataValueTest {
+ 
+     @Test
+     public void testBasic() {
+-        subject = new FixedMetadataValue(plugin, new Integer(50));
++        subject = new FixedMetadataValue(plugin, 50);
+         assertSame(plugin, subject.getOwningPlugin());
+-        assertEquals(new Integer(50), subject.value());
++        assertEquals(50, subject.value());
+     }
+ 
+     @Test
+     public void testNumberTypes() {
+-        subject = new FixedMetadataValue(plugin, new Integer(5));
+-        assertEquals(new Integer(5), subject.value());
++        subject = new FixedMetadataValue(plugin, 5);
++        assertEquals(5, subject.value());
+         assertEquals(5, subject.asInt());
+         assertEquals(true, subject.asBoolean());
+         assertEquals(5, subject.asByte());
+diff --git a/src/test/java/org/bukkit/metadata/MetadataValueAdapterTest.java b/src/test/java/org/bukkit/metadata/MetadataValueAdapterTest.java
+index c1e78568a86525e922a49a802aa5da85b4b6ae4a..f05889c96f9efe3ca21f3bfd6bdfcb79fa1a62a5 100644
+--- a/src/test/java/org/bukkit/metadata/MetadataValueAdapterTest.java
++++ b/src/test/java/org/bukkit/metadata/MetadataValueAdapterTest.java
+@@ -15,10 +15,10 @@ public class MetadataValueAdapterTest {
+         assertEquals(mv.getOwningPlugin(), this.plugin);
+ 
+         // Check value-getting and invalidation.
+-        assertEquals(new Integer(1), mv.value());
+-        assertEquals(new Integer(2), mv.value());
++        assertEquals(1, mv.value());
++        assertEquals(2, mv.value());
+         mv.invalidate();
+-        assertEquals(new Integer(1), mv.value());
++        assertEquals(1, mv.value());
+     }
+ 
+     @Test

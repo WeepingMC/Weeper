@@ -1,0 +1,67 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 19 Jun 2021 15:46:18 +0200
+Subject: [PATCH] player track entity events
+
+
+diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
+index 44aa0c4ec6f0e4df2541c74fa7de852dae59bda5..4609e755f079d4db81133a6b784694f042223df2 100644
+--- a/src/main/java/net/minecraft/server/level/ServerEntity.java
++++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
+@@ -1,7 +1,10 @@
+ package net.minecraft.server.level;
+ 
++import com.destroystokyo.paper.PaperSkinParts;
++import com.destroystokyo.paper.SkinParts;
+ import com.google.common.collect.Lists;
+ import com.mojang.datafixers.util.Pair;
++import com.github.weepingmc.event.packet.PlayerTrackEntityEvent; // Paper
+ import java.util.Collection;
+ import java.util.Collections;
+ import java.util.Iterator;
+@@ -9,6 +12,7 @@ import java.util.List;
+ import java.util.Objects;
+ import java.util.Set;
+ import java.util.function.Consumer;
++import com.github.weepingmc.event.packet.PlayerUntrackEntityEvent;
+ import net.minecraft.network.protocol.Packet;
+ import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
+ import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;
+@@ -42,7 +46,6 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
+ // CraftBukkit start
+ import net.minecraft.server.network.ServerPlayerConnection;
+ import net.minecraft.util.Mth;
+-import org.bukkit.entity.Player;
+ import org.bukkit.event.player.PlayerVelocityEvent;
+ // CraftBukkit end
+ 
+@@ -234,7 +237,7 @@ public class ServerEntity {
+             boolean cancelled = false;
+ 
+             if (this.entity instanceof ServerPlayer) {
+-                Player player = (Player) this.entity.getBukkitEntity();
++                org.bukkit.entity.Player player = (org.bukkit.entity.Player) this.entity.getBukkitEntity(); // Weeper - decompile fix
+                 org.bukkit.util.Vector velocity = player.getVelocity();
+ 
+                 PlayerVelocityEvent event = new PlayerVelocityEvent(player, velocity.clone());
+@@ -259,6 +262,7 @@ public class ServerEntity {
+     public void removePairing(ServerPlayer player) {
+         this.entity.stopSeenByPlayer(player);
+         player.connection.send(new ClientboundRemoveEntityPacket(this.entity.getId()));
++        new PlayerUntrackEntityEvent(player.getBukkitEntity(), this.entity.getId(), this.entity.getBukkitEntity()).callEventIfRegistered(); // Weeper
+     }
+ 
+     public void addPairing(ServerPlayer player) {
+@@ -280,7 +284,11 @@ public class ServerEntity {
+         Packet<?> packet = this.entity.getAddEntityPacket();
+ 
+         this.yHeadRotp = Mth.floor(this.entity.getYHeadRot() * 256.0F / 360.0F);
+-        consumer.accept(packet);
++        // Weeper start
++        if (PlayerTrackEntityEvent.getHandlerList().getRegisteredListeners().length == 0 || new PlayerTrackEntityEvent((org.bukkit.entity.Player)entityplayer.getBukkitEntity(), this.entity.getBukkitEntity()).callEvent()) {
++            consumer.accept(packet);
++        }
++        // Weeper end
+         if (!this.entity.getEntityData().isEmpty()) {
+             consumer.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.entity.getEntityData(), true));
+         }

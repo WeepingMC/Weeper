@@ -1,10 +1,12 @@
 pluginManagement {
     repositories {
+        mavenLocal()
         gradlePluginPortal()
+        maven("https://papermc.io/repo/repository/maven-public/")
         maven("https://papermc.io/repo/repository/maven-public/")
     }
 }
 
-rootProject.name = "ForkTest"
+rootProject.name = "Weeper"
 
-include("ForkTest-API", "ForkTest-Server")
+include("Weeper-API", "Weeper-Server")

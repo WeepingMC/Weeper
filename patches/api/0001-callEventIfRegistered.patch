@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Fri, 1 Jan 2021 14:51:40 +0100
+Subject: [PATCH] callEventIfRegistered
+
+
+diff --git a/src/main/java/org/bukkit/event/Event.java b/src/main/java/org/bukkit/event/Event.java
+index 8ec56cd6b8e0f5c5dd8c7c88b4671e18dcf109d0..03f5aa30c92c0fc6e122b2b81e2da27ab2467364 100644
+--- a/src/main/java/org/bukkit/event/Event.java
++++ b/src/main/java/org/bukkit/event/Event.java
+@@ -49,6 +49,19 @@ public abstract class Event {
+             return true;
+         }
+     }
++
++    /**
++     * Calls the event and tests if cancelled under the condition that at least
++     * one listener is registered for it.
++     *
++     * @return false if event was cancelled, if cancellable. otherwise true.
++     */
++    public boolean callEventIfRegistered() {
++        if (getHandlers().getRegisteredListeners().length == 0) {
++            return true;
++        }
++        return callEvent();
++    }
+     // Paper end
+ 
+     /**

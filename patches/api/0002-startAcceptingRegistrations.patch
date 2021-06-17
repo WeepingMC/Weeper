@@ -1,0 +1,25 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 19 Jun 2021 15:11:50 +0200
+Subject: [PATCH] startAcceptingRegistrations
+
+
+diff --git a/src/main/java/org/bukkit/enchantments/Enchantment.java b/src/main/java/org/bukkit/enchantments/Enchantment.java
+index 799813410f40589ba1d7d530a47d87f609764705..3be6b80a79d79769cdb6490a5d3c80b1049968df 100644
+--- a/src/main/java/org/bukkit/enchantments/Enchantment.java
++++ b/src/main/java/org/bukkit/enchantments/Enchantment.java
+@@ -390,6 +390,14 @@ public abstract class Enchantment implements Keyed {
+         byKey.put(enchantment.key, enchantment);
+         byName.put(enchantment.getName(), enchantment);
+     }
++    // Weeper start
++    /**
++     * Starts accepting any enchantment registrations
++     */
++    public static void startAcceptingRegistrations() {
++        acceptingNew = true;
++    }
++    // Weeper end
+ 
+     /**
+      * Checks if this is accepting Enchantment registrations.

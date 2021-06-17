@@ -50,3 +50,6 @@ ForkTest-Server
 ForkTest-API
 
 !gradle/wrapper/gradle-wrapper.jar
+
+Weeper-Server
+Weeper-API

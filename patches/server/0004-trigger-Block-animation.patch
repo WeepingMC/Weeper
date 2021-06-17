@@ -1,0 +1,43 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 19 Jun 2021 15:08:28 +0200
+Subject: [PATCH] trigger Block animation
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index 3403b75c8311f1e52a0533363c5f0307442f8a15..acf35b4cbde4824015658d3115b59c55a56ac329 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -66,6 +66,7 @@ import net.minecraft.world.level.GameRules;
+ import net.minecraft.world.level.block.Blocks;
+ import net.minecraft.world.level.block.ChorusFlowerBlock;
+ import net.minecraft.world.level.block.DiodeBlock;
++import net.minecraft.world.level.block.entity.BlockEntity;
+ import net.minecraft.world.level.chunk.ChunkAccess;
+ import net.minecraft.world.level.chunk.ChunkStatus;
+ import net.minecraft.world.level.chunk.ImposterProtoChunk;
+@@ -256,6 +257,7 @@ import org.bukkit.util.BoundingBox;
+ import org.bukkit.util.Consumer;
+ import org.bukkit.util.RayTraceResult;
+ import org.bukkit.util.Vector;
++import org.jetbrains.annotations.NotNull;
+ 
+ public class CraftWorld implements World {
+     public static final int CUSTOM_DIMENSION_OFFSET = 10;
+@@ -2641,6 +2643,16 @@ public class CraftWorld implements World {
+     public DragonBattle getEnderDragonBattle() {
+         return (this.getHandle().dragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().dragonFight());
+     }
++
++    // Weeper start
++    @Override
++    public void triggerBlockAnimation(@NotNull Location location,
++        int action, int actionParameter) {
++            BlockPos position = new BlockPos(location.getX(), location.getY(), location.getZ());
++            BlockEntity blockEntity = world.getTileEntity(position, true);
++            world.blockEvent(position, blockEntity.getBlockState().getBlock(), action, actionParameter);
++    }
++    // Weeper end
+     // Paper start
+     @Override
+     public java.util.concurrent.CompletableFuture<Chunk> getChunkAtAsync(int x, int z, boolean gen, boolean urgent) {

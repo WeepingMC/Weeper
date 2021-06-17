@@ -1,0 +1,34 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 19 Jun 2021 15:08:41 +0200
+Subject: [PATCH] trigger Block animation
+
+
+diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/World.java
+index 8ae9198ba7fdb006dc420504a984627add20dbb5..23a6d1fcaa0eab809f61e62765380ea01e847b47 100644
+--- a/src/main/java/org/bukkit/World.java
++++ b/src/main/java/org/bukkit/World.java
+@@ -3765,4 +3765,23 @@ public interface World extends PluginMessageRecipient, Metadatable, net.kyori.ad
+             }
+         }
+     }
++    // Weeper start
++    /**
++     * Triggers a refresh of the BlockEntity.
++     * Updates the BlockEntity on the client side
++     *
++     * @param location the block location
++     * @param action the action performed
++     * @param actionParameter the parameter of that action
++     */
++    void triggerBlockAnimation(@NotNull Location location, int action, int actionParameter);
++
++    /**
++     * @see {@link #triggerBlockAnimation(Location, int, int)}
++     */
++    @Deprecated(forRemoval = true)
++    default void triggerBlockEntityEvent(@NotNull Location location, int action, int actionParameter){
++        triggerBlockAnimation(location, action, actionParameter);
++    }
++    // Weeper end
+ }
