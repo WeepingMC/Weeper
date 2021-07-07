@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index ab8de6c4e3c0bea2b9f498da00adf88e987d2364..7a966f9a3b5ac48fcc02fe9ca69397117d32273d 100644
+index ab8de6c4e3c0bea2b9f498da00adf88e987d2364..ecfdf5a65910af4a75dc2c607184bbfcddb91007 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -36,7 +36,7 @@ repositories {
@@ -17,6 +17,30 @@ index ab8de6c4e3c0bea2b9f498da00adf88e987d2364..7a966f9a3b5ac48fcc02fe9ca6939711
      implementation("com.destroystokyo.paper:paper-mojangapi:1.16.5-R0.1-SNAPSHOT") // Tuinity
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.12.1")
+@@ -88,7 +88,7 @@ tasks.jar {
+         attributes(
+             "Main-Class" to "org.bukkit.craftbukkit.Main",
+             "Implementation-Title" to "CraftBukkit",
+-            "Implementation-Version" to "git-Tuinity-$implementationVersion", // Tuinity
++            "Implementation-Version" to "git-Weeper-$implementationVersion", // Tuinity
+             "Implementation-Vendor" to SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(Date()), // Paper
+             "Specification-Title" to "Bukkit",
+             "Specification-Version" to project.version,
+diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
+index d50b61876f15d95b836b3dd81d9c3492c91a8448..5d4bd6af9ecd95d426ba05c0b0e17a05f22de65e 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
++++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
+@@ -29,8 +29,8 @@ public class PaperVersionFetcher implements VersionFetcher {
+     @Nonnull
+     @Override
+     public Component getVersionMessage(@Nonnull String serverVersion) {
+-        String[] parts = serverVersion.substring("git-Tuinity-".length()).split("[-\\s]"); // Tuinity
+-        final Component updateMessage = getUpdateStatusMessage("Spottedleaf/Tuinity", GITHUB_BRANCH_NAME, parts[0]); // Tuinity
++        String[] parts = serverVersion.substring("git-Weeper-".length()).split("[-\\s]"); // Tuinity
++        final Component updateMessage = getUpdateStatusMessage("WeepingMc/Weeper", GITHUB_BRANCH_NAME, parts[0]); // Tuinity
+         final Component history = getHistory();
+ 
+         return history != null ? TextComponent.ofChildren(updateMessage, Component.newline(), history) : updateMessage;
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
 index f25bb4214cffd0050241ea229b6acb0c16b2b0a5..f518bd70185847fc30caf81132ff15c4aa97960e 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
@@ -43,3 +67,16 @@ index 4342bc5aad49fe372d561296a6b63818a443d089..1d48ea2e4c5b71b2c208da82bb73a8a9
      private final String serverVersion;
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
+diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+index 001b1e5197eaa51bfff9031aa6c69876c9a47960..ed515cb7503d207fd1e00e48ef6d20c6ab8b4f7f 100644
+--- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
+@@ -11,7 +11,7 @@ public final class Versioning {
+     public static String getBukkitVersion() {
+         String result = "Unknown-Version";
+ 
+-        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.tuinity/tuinity-api/pom.properties"); // Tuinity
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.github.weepingmc.weeper/weeper-api/pom.properties"); // Tuinity
+         Properties properties = new Properties();
+ 
+         if (stream != null) {
