@@ -5,52 +5,41 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 04938bb10c35d2e424043adb7ed8fec2e42bb816..8dd86c3a4727eff4f1a8318384cdae906b13927e 100644
+index ab8de6c4e3c0bea2b9f498da00adf88e987d2364..7a966f9a3b5ac48fcc02fe9ca69397117d32273d 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -18,8 +18,8 @@ repositories {
+@@ -36,7 +36,7 @@ repositories {
  }
  
  dependencies {
--    implementation(project(":Paper-API"))
--    implementation(project(":Paper-MojangAPI"))
+-    implementation(project(":Tuinity-API")) // Tuinity
 +    implementation(project(":Weeper-API")) // Weeper
-+    implementation("com.destroystokyo.paper:paper-mojangapi:1.16.5-R0.1-SNAPSHOT") // ForkTest
+     implementation("com.destroystokyo.paper:paper-mojangapi:1.16.5-R0.1-SNAPSHOT") // Tuinity
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.12.1")
-     implementation("net.minecrell:terminalconsoleappender:1.2.0")
-@@ -122,7 +122,7 @@ tasks.test {
- fun TaskContainer.registerRunTask(
-     name: String, block: JavaExec.() -> Unit
- ): TaskProvider<JavaExec> = register<JavaExec>(name) {
--    group = "paper"
-+    group = "paperweight"
-     standardInput = System.`in`
-     workingDir = rootProject.layout.projectDirectory.dir(
-         providers.gradleProperty("runWorkDir").forUseAtConfigurationTime().orElse("run")
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 3bf39c2d2aa3fc4fd0815dacea57e4899ec0da0e..0d4e1111f7e75ba93bc385c64ab70f170143f9f0 100644
+index f25bb4214cffd0050241ea229b6acb0c16b2b0a5..f518bd70185847fc30caf81132ff15c4aa97960e 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1649,7 +1649,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1716,7 +1716,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
--        return "Paper"; //Paper - Paper > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
-+        return "Weeper"; //Weeper - Weeper > //Paper - Paper > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
+-        return "Tuinity"; // Tuinity - Tuinity > //Paper - Paper > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
++        return "Weeper"; //Weeper - Weeper > // Tuinity - Tuinity > //Paper - Paper > // Spigot - Spigot > // CraftBukkit - cb > vanilla!
      }
  
-     public SystemReport fillSystemReport(SystemReport systemreport) {
+     public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 8a98bd1018afd934696fedbed24e271ab6b75f51..bf6cb0420f81584f6b4d570a7944b25893772f36 100644
+index 4342bc5aad49fe372d561296a6b63818a443d089..1d48ea2e4c5b71b2c208da82bb73a8a9cc5b45b6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -230,7 +230,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
--    private final String serverName = "Paper"; // Paper
-+    private final String serverName = "Weeper"; // Weeper // Paper
+-    private final String serverName = "Tuinity"; // Tuinity // Paper
++    private final String serverName = "Weeper"; // Weeper // Tuinity // Paper
      private final String serverVersion;
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");

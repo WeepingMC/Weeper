@@ -52,8 +52,13 @@ subprojects {
 paperweight {
     serverProject.set(project(":Weeper-Server"))
 
-    usePaperUpstream(providers.gradleProperty("paperRef")) {
-        withPaperPatcher {
+    useStandardUpstream("tuinity") {
+        url.set(github("Tuinity", "Tuinity"))
+        ref.set(providers.gradleProperty("tuinityRef"))
+
+        withStandardPatcher {
+            baseName("Tuinity")
+
             apiPatchDir.set(layout.projectDirectory.dir("patches/api"))
             apiOutputDir.set(layout.projectDirectory.dir("Weeper-API"))
 
@@ -68,6 +73,11 @@ tasks.register("cleanup"){
         layout.projectDirectory.dir("Weeper-API").asFile.deleteRecursively()
         layout.projectDirectory.dir("Weeper-Server").asFile.deleteRecursively()
     }
+}
+
+tasks.paperclipJar {
+    destinationDirectory.set(rootProject.layout.projectDirectory)
+    archiveFileName.set("weeper-paperclip.jar")
 }
 
 

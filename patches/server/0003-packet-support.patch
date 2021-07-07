@@ -390,7 +390,7 @@ index 0000000000000000000000000000000000000000..6d65b30700692a9254998a94952d9938
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..dd94becfcce2ac149261ca9c6f07f4008f5f2319
+index 0000000000000000000000000000000000000000..af7a73e3e5d83490fd71280c8ecbfcc32e69c6bc
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 @@ -0,0 +1,256 @@
@@ -441,7 +441,7 @@ index 0000000000000000000000000000000000000000..dd94becfcce2ac149261ca9c6f07f400
 +import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;
 +import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
 +import net.minecraft.network.protocol.game.ClientboundPlayerInfoPacket;
-+import net.minecraft.network.protocol.game.ClientboundRemoveEntityPacket;
++import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
 +import net.minecraft.network.protocol.game.ClientboundRotateHeadPacket;
 +import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
 +import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
@@ -560,7 +560,7 @@ index 0000000000000000000000000000000000000000..dd94becfcce2ac149261ca9c6f07f400
 +    @Override
 +    @Nonnull
 +    public PacketStepBuilder destroyEntity(int entityId) {
-+        initial.setNext(of(new ClientboundRemoveEntityPacket(entityId)));
++        initial.setNext(of(new ClientboundRemoveEntitiesPacket(entityId)));
 +        return this;
 +    }
 +
@@ -596,7 +596,7 @@ index 0000000000000000000000000000000000000000..dd94becfcce2ac149261ca9c6f07f400
 +    @Override
 +    @Nonnull
 +    public PacketStepBuilder removeEntity(int entityId) {
-+        initial.setNext(of(new ClientboundRemoveEntityPacket(entityId)));
++        initial.setNext(of(new ClientboundRemoveEntitiesPacket(entityId)));
 +        return this;
 +    }
 +
@@ -800,7 +800,7 @@ index 56e4036a88e570333633bf5fc4dc4a2de4654ab9..3df3edce4dc1692c41f1c46f07f934ea
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index af90013d48e2dd827e045e2fc0f7f5be0dbaa33f..d74486a534c11726e259eb10884a1fbce0e5e0f6 100644
+index e75efd67acb063e3ce7506839e4a888241bda703..64868e375b1f230a98eee628c26c597d73e168c5 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -261,7 +261,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
@@ -828,7 +828,7 @@ index af90013d48e2dd827e045e2fc0f7f5be0dbaa33f..d74486a534c11726e259eb10884a1fbc
      private EntityInLevelCallback levelCallback;
      private Vec3 packetCoordinates;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 57c448ee93df76fc2a17c75fafc78408d720ced3..b554785e61de6691472215342d8d85a30ba78af4 100644
+index ed745776316c5346ee1b44c8f022c40359b7e642..954246dcbccd480f5246ac4b6b9806996097aee7 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -174,7 +174,7 @@ public abstract class LivingEntity extends Entity {
@@ -841,7 +841,7 @@ index 57c448ee93df76fc2a17c75fafc78408d720ced3..b554785e61de6691472215342d8d85a3
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index bf6cb0420f81584f6b4d570a7944b25893772f36..6c01e562f451618b3b0c3d270ed98aa63dd3533b 100644
+index 1d48ea2e4c5b71b2c208da82bb73a8a9cc5b45b6..e4935846fc1766f53325321266c080b7d7d6940a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -4,7 +4,6 @@ import com.google.common.base.Charsets;
@@ -852,7 +852,7 @@ index bf6cb0420f81584f6b4d570a7944b25893772f36..6c01e562f451618b3b0c3d270ed98aa6
  import com.google.common.collect.Iterators;
  import com.google.common.collect.Lists;
  import com.google.common.collect.MapMaker;
-@@ -2521,5 +2520,11 @@ public final class CraftServer implements Server {
+@@ -2537,5 +2536,11 @@ public final class CraftServer implements Server {
          return datapackManager;
      }
  

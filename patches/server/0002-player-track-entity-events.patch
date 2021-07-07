@@ -5,7 +5,7 @@ Subject: [PATCH] player track entity events
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 44aa0c4ec6f0e4df2541c74fa7de852dae59bda5..4609e755f079d4db81133a6b784694f042223df2 100644
+index 0fcd6a9162f5bddb3c4fc42b3a64efde7c7d9a9b..00c496daff88850e1fe5c828ca88fd43ebeffbff 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
 @@ -1,7 +1,10 @@
@@ -47,7 +47,7 @@ index 44aa0c4ec6f0e4df2541c74fa7de852dae59bda5..4609e755f079d4db81133a6b784694f0
 @@ -259,6 +262,7 @@ public class ServerEntity {
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
-         player.connection.send(new ClientboundRemoveEntityPacket(this.entity.getId()));
+         player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));
 +        new PlayerUntrackEntityEvent(player.getBukkitEntity(), this.entity.getId(), this.entity.getBukkitEntity()).callEventIfRegistered(); // Weeper
      }
  
