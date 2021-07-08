@@ -68,7 +68,7 @@ index 0000000000000000000000000000000000000000..db25a5ed8f50ec406ca77441e60cb142
 +
 +public class ColorUtil {
 +
-+        public Color fromARGB(int argb){
++        public static Color fromARGB(int argb){
 +            return new Color(getR(argb), getG(argb), getB(argb), getA(argb));
 +        }
 +
