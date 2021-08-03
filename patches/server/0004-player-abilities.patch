@@ -1,4 +1,4 @@
-From a925175b311903ff3bdaba21ca1748946b1af5cc Mon Sep 17 00:00:00 2001
+From 37e3945650548740d1edbe77db1c7c88ec2e3738 Mon Sep 17 00:00:00 2001
 From: Yannick Lamprecht <yannicklamprecht@live.de>
 Date: Mon, 1 Feb 2021 02:33:26 +0100
 Subject: [PATCH] player abilities
@@ -94,5 +94,5 @@ index 95a802e00..1a397aa28 100644
      public void send(@Nonnull Collection<? extends Player> players){
          initial.execute(players);
 -- 
-2.30.1
+2.32.0
 
