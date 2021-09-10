@@ -95,10 +95,10 @@ index b6c1e50df4e0a69ac1e81613539bcc0731c67063..77e1d8140b45c8bf3e39d5f17c7ee28f
      private static int fetchDistanceFromGitHub(@Nonnull String repo, @Nonnull String branch, @Nonnull String hash) {
          try {
 diff --git a/src/main/java/net/pl3x/purpur/PurpurConfig.java b/src/main/java/net/pl3x/purpur/PurpurConfig.java
-index 93e07295bd49c8951717712bd4b67ceaaed78839..2497ea6e08075b3042d5f09041a0a578d17a7149 100644
+index 15963a7d4d721f3a8b665c1917cd5f2860814a62..6bcb1bec8e889b56569e29500a8abdf7da579849 100644
 --- a/src/main/java/net/pl3x/purpur/PurpurConfig.java
 +++ b/src/main/java/net/pl3x/purpur/PurpurConfig.java
-@@ -326,7 +326,7 @@ public class PurpurConfig {
+@@ -209,7 +209,7 @@ public class PurpurConfig {
          if (!TimingsManager.hiddenConfigs.contains("settings.seed")) TimingsManager.hiddenConfigs.add("settings.seed");
      }
  
