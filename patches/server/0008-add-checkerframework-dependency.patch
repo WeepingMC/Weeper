@@ -1,0 +1,18 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Fri, 10 Sep 2021 22:58:17 +0200
+Subject: [PATCH] add checkerframework dependency
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 6d37ab2dc1aef062dde8bb2818576afa060a7572..c067d8bb8352dd5acff8ee6f57b4826c7e6d11a4 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -72,6 +72,7 @@ dependencies {
+     implementation("com.github.technove:AIR:fe3dbb4420") // Airplane - config
+     implementation ("me.carleslc.Simple-YAML:Simple-Yaml:1.7.2") // Airplane - more config
+     implementation("com.github.technove:Flare:2c4a2114a0") // Airplane - flare
++    implementation("org.checkerframework:checker-qual:3.6.1")
+ 
+     testImplementation("io.github.classgraph:classgraph:4.8.47") // Paper - mob goal test
+     testImplementation("junit:junit:4.13.1")
