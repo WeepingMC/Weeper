@@ -79,8 +79,6 @@ subprojects {
 
 paperweight {
     serverProject.set(project(":Weeper-Server"))
-    remapRepo.set("https://maven.fabricmc.net/")
-    decompileRepo.set("https://files.minecraftforge.net/maven/")
 
     usePaperUpstream(providers.gradleProperty("upstreamRef")) {
         withPaperPatcher {
@@ -88,7 +86,7 @@ paperweight {
             apiPatchDir.set(layout.projectDirectory.dir("patches/api"))
             apiOutputDir.set(layout.projectDirectory.dir("Weeper-API"))
 
-            remapRepo.set("https://maven.quiltmc.org/repository/release/")
+            remapRepo.set("https://maven.fabricmc.net/")
             decompileRepo.set("https://files.minecraftforge.net/maven/")
 
             serverPatchDir.set(layout.projectDirectory.dir("patches/server"))
