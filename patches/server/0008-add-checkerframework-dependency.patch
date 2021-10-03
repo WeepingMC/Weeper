@@ -5,10 +5,10 @@ Subject: [PATCH] add checkerframework dependency
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index ab0b4cb77ef482be6449a12232dcfbbdcdee7ced..4c5eb95402965f861c800b92d4a2e46b056df5ac 100644
+index bce8d5c5ea7825d013f7dbbb77a2e3256b3677b9..76656d95d885d4a62cc23e13fcb208d7a011601c 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -75,6 +75,7 @@ dependencies {
+@@ -76,6 +76,7 @@ dependencies {
          exclude(group="org.yaml", module="snakeyaml") // exclude snakeyaml dependency because its old (1.26)
      } // Airplane - more config
      implementation("com.github.technove:Flare:2c4a2114a0") // Airplane - flare
