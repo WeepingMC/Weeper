@@ -800,7 +800,7 @@ index 56e4036a88e570333633bf5fc4dc4a2de4654ab9..3df3edce4dc1692c41f1c46f07f934ea
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index e0b93f6d552683bd6cd35fa25b756f45d8424455..a7eb4fbca1d1b44b29ca3f8296336bf7b13f215f 100644
+index 4f164f238177b5e2b18c76b7cc14596ec93409d1..9a9db1ad0f7d5d9024d390ce079714d9b5e26eea 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -261,7 +261,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, n
@@ -828,7 +828,7 @@ index e0b93f6d552683bd6cd35fa25b756f45d8424455..a7eb4fbca1d1b44b29ca3f8296336bf7
      private EntityInLevelCallback levelCallback;
      private Vec3 packetCoordinates;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index fa951b44300f3ac26342771d9a84bea637a1d7c4..a93cfd8c4da379544f842c703621c48a42ca8b03 100644
+index 1018f4640bab5876c5e0afb5b88f71437fb79662..4e01a2a6dd9b35ecfac9cf4c971f948a379cc4ee 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -174,7 +174,7 @@ public abstract class LivingEntity extends Entity {
@@ -841,10 +841,10 @@ index fa951b44300f3ac26342771d9a84bea637a1d7c4..a93cfd8c4da379544f842c703621c48a
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 1cec5b007f99e4ddc1798c010967a2c74161a05f..46003f12f3fad7f1c2f343621c493f36f6ad3003 100644
+index 5a3b7255eb34b10940726f12acf1f358bb0e9dd8..d0dd63d382811e1dc601f1ed8620e887106a086e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2696,6 +2696,12 @@ public final class CraftServer implements Server {
+@@ -2674,5 +2674,11 @@ public final class CraftServer implements Server {
          return datapackManager;
      }
  
@@ -855,8 +855,7 @@ index 1cec5b007f99e4ddc1798c010967a2c74161a05f..46003f12f3fad7f1c2f343621c493f36
 +        return packetPipeline;
 +    }
      // Paper end
- 
-     // Purpur start
+ }
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 index b1fbbfeadb63d495b57f6c29b00de5327ca713cd..57c01858e22ea02f720e3cb1f2049b268af02a19 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
