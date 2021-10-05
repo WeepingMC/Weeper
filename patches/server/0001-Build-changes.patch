@@ -72,10 +72,10 @@ diff --git a/src/main/java/net/pl3x/purpur/PurpurConfig.java b/src/main/java/net
 new file mode 100644
 index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index f925130552cb4ff2f813b1ddae9ac2f915e17bd5..5a3b7255eb34b10940726f12acf1f358bb0e9dd8 100644
+index 0adb686d690e1be0c5540625efbecc46bac5d045..e66bc1cc46e3d5324fdc66943579974d1358db5c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -249,7 +249,7 @@ import javax.annotation.Nullable; // Paper
+@@ -251,7 +251,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
