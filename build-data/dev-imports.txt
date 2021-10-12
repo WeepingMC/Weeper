@@ -16,3 +16,4 @@ minecraft net/minecraft/network/protocol/game/ClientboundSetEntityDataPacket.jav
 minecraft net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java
 minecraft net/minecraft/network/protocol/game/ClientboundRemoveEntityPacket.java
 minecraft net/minecraft/server/level/ServerEntity.java
+minecraft net/minecraft/world/inventory/Slot.java
