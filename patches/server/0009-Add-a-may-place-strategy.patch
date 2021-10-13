@@ -5,13 +5,14 @@ Subject: [PATCH] Add a may place strategy
 
 
 diff --git a/src/main/java/net/minecraft/world/Container.java b/src/main/java/net/minecraft/world/Container.java
-index 7437f01ca8f416e2c9150250e324af4725a4efb6..c397ccf6d24c57ae5915e39e7c2eaec4471d9669 100644
+index 7437f01ca8f416e2c9150250e324af4725a4efb6..e52dd3f4b283ee390fd26be50e10b511a1f024c6 100644
 --- a/src/main/java/net/minecraft/world/Container.java
 +++ b/src/main/java/net/minecraft/world/Container.java
-@@ -1,11 +1,13 @@
+@@ -1,11 +1,14 @@
  package net.minecraft.world;
  
  import java.util.Set;
++import java.util.function.BiFunction;
 +import java.util.function.Function;
  import net.minecraft.world.entity.player.Player;
  import net.minecraft.world.item.Item;
@@ -22,31 +23,32 @@ index 7437f01ca8f416e2c9150250e324af4725a4efb6..c397ccf6d24c57ae5915e39e7c2eaec4
  // CraftBukkit end
  
  public interface Container extends Clearable {
-@@ -88,4 +90,7 @@ public interface Container extends Clearable {
+@@ -88,4 +91,7 @@ public interface Container extends Clearable {
  
      int MAX_STACK = 64;
      // CraftBukkit end
 +    // Weeper may place strategy - start
-+    default void setMayPlaceStrategy(@Nullable Function<ItemStack, Boolean> mayPlaceStrategy){};
++    default void setMayPlaceStrategy(@Nullable BiFunction<Integer, ItemStack, Boolean> mayPlaceStrategy){};
 +    // Weeper may place strategy - end
  }
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index ca05d8e5ff1b8caa07c0e4f3e203abd46d7a7ede..6a29ad8599b29b038614e3b8ca4c0dc155ea0793 100644
+index ca05d8e5ff1b8caa07c0e4f3e203abd46d7a7ede..d75c6884ee03495f2bf4bade0118e6ad9bc221c7 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-@@ -13,6 +13,7 @@ import java.util.Objects;
+@@ -13,6 +13,8 @@ import java.util.Objects;
  import java.util.Optional;
  import java.util.OptionalInt;
  import java.util.Set;
++import java.util.function.BiFunction;
 +import java.util.function.Function;
  import java.util.function.Supplier;
  import javax.annotation.Nullable;
  import net.minecraft.CrashReport;
-@@ -149,6 +150,11 @@ public abstract class AbstractContainerMenu {
+@@ -149,6 +151,11 @@ public abstract class AbstractContainerMenu {
          return slot;
      }
  
-+    public void setMayPlaceStrategy(Function<ItemStack, Boolean> mayPlaceStrategy){
++    public void setMayPlaceStrategy(BiFunction<Integer, ItemStack, Boolean> mayPlaceStrategy){
 +        this.slots.forEach(slot -> slot.setMayPlaceStrategy(mayPlaceStrategy));
 +    }
 +
@@ -55,13 +57,14 @@ index ca05d8e5ff1b8caa07c0e4f3e203abd46d7a7ede..6a29ad8599b29b038614e3b8ca4c0dc1
          this.dataSlots.add(property);
          this.remoteDataSlots.add(0);
 diff --git a/src/main/java/net/minecraft/world/inventory/Slot.java b/src/main/java/net/minecraft/world/inventory/Slot.java
-index 4468c415905f4b48aaa4269832ef725a8b9bc3ef..5d43224dd07d43e2afc606f110e3194e6966d8c6 100644
+index 4468c415905f4b48aaa4269832ef725a8b9bc3ef..4ecd92517e3b8e495500f469b9ea22bf6c2b2ece 100644
 --- a/src/main/java/net/minecraft/world/inventory/Slot.java
 +++ b/src/main/java/net/minecraft/world/inventory/Slot.java
-@@ -2,11 +2,13 @@ package net.minecraft.world.inventory;
+@@ -2,11 +2,14 @@ package net.minecraft.world.inventory;
  
  import com.mojang.datafixers.util.Pair;
  import java.util.Optional;
++import java.util.function.BiFunction;
 +import java.util.function.Function;
  import javax.annotation.Nullable;
  import net.minecraft.resources.ResourceLocation;
@@ -72,29 +75,29 @@ index 4468c415905f4b48aaa4269832ef725a8b9bc3ef..5d43224dd07d43e2afc606f110e3194e
  
  public class Slot {
      public final int slot;
-@@ -14,6 +16,11 @@ public class Slot {
+@@ -14,6 +17,11 @@ public class Slot {
      public int index;
      public final int x;
      public final int y;
-+    private @Nullable Function<ItemStack, Boolean> mayPlaceStrategy;
++    private @Nullable BiFunction<Integer, ItemStack, Boolean> mayPlaceStrategy;
 +
-+    public void setMayPlaceStrategy(@Nullable Function<ItemStack, Boolean> mayPlaceStrategy){
++    public void setMayPlaceStrategy(@Nullable BiFunction<Integer, ItemStack, Boolean> mayPlaceStrategy){
 +        this.mayPlaceStrategy = mayPlaceStrategy;
 +    }
  
      public Slot(Container inventory, int index, int x, int y) {
          this.container = inventory;
-@@ -44,7 +51,7 @@ public class Slot {
+@@ -44,7 +52,7 @@ public class Slot {
      }
  
      public boolean mayPlace(ItemStack stack) {
 -        return true;
-+        return this.mayPlaceStrategy != null ? mayPlaceStrategy.apply(stack): true;
++        return this.mayPlaceStrategy != null ? mayPlaceStrategy.apply(slot, stack): true;
      }
  
      public ItemStack getItem() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 7c7d05852dd463331110d1dcb71b4d4f5312900f..2829af7c6abfbb3e789a5d239ee3a02bc3c5df95 100644
+index 7c7d05852dd463331110d1dcb71b4d4f5312900f..4e103861451afc78df9d8efa2e83c5ee5ffb4a95 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -1,5 +1,6 @@
@@ -104,7 +107,16 @@ index 7c7d05852dd463331110d1dcb71b4d4f5312900f..2829af7c6abfbb3e789a5d239ee3a02b
  import com.google.common.base.Preconditions;
  import com.google.common.collect.ImmutableSet;
  import java.util.ArrayList;
-@@ -14,6 +15,7 @@ import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
+@@ -7,6 +8,8 @@ import java.util.Arrays;
+ import java.util.Collection;
+ import java.util.Optional;
+ import java.util.Set;
++import java.util.function.BiFunction;
++
+ import net.minecraft.core.BlockPos;
+ import net.minecraft.nbt.CompoundTag;
+ import net.minecraft.network.chat.Component;
+@@ -14,6 +17,7 @@ import net.minecraft.network.protocol.game.ClientboundOpenScreenPacket;
  import net.minecraft.network.protocol.game.ServerboundContainerClosePacket;
  import net.minecraft.server.level.ServerLevel;
  import net.minecraft.server.level.ServerPlayer;
@@ -112,7 +124,7 @@ index 7c7d05852dd463331110d1dcb71b4d4f5312900f..2829af7c6abfbb3e789a5d239ee3a02b
  import net.minecraft.world.MenuProvider;
  import net.minecraft.world.entity.Entity;
  import net.minecraft.world.entity.EntityType;
-@@ -62,6 +64,7 @@ import org.bukkit.permissions.Permission;
+@@ -62,6 +66,7 @@ import org.bukkit.permissions.Permission;
  import org.bukkit.permissions.PermissionAttachment;
  import org.bukkit.permissions.PermissionAttachmentInfo;
  import org.bukkit.plugin.Plugin;
@@ -120,18 +132,18 @@ index 7c7d05852dd463331110d1dcb71b4d4f5312900f..2829af7c6abfbb3e789a5d239ee3a02b
  
  public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      private CraftInventoryPlayer inventory;
-@@ -294,6 +297,10 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -294,6 +299,10 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
  
      @Override
      public InventoryView openInventory(Inventory inventory) {
 +        return openInventory(inventory, null);
 +    }
 +    @Override
-+    public InventoryView openInventory(Inventory inventory, Function<ItemStack, Boolean> mayPlaceStrategy) {
++    public InventoryView openInventory(Inventory inventory, BiFunction<Integer, ItemStack, Boolean> mayPlaceStrategy) {
          if (!(this.getHandle() instanceof ServerPlayer)) return null;
          ServerPlayer player = (ServerPlayer) this.getHandle();
          AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
-@@ -323,7 +330,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -323,7 +332,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
          if (iinventory instanceof MenuProvider) {
              this.getHandle().openMenu(iinventory);
          } else {
@@ -140,42 +152,50 @@ index 7c7d05852dd463331110d1dcb71b4d4f5312900f..2829af7c6abfbb3e789a5d239ee3a02b
          }
  
          if (this.getHandle().containerMenu == formerContainer) {
-@@ -334,9 +341,16 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -334,9 +343,15 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      }
  
      private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {
 +        openCustomInventory( inventory, player, windowType, null);
 +    }
-+    private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType, @Nullable Function<ItemStack, Boolean> mayPlaceStrategy) {
++    private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType, @Nullable BiFunction<Integer, ItemStack, Boolean> mayPlaceStrategy) {
          if (player.connection == null) return;
          Preconditions.checkArgument(windowType != null, "Unknown windowType");
          AbstractContainerMenu container = new CraftContainer(inventory, player, player.nextContainerCounter());
 +        if(mayPlaceStrategy != null){
-+            Container top = ((CraftInventory) inventory).getInventory();
-+            top.setMayPlaceStrategy(itemStack -> mayPlaceStrategy.apply(CraftItemStack.asBukkitCopy(itemStack)));
++            container.setMayPlaceStrategy((slot, itemStack) -> mayPlaceStrategy.apply(slot,CraftItemStack.asBukkitCopy(itemStack)));
 +        }
  
          container = CraftEventFactory.callInventoryOpenEvent(player, container);
          if (container == null) return;
 diff --git a/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventory.java b/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventory.java
-index 396a4ae3d5a829eda78ef98561333aea300aa722..39afb1be00841babc218bea0dc6f784c9b87870d 100644
+index 396a4ae3d5a829eda78ef98561333aea300aa722..ec77aa8bc6e6917dbdc0d58064d835929745984a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventory.java
 +++ b/src/main/java/org/bukkit/craftbukkit/inventory/CraftInventory.java
-@@ -3,6 +3,7 @@ package org.bukkit.craftbukkit.inventory;
+@@ -3,6 +3,8 @@ package org.bukkit.craftbukkit.inventory;
  import java.util.HashMap;
  import java.util.List;
  import java.util.ListIterator;
++import java.util.function.BiFunction;
 +import java.util.function.Function;
  import net.minecraft.world.Container;
  import net.minecraft.world.inventory.CraftingContainer;
  import net.minecraft.world.inventory.MerchantContainer;
-@@ -567,4 +568,9 @@ public class CraftInventory implements Inventory {
+@@ -26,6 +28,7 @@ import org.bukkit.entity.HumanEntity;
+ import org.bukkit.event.inventory.InventoryType;
+ import org.bukkit.inventory.Inventory;
+ import org.bukkit.inventory.InventoryHolder;
++import org.bukkit.inventory.InventoryView;
+ import org.bukkit.inventory.ItemStack;
+ 
+ public class CraftInventory implements Inventory {
+@@ -567,4 +570,9 @@ public class CraftInventory implements Inventory {
      public Location getLocation() {
          return this.inventory.getLocation();
      }
 +
 +    @Override
-+    public void setMayPlaceStrategy(Function<ItemStack, Boolean> mayPlaceStrategy) {
-+        this.inventory.setMayPlaceStrategy(itemStack -> mayPlaceStrategy.apply(CraftItemStack.asBukkitCopy(itemStack)));
++    public void setMayPlaceStrategy(BiFunction<Integer, ItemStack, Boolean> mayPlaceStrategy) {
++        this.inventory.setMayPlaceStrategy((slot, itemStack) -> mayPlaceStrategy.apply(slot, CraftItemStack.asBukkitCopy(itemStack)));
 +    }
  }

@@ -5,19 +5,20 @@ Subject: [PATCH] Add a may place strategy
 
 
 diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
-index 28d1ff809e44bda0324ffac957c1d455be02e783..2b95f92814e62a6bb98c4c96dff1a85a6b27ddca 100644
+index 28d1ff809e44bda0324ffac957c1d455be02e783..b4b0d216b601d817437de126759917d5f89e325e 100644
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
-@@ -2,6 +2,8 @@ package org.bukkit.entity;
+@@ -2,6 +2,9 @@ package org.bukkit.entity;
  
  import java.util.Collection;
  import java.util.Set;
++import java.util.function.BiFunction;
 +
 +import com.google.common.base.Function;
  import org.bukkit.GameMode;
  import org.bukkit.Location;
  import org.bukkit.Material;
-@@ -90,6 +92,17 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
+@@ -90,6 +93,17 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
      @Nullable
      public InventoryView openInventory(@NotNull Inventory inventory);
  
@@ -30,20 +31,20 @@ index 28d1ff809e44bda0324ffac957c1d455be02e783..2b95f92814e62a6bb98c4c96dff1a85a
 +     * @return The newly opened inventory view
 +     */
 +    @Nullable
-+    InventoryView openInventory(Inventory inventory, @Nullable Function<ItemStack, Boolean> mayPlaceStrategy);
++    InventoryView openInventory(Inventory inventory, @Nullable BiFunction<Integer, ItemStack, Boolean> mayPlaceStrategy);
 +
      /**
       * Opens an empty workbench inventory window with the player's inventory
       * on the bottom.
 diff --git a/src/main/java/org/bukkit/inventory/Inventory.java b/src/main/java/org/bukkit/inventory/Inventory.java
-index 8f00cb2e3bc9963e9657c1b2493e8b015a6664d0..5c486be5befcb88db5f31ac36bfaa58186e614c4 100644
+index 8f00cb2e3bc9963e9657c1b2493e8b015a6664d0..0fef85fc7b5f9f2f99be802c04f5a6d403c5a993 100644
 --- a/src/main/java/org/bukkit/inventory/Inventory.java
 +++ b/src/main/java/org/bukkit/inventory/Inventory.java
 @@ -3,6 +3,7 @@ package org.bukkit.inventory;
  import java.util.HashMap;
  import java.util.List;
  import java.util.ListIterator;
-+import java.util.function.Function;
++import java.util.function.BiFunction;
  import org.bukkit.Location;
  import org.bukkit.Material;
  import org.bukkit.entity.HumanEntity;
@@ -58,6 +59,6 @@ index 8f00cb2e3bc9963e9657c1b2493e8b015a6664d0..5c486be5befcb88db5f31ac36bfaa581
 +     * Sets a mayPlace strategy
 +     * @param mayPlaceStrategy
 +     */
-+    void setMayPlaceStrategy(@Nullable Function<ItemStack, Boolean> mayPlaceStrategy);
++    void setMayPlaceStrategy(@Nullable BiFunction<Integer, ItemStack, Boolean> mayPlaceStrategy);
 +    // Weeper may place strategy - end
  }
