@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index bfe5c8400d965814392e40aab758d7179c75c35c..d01a7660e7abff67949106a0e3bd49884e42c32c 100644
+index bfe5c8400d965814392e40aab758d7179c75c35c..100d78b300bfea4d04dee37de79421872afb3967 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -25,8 +25,8 @@ repositories {
@@ -14,7 +14,7 @@ index bfe5c8400d965814392e40aab758d7179c75c35c..d01a7660e7abff67949106a0e3bd4988
  dependencies {
 -    implementation(project(":Paper-API"))
 -    implementation(project(":Paper-MojangAPI"))
-+    implementation(project(":Weeper-API")) // Weeper // Airplane // Purpur
++    implementation(project(":Weeper-API")) // Weeper
 +    implementation("io.papermc.paper:paper-mojangapi:1.17.1-R0.1-SNAPSHOT") // Airplane
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
@@ -24,12 +24,12 @@ index bfe5c8400d965814392e40aab758d7179c75c35c..d01a7660e7abff67949106a0e3bd4988
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
 -            "Implementation-Version" to "git-Paper-$implementationVersion",
-+            "Implementation-Version" to "git-Weeper-$implementationVersion", // Weeper // Airplane // Purpur
++            "Implementation-Version" to "git-Weeper-$implementationVersion", // Weeper
              "Implementation-Vendor" to date, // Paper
              "Specification-Title" to "Bukkit",
              "Specification-Version" to project.version,
 diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-index ece77f5ea4b14bbed7c070131b3251ea86764538..803ba10a78b3135b51da39ccd445be0f9bca000a 100644
+index ece77f5ea4b14bbed7c070131b3251ea86764538..a05254825283ebdfe5f050d76072c10e3acdb66b 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 @@ -19,8 +19,8 @@ import java.util.stream.StreamSupport;
@@ -49,8 +49,8 @@ index ece77f5ea4b14bbed7c070131b3251ea86764538..803ba10a78b3135b51da39ccd445be0f
      public Component getVersionMessage(@Nonnull String serverVersion) {
 -        String[] parts = serverVersion.substring("git-Paper-".length()).split("[-\\s]");
 -        final Component updateMessage = getUpdateStatusMessage("PaperMC/Paper", GITHUB_BRANCH_NAME, parts[0]);
-+        String[] parts = serverVersion.substring("git-Weeper-".length()).split("[-\\s]"); // Weeper // Airplane // Purpur
-+        final Component updateMessage = getUpdateStatusMessage("WeepingMc/Weeper", GITHUB_BRANCH_NAME, parts[0]); // Weeper // Airplane // Purpur
++        String[] parts = serverVersion.substring("git-Weeper-".length()).split("[-\\s]"); // Weeper
++        final Component updateMessage = getUpdateStatusMessage("WeepingMc/Weeper", GITHUB_BRANCH_NAME, parts[0]); // Weeper
          final Component history = getHistory();
  
          return history != null ? TextComponent.ofChildren(updateMessage, Component.newline(), history) : updateMessage;
@@ -70,11 +70,8 @@ index ece77f5ea4b14bbed7c070131b3251ea86764538..803ba10a78b3135b51da39ccd445be0f
  
          switch (distance) {
              case -1:
-diff --git a/src/main/java/net/pl3x/purpur/PurpurConfig.java b/src/main/java/net/pl3x/purpur/PurpurConfig.java
-new file mode 100644
-index 0000000000000000000000000000000000000000..e69de29bb2d1d6434b8b29ae775ad8c2e48c5391
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index cfbde4c1220b0d6081a3e4ad2375e0d7bfb2ef40..bf41a6a241545641c0b5db5861f67cb03d7580d6 100644
+index cfbde4c1220b0d6081a3e4ad2375e0d7bfb2ef40..fe8ee31974e5966d7cd63ad4bfc4a87a2d5a6028 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -251,7 +251,7 @@ import javax.annotation.Nullable; // Paper
@@ -82,12 +79,12 @@ index cfbde4c1220b0d6081a3e4ad2375e0d7bfb2ef40..bf41a6a241545641c0b5db5861f67cb0
  
  public final class CraftServer implements Server {
 -    private final String serverName = "Paper"; // Paper
-+    private final String serverName = "Weeper"; // Weeper // Paper // Airplane // Purpur
++    private final String serverName = "Weeper"; // Weeper // Paper
      private final String serverVersion;
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 774556a62eb240da42e84db4502e2ed43495be17..e0d7260f8ecc833c852935f497bc611178ae1192 100644
+index 774556a62eb240da42e84db4502e2ed43495be17..4e2d964a7a5992d1e18cc7ee9e49180fd11035d5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
@@ -95,7 +92,7 @@ index 774556a62eb240da42e84db4502e2ed43495be17..e0d7260f8ecc833c852935f497bc6111
          String result = "Unknown-Version";
  
 -        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/io.papermc.paper/paper-api/pom.properties");
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.github.weepingmc.weeper/weeper-api/pom.properties"); // Weeper // Airplane // Purpur
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.github.weepingmc.weeper/weeper-api/pom.properties"); // Weeper
          Properties properties = new Properties();
  
          if (stream != null) {
