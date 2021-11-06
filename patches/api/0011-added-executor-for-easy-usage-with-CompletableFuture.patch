@@ -1,0 +1,87 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 6 Nov 2021 23:18:10 +0100
+Subject: [PATCH] added executor for easy usage with CompletableFutures
+
+
+diff --git a/src/main/java/org/bukkit/plugin/Plugin.java b/src/main/java/org/bukkit/plugin/Plugin.java
+index c25fc646be750d3a3b2f4fb3f1c53daee5254107..e6072d0ea05b14d2867a3e4b731db5f54d1c29c9 100644
+--- a/src/main/java/org/bukkit/plugin/Plugin.java
++++ b/src/main/java/org/bukkit/plugin/Plugin.java
+@@ -2,12 +2,14 @@ package org.bukkit.plugin;
+ 
+ import java.io.File;
+ import java.io.InputStream;
++import java.util.concurrent.Executor;
+ import java.util.logging.Logger;
+ import org.bukkit.Server;
+ import org.bukkit.command.TabExecutor;
+ import org.bukkit.configuration.file.FileConfiguration;
+ import org.bukkit.generator.BiomeProvider;
+ import org.bukkit.generator.ChunkGenerator;
++import org.checkerframework.checker.nullness.qual.NonNull;
+ import org.jetbrains.annotations.NotNull;
+ import org.jetbrains.annotations.Nullable;
+ 
+@@ -105,6 +107,22 @@ public interface Plugin extends TabExecutor {
+     @NotNull
+     public Server getServer();
+ 
++    // Weeper start - executors
++    /**
++     * Returns an executor of the mainthread
++     * @return executor
++     */
++    @NotNull
++    Executor mainThreadExecutor();
++
++    /**
++     * Returns an async executor
++     * @return executor
++     */
++    @NonNull
++    Executor asyncExecutor();
++    // Weeper stop - executors
++
+     /**
+      * Returns a value indicating whether or not this plugin is currently
+      * enabled
+diff --git a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
+index c943bd801b54519ba6cf5d45aec593d7b7438f99..3bba39bfdbc61c4eb50ea39dd0f6a23016b2b2e7 100644
+--- a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
++++ b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
+@@ -11,6 +11,7 @@ import java.io.Reader;
+ import java.net.URL;
+ import java.net.URLConnection;
+ import java.util.List;
++import java.util.concurrent.Executor;
+ import java.util.logging.Level;
+ import java.util.logging.Logger;
+ import org.apache.commons.lang.Validate;
+@@ -26,6 +27,7 @@ import org.bukkit.plugin.PluginBase;
+ import org.bukkit.plugin.PluginDescriptionFile;
+ import org.bukkit.plugin.PluginLoader;
+ import org.bukkit.plugin.PluginLogger;
++import org.checkerframework.checker.nullness.qual.NonNull;
+ import org.jetbrains.annotations.NotNull;
+ import org.jetbrains.annotations.Nullable;
+ 
+@@ -95,6 +97,18 @@ public abstract class JavaPlugin extends PluginBase {
+         return server;
+     }
+ 
++    // Weeper start - executors
++    @Override
++    public @NotNull Executor mainThreadExecutor() {
++        return (runnable) -> getServer().getScheduler().runTask(this, runnable);
++    }
++
++    @Override
++    public @NonNull Executor asyncExecutor() {
++        return (runnable) -> getServer().getScheduler().runTaskAsynchronously(this, runnable);
++    }
++    // Weeper stop - executors
++
+     /**
+      * Returns a value indicating whether or not this plugin is currently
+      * enabled
