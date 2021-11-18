@@ -85,3 +85,46 @@ index c943bd801b54519ba6cf5d45aec593d7b7438f99..3bba39bfdbc61c4eb50ea39dd0f6a230
      /**
       * Returns a value indicating whether or not this plugin is currently
       * enabled
+diff --git a/src/test/java/org/bukkit/plugin/TestPlugin.java b/src/test/java/org/bukkit/plugin/TestPlugin.java
+index a8be3e23e3e280ad301d9530de50028515612966..443591e86e39eda270968cce9ade44cc341f5dde 100644
+--- a/src/test/java/org/bukkit/plugin/TestPlugin.java
++++ b/src/test/java/org/bukkit/plugin/TestPlugin.java
+@@ -1,14 +1,18 @@
+ package org.bukkit.plugin;
+ 
+-import java.io.File;
+-import java.io.InputStream;
+-import java.util.List;
+ import org.bukkit.Server;
+ import org.bukkit.command.Command;
+ import org.bukkit.command.CommandSender;
+ import org.bukkit.configuration.file.FileConfiguration;
+ import org.bukkit.generator.BiomeProvider;
+ import org.bukkit.generator.ChunkGenerator;
++import org.checkerframework.checker.nullness.qual.NonNull;
++import org.jetbrains.annotations.NotNull;
++
++import java.io.File;
++import java.io.InputStream;
++import java.util.List;
++import java.util.concurrent.Executor;
+ 
+ public class TestPlugin extends PluginBase {
+     private boolean enabled = true;
+@@ -78,6 +82,16 @@ public class TestPlugin extends PluginBase {
+         throw new UnsupportedOperationException("Not supported.");
+     }
+ 
++    @Override
++    public @NotNull Executor mainThreadExecutor() {
++        throw new UnsupportedOperationException("Not supported.");
++    }
++
++    @Override
++    public @NonNull Executor asyncExecutor() {
++        throw new UnsupportedOperationException("Not supported.");
++    }
++
+     @Override
+     public boolean isEnabled() {
+         return enabled;
