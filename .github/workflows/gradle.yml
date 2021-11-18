@@ -10,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix:
-        java-version: [ '16' ]
+        java-version: [ '16', '17' ]
         os: [ 'ubuntu-latest']
     runs-on: ${{ matrix.os }}
     steps:
