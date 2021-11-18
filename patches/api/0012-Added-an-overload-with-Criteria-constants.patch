@@ -6,13 +6,15 @@ Subject: [PATCH] Added an overload with Criteria constants
 
 diff --git a/src/main/java/org/bukkit/scoreboard/Criteria.java b/src/main/java/org/bukkit/scoreboard/Criteria.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..be2de5c86af0db849700f2e544b1756146cadaf1
+index 0000000000000000000000000000000000000000..fb5b629bbfe59421e1fbe30f7c80049bd77e2d5e
 --- /dev/null
 +++ b/src/main/java/org/bukkit/scoreboard/Criteria.java
-@@ -0,0 +1,15 @@
+@@ -0,0 +1,17 @@
 +package org.bukkit.scoreboard;
 +
-+public record Criteria(String value) {
++import org.jetbrains.annotations.NotNull;
++
++public record Criteria(@NotNull String value) {
 +    public static final Criteria DUMMY = new Criteria("dummy");
 +    public static final Criteria TRIGGER = new Criteria("trigger");
 +    public static final Criteria DEATH = new Criteria("deathCount");
