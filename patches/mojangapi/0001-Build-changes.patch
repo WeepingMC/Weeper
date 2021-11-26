@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Fri, 26 Nov 2021 21:05:21 +0100
+Subject: [PATCH] Build changes
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 854971e10dd15e248e98fcff7eaf1bfe01025583..2b89cd992d56b003d2a2ec5807cab815263b3a0b 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -14,7 +14,7 @@ repositories {
+ }
+ 
+ dependencies {
+-    implementation(project(":paper-api"))
++    implementation(project(":Weeper-API"))
+     api("com.mojang:brigadier:1.0.18")
+ 
+     compileOnly("it.unimi.dsi:fastutil:8.2.2")

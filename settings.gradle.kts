@@ -9,4 +9,4 @@ pluginManagement {
 
 rootProject.name = "Weeper"
 
-include("Weeper-API", "Weeper-Server")
+include("Weeper-API", "Weeper-Server", "Weeper-MojangAPI")
