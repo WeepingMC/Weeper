@@ -3,23 +3,8 @@ import io.papermc.paperweight.util.constants.PAPERCLIP_CONFIG
 plugins {
     java
     id("com.github.johnrengelman.shadow") version "7.1.0" apply false
-    id("io.papermc.paperweight.patcher") version "1.2.0"
+    id("io.papermc.paperweight.patcher") version "1.3.0-SNAPSHOT"
     `maven-publish`
-}
-
-repositories {
-    mavenCentral()
-    maven("https://papermc.io/repo/repository/maven-public/") {
-        content {
-            onlyForConfigurations(PAPERCLIP_CONFIG)
-        }
-    }
-}
-
-dependencies {
-    remapper("net.fabricmc:tiny-remapper:0.6.0:fat")
-    decompiler("net.minecraftforge:forgeflower:1.5.498.12")
-    paperclip("io.papermc:paperclip:2.0.1")
 }
 
 allprojects {
@@ -28,7 +13,7 @@ allprojects {
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(16))
+            languageVersion.set(JavaLanguageVersion.of(17))
         }
     }
 }
@@ -37,7 +22,7 @@ subprojects {
 
     tasks.withType<JavaCompile>().configureEach {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(16)
+        options.release.set(17)
     }
     tasks.withType<Javadoc> {
         options.encoding = Charsets.UTF_8.name()
@@ -70,6 +55,21 @@ subprojects {
             }
         }
     }
+}
+
+repositories {
+    mavenCentral()
+    maven("https://papermc.io/repo/repository/maven-public/") {
+        content {
+            onlyForConfigurations(PAPERCLIP_CONFIG)
+        }
+    }
+}
+
+dependencies {
+    remapper("net.fabricmc:tiny-remapper:0.6.0:fat")
+    decompiler("net.minecraftforge:forgeflower:1.5.498.22")
+    paperclip("io.papermc:paperclip:3.0.0-SNAPSHOT")
 }
 
 paperweight {

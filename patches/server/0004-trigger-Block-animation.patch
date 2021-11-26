@@ -5,7 +5,7 @@ Subject: [PATCH] trigger Block animation
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 858e29ad77aee8a1b7797c2d82902abbfd662da2..7ffdd4c93c9989bd3e0c8940b2ae9a5441ac6d55 100644
+index 9c3a728b42fb18bb39377cf34e59add2c4cce73c..57e9ea26d6f508db5619d1110a69295bf7efd94a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 @@ -45,6 +45,9 @@ import net.minecraft.world.level.ClipContext;
@@ -36,7 +36,7 @@ index 858e29ad77aee8a1b7797c2d82902abbfd662da2..7ffdd4c93c9989bd3e0c8940b2ae9a54
 +    public void triggerBlockAnimation(@NotNull Location location,
 +        int action, int actionParameter) {
 +            BlockPos position = new BlockPos(location.getX(), location.getY(), location.getZ());
-+            BlockEntity blockEntity = world.getTileEntity(position, true);
++            BlockEntity blockEntity = world.getBlockEntity(position, true);
 +            world.blockEvent(position, blockEntity.getBlockState().getBlock(), action, actionParameter);
 +    }
 +    // Weeper end

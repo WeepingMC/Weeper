@@ -5,10 +5,10 @@ Subject: [PATCH] add checkerframework dependency
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 02f80c9a34a23c2285a1e05b41f53b4bafc28c5a..2190d41569196fb5fdf75bdbdd35bb47d19ca741 100644
+index 720ba2774196f24cca6c4d1b173f90f8151c8a5e..49bb1628d7ef7eb1b617918e6aa5cfbd9521e2b7 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -42,6 +42,7 @@ dependencies {
+@@ -40,6 +40,7 @@ dependencies {
  
      implementation("org.ow2.asm:asm:9.1")
      implementation("org.ow2.asm:asm-commons:9.1")
