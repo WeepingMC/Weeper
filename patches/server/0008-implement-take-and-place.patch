@@ -5,7 +5,7 @@ Subject: [PATCH] implement take and place
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index ca05d8e5ff1b8caa07c0e4f3e203abd46d7a7ede..f8b320a0356ccc3094940e4ea0b07b14a619642e 100644
+index 1f4d3a48553a467bcbd4799735d1950c9c2dbe23..4321fcab8859fa07825e6af599f5eeb5d6bca98f 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 @@ -1,5 +1,6 @@
@@ -81,7 +81,7 @@ index 4468c415905f4b48aaa4269832ef725a8b9bc3ef..181a64cc45d94ae2ec3673331e14b673
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 7c7d05852dd463331110d1dcb71b4d4f5312900f..cb0ad2be6a5f2b72e3687278892d608b6b86d9da 100644
+index eb0ce87bc8eac723b73c2ee6da41db5da3fab401..8c1bd38369d42047377228dbfa36d0ea6b12a319 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -1,5 +1,6 @@

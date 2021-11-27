@@ -101,6 +101,7 @@ paperweight {
 tasks.register("cleanup"){
     doLast{
         layout.projectDirectory.dir("Weeper-API").asFile.deleteRecursively()
+        layout.projectDirectory.dir("Weeper-MojangAPI").asFile.deleteRecursively()
         layout.projectDirectory.dir("Weeper-Server").asFile.deleteRecursively()
     }
 }

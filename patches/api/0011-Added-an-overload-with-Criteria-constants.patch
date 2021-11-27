@@ -28,7 +28,7 @@ index 0000000000000000000000000000000000000000..fb5b629bbfe59421e1fbe30f7c80049b
 +    public static final Criteria ARMOR = new Criteria("armor");
 +}
 diff --git a/src/main/java/org/bukkit/scoreboard/Scoreboard.java b/src/main/java/org/bukkit/scoreboard/Scoreboard.java
-index 93089ce61d2e1888df13b7c9629a79cd6f5f767a..cea6cd376eacf6f9ac227388f7f291cf41d51901 100644
+index f7754ab421c7b452a53c28d1e2fafdccfbba24bf..17c74ecfdc9e47e1a4e5d8dba3120fd7529ab059 100644
 --- a/src/main/java/org/bukkit/scoreboard/Scoreboard.java
 +++ b/src/main/java/org/bukkit/scoreboard/Scoreboard.java
 @@ -47,6 +47,29 @@ public interface Scoreboard {

@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 72e4828940396b7b326ed64c3c06b785f949b08d..ada8239c69444918288ecdb3afa57a959dc89ddb 100644
+index cd74406039704e5a880f00b9b60bb7b1dedc5398..718a8a69a3c28769c1a4fef340abc65b39679b7b 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -18,8 +18,8 @@ repositories {
@@ -19,7 +19,7 @@ index 72e4828940396b7b326ed64c3c06b785f949b08d..ada8239c69444918288ecdb3afa57a95
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -71,7 +71,7 @@ tasks.jar {
+@@ -67,7 +67,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
@@ -29,7 +29,7 @@ index 72e4828940396b7b326ed64c3c06b785f949b08d..ada8239c69444918288ecdb3afa57a95
              "Specification-Title" to "Bukkit",
              "Specification-Version" to project.version,
 diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-index ece77f5ea4b14bbed7c070131b3251ea86764538..a05254825283ebdfe5f050d76072c10e3acdb66b 100644
+index ece77f5ea4b14bbed7c070131b3251ea86764538..a7ecab042ae88a4e09268f42b96410189413ebef 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 @@ -19,8 +19,8 @@ import java.util.stream.StreamSupport;
