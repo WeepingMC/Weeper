@@ -10,7 +10,7 @@ jobs:
   build:
     strategy:
       matrix:
-        java-version: [ '16', '17' ]
+        java-version: [ '17' ]
         os: [ 'ubuntu-latest']
     runs-on: ${{ matrix.os }}
     steps:
@@ -27,13 +27,15 @@ jobs:
         run: git config --global user.name "Master Dummy"
       - name: Apply Patches
         run: ./gradlew applyPatches
-      - name: Generate Paperclip jar
-        run: ./gradlew paperclipJar
-      - uses: "actions/upload-artifact@v2"
-        with:
-          name: "paperclip"
-          path: "weeper-paperclip.jar"
-      - uses: "actions/upload-artifact@v2"
-        with:
-          name: "api"
-          path: "Weeper-API/build/libs/Weeper-API-*.jar"
+      - name: Generate reobf Paperclip jar
+        run: ./gradlew createReobfPaperclipJar
+      - name: Generate moj Paperclip jar
+        run: ./gradlew createMojmapPaperclipJar
+#      - uses: "actions/upload-artifact@v2"
+#        with:
+#          name: "paperclip"
+#          path: "weeper-paperclip.jar"
+#      - uses: "actions/upload-artifact@v2"
+#        with:
+#          name: "api"
+#          path: "Weeper-API/build/libs/Weeper-API-*.jar"
