@@ -29,7 +29,7 @@ index cd74406039704e5a880f00b9b60bb7b1dedc5398..718a8a69a3c28769c1a4fef340abc65b
              "Specification-Title" to "Bukkit",
              "Specification-Version" to project.version,
 diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-index ece77f5ea4b14bbed7c070131b3251ea86764538..a7ecab042ae88a4e09268f42b96410189413ebef 100644
+index ece77f5ea4b14bbed7c070131b3251ea86764538..a05254825283ebdfe5f050d76072c10e3acdb66b 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 @@ -19,8 +19,8 @@ import java.util.stream.StreamSupport;
@@ -38,7 +38,7 @@ index ece77f5ea4b14bbed7c070131b3251ea86764538..a7ecab042ae88a4e09268f42b9641018
      private static final java.util.regex.Pattern VER_PATTERN = java.util.regex.Pattern.compile("^([0-9\\.]*)\\-.*R"); // R is an anchor, will always give '-R' at end
 -    private static final String GITHUB_BRANCH_NAME = "master";
 -    private static final String DOWNLOAD_PAGE = "https://papermc.io/downloads";
-+    private static final String GITHUB_BRANCH_NAME = "dev/1.18";
++    private static final String GITHUB_BRANCH_NAME = "main";
 +    private static final String DOWNLOAD_PAGE = "https://github.com/WeepingMC/Weeper/actions/";
      private static @Nullable String mcVer;
  
@@ -71,10 +71,10 @@ index ece77f5ea4b14bbed7c070131b3251ea86764538..a7ecab042ae88a4e09268f42b9641018
          switch (distance) {
              case -1:
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 519806cee3a45eaaedefa83b7237b073c9bbc332..b0376d6996d7c3cfe62f2de9c47efb8f1f2f19d1 100644
+index 893badbe321fa974cb82f5f11ab590bb3827f8b8..d4ce57c6b5a4515bea8b5b1efeac093136366ee3 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1707,7 +1707,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1708,7 +1708,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
@@ -84,7 +84,7 @@ index 519806cee3a45eaaedefa83b7237b073c9bbc332..b0376d6996d7c3cfe62f2de9c47efb8f
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 6b53310b37a502a677459bf2b777a2c450fb6482..c472cc9534da4c7a5205413b5d664290cfa51110 100644
+index 1d7d3dbf7f6857d9853112844b70692e92e9c89d..f556d52e47f0870d66cacb0a5794923e3f675f3d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -255,7 +255,7 @@ import javax.annotation.Nullable; // Paper
