@@ -97,7 +97,7 @@ index 1d7d3dbf7f6857d9853112844b70692e92e9c89d..f556d52e47f0870d66cacb0a5794923e
      private final String bukkitVersion = Versioning.getBukkitVersion();
      private final Logger logger = Logger.getLogger("Minecraft");
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 774556a62eb240da42e84db4502e2ed43495be17..4e2d964a7a5992d1e18cc7ee9e49180fd11035d5 100644
+index 774556a62eb240da42e84db4502e2ed43495be17..793effdc5f473d11de41d932a0ebc35edd735a26 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {
@@ -105,7 +105,7 @@ index 774556a62eb240da42e84db4502e2ed43495be17..4e2d964a7a5992d1e18cc7ee9e49180f
          String result = "Unknown-Version";
  
 -        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/io.papermc.paper/paper-api/pom.properties");
-+        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.github.weepingmc.weeper/weeper-api/pom.properties"); // Weeper
++        InputStream stream = Bukkit.class.getClassLoader().getResourceAsStream("META-INF/maven/com.github.weepingmc.weeper/Weeper-API/pom.properties"); // Weeper
          Properties properties = new Properties();
  
          if (stream != null) {
