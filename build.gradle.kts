@@ -109,3 +109,14 @@ tasks.register("cleanup"){
         layout.projectDirectory.dir("Weeper-Server").asFile.deleteRecursively()
     }
 }
+
+tasks.generateDevelopmentBundle {
+    apiCoordinates.set("com.github.weepingmc.weeper:Weeper-API")
+    mojangApiCoordinates.set("com.github.weepingmc.weeper:Weeper-MojangAPI")
+    libraryRepositories.addAll(
+        "https://repo.maven.apache.org/maven2/",
+        "https://libraries.minecraft.net/",
+        "https://papermc.io/repo/repository/maven-public/",
+        "https://maven.fabricmc.net/",
+    )
+}
