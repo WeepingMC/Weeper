@@ -27,15 +27,15 @@ jobs:
         run: git config --global user.name "Master Dummy"
       - name: Apply Patches
         run: ./gradlew applyPatches
-#      - name: Generate reobf Paperclip jar
-#        run: ./gradlew createReobfPaperclipJar
-#      - name: Generate moj Paperclip jar
-#        run: ./gradlew createMojmapPaperclipJar
-#      - uses: "actions/upload-artifact@v2"
-#        with:
-#          name: "paperclip"
-#          path: "weeper-paperclip.jar"
-#      - uses: "actions/upload-artifact@v2"
-#        with:
-#          name: "api"
-#          path: "Weeper-API/build/libs/Weeper-API-*.jar"
+      - name: Generate reobf Paperclip jar
+        run: ./gradlew createReobfPaperclipJar
+      - name: Generate moj Paperclip jar
+        run: ./gradlew createMojmapPaperclipJar
+      - uses: "actions/upload-artifact@v2"
+        with:
+          name: "paperclip"
+          path: "weeper-paperclip.jar"
+      - uses: "actions/upload-artifact@v2"
+        with:
+          name: "api"
+          path: "Weeper-API/build/libs/Weeper-API-*.jar"
