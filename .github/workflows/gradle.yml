@@ -34,11 +34,11 @@ jobs:
       - uses: "actions/upload-artifact@v2"
         with:
           name: "paperclip"
-          path: "build/Weeper-paperclip-*-mojmap.jar"
+          path: "build/libs/Weeper-paperclip-*-mojmap.jar"
       - uses: "actions/upload-artifact@v2"
         with:
           name: "paperclip reobf"
-          path: "build/Weeper-paperclip-*-reobf.jar"
+          path: "build/libs/Weeper-paperclip-*-reobf.jar"
       - uses: "actions/upload-artifact@v2"
         with:
           name: "api"
