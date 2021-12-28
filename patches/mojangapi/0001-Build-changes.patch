@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 854971e10dd15e248e98fcff7eaf1bfe01025583..2b89cd992d56b003d2a2ec5807cab815263b3a0b 100644
+index c90209011a266e71511954f23a1e42efa8c62a54..ac1b8d2859dcd46ea85b1564b77fc536d04f888b 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -14,7 +14,7 @@ repositories {
@@ -13,7 +13,7 @@ index 854971e10dd15e248e98fcff7eaf1bfe01025583..2b89cd992d56b003d2a2ec5807cab815
  
  dependencies {
 -    implementation(project(":paper-api"))
-+    implementation(project(":Weeper-API"))
++    implementation(project(":Weeper-API")) // Weeper
      api("com.mojang:brigadier:1.0.18")
  
-     compileOnly("it.unimi.dsi:fastutil:8.2.2")
+     compileOnly("it.unimi.dsi:fastutil:8.5.6")
