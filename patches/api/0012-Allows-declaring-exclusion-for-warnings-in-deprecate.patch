@@ -1,0 +1,61 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Fri, 11 Feb 2022 00:12:46 +0100
+Subject: [PATCH] Allows declaring exclusion for warnings in deprecated events
+ on class level.
+
+All JavaPlugins listed do not throw the deprecated event register warning
+
+diff --git a/src/main/java/org/bukkit/plugin/DoNotWarnFor.java b/src/main/java/org/bukkit/plugin/DoNotWarnFor.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..f67e2c7343c54a23066f073207d4a9be872603a8
+--- /dev/null
++++ b/src/main/java/org/bukkit/plugin/DoNotWarnFor.java
+@@ -0,0 +1,19 @@
++package org.bukkit.plugin;
++
++import org.bukkit.plugin.java.JavaPlugin;
++
++import java.lang.annotation.ElementType;
++import java.lang.annotation.Retention;
++import java.lang.annotation.RetentionPolicy;
++import java.lang.annotation.Target;
++
++/**
++ * Allows declaring exclusion for warnings in deprecated events on class level.
++ *
++ * All JavaPlugins listed do not throw the deprecated event register warning
++ */
++@Retention(RetentionPolicy.RUNTIME)
++@Target(ElementType.TYPE)
++public @interface DoNotWarnFor {
++    Class<? extends JavaPlugin>[] plugins();
++}
+diff --git a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
+index c8b11793c6a3baabc1c9566e0463ab1d6e293827..94907305d60a8d35960979db6d03dc6cb7efae7e 100644
+--- a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
++++ b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
+@@ -31,6 +31,7 @@ import org.bukkit.event.Listener;
+ import org.bukkit.event.server.PluginDisableEvent;
+ import org.bukkit.event.server.PluginEnableEvent;
+ import org.bukkit.plugin.AuthorNagException;
++import org.bukkit.plugin.DoNotWarnFor;
+ import org.bukkit.plugin.EventExecutor;
+ import org.bukkit.plugin.InvalidDescriptionException;
+ import org.bukkit.plugin.InvalidPluginException;
+@@ -319,6 +320,15 @@ public final class JavaPluginLoader implements PluginLoader {
+                     if (!warningState.printFor(warning)) {
+                         break;
+                     }
++                    // Weeper start - allow exclusion for own plugin
++                    if(clazz.getAnnotation(DoNotWarnFor.class) != null){
++                        DoNotWarnFor exclusion = clazz.getAnnotation(DoNotWarnFor.class);
++                        if(Arrays.asList(exclusion.plugins()).contains(plugin.getClass())){
++                            break;
++                        }
++                    }
++                    // Weeper end - allow exclusion for own plugin
++
+                     plugin.getLogger().log(
+                             Level.WARNING,
+                             String.format(
