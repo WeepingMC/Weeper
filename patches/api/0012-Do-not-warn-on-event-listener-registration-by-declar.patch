@@ -1,0 +1,33 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Fri, 11 Feb 2022 00:12:46 +0100
+Subject: [PATCH] Do not warn on event listener registration by declaring event
+ when event is deprecated.
+
+All JavaPlugins listed do not throw the deprecated event register warning
+
+diff --git a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
+index c8b11793c6a3baabc1c9566e0463ab1d6e293827..bae9ba15c7071e43a934820373d2358ef9eda979 100644
+--- a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
++++ b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
+@@ -12,6 +12,7 @@ import java.util.HashMap;
+ import java.util.HashSet;
+ import java.util.List;
+ import java.util.Map;
++import java.util.Objects;
+ import java.util.Set;
+ import java.util.concurrent.CopyOnWriteArrayList;
+ import java.util.jar.JarEntry;
+@@ -319,6 +320,12 @@ public final class JavaPluginLoader implements PluginLoader {
+                     if (!warningState.printFor(warning)) {
+                         break;
+                     }
++                    // Weeper start - allow exclusion for own plugin
++                    if(Objects.equals(clazz.getClassLoader(), plugin.getClass().getClassLoader())) {
++                        break;
++                    }
++                    // Weeper end - allow exclusion for own plugin
++
+                     plugin.getLogger().log(
+                             Level.WARNING,
+                             String.format(
