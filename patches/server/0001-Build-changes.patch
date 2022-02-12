@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index da31e84cb558e6fad9cab015cfae753ce7be7db0..735027cb051373c3af5732412dfea6e690e45967 100644
+index 028f6a1795ceb99d1760c73b0980238677b4b8bc..d28ca03b35804684b4423eb2c972011d7fbdfaf9 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -18,8 +18,8 @@ repositories {
@@ -71,7 +71,7 @@ index ece77f5ea4b14bbed7c070131b3251ea86764538..a05254825283ebdfe5f050d76072c10e
          switch (distance) {
              case -1:
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 481a5dbad82f3f8dd5b1bf8ab207d82ec73d5bbd..a9494df49d8420c80ed635f57c4d1a4c1c6c031a 100644
+index eab93e1e3712c0a01cac187bf5944818c813d665..e81dd77491d7fc3bab13c7c8a6c9e7f4a0757922 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1709,7 +1709,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -84,10 +84,10 @@ index 481a5dbad82f3f8dd5b1bf8ab207d82ec73d5bbd..a9494df49d8420c80ed635f57c4d1a4c
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index ba7023e7ca5d29375ff53c2951892138d155f69f..c7875951ee58991a970a722918cf741d8fc20b5e 100644
+index f0629cac377b29246e990a01d60601270cbd77bd..51f51a7c86c2cd2daf4b88e233864c2b672cee4d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -254,7 +254,7 @@ import javax.annotation.Nullable; // Paper
+@@ -251,7 +251,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {
