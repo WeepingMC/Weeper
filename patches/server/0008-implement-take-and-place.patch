@@ -5,7 +5,7 @@ Subject: [PATCH] implement take and place
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index 1f4d3a48553a467bcbd4799735d1950c9c2dbe23..4321fcab8859fa07825e6af599f5eeb5d6bca98f 100644
+index a0e5e2daff21564a85c46ad469b79139cc26c1fd..a506578473c5900c7207ccc595695f2091645552 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 @@ -1,5 +1,6 @@
@@ -15,7 +15,7 @@ index 1f4d3a48553a467bcbd4799735d1950c9c2dbe23..4321fcab8859fa07825e6af599f5eeb5
  import com.google.common.base.Suppliers;
  import com.google.common.collect.HashBasedTable;
  import com.google.common.collect.Lists;
-@@ -149,6 +150,12 @@ public abstract class AbstractContainerMenu {
+@@ -157,6 +158,12 @@ public abstract class AbstractContainerMenu {
          return slot;
      }
  
@@ -81,7 +81,7 @@ index 4468c415905f4b48aaa4269832ef725a8b9bc3ef..181a64cc45d94ae2ec3673331e14b673
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index eb0ce87bc8eac723b73c2ee6da41db5da3fab401..8c1bd38369d42047377228dbfa36d0ea6b12a319 100644
+index e7108dd70f1eb91f38e04ad71e595bc679560f75..411acca5b236bad2cd1cb39eabb25060c719b501 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -1,5 +1,6 @@
