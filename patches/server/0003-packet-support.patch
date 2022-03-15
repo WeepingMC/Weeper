@@ -841,10 +841,10 @@ index fdd76d1a1636f30f519c434b41061d826c4a8261..8108fc40289f0d2a1b2a891d55089966
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 97ff2792186fa36714db3ae099489ea37b3b2598..c13c1914e308eaad0ec8f67b0907f2fd4bd497bf 100644
+index a54edbcee5f4f914cb95d5053cf587bc6a74ffa2..b63cf54d022f8e595a8e22e62ffd260b5f74004a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2832,5 +2832,11 @@ public final class CraftServer implements Server {
+@@ -2852,5 +2852,11 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
  
@@ -857,7 +857,7 @@ index 97ff2792186fa36714db3ae099489ea37b3b2598..c13c1914e308eaad0ec8f67b0907f2fd
      // Paper end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-index 152bd54ebd0b0eeee4f3f7faf0c3043d83c01cc1..55eca651da332f8e3df03a2362c5b9a38eee844d 100644
+index 0102c475b6e49777c1e24c32e5eff2992e51c89f..95caf0537a74334367c5a04f1bb78b8ee1e09559 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 @@ -20,7 +20,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
