@@ -800,10 +800,10 @@ index 56e4036a88e570333633bf5fc4dc4a2de4654ab9..3df3edce4dc1692c41f1c46f07f934ea
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 84fce7dccf9232209f939a32acfc3131e62eb27c..c193e2d94f67fc484a24f8c3716c30713dc31821 100644
+index 49cf3601df7b145d49b1fe9a71ba0bc60c5394b3..2fa2afd75b70aad41122d91e889cd9a80254e056 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -270,7 +270,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
+@@ -270,7 +270,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      public int invulnerableTime;
      protected boolean firstTick;
      protected final SynchedEntityData entityData;
@@ -812,7 +812,7 @@ index 84fce7dccf9232209f939a32acfc3131e62eb27c..c193e2d94f67fc484a24f8c3716c3071
      protected static final int FLAG_ONFIRE = 0;
      private static final int FLAG_SHIFT_KEY_DOWN = 1;
      private static final int FLAG_SPRINTING = 3;
-@@ -279,11 +279,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, i
+@@ -279,11 +279,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      protected static final int FLAG_GLOWING = 6;
      protected static final int FLAG_FALL_FLYING = 7;
      private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
