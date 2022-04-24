@@ -828,7 +828,7 @@ index 49cf3601df7b145d49b1fe9a71ba0bc60c5394b3..2fa2afd75b70aad41122d91e889cd9a8
      private EntityInLevelCallback levelCallback;
      private Vec3 packetCoordinates;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index fdd76d1a1636f30f519c434b41061d826c4a8261..8108fc40289f0d2a1b2a891d550899663114c3aa 100644
+index 1521f53ee1bd85ca44a68b2c9d969eaf63fa342e..c123aacfcc58a36df1070e815612425d3ee028e1 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -174,7 +174,7 @@ public abstract class LivingEntity extends Entity {
@@ -841,10 +841,10 @@ index fdd76d1a1636f30f519c434b41061d826c4a8261..8108fc40289f0d2a1b2a891d55089966
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 80fb185c334dd2d025a797baf87eb1477b495641..3348e632215a2c8a87db966e255afa3a55e9a411 100644
+index 4e49e21697a045946c9c102c13a0a8a8714a96af..ef8595efcef140476ae10c3c51d6a4c3c815b3b4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2863,5 +2863,11 @@ public final class CraftServer implements Server {
+@@ -2872,5 +2872,11 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
  
@@ -870,7 +870,7 @@ index 0102c475b6e49777c1e24c32e5eff2992e51c89f..95caf0537a74334367c5a04f1bb78b8e
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-index be5e4c2f3c552e0438ed1cc660e411c41fd13df7..7ddf6ec3169dfcdde08c11be890e66373019c59d 100644
+index d3d9641862f4746469bca946ef6d89a88f15698b..44d65585cdb24a2cba63d6d566a3f845e66d4673 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 @@ -14,14 +14,20 @@ import org.bukkit.scoreboard.Team;
