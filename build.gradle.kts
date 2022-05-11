@@ -7,6 +7,8 @@ plugins {
     id("io.papermc.paperweight.patcher") version "1.3.6"
 }
 
+val paperMavenPublicUrl = "https://papermc.io/repo/repository/maven-public/"
+
 allprojects {
     apply(plugin = "java")
     apply(plugin = "maven-publish")
@@ -19,8 +21,7 @@ allprojects {
 }
 
 subprojects {
-
-    tasks.withType<JavaCompile>().configureEach {
+    tasks.withType<JavaCompile> {
         options.encoding = Charsets.UTF_8.name()
         options.release.set(17)
     }
@@ -38,26 +39,6 @@ subprojects {
     repositories {
         mavenCentral()
         maven("https://papermc.io/repo/repository/maven-public/")
-    }
-
-    apply<MavenPublishPlugin>()
-    publishing {
-        repositories {
-            maven {
-                authentication {
-                    credentials(PasswordCredentials::class)
-                }
-                url = uri("https://nexus.endrealm.net/repository/toothpick/")
-                name = "endrealm"
-            }
-            maven {
-                authentication {
-                    credentials(PasswordCredentials::class)
-                }
-                url = uri("https://dev.craftstuebchen.de/repo/repository/snapshots/")
-                name = "cs"
-            }
-        }
     }
 }
 
@@ -119,4 +100,38 @@ tasks.generateDevelopmentBundle {
         "https://papermc.io/repo/repository/maven-public/",
         "https://maven.fabricmc.net/",
     )
+}
+
+allprojects {
+    publishing {
+        repositories {
+            maven {
+                authentication {
+                    credentials(PasswordCredentials::class)
+                }
+                url = uri("https://nexus.endrealm.net/repository/toothpick/")
+                name = "endrealm"
+            }
+            maven {
+                authentication {
+                    credentials(PasswordCredentials::class)
+                }
+                url = uri("https://dev.craftstuebchen.de/repo/repository/snapshots/")
+                name = "cs"
+            }
+        }
+    }
+}
+
+
+publishing {
+    // Publishing dev bundle:
+    // ./gradlew publishDevBundlePublicationTo(MavenLocal|MyRepoSnapshotsRepository) -PpublishDevBundle
+    if (project.hasProperty("publishDevBundle")) {
+        publications.create<MavenPublication>("devBundle") {
+            artifact(tasks.generateDevelopmentBundle) {
+                artifactId = "dev-bundle"
+            }
+        }
+    }
 }
