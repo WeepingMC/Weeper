@@ -5,7 +5,7 @@ Subject: [PATCH] trigger Block animation
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 48825eaba9677a8b1e4fff80738e17d08e3307f8..0d90bd627d87a54f408c9d0cb18dfde90fea61a0 100644
+index b6770f6dbd88990151513c44259d926381983cff..93172ca74eba43c79ab17cc9cbcba899e5118fd9 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 @@ -54,6 +54,7 @@ import net.minecraft.world.level.ChunkPos;
@@ -24,7 +24,7 @@ index 48825eaba9677a8b1e4fff80738e17d08e3307f8..0d90bd627d87a54f408c9d0cb18dfde9
  
  public class CraftWorld extends CraftRegionAccessor implements World {
      public static final int CUSTOM_DIMENSION_OFFSET = 10;
-@@ -2179,6 +2181,16 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -2180,6 +2182,16 @@ public class CraftWorld extends CraftRegionAccessor implements World {
      public DragonBattle getEnderDragonBattle() {
          return (this.getHandle().dragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().dragonFight());
      }

@@ -316,10 +316,10 @@ index d8666481f9a407403d0114ff02024fd3c50c27c4..baa00bc7fccbf4edd35ead8ab6a859ab
  
      @NotNull
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 743a4091e06015b303d1eebc3b6bd393f98e4b9f..99a8c5b0156c4a93a15cd018860e472aea6fdef2 100644
+index 79b26045a68ebb9b01e5bd06abbccaaef5489777..f7809595eb1e255a845eaf2863b78aec5d99fb6a 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2057,5 +2057,12 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2054,5 +2054,12 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       * @return the potion brewer
       */
      @NotNull org.bukkit.potion.PotionBrewer getPotionBrewer();
