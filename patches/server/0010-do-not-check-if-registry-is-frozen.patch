@@ -5,10 +5,10 @@ Subject: [PATCH] do not check if registry is frozen
 
 
 diff --git a/src/main/java/net/minecraft/core/MappedRegistry.java b/src/main/java/net/minecraft/core/MappedRegistry.java
-index a015a097b807d49f60323dacda970db260543561..8c49b5caa4e958bc2311bf24f91215120add9019 100644
+index c3c0e52cfe8ef5fe9049c4582778040702131b47..82d672531b1c6a6a75d4b263c30cfe1f885ea681 100644
 --- a/src/main/java/net/minecraft/core/MappedRegistry.java
 +++ b/src/main/java/net/minecraft/core/MappedRegistry.java
-@@ -84,7 +84,7 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
+@@ -83,7 +83,7 @@ public class MappedRegistry<T> extends WritableRegistry<T> {
      }
  
      private Holder<T> registerMapping(int rawId, ResourceKey<T> key, T value, Lifecycle lifecycle, boolean checkDuplicateKeys) {
