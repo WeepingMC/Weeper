@@ -5,7 +5,7 @@ Subject: [PATCH] added executor for easy usage with CompletableFutures
 
 
 diff --git a/src/main/java/org/bukkit/plugin/Plugin.java b/src/main/java/org/bukkit/plugin/Plugin.java
-index c25fc646be750d3a3b2f4fb3f1c53daee5254107..e6072d0ea05b14d2867a3e4b731db5f54d1c29c9 100644
+index 34438b5362b0ba0949625d81e8371fe0d1f76fdf..a6d4994e7d2a7cd59094287781cc2dafc3eda9a1 100644
 --- a/src/main/java/org/bukkit/plugin/Plugin.java
 +++ b/src/main/java/org/bukkit/plugin/Plugin.java
 @@ -2,12 +2,14 @@ package org.bukkit.plugin;
@@ -47,17 +47,17 @@ index c25fc646be750d3a3b2f4fb3f1c53daee5254107..e6072d0ea05b14d2867a3e4b731db5f5
       * Returns a value indicating whether or not this plugin is currently
       * enabled
 diff --git a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
-index c943bd801b54519ba6cf5d45aec593d7b7438f99..3bba39bfdbc61c4eb50ea39dd0f6a23016b2b2e7 100644
+index 3bea5dd67ad0393160ccede4ac99a3c7baa1803b..56aa89aed26c54874f846bd55d66b556e920ec7f 100644
 --- a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
 +++ b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
-@@ -11,6 +11,7 @@ import java.io.Reader;
+@@ -12,6 +12,7 @@ import java.io.Reader;
  import java.net.URL;
  import java.net.URLConnection;
  import java.util.List;
 +import java.util.concurrent.Executor;
  import java.util.logging.Level;
  import java.util.logging.Logger;
- import org.apache.commons.lang.Validate;
+ import org.bukkit.Server;
 @@ -26,6 +27,7 @@ import org.bukkit.plugin.PluginBase;
  import org.bukkit.plugin.PluginDescriptionFile;
  import org.bukkit.plugin.PluginLoader;
