@@ -5,7 +5,7 @@ Subject: [PATCH] implement take and place
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index a0e5e2daff21564a85c46ad469b79139cc26c1fd..a506578473c5900c7207ccc595695f2091645552 100644
+index 79d8bcf3f9b0fe4a65ad7899f858efefac6feaa7..f127a6886cf164bbced94f4bfc852a17222f0dd9 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 @@ -1,5 +1,6 @@
@@ -15,7 +15,7 @@ index a0e5e2daff21564a85c46ad469b79139cc26c1fd..a506578473c5900c7207ccc595695f20
  import com.google.common.base.Suppliers;
  import com.google.common.collect.HashBasedTable;
  import com.google.common.collect.Lists;
-@@ -157,6 +158,12 @@ public abstract class AbstractContainerMenu {
+@@ -156,6 +157,12 @@ public abstract class AbstractContainerMenu {
          return slot;
      }
  
@@ -29,7 +29,7 @@ index a0e5e2daff21564a85c46ad469b79139cc26c1fd..a506578473c5900c7207ccc595695f20
          this.dataSlots.add(property);
          this.remoteDataSlots.add(0);
 diff --git a/src/main/java/net/minecraft/world/inventory/Slot.java b/src/main/java/net/minecraft/world/inventory/Slot.java
-index 4468c415905f4b48aaa4269832ef725a8b9bc3ef..181a64cc45d94ae2ec3673331e14b6735938be82 100644
+index 52d555af415277d8d1f30d8b46855d4b05867597..c3bc0c196e771a10bb990a16ebcc0e7ee2da2761 100644
 --- a/src/main/java/net/minecraft/world/inventory/Slot.java
 +++ b/src/main/java/net/minecraft/world/inventory/Slot.java
 @@ -1,5 +1,7 @@
@@ -71,7 +71,7 @@ index 4468c415905f4b48aaa4269832ef725a8b9bc3ef..181a64cc45d94ae2ec3673331e14b673
      }
  
      public ItemStack getItem() {
-@@ -82,7 +92,7 @@ public class Slot {
+@@ -87,7 +97,7 @@ public class Slot {
      }
  
      public boolean mayPickup(Player playerEntity) {
@@ -81,7 +81,7 @@ index 4468c415905f4b48aaa4269832ef725a8b9bc3ef..181a64cc45d94ae2ec3673331e14b673
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index e7108dd70f1eb91f38e04ad71e595bc679560f75..411acca5b236bad2cd1cb39eabb25060c719b501 100644
+index 83c5314ed3a3f09162bca47902c4e749fab940a0..57f15f11b158e0c29130c8d0ed2834653603277c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -1,5 +1,6 @@
