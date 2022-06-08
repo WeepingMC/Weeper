@@ -213,26 +213,28 @@ index 0000000000000000000000000000000000000000..eed9614c64f7fcb36ca2b10bb1489314
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/options/EntityMetaBuilder.java b/src/main/java/com/github/weepingmc/packet/options/EntityMetaBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..c5c51fe715c5654b210a72b518e923656d800772
+index 0000000000000000000000000000000000000000..6f4d7a7df5e785a01820152e0f831d143fece7d6
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/options/EntityMetaBuilder.java
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,22 @@
 +package com.github.weepingmc.packet.options;
 +
++import com.destroystokyo.paper.SkinParts;
++import net.kyori.adventure.text.Component;
 +import net.md_5.bungee.api.chat.BaseComponent;
 +import org.jetbrains.annotations.NotNull;
-+import org.jetbrains.annotations.Nullable;
 +
 +import java.util.Set;
-+
-+import com.destroystokyo.paper.SkinParts;
 +
 +public interface EntityMetaBuilder {
 +    @NotNull
 +    EntityMetaBuilder withEntityStatus(@NotNull Set<EntityStatus> entityStatus);
 +
 +    @NotNull
-+    EntityMetaBuilder withCustomName(@Nullable BaseComponent[] baseComponents);
++    EntityMetaBuilder withCustomName(@NotNull BaseComponent[] baseComponents);
++
++    @NotNull
++    EntityMetaBuilder withCustomName(@NotNull Component component);
 +
 +    @NotNull
 +    EntityMetaBuilder withSkinParts(@NotNull SkinParts skinParts);
@@ -296,7 +298,7 @@ index 0000000000000000000000000000000000000000..aafa50f0809a03dcdd3a8fcf914d04e7
 +    REMOVE_PLAYERS_FROM_TEAM
 +}
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index d8666481f9a407403d0114ff02024fd3c50c27c4..baa00bc7fccbf4edd35ead8ab6a859abcb1bdc11 100644
+index a87399fa4838d4b2c1ff9cc35d433ae76cc149bf..52f8a44a9d7c4d9e4195570b99fdf3fb31f600fd 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
 @@ -2362,6 +2362,15 @@ public final class Bukkit {

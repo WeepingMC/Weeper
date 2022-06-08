@@ -173,30 +173,29 @@ index 0000000000000000000000000000000000000000..270f90c81b77732cf2db947d74aa23c2
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftEntityMetaBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftEntityMetaBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..5433c5f6957b5d50c7fb8be92206310f869333a7
+index 0000000000000000000000000000000000000000..a51cf8bfda811b2162bef4d67122619b2d7991ec
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftEntityMetaBuilder.java
-@@ -0,0 +1,49 @@
+@@ -0,0 +1,57 @@
 +package com.github.weepingmc.packet;
 +
-+import static com.github.weepingmc.packet.CraftPacketConversion.mapStatus;
-+
-+import java.util.ArrayList;
-+import java.util.List;
-+import java.util.Optional;
-+import java.util.Set;
-+
-+import javax.annotation.Nonnull;
-+
 +import com.destroystokyo.paper.SkinParts;
-+
 +import com.github.weepingmc.packet.options.EntityMetaBuilder;
 +import com.github.weepingmc.packet.options.EntityStatus;
++import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 +import net.md_5.bungee.api.chat.BaseComponent;
 +import net.minecraft.network.chat.Component;
 +import net.minecraft.network.syncher.SynchedEntityData;
 +import net.minecraft.world.entity.Entity;
 +import net.minecraft.world.entity.player.Player;
++
++import javax.annotation.Nonnull;
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Optional;
++import java.util.Set;
++
++import static com.github.weepingmc.packet.CraftPacketConversion.mapStatus;
 +
 +public class CraftEntityMetaBuilder implements EntityMetaBuilder {
 +
@@ -213,14 +212,23 @@ index 0000000000000000000000000000000000000000..5433c5f6957b5d50c7fb8be92206310f
 +    }
 +
 +    public @Nonnull EntityMetaBuilder withSkinParts(@Nonnull SkinParts skinParts) {
-+        dataWatcherList.add(new SynchedEntityData.DataItem<>(Player.DATA_PLAYER_MODE_CUSTOMISATION, (byte)skinParts.getRaw()));
++        dataWatcherList.add(new SynchedEntityData.DataItem<>(Player.DATA_PLAYER_MODE_CUSTOMISATION, (byte) skinParts.getRaw()));
 +        return this;
 +    }
 +
 +    @Override
 +    public @Nonnull EntityMetaBuilder withCustomName(@Nonnull BaseComponent[] baseComponents) {
++        return withCustomName(net.md_5.bungee.chat.ComponentSerializer.toString(baseComponents));
++    }
++
++    @Override
++    public @Nonnull EntityMetaBuilder withCustomName(@Nonnull net.kyori.adventure.text.Component component) {
++        return withCustomName(GsonComponentSerializer.gson().serialize(component));
++    }
++
++    private @Nonnull EntityMetaBuilder withCustomName(String jsonString) {
 +        SynchedEntityData.DataItem<Optional<Component>> chat = new SynchedEntityData.DataItem<>(Entity.DATA_CUSTOM_NAME,
-+                Optional.ofNullable(net.minecraft.network.chat.Component.Serializer.fromJson(net.md_5.bungee.chat.ComponentSerializer.toString(baseComponents))));
++            Optional.ofNullable(net.minecraft.network.chat.Component.Serializer.fromJson(jsonString)));
 +        dataWatcherList.add(chat);
 +        dataWatcherList.add(new SynchedEntityData.DataItem<>(Entity.DATA_CUSTOM_NAME_VISIBLE, true));
 +        return this;
