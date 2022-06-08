@@ -173,7 +173,7 @@ index 0000000000000000000000000000000000000000..270f90c81b77732cf2db947d74aa23c2
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftEntityMetaBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftEntityMetaBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..9cba5680d8226cfaab9cdf024a3edc6cfa077353
+index 0000000000000000000000000000000000000000..5433c5f6957b5d50c7fb8be92206310f869333a7
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftEntityMetaBuilder.java
 @@ -0,0 +1,49 @@
@@ -220,7 +220,7 @@ index 0000000000000000000000000000000000000000..9cba5680d8226cfaab9cdf024a3edc6c
 +    @Override
 +    public @Nonnull EntityMetaBuilder withCustomName(@Nonnull BaseComponent[] baseComponents) {
 +        SynchedEntityData.DataItem<Optional<Component>> chat = new SynchedEntityData.DataItem<>(Entity.DATA_CUSTOM_NAME,
-+                Optional.ofNullable(net.minecraft.network.chat.BaseComponent.Serializer.fromJson(net.md_5.bungee.chat.ComponentSerializer.toString(baseComponents))));
++                Optional.ofNullable(net.minecraft.network.chat.Component.Serializer.fromJson(net.md_5.bungee.chat.ComponentSerializer.toString(baseComponents))));
 +        dataWatcherList.add(chat);
 +        dataWatcherList.add(new SynchedEntityData.DataItem<>(Entity.DATA_CUSTOM_NAME_VISIBLE, true));
 +        return this;
@@ -390,10 +390,10 @@ index 0000000000000000000000000000000000000000..6d65b30700692a9254998a94952d9938
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..af7a73e3e5d83490fd71280c8ecbfcc32e69c6bc
+index 0000000000000000000000000000000000000000..8190a2b88f8eae156a3be48ca475ce737077b4b2
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-@@ -0,0 +1,256 @@
+@@ -0,0 +1,257 @@
 +package com.github.weepingmc.packet;
 +
 +import static com.github.weepingmc.packet.CraftPacketConversion.from;
@@ -464,7 +464,7 @@ index 0000000000000000000000000000000000000000..af7a73e3e5d83490fd71280c8ecbfcc3
 +    @Nonnull
 +    public PacketStepBuilder sendPlayerProfile(@Nonnull PlayerProfile playerProfile, @Nonnull ProfileAction profileAction) {
 +        GameProfile gameProfile = ((CraftPlayerProfile) playerProfile).getGameProfile();
-+        ClientboundPlayerInfoPacket.PlayerUpdate playerUpdate = new ClientboundPlayerInfoPacket.PlayerUpdate(gameProfile, 0, GameType.DEFAULT_MODE, null);
++        ClientboundPlayerInfoPacket.PlayerUpdate playerUpdate = new ClientboundPlayerInfoPacket.PlayerUpdate(gameProfile, 0, GameType.DEFAULT_MODE, null, null);
 +        ClientboundPlayerInfoPacket clientboundPlayerInfoPacket = new ClientboundPlayerInfoPacket(from(profileAction), Collections.singletonList(playerUpdate));
 +        initial.setNext(of(clientboundPlayerInfoPacket));
 +        return this;
@@ -620,7 +620,8 @@ index 0000000000000000000000000000000000000000..af7a73e3e5d83490fd71280c8ecbfcc3
 +                location.getPitch(),
 +            Registry.ENTITY_TYPE.getOptional(org.bukkit.craftbukkit.util.CraftNamespacedKey.toMinecraft(entityType.getKey())).orElse(net.minecraft.world.entity.EntityType.ARMOR_STAND),
 +                1,
-+                new Vec3(movementDirection.getX(), movementDirection.getY(), movementDirection.getZ())
++                new Vec3(movementDirection.getX(), movementDirection.getY(), movementDirection.getZ()),
++            0
 +        )));
 +        return this;
 +    }

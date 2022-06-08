@@ -5,7 +5,7 @@ Subject: [PATCH] add marker support
 
 
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-index af7a73e3e5d83490fd71280c8ecbfcc32e69c6bc..4332c973e225a5d6453435052baa3b3765dbc1f9 100644
+index 8190a2b88f8eae156a3be48ca475ce737077b4b2..b8e93bbb53328a71a2f1a418bcbde267d8ccd1e6 100644
 --- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 @@ -3,6 +3,8 @@ package com.github.weepingmc.packet;
@@ -38,7 +38,7 @@ index af7a73e3e5d83490fd71280c8ecbfcc32e69c6bc..4332c973e225a5d6453435052baa3b37
  
  public class CraftPacketStepBuilder implements PacketStepBuilder {
  
-@@ -245,6 +254,17 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+@@ -246,6 +255,17 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
          return this;
      }
  
