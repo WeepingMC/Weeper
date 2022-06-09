@@ -1,5 +1,8 @@
 import io.papermc.paperweight.util.constants.PAPERCLIP_CONFIG
 
+var javaVersion = 17
+var charSet: String = Charsets.UTF_8.name()
+
 plugins {
     java
     `maven-publish`
@@ -15,21 +18,21 @@ allprojects {
 
     java {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(17))
+            languageVersion.set(JavaLanguageVersion.of(javaVersion))
         }
     }
 }
 
 subprojects {
     tasks.withType<JavaCompile> {
-        options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
+        options.encoding = charSet
+        options.release.set(javaVersion)
     }
     tasks.withType<Javadoc> {
-        options.encoding = Charsets.UTF_8.name()
+        options.encoding = charSet
     }
     tasks.withType<ProcessResources> {
-        filteringCharset = Charsets.UTF_8.name()
+        filteringCharset = charSet
     }
 
     if (name == "Weeperr-MojangAPI") {
