@@ -41,7 +41,7 @@ subprojects {
 
     repositories {
         mavenCentral()
-        maven("https://papermc.io/repo/repository/maven-public/")
+        maven(paperMavenPublicUrl)
     }
 }
 
@@ -63,8 +63,8 @@ dependencies {
 paperweight {
     serverProject.set(project(":Weeper-Server"))
 
-    remapRepo.set("https://maven.fabricmc.net/")
-    decompileRepo.set("https://files.minecraftforge.net/maven/")
+    remapRepo.set(paperMavenPublicUrl)
+    decompileRepo.set(paperMavenPublicUrl)
 
     usePaperUpstream(providers.gradleProperty("upstreamRef")) {
         withPaperPatcher {
@@ -99,9 +99,7 @@ tasks.generateDevelopmentBundle {
     mojangApiCoordinates.set("com.github.weepingmc.weeper:Weeper-MojangAPI")
     libraryRepositories.addAll(
         "https://repo.maven.apache.org/maven2/",
-        "https://libraries.minecraft.net/",
-        "https://papermc.io/repo/repository/maven-public/",
-        "https://maven.fabricmc.net/",
+        paperMavenPublicUrl
     )
 }
 
