@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 50d35d6e60f398501af447319de9d6ccd4db8b00..bd9d82f4a29fb59e81c341f9ab8dda90533b3ae5 100644
+index 68b8f275f9c9e77a949ca29749a05b469bcdb910..34c62285bb5fc537967330735dc7db98e2c98019 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -9,8 +9,8 @@ plugins {
@@ -19,7 +19,7 @@ index 50d35d6e60f398501af447319de9d6ccd4db8b00..bd9d82f4a29fb59e81c341f9ab8dda90
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -62,7 +62,7 @@ tasks.jar {
+@@ -64,7 +64,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
@@ -29,7 +29,7 @@ index 50d35d6e60f398501af447319de9d6ccd4db8b00..bd9d82f4a29fb59e81c341f9ab8dda90
              "Specification-Title" to "Bukkit",
              "Specification-Version" to project.version,
 diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
-index bf42969859545a8a520923ef1836ffa4a5cc24a0..adff2d4e17511a86a3dff5524301e98f3e682a18 100644
+index bf42969859545a8a520923ef1836ffa4a5cc24a0..db382aa06c509ef11d2e8826a26a4f2b0c1b444b 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 @@ -19,8 +19,8 @@ import java.util.stream.StreamSupport;
@@ -71,7 +71,7 @@ index bf42969859545a8a520923ef1836ffa4a5cc24a0..adff2d4e17511a86a3dff5524301e98f
          switch (distance) {
              case -1:
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index a06b1fb0eaba5ed91db4cf34240c1544662b5e97..20f5268b14b3386aa097d93d5ea47f39a6068419 100644
+index 32dc0cd20a4dd8fc02be1f7ba3d727db826dbe5d..5729b50743ac3d302e802c522c231058ecc0721f 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1654,7 +1654,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -84,7 +84,7 @@ index a06b1fb0eaba5ed91db4cf34240c1544662b5e97..20f5268b14b3386aa097d93d5ea47f39
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index a25222c01433170a5a536562159f1d0f80ba2fbe..6914ec95d7efcd4a37810be28417d7ea3e69ffbc 100644
+index f1e5ccfbcd08a73ac3aba9a1cb7b414faef81f9e..4f3da417030b24f123444aa36d0d03d23a12cf93 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -243,7 +243,7 @@ import javax.annotation.Nullable; // Paper
