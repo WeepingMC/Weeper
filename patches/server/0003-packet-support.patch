@@ -807,10 +807,10 @@ index ee8f6838d774fd316178a10db5101102963c1847..bf093b68edcdc2691495435822722465
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index ade1e37d20ef3021f73da6d1905cea76d3ff0aa7..8f3030a5fc155c6520900514de32b847b8375d4c 100644
+index b0728b66c54dc22a5a98f150910d07f4b38ebd7e..686310392c70cb5cec16aacc9ed693d33965b618 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -326,7 +326,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -331,7 +331,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      public int invulnerableTime;
      protected boolean firstTick;
      protected final SynchedEntityData entityData;
@@ -819,7 +819,7 @@ index ade1e37d20ef3021f73da6d1905cea76d3ff0aa7..8f3030a5fc155c6520900514de32b847
      protected static final int FLAG_ONFIRE = 0;
      private static final int FLAG_SHIFT_KEY_DOWN = 1;
      private static final int FLAG_SPRINTING = 3;
-@@ -335,11 +335,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -340,11 +340,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
      protected static final int FLAG_GLOWING = 6;
      protected static final int FLAG_FALL_FLYING = 7;
      private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
@@ -848,7 +848,7 @@ index e8dc99752d06ca40f17f3ad2c829b2447b703d7c..5d3464743e9803ef982a6c94b62040d1
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 4f3da417030b24f123444aa36d0d03d23a12cf93..82cb6b7fb609afb42a0682ff393a0c458f895cce 100644
+index 4a2d2653bf239344585217607d366294ab046ed9..7943dd87c0a26c51c1211f4cf125669c4590871a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -2868,5 +2868,10 @@ public final class CraftServer implements Server {
