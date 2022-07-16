@@ -5,10 +5,10 @@ Subject: [PATCH] trigger Block animation
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 488c140fab2cad6d68d87ff0742a7a40ad81259e..2f931edfdbfda883cdb985e39e17700cdbf2498c 100644
+index 00fbf9ffdfa1c0d821ff86108c33e8b62a3d1268..f7ac8a65ae30e6c6da9555f73269c37466f86d6a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -54,6 +54,7 @@ import net.minecraft.world.level.ChunkPos;
+@@ -55,6 +55,7 @@ import net.minecraft.world.level.ChunkPos;
  import net.minecraft.world.level.ClipContext;
  import net.minecraft.world.level.Explosion;
  import net.minecraft.world.level.GameRules;
@@ -16,15 +16,15 @@ index 488c140fab2cad6d68d87ff0742a7a40ad81259e..2f931edfdbfda883cdb985e39e17700c
  import net.minecraft.world.level.chunk.ChunkAccess;
  import net.minecraft.world.level.chunk.ChunkStatus;
  import net.minecraft.world.level.chunk.ImposterProtoChunk;
-@@ -129,6 +130,7 @@ import org.bukkit.util.BoundingBox;
- import org.bukkit.util.Consumer;
+@@ -135,6 +136,7 @@ import org.bukkit.util.Consumer;
  import org.bukkit.util.RayTraceResult;
+ import org.bukkit.util.StructureSearchResult;
  import org.bukkit.util.Vector;
 +import org.jetbrains.annotations.NotNull;
  
  public class CraftWorld extends CraftRegionAccessor implements World {
      public static final int CUSTOM_DIMENSION_OFFSET = 10;
-@@ -2167,6 +2169,16 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -2234,6 +2236,16 @@ public class CraftWorld extends CraftRegionAccessor implements World {
      public DragonBattle getEnderDragonBattle() {
          return (this.getHandle().dragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().dragonFight());
      }
