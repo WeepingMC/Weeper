@@ -4,36 +4,13 @@ Date: Wed, 10 Nov 2021 18:46:52 +0100
 Subject: [PATCH] Added an overload with Criteria constants
 
 
-diff --git a/src/main/java/org/bukkit/scoreboard/Criteria.java b/src/main/java/org/bukkit/scoreboard/Criteria.java
-new file mode 100644
-index 0000000000000000000000000000000000000000..fb5b629bbfe59421e1fbe30f7c80049bd77e2d5e
---- /dev/null
-+++ b/src/main/java/org/bukkit/scoreboard/Criteria.java
-@@ -0,0 +1,17 @@
-+package org.bukkit.scoreboard;
-+
-+import org.jetbrains.annotations.NotNull;
-+
-+public record Criteria(@NotNull String value) {
-+    public static final Criteria DUMMY = new Criteria("dummy");
-+    public static final Criteria TRIGGER = new Criteria("trigger");
-+    public static final Criteria DEATH = new Criteria("deathCount");
-+    public static final Criteria PLAYER_KILLS = new Criteria("playerKillCount");
-+    public static final Criteria TOTAL_KILLS = new Criteria("totalKillCount");
-+    public static final Criteria HEALTH = new Criteria("health");
-+    public static final Criteria XP = new Criteria("xp");
-+    public static final Criteria LEVEL = new Criteria("level");
-+    public static final Criteria FOOD = new Criteria("food");
-+    public static final Criteria AIR = new Criteria("air");
-+    public static final Criteria ARMOR = new Criteria("armor");
-+}
 diff --git a/src/main/java/org/bukkit/scoreboard/Scoreboard.java b/src/main/java/org/bukkit/scoreboard/Scoreboard.java
-index f7754ab421c7b452a53c28d1e2fafdccfbba24bf..17c74ecfdc9e47e1a4e5d8dba3120fd7529ab059 100644
+index 880b20bf25f74e9cb54ff3fb282a5b74db6a0a85..ade75793c03c7a89af1f73ac02986b9ed5ae4866 100644
 --- a/src/main/java/org/bukkit/scoreboard/Scoreboard.java
 +++ b/src/main/java/org/bukkit/scoreboard/Scoreboard.java
-@@ -47,6 +47,29 @@ public interface Scoreboard {
-      */
+@@ -49,6 +49,29 @@ public interface Scoreboard {
      @NotNull
+     @Deprecated
      Objective registerNewObjective(@NotNull String name, @NotNull String criteria, @Nullable net.kyori.adventure.text.Component displayName) throws IllegalArgumentException;
 +
 +    /**
@@ -61,3 +38,26 @@ index f7754ab421c7b452a53c28d1e2fafdccfbba24bf..17c74ecfdc9e47e1a4e5d8dba3120fd7
      /**
       * Registers an Objective on this Scoreboard
       *
+diff --git a/src/main/src/main/java/org/bukkit/scoreboard/Criteria.java b/src/main/src/main/java/org/bukkit/scoreboard/Criteria.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..fb5b629bbfe59421e1fbe30f7c80049bd77e2d5e
+--- /dev/null
++++ b/src/main/src/main/java/org/bukkit/scoreboard/Criteria.java
+@@ -0,0 +1,17 @@
++package org.bukkit.scoreboard;
++
++import org.jetbrains.annotations.NotNull;
++
++public record Criteria(@NotNull String value) {
++    public static final Criteria DUMMY = new Criteria("dummy");
++    public static final Criteria TRIGGER = new Criteria("trigger");
++    public static final Criteria DEATH = new Criteria("deathCount");
++    public static final Criteria PLAYER_KILLS = new Criteria("playerKillCount");
++    public static final Criteria TOTAL_KILLS = new Criteria("totalKillCount");
++    public static final Criteria HEALTH = new Criteria("health");
++    public static final Criteria XP = new Criteria("xp");
++    public static final Criteria LEVEL = new Criteria("level");
++    public static final Criteria FOOD = new Criteria("food");
++    public static final Criteria AIR = new Criteria("air");
++    public static final Criteria ARMOR = new Criteria("armor");
++}
