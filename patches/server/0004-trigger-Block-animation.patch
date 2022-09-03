@@ -5,7 +5,7 @@ Subject: [PATCH] trigger Block animation
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index f0b14914438840bd819fa7da8b76f4fcc13704d0..4f22186fc9d9ea0afb4735afd48435a048c9e759 100644
+index 1b6ae90acffa06502902e11473b65c8431616b05..b4edbb921f48d36cf5d52c0209b90756f3a00193 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 @@ -55,6 +55,7 @@ import net.minecraft.world.level.ChunkPos;
@@ -24,20 +24,21 @@ index f0b14914438840bd819fa7da8b76f4fcc13704d0..4f22186fc9d9ea0afb4735afd48435a0
  
  public class CraftWorld extends CraftRegionAccessor implements World {
      public static final int CUSTOM_DIMENSION_OFFSET = 10;
-@@ -2255,6 +2257,16 @@ public class CraftWorld extends CraftRegionAccessor implements World {
-     public DragonBattle getEnderDragonBattle() {
+@@ -2247,6 +2249,17 @@ public class CraftWorld extends CraftRegionAccessor implements World {
          return (this.getHandle().dragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().dragonFight());
      }
+ 
 +
 +    // Weeper start
 +    @Override
 +    public void triggerBlockAnimation(@NotNull Location location,
-+        int action, int actionParameter) {
-+            BlockPos position = new BlockPos(location.getX(), location.getY(), location.getZ());
-+            BlockEntity blockEntity = world.getBlockEntity(position, true);
-+            world.blockEvent(position, blockEntity.getBlockState().getBlock(), action, actionParameter);
++                                      int action, int actionParameter) {
++        BlockPos position = new BlockPos(location.getX(), location.getY(), location.getZ());
++        BlockEntity blockEntity = world.getBlockEntity(position, true);
++        world.blockEvent(position, blockEntity.getBlockState().getBlock(), action, actionParameter);
 +    }
 +    // Weeper end
-     // Paper start
++
      @Override
-     public java.util.concurrent.CompletableFuture<Chunk> getChunkAtAsync(int x, int z, boolean gen, boolean urgent) {
+     public PersistentDataContainer getPersistentDataContainer() {
+         return this.persistentDataContainer;
