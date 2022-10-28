@@ -112,10 +112,10 @@ index 745883a7b9c2590ae8e28db79e1bd0341a7e54bd..3607bc2217419ac5600d6bde79ece487
          private final Cat cat;
  
 diff --git a/src/main/java/net/minecraft/world/entity/raid/Raider.java b/src/main/java/net/minecraft/world/entity/raid/Raider.java
-index 8877423a99e387c18d1d994518bf15d8d9ba64af..2e75c7caa3bc2f370a7ae254fc411124788981c3 100644
+index e5ccbaf72f29731f1d1aa939b9297b644a408cd4..4ac37941992d53ce51ea66935ae37eb79b7d075d 100644
 --- a/src/main/java/net/minecraft/world/entity/raid/Raider.java
 +++ b/src/main/java/net/minecraft/world/entity/raid/Raider.java
-@@ -350,7 +350,7 @@ public abstract class Raider extends PatrollingMonster {
+@@ -352,7 +352,7 @@ public abstract class Raider extends PatrollingMonster {
          }
      }
  
@@ -124,7 +124,7 @@ index 8877423a99e387c18d1d994518bf15d8d9ba64af..2e75c7caa3bc2f370a7ae254fc411124
  
          private final Raider raider;
          private final double speedModifier;
-@@ -498,7 +498,7 @@ public abstract class Raider extends PatrollingMonster {
+@@ -500,7 +500,7 @@ public abstract class Raider extends PatrollingMonster {
          }
      }
  
