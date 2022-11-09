@@ -5,7 +5,7 @@ Subject: [PATCH] player track entity events
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 3b144c820531122eb37d41be06c182b5f5dc0724..82e7962980258797afd45c198dd90a55d563b47a 100644
+index 2358bb1788cfb902bac9b3b7588954af2d2cd823..fc2c567dcc782968821a95e4cec6b3d29c86b56b 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
 @@ -1,5 +1,6 @@
@@ -31,7 +31,7 @@ index 3b144c820531122eb37d41be06c182b5f5dc0724..82e7962980258797afd45c198dd90a55
  import org.bukkit.event.player.PlayerVelocityEvent;
  // CraftBukkit end
  
-@@ -223,7 +224,7 @@ public class ServerEntity {
+@@ -224,7 +225,7 @@ public class ServerEntity {
              boolean cancelled = false;
  
              if (this.entity instanceof ServerPlayer) {
@@ -40,7 +40,7 @@ index 3b144c820531122eb37d41be06c182b5f5dc0724..82e7962980258797afd45c198dd90a55
                  org.bukkit.util.Vector velocity = player.getVelocity();
  
                  PlayerVelocityEvent event = new PlayerVelocityEvent(player, velocity.clone());
-@@ -248,6 +249,7 @@ public class ServerEntity {
+@@ -249,6 +250,7 @@ public class ServerEntity {
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
          player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));
@@ -48,7 +48,7 @@ index 3b144c820531122eb37d41be06c182b5f5dc0724..82e7962980258797afd45c198dd90a55
      }
  
      public void addPairing(ServerPlayer player) {
-@@ -269,7 +271,11 @@ public class ServerEntity {
+@@ -270,7 +272,11 @@ public class ServerEntity {
          Packet<?> packet = this.entity.getAddEntityPacket();
  
          this.yHeadRotp = Mth.floor(this.entity.getYHeadRot() * 256.0F / 360.0F);
@@ -59,5 +59,5 @@ index 3b144c820531122eb37d41be06c182b5f5dc0724..82e7962980258797afd45c198dd90a55
 +        }
 +        // Weeper end
          if (!this.entity.getEntityData().isEmpty()) {
-             consumer.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.entity.getEntityData(), true));
+             consumer.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.entity.getEntityData(), true, this.clearDirtyEntityData)); // Paper
          }
