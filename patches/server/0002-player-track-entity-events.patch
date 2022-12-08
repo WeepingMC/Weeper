@@ -5,7 +5,7 @@ Subject: [PATCH] player track entity events
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 2358bb1788cfb902bac9b3b7588954af2d2cd823..fc2c567dcc782968821a95e4cec6b3d29c86b56b 100644
+index 190e9761087baec5827d722a8281f0ffb6798341..71a848b1d54a0a90cba14fbb20f3413d04566d25 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
 @@ -1,5 +1,6 @@
@@ -15,32 +15,15 @@ index 2358bb1788cfb902bac9b3b7588954af2d2cd823..fc2c567dcc782968821a95e4cec6b3d2
  import com.google.common.collect.Lists;
  import com.mojang.datafixers.util.Pair;
  import com.mojang.logging.LogUtils;
-@@ -10,6 +11,7 @@ import java.util.List;
- import java.util.Objects;
+@@ -11,6 +12,7 @@ import java.util.Objects;
  import java.util.Set;
  import java.util.function.Consumer;
+ import javax.annotation.Nullable;
 +import com.github.weepingmc.event.packet.PlayerUntrackEntityEvent;
  import net.minecraft.network.protocol.Packet;
+ import net.minecraft.network.protocol.game.ClientGamePacketListener;
  import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;
- import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
-@@ -41,7 +43,6 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
- // CraftBukkit start
- import net.minecraft.server.network.ServerPlayerConnection;
- import net.minecraft.util.Mth;
--import org.bukkit.entity.Player;
- import org.bukkit.event.player.PlayerVelocityEvent;
- // CraftBukkit end
- 
-@@ -224,7 +225,7 @@ public class ServerEntity {
-             boolean cancelled = false;
- 
-             if (this.entity instanceof ServerPlayer) {
--                Player player = (Player) this.entity.getBukkitEntity();
-+                org.bukkit.entity.Player player = (org.bukkit.entity.Player) this.entity.getBukkitEntity(); // Weeper - decompile fix
-                 org.bukkit.util.Vector velocity = player.getVelocity();
- 
-                 PlayerVelocityEvent event = new PlayerVelocityEvent(player, velocity.clone());
-@@ -249,6 +250,7 @@ public class ServerEntity {
+@@ -253,6 +255,7 @@ public class ServerEntity {
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
          player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));
@@ -48,8 +31,8 @@ index 2358bb1788cfb902bac9b3b7588954af2d2cd823..fc2c567dcc782968821a95e4cec6b3d2
      }
  
      public void addPairing(ServerPlayer player) {
-@@ -270,7 +272,11 @@ public class ServerEntity {
-         Packet<?> packet = this.entity.getAddEntityPacket();
+@@ -274,7 +277,11 @@ public class ServerEntity {
+         Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket();
  
          this.yHeadRotp = Mth.floor(this.entity.getYHeadRot() * 256.0F / 360.0F);
 -        consumer.accept(packet);
@@ -58,6 +41,6 @@ index 2358bb1788cfb902bac9b3b7588954af2d2cd823..fc2c567dcc782968821a95e4cec6b3d2
 +            consumer.accept(packet);
 +        }
 +        // Weeper end
-         if (!this.entity.getEntityData().isEmpty()) {
-             consumer.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.entity.getEntityData(), true, this.clearDirtyEntityData)); // Paper
+         if (this.trackedDataValues != null) {
+             consumer.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
