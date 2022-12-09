@@ -5,7 +5,7 @@ Subject: [PATCH] added executor for easy usage with CompletableFutures
 
 
 diff --git a/src/main/java/org/bukkit/plugin/Plugin.java b/src/main/java/org/bukkit/plugin/Plugin.java
-index 34438b5362b0ba0949625d81e8371fe0d1f76fdf..a6d4994e7d2a7cd59094287781cc2dafc3eda9a1 100644
+index cdf496598839380e073d7ccd89af473e9a702f00..a54a3fba9621ed85700aa3b8743650ee35068e0a 100644
 --- a/src/main/java/org/bukkit/plugin/Plugin.java
 +++ b/src/main/java/org/bukkit/plugin/Plugin.java
 @@ -2,12 +2,14 @@ package org.bukkit.plugin;
@@ -23,7 +23,7 @@ index 34438b5362b0ba0949625d81e8371fe0d1f76fdf..a6d4994e7d2a7cd59094287781cc2daf
  import org.jetbrains.annotations.NotNull;
  import org.jetbrains.annotations.Nullable;
  
-@@ -105,6 +107,22 @@ public interface Plugin extends TabExecutor {
+@@ -106,6 +108,22 @@ public interface Plugin extends TabExecutor {
      @NotNull
      public Server getServer();
  
