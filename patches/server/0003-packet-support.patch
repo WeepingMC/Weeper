@@ -236,10 +236,10 @@ index 0000000000000000000000000000000000000000..a51cf8bfda811b2162bef4d67122619b
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..c30f5dbbbe407e40bd22cc77051906ef47dd717a
+index 0000000000000000000000000000000000000000..dc53aa2aa5b9613c6f99c6429e70b6e4d6047144
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
-@@ -0,0 +1,102 @@
+@@ -0,0 +1,111 @@
 +package com.github.weepingmc.packet;
 +
 +import java.util.ArrayList;
@@ -253,7 +253,7 @@ index 0000000000000000000000000000000000000000..c30f5dbbbe407e40bd22cc77051906ef
 +import com.github.weepingmc.packet.options.EntityStatus;
 +import com.github.weepingmc.packet.options.PlayerAbility;
 +import com.github.weepingmc.packet.options.ProfileAction;
-+import net.minecraft.network.protocol.game.ClientboundPlayerInfoPacket.Action;
++import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 +import net.minecraft.world.entity.EquipmentSlot;
 +import net.minecraft.world.entity.player.Abilities;
 +import net.minecraft.world.item.ItemStack;
@@ -263,18 +263,27 @@ index 0000000000000000000000000000000000000000..c30f5dbbbe407e40bd22cc77051906ef
 +    private CraftPacketConversion() {
 +    }
 +
-+    static Action from(ProfileAction action) {
++    static ClientboundPlayerInfoUpdatePacket.Action from(ProfileAction action) {
 +        switch (action) {
-+            case ADD_PLAYER:
-+                return Action.ADD_PLAYER;
-+            case REMOVE_PLAYER:
-+                return Action.REMOVE_PLAYER;
-+            case UPDATE_LATENCY:
-+                return Action.UPDATE_LATENCY;
-+            case UPDATE_GAME_MODE:
-+                return Action.UPDATE_GAME_MODE;
-+            case UPDATE_DISPLAY_NAME:
-+                return Action.UPDATE_DISPLAY_NAME;
++            case ADD_PLAYER -> {
++                return ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER;
++            }
++            case UPDATE_LATENCY -> {
++                return ClientboundPlayerInfoUpdatePacket.Action.UPDATE_LATENCY;
++            }
++            case INITIALIZE_CHAT -> {
++                return ClientboundPlayerInfoUpdatePacket.Action.INITIALIZE_CHAT;
++            }
++            case UPDATE_GAME_MODE -> {
++                return ClientboundPlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE;
++            }
++            case UPDATE_DISPLAY_NAME -> {
++                return ClientboundPlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME;
++            }
++
++            case UPDATE_LISTED -> {
++                return ClientboundPlayerInfoUpdatePacket.Action.UPDATE_LISTED;
++            }
 +        }
 +        throw new UnsupportedOperationException("Invalid case!");
 +    }
@@ -398,26 +407,31 @@ index 0000000000000000000000000000000000000000..6d65b30700692a9254998a94952d9938
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..8190a2b88f8eae156a3be48ca475ce737077b4b2
+index 0000000000000000000000000000000000000000..a845494fd39f61df893c7d2f2dbee9c1bf22cccb
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-@@ -0,0 +1,257 @@
+@@ -0,0 +1,259 @@
 +package com.github.weepingmc.packet;
 +
-+import static com.github.weepingmc.packet.CraftPacketConversion.from;
-+import static com.github.weepingmc.packet.CraftPacketConversion.mapPlayerAbilities;
-+
-+import java.util.ArrayList;
-+import java.util.Collection;
-+import java.util.Collections;
-+import java.util.List;
-+import java.util.Optional;
-+import java.util.Set;
-+import java.util.UUID;
-+import java.util.concurrent.TimeUnit;
-+
-+import javax.annotation.Nonnull;
-+
++import com.destroystokyo.paper.profile.CraftPlayerProfile;
++import com.destroystokyo.paper.profile.PlayerProfile;
++import com.github.weepingmc.packet.ChainablePacketStep.DelayPacketStep;
++import com.github.weepingmc.packet.ChainablePacketStep.NmsPacketStep;
++import com.github.weepingmc.packet.options.*;
++import com.mojang.authlib.GameProfile;
++import com.mojang.datafixers.util.Pair;
++import net.minecraft.core.BlockPos;
++import net.minecraft.core.registries.BuiltInRegistries;
++import net.minecraft.network.protocol.Packet;
++import net.minecraft.network.protocol.game.*;
++import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket.Action;
++import net.minecraft.network.syncher.SynchedEntityData;
++import net.minecraft.world.entity.Entity;
++import net.minecraft.world.entity.LivingEntity;
++import net.minecraft.world.entity.Pose;
++import net.minecraft.world.entity.player.Abilities;
++import net.minecraft.world.level.GameType;
++import net.minecraft.world.phys.Vec3;
 +import org.bukkit.Location;
 +import org.bukkit.block.data.BlockData;
 +import org.bukkit.craftbukkit.inventory.CraftItemStack;
@@ -426,43 +440,15 @@ index 0000000000000000000000000000000000000000..8190a2b88f8eae156a3be48ca475ce73
 +import org.bukkit.plugin.java.JavaPlugin;
 +import org.bukkit.scoreboard.Team;
 +import org.bukkit.util.Vector;
++import org.jetbrains.annotations.NotNull;
 +
-+import com.destroystokyo.paper.profile.CraftPlayerProfile;
-+import com.destroystokyo.paper.profile.PlayerProfile;
-+import com.mojang.authlib.GameProfile;
-+import com.mojang.datafixers.util.Pair;
++import javax.annotation.Nonnull;
++import java.util.*;
++import java.util.concurrent.TimeUnit;
++import java.util.stream.Collectors;
 +
-+import com.github.weepingmc.packet.ChainablePacketStep.DelayPacketStep;
-+import com.github.weepingmc.packet.ChainablePacketStep.NmsPacketStep;
-+import com.github.weepingmc.packet.options.Animation;
-+import com.github.weepingmc.packet.options.EntityMetaBuilder;
-+import com.github.weepingmc.packet.options.PlayerAbility;
-+import com.github.weepingmc.packet.options.ProfileAction;
-+import com.github.weepingmc.packet.options.TeamMode;
-+import net.minecraft.core.BlockPos;
-+import net.minecraft.core.Registry;
-+import net.minecraft.network.protocol.Packet;
-+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-+import net.minecraft.network.protocol.game.ClientboundAddPlayerPacket;
-+import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
-+import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
-+import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;
-+import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
-+import net.minecraft.network.protocol.game.ClientboundPlayerInfoPacket;
-+import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
-+import net.minecraft.network.protocol.game.ClientboundRotateHeadPacket;
-+import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
-+import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
-+import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket;
-+import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket.Action;
-+import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
-+import net.minecraft.network.syncher.SynchedEntityData;
-+import net.minecraft.world.entity.Entity;
-+import net.minecraft.world.entity.LivingEntity;
-+import net.minecraft.world.entity.Pose;
-+import net.minecraft.world.entity.player.Abilities;
-+import net.minecraft.world.level.GameType;
-+import net.minecraft.world.phys.Vec3;
++import static com.github.weepingmc.packet.CraftPacketConversion.from;
++import static com.github.weepingmc.packet.CraftPacketConversion.mapPlayerAbilities;
 +
 +public class CraftPacketStepBuilder implements PacketStepBuilder {
 +
@@ -470,11 +456,33 @@ index 0000000000000000000000000000000000000000..8190a2b88f8eae156a3be48ca475ce73
 +
 +    @Override
 +    @Nonnull
-+    public PacketStepBuilder sendPlayerProfile(@Nonnull PlayerProfile playerProfile, @Nonnull ProfileAction profileAction) {
++    public PacketStepBuilder sendPlayerProfile(@Nonnull PlayerProfile playerProfile, @Nonnull ProfileAction profileAction, boolean listed) {
 +        GameProfile gameProfile = ((CraftPlayerProfile) playerProfile).getGameProfile();
-+        ClientboundPlayerInfoPacket.PlayerUpdate playerUpdate = new ClientboundPlayerInfoPacket.PlayerUpdate(gameProfile, 0, GameType.DEFAULT_MODE, null, null);
-+        ClientboundPlayerInfoPacket clientboundPlayerInfoPacket = new ClientboundPlayerInfoPacket(from(profileAction), Collections.singletonList(playerUpdate));
-+        initial.setNext(of(clientboundPlayerInfoPacket));
++
++        if (profileAction == ProfileAction.REMOVE_PLAYER) {
++            removePlayerProfile(playerProfile);
++        } else {
++            ClientboundPlayerInfoUpdatePacket.Entry playerUpdate =
++                new ClientboundPlayerInfoUpdatePacket.Entry(
++                    gameProfile.getId(),
++                    gameProfile,
++                    listed,
++                    0,
++                    GameType.DEFAULT_MODE,
++                    null,
++                    null
++                );
++            ClientboundPlayerInfoUpdatePacket clientboundPlayerInfoUpdatePacket = new ClientboundPlayerInfoUpdatePacket(from(profileAction), Collections.singletonList(playerUpdate));
++            initial.setNext(of(clientboundPlayerInfoUpdatePacket));
++        }
++
++        return this;
++    }
++
++    @Override
++    public @NotNull PacketStepBuilder removePlayerProfile(@NotNull PlayerProfile playerProfile) {
++        ClientboundPlayerInfoRemovePacket clientboundPlayerInfoRemovePacket = new ClientboundPlayerInfoRemovePacket(List.of(playerProfile.getId()));
++        initial.setNext(of(clientboundPlayerInfoRemovePacket));
 +        return this;
 +    }
 +
@@ -493,7 +501,7 @@ index 0000000000000000000000000000000000000000..8190a2b88f8eae156a3be48ca475ce73
 +            case CREATE_TEAM, UPDATE_TEAM_INFO -> ClientboundSetPlayerTeamPacket.createAddOrModifyPacket(nmsTeam, teamMode == TeamMode.UPDATE_TEAM_INFO);
 +            case REMOVE_TEAM -> ClientboundSetPlayerTeamPacket.createRemovePacket(nmsTeam);
 +            case ADD_PLAYERS_TO_TEAM, REMOVE_PLAYERS_FROM_TEAM -> {
-+                var operation = (teamMode == TeamMode.ADD_PLAYERS_TO_TEAM)  ?  Action.ADD: Action.REMOVE;
++                var operation = (teamMode == TeamMode.ADD_PLAYERS_TO_TEAM) ? Action.ADD : Action.REMOVE;
 +                yield ClientboundSetPlayerTeamPacket.createPlayerPacket(nmsTeam, "", operation);
 +            }
 +        };
@@ -519,10 +527,10 @@ index 0000000000000000000000000000000000000000..8190a2b88f8eae156a3be48ca475ce73
 +    @Override
 +    @Nonnull
 +    public PacketStepBuilder sleepAt(int entityId, @Nonnull Location location) {
-+        List<SynchedEntityData.DataItem<?>> dataWatcherItems = new ArrayList<>();
-+        dataWatcherItems.add(new SynchedEntityData.DataItem<>(Entity.DATA_POSE, Pose.SLEEPING));
++        List<SynchedEntityData.DataValue<?>> dataWatcherItems = new ArrayList<>();
++        dataWatcherItems.add(new SynchedEntityData.DataItem<>(Entity.DATA_POSE, Pose.SLEEPING).value());
 +        dataWatcherItems.add(new SynchedEntityData.DataItem<>(LivingEntity.SLEEPING_POS_ID,
-+            Optional.of(new BlockPos(location.getBlockX(), location.getY(), location.getBlockZ())))
++            Optional.of(new BlockPos(location.getBlockX(), location.getY(), location.getBlockZ()))).value()
 +        );
 +        ClientboundSetEntityDataPacket meta = new ClientboundSetEntityDataPacket(entityId, dataWatcherItems);
 +        initial.setNext(of(meta));
@@ -533,8 +541,8 @@ index 0000000000000000000000000000000000000000..8190a2b88f8eae156a3be48ca475ce73
 +    @Nonnull
 +    public PacketStepBuilder rotateHead(int entityId, float yaw) {
 +        initial.setNext(of(new ClientboundRotateHeadPacket(
-+                entityId,
-+                (byte) ((int) (yaw * 256.0F / 360.0F))
++            entityId,
++            (byte) ((int) (yaw * 256.0F / 360.0F))
 +        )));
 +        return this;
 +    }
@@ -543,10 +551,10 @@ index 0000000000000000000000000000000000000000..8190a2b88f8eae156a3be48ca475ce73
 +    @Nonnull
 +    public PacketStepBuilder rotateFullHead(int entityId, float yaw, float pitch, boolean onGround) {
 +        initial.setNext(of(new ClientboundMoveEntityPacket.Rot(
-+                entityId,
-+                (byte) ((int) (yaw * 256.0F / 360.0F)),
-+                (byte) ((int) (pitch * 256.0F / 360.0F)),
-+                onGround
++            entityId,
++            (byte) ((int) (yaw * 256.0F / 360.0F)),
++            (byte) ((int) (pitch * 256.0F / 360.0F)),
++            onGround
 +        )));
 +        return this;
 +    }
@@ -555,13 +563,13 @@ index 0000000000000000000000000000000000000000..8190a2b88f8eae156a3be48ca475ce73
 +    @Nonnull
 +    public PacketStepBuilder movePositionAndRotateFullHead(int entityId, @Nonnull Vector direction, byte yaw, byte pitch, boolean onGround) {
 +        initial.setNext(of(new ClientboundMoveEntityPacket.PosRot(
-+                entityId,
-+                (short) direction.getX(),
-+                (short) direction.getY(),
-+                (short) direction.getZ(),
-+                (byte) ((int) (yaw * 256.0F / 360.0F)),
-+                (byte) ((int) (pitch * 256.0F / 360.0F)),
-+                onGround)));
++            entityId,
++            (short) direction.getX(),
++            (short) direction.getY(),
++            (short) direction.getZ(),
++            (byte) ((int) (yaw * 256.0F / 360.0F)),
++            (byte) ((int) (pitch * 256.0F / 360.0F)),
++            onGround)));
 +        return this;
 +    }
 +
@@ -576,7 +584,7 @@ index 0000000000000000000000000000000000000000..8190a2b88f8eae156a3be48ca475ce73
 +    @Nonnull
 +    public PacketStepBuilder animateBlockBreak(int entityID, @Nonnull Location location, byte destroyStage) {
 +        initial.setNext(of(new ClientboundBlockDestructionPacket(entityID,
-+                new BlockPos(location.getBlockX(), location.getY(), location.getBlockZ()), destroyStage)));
++            new BlockPos(location.getBlockX(), location.getY(), location.getBlockZ()), destroyStage)));
 +        return this;
 +    }
 +
@@ -619,16 +627,16 @@ index 0000000000000000000000000000000000000000..8190a2b88f8eae156a3be48ca475ce73
 +    @Nonnull
 +    public PacketStepBuilder spawnEntity(int entityId, @Nonnull UUID uuid, @Nonnull Location location, @Nonnull org.bukkit.entity.EntityType entityType, @Nonnull Vector movementDirection) {
 +        initial.setNext(of(new ClientboundAddEntityPacket(
-+                entityId,
-+                uuid,
-+                location.getX(),
-+                location.getY(),
-+                location.getZ(),
-+                location.getYaw(),
-+                location.getPitch(),
-+            Registry.ENTITY_TYPE.getOptional(org.bukkit.craftbukkit.util.CraftNamespacedKey.toMinecraft(entityType.getKey())).orElse(net.minecraft.world.entity.EntityType.ARMOR_STAND),
-+                1,
-+                new Vec3(movementDirection.getX(), movementDirection.getY(), movementDirection.getZ()),
++            entityId,
++            uuid,
++            location.getX(),
++            location.getY(),
++            location.getZ(),
++            location.getYaw(),
++            location.getPitch(),
++            BuiltInRegistries.ENTITY_TYPE.getOptional(org.bukkit.craftbukkit.util.CraftNamespacedKey.toMinecraft(entityType.getKey())).orElse(net.minecraft.world.entity.EntityType.ARMOR_STAND),
++            1,
++            new Vec3(movementDirection.getX(), movementDirection.getY(), movementDirection.getZ()),
 +            0
 +        )));
 +        return this;
@@ -637,7 +645,10 @@ index 0000000000000000000000000000000000000000..8190a2b88f8eae156a3be48ca475ce73
 +    @Override
 +    @Nonnull
 +    public PacketStepBuilder withMeta(int entityId, @Nonnull EntityMetaBuilder metaBuilder) {
-+        initial.setNext(of(new ClientboundSetEntityDataPacket(entityId, ((CraftEntityMetaBuilder) metaBuilder).build())));
++        initial.setNext(
++            of(new ClientboundSetEntityDataPacket(entityId,
++                ((CraftEntityMetaBuilder) metaBuilder).build().stream().map(SynchedEntityData.DataItem::value).collect(Collectors.toList())))
++        );
 +        return this;
 +    }
 +
@@ -651,11 +662,11 @@ index 0000000000000000000000000000000000000000..8190a2b88f8eae156a3be48ca475ce73
 +    }
 +
 +    @Override
-+    public void send(@Nonnull Collection<? extends org.bukkit.entity.Player> players){
++    public void send(@Nonnull Collection<? extends org.bukkit.entity.Player> players) {
 +        initial.execute(players);
 +    }
 +
-+    private ChainablePacketStep of(Packet<?> packet){
++    private ChainablePacketStep of(Packet<?> packet) {
 +        return new ChainablePacketStep(new NmsPacketStep(packet));
 +    }
 +}
@@ -709,36 +720,25 @@ index e94937e58c77a5331d012cb2775ae5f4bc84656e..0d4a5e57ba307b0694b3dcb7d0cbccaf
  
      @Override
      public void handle(ClientGamePacketListener listener) {
-diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoPacket.java
-index 46ae5d40c26264e6b0ca253afa65b7846e6e5e6d..22ca7256339d2c5aa591ec3e5ec660df6336b3e3 100644
---- a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoPacket.java
-+++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoPacket.java
-@@ -5,9 +5,11 @@ import com.google.common.collect.Lists;
- import com.mojang.authlib.GameProfile;
- import java.util.Collection;
- import java.util.List;
-+import java.util.Objects;
- import javax.annotation.Nullable;
- import net.minecraft.network.FriendlyByteBuf;
- import net.minecraft.network.chat.Component;
-+import net.minecraft.network.chat.Component.Serializer;
- import net.minecraft.network.protocol.Packet;
- import net.minecraft.server.level.ServerPlayer;
- import net.minecraft.world.entity.player.ProfilePublicKey;
-@@ -37,6 +39,13 @@ public class ClientboundPlayerInfoPacket implements Packet<ClientGamePacketListe
- 
+diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
+index 4cd1cce5641c6001b34b9da6aac779bf6e8480d1..6e992e41a6a4cc66c32bebe605cb414921cb5cb0 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
++++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
+@@ -24,6 +24,14 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
+         this.entries = players.stream().map(ClientboundPlayerInfoUpdatePacket.Entry::new).toList();
      }
  
 +    // Weeper start
-+    public ClientboundPlayerInfoPacket(Action action, List<PlayerUpdate> playerUpdates) {
-+        this.action = action;
-+        this.entries = playerUpdates;
-+    }
++    public ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action action, List<ClientboundPlayerInfoUpdatePacket.Entry> playerUpdates) {
++                this.actions = EnumSet.of(action);
++                this.entries = playerUpdates;
++            }
 +    // Weeper end
 +
-     public ClientboundPlayerInfoPacket(FriendlyByteBuf buf) {
-         this.action = buf.readEnum(ClientboundPlayerInfoPacket.Action.class);
-         this.entries = buf.readList(this.action::read);
++
+     public ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action action, ServerPlayer player) {
+         this.actions = EnumSet.of(action);
+         this.entries = List.of(new ClientboundPlayerInfoUpdatePacket.Entry(player));
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java
 index 15ebf22e9ca11870e5f24ff5ab8bcbee8c571ee3..9e711248be49a784e3eb37e89902f876f4d69f67 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java
@@ -757,32 +757,6 @@ index 15ebf22e9ca11870e5f24ff5ab8bcbee8c571ee3..9e711248be49a784e3eb37e89902f876
      public ClientboundRotateHeadPacket(FriendlyByteBuf buf) {
          this.entityId = buf.readVarInt();
          this.yHeadRot = buf.readByte();
-diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundSetEntityDataPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundSetEntityDataPacket.java
-index bf838c097aeb79fbe82c0b6cdf3315acf03474cd..264f2df6340c5f22bf475ee32b9ab605d52a04ae 100644
---- a/src/main/java/net/minecraft/network/protocol/game/ClientboundSetEntityDataPacket.java
-+++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundSetEntityDataPacket.java
-@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
- import net.minecraft.network.FriendlyByteBuf;
- import net.minecraft.network.protocol.Packet;
- import net.minecraft.network.syncher.SynchedEntityData;
-+import net.minecraft.network.syncher.SynchedEntityData.DataItem;
- 
- public class ClientboundSetEntityDataPacket implements Packet<ClientGamePacketListener> {
-     private final int id;
-@@ -27,6 +28,13 @@ public class ClientboundSetEntityDataPacket implements Packet<ClientGamePacketLi
- 
-     }
- 
-+    // Weeper - start
-+    public ClientboundSetEntityDataPacket(int id, List<DataItem<?>> packedItems) {
-+        this.id = id;
-+        this.packedItems = packedItems;
-+    }
-+    // Weeper - end
-+
-     public ClientboundSetEntityDataPacket(FriendlyByteBuf buf) {
-         this.id = buf.readVarInt();
-         this.packedItems = SynchedEntityData.unpack(buf);
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java
 index ee8f6838d774fd316178a10db5101102963c1847..bf093b68edcdc269149543582272246577619f49 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java
@@ -807,7 +781,7 @@ index ee8f6838d774fd316178a10db5101102963c1847..bf093b68edcdc2691495435822722465
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 6fa47becd0f83ac4273ef3a10c314aa27b08184b..b3bf1273e23970f8db7b94e1ecb53972bb838041 100644
+index 7f94da8059147760cbdc2476d0e8beda4a105f40..9ea4b14eb5756e64f915280bab1570f75980c60c 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -331,7 +331,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -835,10 +809,10 @@ index 6fa47becd0f83ac4273ef3a10c314aa27b08184b..b3bf1273e23970f8db7b94e1ecb53972
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 0318c9483a4d96eb39ff4df9054a9e6398186bc3..41b3d2c4d8608ec38dd5357e7e4fb34e438727a1 100644
+index 9e075de3542bda8ae086c9ca68bcd00b16d565d0..282c7ce60c24426cab6a808495a1ac3a344c11f6 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -175,7 +175,7 @@ public abstract class LivingEntity extends Entity {
+@@ -176,7 +176,7 @@ public abstract class LivingEntity extends Entity {
      private static final EntityDataAccessor<Boolean> DATA_EFFECT_AMBIENCE_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
      public static final EntityDataAccessor<Integer> DATA_ARROW_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
      private static final EntityDataAccessor<Integer> DATA_STINGER_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
@@ -848,10 +822,10 @@ index 0318c9483a4d96eb39ff4df9054a9e6398186bc3..41b3d2c4d8608ec38dd5357e7e4fb34e
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index c4131009fd05cf8219bad2ba16f5afdc1851f9b0..daf3c8d119a1262fb0d4dc0a9f207025ca9e1d0a 100644
+index a3427b7627f87427485798ec4f00b8d30757af43..0700865383c07ff4245a3f2559e3e660b6b711fb 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2910,5 +2910,10 @@ public final class CraftServer implements Server {
+@@ -2934,5 +2934,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
  

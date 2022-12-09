@@ -5,7 +5,7 @@ Subject: [PATCH] implement take and place
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index 49b063655dfc09e30d446dbf07503fdda04a7e30..73b2e39e1c4e0b4eb383f6d57f0ee91e0460915b 100644
+index 95ba37458e8154dbce6a8590508840d694fcbed1..de01cc478352f1157c42b60da401232675ac4399 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 @@ -1,5 +1,6 @@
@@ -15,7 +15,7 @@ index 49b063655dfc09e30d446dbf07503fdda04a7e30..73b2e39e1c4e0b4eb383f6d57f0ee91e
  import com.google.common.base.Suppliers;
  import com.google.common.collect.HashBasedTable;
  import com.google.common.collect.Lists;
-@@ -156,6 +157,12 @@ public abstract class AbstractContainerMenu {
+@@ -157,6 +158,12 @@ public abstract class AbstractContainerMenu {
          return slot;
      }
  
