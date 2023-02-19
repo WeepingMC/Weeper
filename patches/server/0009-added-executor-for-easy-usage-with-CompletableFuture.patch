@@ -5,7 +5,7 @@ Subject: [PATCH] added executor for easy usage with CompletableFutures
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/scheduler/MinecraftInternalPlugin.java b/src/main/java/org/bukkit/craftbukkit/scheduler/MinecraftInternalPlugin.java
-index 909b2c98e7a9117d2f737245e4661792ffafb744..d320fd1ec4fbdd66c68e505db000d253cff32131 100644
+index d96399e9bf1a58db5a4a22e58abb99e7660e0694..44aecaa931f7dc47ffde56441c78105d50282eb9 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scheduler/MinecraftInternalPlugin.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scheduler/MinecraftInternalPlugin.java
 @@ -11,12 +11,14 @@ import org.bukkit.plugin.PluginBase;
@@ -23,7 +23,7 @@ index 909b2c98e7a9117d2f737245e4661792ffafb744..d320fd1ec4fbdd66c68e505db000d253
  
  public class MinecraftInternalPlugin extends PluginBase {
      private boolean enabled = true;
-@@ -88,6 +90,16 @@ public class MinecraftInternalPlugin extends PluginBase {
+@@ -94,6 +96,16 @@ public class MinecraftInternalPlugin extends PluginBase {
          throw new UnsupportedOperationException("Not supported.");
      }
  

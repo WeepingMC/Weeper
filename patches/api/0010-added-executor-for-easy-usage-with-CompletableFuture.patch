@@ -5,7 +5,7 @@ Subject: [PATCH] added executor for easy usage with CompletableFutures
 
 
 diff --git a/src/main/java/org/bukkit/plugin/Plugin.java b/src/main/java/org/bukkit/plugin/Plugin.java
-index cdf496598839380e073d7ccd89af473e9a702f00..a54a3fba9621ed85700aa3b8743650ee35068e0a 100644
+index 4eb639fbb46a0848be207149ea433455550fae1c..3a72e97a6c5ce06c5be2d16f93d8fcb44fe2c127 100644
 --- a/src/main/java/org/bukkit/plugin/Plugin.java
 +++ b/src/main/java/org/bukkit/plugin/Plugin.java
 @@ -2,12 +2,14 @@ package org.bukkit.plugin;
@@ -23,7 +23,7 @@ index cdf496598839380e073d7ccd89af473e9a702f00..a54a3fba9621ed85700aa3b8743650ee
  import org.jetbrains.annotations.NotNull;
  import org.jetbrains.annotations.Nullable;
  
-@@ -106,6 +108,22 @@ public interface Plugin extends TabExecutor {
+@@ -117,6 +119,22 @@ public interface Plugin extends TabExecutor {
      @NotNull
      public Server getServer();
  
@@ -47,7 +47,7 @@ index cdf496598839380e073d7ccd89af473e9a702f00..a54a3fba9621ed85700aa3b8743650ee
       * Returns a value indicating whether or not this plugin is currently
       * enabled
 diff --git a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
-index 3bea5dd67ad0393160ccede4ac99a3c7baa1803b..56aa89aed26c54874f846bd55d66b556e920ec7f 100644
+index a536c47fb5f05cad046c2f3374c69f4f83f7f32c..e9bab4a6175c900379e1e0bce2a0b0a07258e5b9 100644
 --- a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
 +++ b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
 @@ -12,6 +12,7 @@ import java.io.Reader;
@@ -66,7 +66,7 @@ index 3bea5dd67ad0393160ccede4ac99a3c7baa1803b..56aa89aed26c54874f846bd55d66b556
  import org.jetbrains.annotations.NotNull;
  import org.jetbrains.annotations.Nullable;
  
-@@ -95,6 +97,18 @@ public abstract class JavaPlugin extends PluginBase {
+@@ -102,6 +104,18 @@ public abstract class JavaPlugin extends PluginBase {
          return server;
      }
  
@@ -86,7 +86,7 @@ index 3bea5dd67ad0393160ccede4ac99a3c7baa1803b..56aa89aed26c54874f846bd55d66b556
       * Returns a value indicating whether or not this plugin is currently
       * enabled
 diff --git a/src/test/java/org/bukkit/plugin/TestPlugin.java b/src/test/java/org/bukkit/plugin/TestPlugin.java
-index a8be3e23e3e280ad301d9530de50028515612966..443591e86e39eda270968cce9ade44cc341f5dde 100644
+index 43b58e920e739bb949ac0673e9ef73ba7b500dc9..d56bfe14a83b3df7fb64e4f16cc09cf42513a8e8 100644
 --- a/src/test/java/org/bukkit/plugin/TestPlugin.java
 +++ b/src/test/java/org/bukkit/plugin/TestPlugin.java
 @@ -1,14 +1,18 @@
@@ -111,7 +111,7 @@ index a8be3e23e3e280ad301d9530de50028515612966..443591e86e39eda270968cce9ade44cc
  
  public class TestPlugin extends PluginBase {
      private boolean enabled = true;
-@@ -78,6 +82,16 @@ public class TestPlugin extends PluginBase {
+@@ -84,6 +88,16 @@ public class TestPlugin extends PluginBase {
          throw new UnsupportedOperationException("Not supported.");
      }
  
