@@ -1,0 +1,76 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 11 Mar 2023 03:30:09 +0100
+Subject: [PATCH] Upgrade to snakeyaml 2.0
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index e31ce5ea89896e088fd18f0753ce86ba3ef4e284..fa49f50bb352ec68cd66abf252aebad74403f6e5 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -26,7 +26,7 @@ dependencies {
+     api("com.google.guava:guava:31.1-jre")
+     api("com.google.code.gson:gson:2.10")
+     api("net.md-5:bungeecord-chat:1.16-R0.4-deprecated+build.6") // Paper
+-    api("org.yaml:snakeyaml:1.33")
++    api("org.yaml:snakeyaml:2.0")
+     // Paper start
+     api("com.googlecode.json-simple:json-simple:1.1.1") {
+         isTransitive = false // includes junit
+diff --git a/src/main/java/org/bukkit/configuration/file/YamlConstructor.java b/src/main/java/org/bukkit/configuration/file/YamlConstructor.java
+index 092599425808df891e8753cf5441c5b48080c7e5..3c85876b34746fa734400e848ff537776bc49f2c 100644
+--- a/src/main/java/org/bukkit/configuration/file/YamlConstructor.java
++++ b/src/main/java/org/bukkit/configuration/file/YamlConstructor.java
+@@ -14,6 +14,7 @@ import org.yaml.snakeyaml.nodes.Tag;
+ public class YamlConstructor extends SafeConstructor {
+ 
+     public YamlConstructor() {
++        super(YamlCreator.trustedLoaderOptions()); // paper - snakeyaml 2.0
+         this.yamlConstructors.put(Tag.MAP, new ConstructCustomObject());
+     }
+ 
+diff --git a/src/main/java/org/bukkit/configuration/file/YamlCreator.java b/src/main/java/org/bukkit/configuration/file/YamlCreator.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..ae4e6a15c5ed9c356ad658d2a82f499f8b7f2424
+--- /dev/null
++++ b/src/main/java/org/bukkit/configuration/file/YamlCreator.java
+@@ -0,0 +1,14 @@
++package org.bukkit.configuration.file;
++
++import org.yaml.snakeyaml.LoaderOptions;
++import org.yaml.snakeyaml.inspector.TrustedTagInspector;
++
++public final class YamlCreator {
++    public static LoaderOptions trustedLoaderOptions() {
++        LoaderOptions options = new LoaderOptions();
++        options.setTagInspector(new TrustedTagInspector());
++        return options;
++    }
++
++    private YamlCreator(){}
++}
+diff --git a/src/main/java/org/bukkit/configuration/file/YamlRepresenter.java b/src/main/java/org/bukkit/configuration/file/YamlRepresenter.java
+index 4670f866812c2a79c632f396c72a4b28783e58dd..8804fbbaf497a07f38d01b9814abe9d9632bf170 100644
+--- a/src/main/java/org/bukkit/configuration/file/YamlRepresenter.java
++++ b/src/main/java/org/bukkit/configuration/file/YamlRepresenter.java
+@@ -12,6 +12,7 @@ import org.yaml.snakeyaml.representer.Representer;
+ public class YamlRepresenter extends Representer {
+ 
+     public YamlRepresenter() {
++        super(new org.yaml.snakeyaml.DumperOptions()); // paper - snakeyaml 2.0
+         this.multiRepresenters.put(ConfigurationSection.class, new RepresentConfigurationSection());
+         this.multiRepresenters.put(ConfigurationSerializable.class, new RepresentConfigurationSerializable());
+         // SPIGOT-6234: We could just switch YamlConstructor to extend Constructor rather than SafeConstructor, however there is a very small risk of issues with plugins treating config as untrusted input
+diff --git a/src/main/java/org/bukkit/plugin/PluginDescriptionFile.java b/src/main/java/org/bukkit/plugin/PluginDescriptionFile.java
+index f1ae66989afaa433bf2896e0bfe2cea472f774d8..65017ee493eecebd09402b00d768241137586c31 100644
+--- a/src/main/java/org/bukkit/plugin/PluginDescriptionFile.java
++++ b/src/main/java/org/bukkit/plugin/PluginDescriptionFile.java
+@@ -200,7 +200,7 @@ public final class PluginDescriptionFile implements io.papermc.paper.plugin.conf
+         @Override
+         @NotNull
+         protected Yaml initialValue() {
+-            return new Yaml(new SafeConstructor() {
++            return new Yaml(new SafeConstructor(org.bukkit.configuration.file.YamlCreator.trustedLoaderOptions()) { // paper - snakeyaml 2.0
+                 {
+                     yamlConstructors.put(null, new AbstractConstruct() {
+                         @NotNull
