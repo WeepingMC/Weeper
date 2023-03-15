@@ -7,7 +7,7 @@ plugins {
     java
     `maven-publish`
     id("com.github.johnrengelman.shadow") version "8.1.0"
-    id("io.papermc.paperweight.patcher") version "1.5.2"
+    id("io.papermc.paperweight.patcher") version "1.5.3"
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
@@ -47,7 +47,7 @@ subprojects {
 
 repositories {
     mavenCentral()
-    maven("https://papermc.io/repo/repository/maven-public/") {
+    maven("https://repo.papermc.io/repository/maven-public/") {
         content {
             onlyForConfigurations(PAPERCLIP_CONFIG)
         }
@@ -56,7 +56,7 @@ repositories {
 
 dependencies {
     remapper("net.fabricmc:tiny-remapper:0.8.6:fat")
-    decompiler("net.minecraftforge:forgeflower:2.0.605.1")
+    decompiler("net.minecraftforge:forgeflower:2.0.627.2")
     paperclip("io.papermc:paperclip:3.0.2")
 }
 
@@ -106,13 +106,6 @@ tasks.generateDevelopmentBundle {
 allprojects {
     publishing {
         repositories {
-            maven {
-                authentication {
-                    credentials(PasswordCredentials::class)
-                }
-                url = uri("https://nexus.endrealm.net/repository/toothpick/")
-                name = "endrealm"
-            }
             maven {
                 authentication {
                     credentials(PasswordCredentials::class)

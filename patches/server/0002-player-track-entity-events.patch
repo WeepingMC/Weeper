@@ -5,7 +5,7 @@ Subject: [PATCH] player track entity events
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 190e9761087baec5827d722a8281f0ffb6798341..71a848b1d54a0a90cba14fbb20f3413d04566d25 100644
+index b7fd8e70413c38923d0719aff803449e392383ac..e9ae3a1437c5b4dab9b3ff76d86fd0f1eb4727ab 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
 @@ -1,5 +1,6 @@
@@ -15,15 +15,15 @@ index 190e9761087baec5827d722a8281f0ffb6798341..71a848b1d54a0a90cba14fbb20f3413d
  import com.google.common.collect.Lists;
  import com.mojang.datafixers.util.Pair;
  import com.mojang.logging.LogUtils;
-@@ -11,6 +12,7 @@ import java.util.Objects;
- import java.util.Set;
+@@ -13,6 +14,7 @@ import java.util.Set;
  import java.util.function.Consumer;
+ import java.util.stream.Stream;
  import javax.annotation.Nullable;
 +import com.github.weepingmc.event.packet.PlayerUntrackEntityEvent;
  import net.minecraft.network.protocol.Packet;
  import net.minecraft.network.protocol.game.ClientGamePacketListener;
- import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;
-@@ -253,6 +255,7 @@ public class ServerEntity {
+ import net.minecraft.network.protocol.game.ClientboundBundlePacket;
+@@ -282,6 +284,7 @@ public class ServerEntity {
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
          player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));
@@ -31,7 +31,7 @@ index 190e9761087baec5827d722a8281f0ffb6798341..71a848b1d54a0a90cba14fbb20f3413d
      }
  
      public void addPairing(ServerPlayer player) {
-@@ -274,7 +277,11 @@ public class ServerEntity {
+@@ -304,7 +307,11 @@ public class ServerEntity {
          Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket();
  
          this.yHeadRotp = Mth.floor(this.entity.getYHeadRot() * 256.0F / 360.0F);
