@@ -1,0 +1,111 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Fri, 24 Mar 2023 18:24:08 +0100
+Subject: [PATCH] Support per player display names
+
+
+diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
+index ff7ba7a161cfed7521354bc6e3f21ba0f17f3760..678579ddddc196e7d351d20ed8e6e7fb26b1f345 100644
+--- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
++++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
+@@ -161,8 +161,14 @@ public class SynchedEntityData {
+         return this.isDirty;
+     }
+ 
++    // Paper start - per player display component
+     @Nullable
+     public List<SynchedEntityData.DataValue<?>> packDirty() {
++        return packDirty(null);
++    }
++    @Nullable
++    public List<SynchedEntityData.DataValue<?>> packDirty(@Nullable Entity entity) {
++        // Paper end - per player display component
+         List<SynchedEntityData.DataValue<?>> list = null;
+ 
+         if (this.isDirty) {
+@@ -177,6 +183,14 @@ public class SynchedEntityData {
+                     if (list == null) {
+                         list = new ArrayList();
+                     }
++                    // Paper start - per player display component
++                    if(datawatcher_item.accessor == Entity.DATA_CUSTOM_NAME && entity instanceof ServerPlayer serverPlayer) {
++                        net.minecraft.network.chat.Component component = this.entity.getBukkitEntity().getDisplayNamePerPlayerOverride(serverPlayer);
++                        if(component != null) {
++                            ((SynchedEntityData.DataItem< java.util.Optional<net.minecraft.network.chat.Component>>)datawatcher_item).value = java.util.Optional.of(component);
++                        }
++                    }
++                    // Paper end - per player display component
+ 
+                     list.add(datawatcher_item.value());
+                 }
+diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
+index e9ae3a1437c5b4dab9b3ff76d86fd0f1eb4727ab..11af8b496b151531b037ab8a7db8d7faca1f0b9b 100644
+--- a/src/main/java/net/minecraft/server/level/ServerEntity.java
++++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
+@@ -400,7 +400,7 @@ public class ServerEntity {
+ 
+     private void sendDirtyEntityData() {
+         SynchedEntityData datawatcher = this.entity.getEntityData();
+-        List<SynchedEntityData.DataValue<?>> list = datawatcher.packDirty();
++        List<SynchedEntityData.DataValue<?>> list = datawatcher.packDirty(this.entity); // Paper - per player display component
+ 
+         if (list != null) {
+             this.trackedDataValues = datawatcher.getNonDefaultValues();
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+index 57a0dbb23a32123d30c3b3572f4d129be9d97847..61f418e453f91476735932ff91636da6a8353d2d 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -4,7 +4,10 @@ import com.google.common.base.Function;
+ import com.google.common.base.Preconditions;
+ import com.google.common.base.Predicates;
+ import com.google.common.collect.Lists;
++
++import java.util.HashMap;
+ import java.util.List;
++import java.util.Map;
+ import java.util.Set;
+ import java.util.UUID;
+ import net.minecraft.core.PositionImpl;
+@@ -194,6 +197,7 @@ import org.bukkit.util.Vector;
+ 
+ import net.md_5.bungee.api.chat.BaseComponent; // Spigot
+ 
++
+ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+     private static PermissibleBase perm;
+     private static final CraftPersistentDataTypeRegistry DATA_TYPE_REGISTRY = new CraftPersistentDataTypeRegistry();
+@@ -203,6 +207,7 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+     private EntityDamageEvent lastDamageEvent;
+     private final CraftPersistentDataContainer persistentDataContainer = new CraftPersistentDataContainer(CraftEntity.DATA_TYPE_REGISTRY);
+     protected net.kyori.adventure.pointer.Pointers adventure$pointers; // Paper - implement pointers
++    private Map<UUID, Component> displayNameOverrides = new HashMap<>();
+ 
+     public CraftEntity(final CraftServer server, final Entity entity) {
+         this.server = server;
+@@ -1442,4 +1447,26 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+         return !this.getHandle().level.noCollision(this.getHandle(), aabb);
+     }
+     // Paper End - Collision API
++    // Paper start - per player display component
++    public Component getDisplayNamePerPlayerOverride(ServerPlayer serverPlayer) {
++        return displayNameOverrides.get(serverPlayer.getUUID());
++    }
++    @Override
++    public @org.jetbrains.annotations.Nullable net.kyori.adventure.text.Component displayNamePerPlayerOverride(@org.jetbrains.annotations.NotNull Player player) {
++        Component component = this.displayNameOverrides.get(player.getUniqueId());
++        if(component == null) {
++            return null;
++        }
++        return io.papermc.paper.adventure.PaperAdventure.asAdventure(component);
++    }
++
++    @Override
++    public void displayNamePerPlayerOverride(@org.jetbrains.annotations.NotNull Player player, @org.jetbrains.annotations.Nullable net.kyori.adventure.text.Component component) {
++        if (component == null){
++            this.displayNameOverrides.remove(player.getUniqueId());
++            return;
++        }
++        this.displayNameOverrides.put(player.getUniqueId(), io.papermc.paper.adventure.PaperAdventure.asVanilla(component));
++    }
++    // Paper end - per player display component
+ }
