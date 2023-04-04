@@ -5,10 +5,10 @@ Subject: [PATCH] add deprecation annotations where javadoc is bitching
 
 
 diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/World.java
-index 62bbbffe92f67a871bdeb628d15b5a3d7f4d4bd6..0eb7a807c437d07c66228b79734afed9732beb4b 100644
+index 3a2473cfe4986488e0af7784b7d152f65f112e07..5965332f64a3a51ede04e6b5c8c19934113a00b3 100644
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
-@@ -4081,7 +4081,7 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
+@@ -4078,7 +4078,7 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
      void triggerBlockAnimation(@NotNull Location location, int action, int actionParameter);
  
      /**
@@ -18,7 +18,7 @@ index 62bbbffe92f67a871bdeb628d15b5a3d7f4d4bd6..0eb7a807c437d07c66228b79734afed9
      @Deprecated(forRemoval = true)
      default void triggerBlockEntityEvent(@NotNull Location location, int action, int actionParameter){
 diff --git a/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java b/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
-index 8eb6f4090578d9e1b12aff813840108fdeece730..634fcb7cf4a86d532d464331e1b0c12692a76b71 100644
+index f0db59a556deaefefbdaca121585c0fd199c13c2..ad077dbad280331b5457b1e79232f9052aa4dfa9 100644
 --- a/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
 +++ b/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
 @@ -86,6 +86,7 @@ public class PrepareItemEnchantEvent extends InventoryEvent implements Cancellab
