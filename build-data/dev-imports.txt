@@ -6,15 +6,8 @@
 #     datafixerupper com.mojang.datafixers.DataFixerBuilder
 #     datafixerupper com/mojang/datafixers/util/Either.java
 # To import classes from the vanilla Minecraft jar use `minecraft` as the artifactId:
-#     minecraft net.minecraft.world.level.entity.LevelEntityGetterAdapter
-#     minecraft net/minecraft/world/level/entity/LevelEntityGetter.java
-minecraft net/minecraft/network/protocol/game/ClientboundAddPlayerPacket.java
-minecraft net/minecraft/network/protocol/game/ClientboundAnimatePacket.java
 minecraft net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 minecraft net/minecraft/network/protocol/game/ClientboundPlayerInfoRemovePacket.java
-minecraft net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java
 minecraft net/minecraft/network/protocol/game/ClientboundSetEntityDataPacket.java
-minecraft net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java
 minecraft net/minecraft/network/protocol/game/ClientboundRemoveEntitiesPacket.java
 minecraft net/minecraft/server/level/ServerEntity.java
-minecraft net/minecraft/world/inventory/Slot.java

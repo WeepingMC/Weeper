@@ -407,7 +407,7 @@ index 0000000000000000000000000000000000000000..6d65b30700692a9254998a94952d9938
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..a845494fd39f61df893c7d2f2dbee9c1bf22cccb
+index 0000000000000000000000000000000000000000..d85c18befce2b290c7e17a6b12ae3cf676f27296
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 @@ -0,0 +1,259 @@
@@ -721,7 +721,7 @@ index 2dce930e691731781a6700610271dd549cf34fe8..c7ec04ba498ca8d5bd19e2c5ed099f60
      @Override
      public void handle(ClientGamePacketListener listener) {
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
-index 23e0e6937e28f09271a4ec7c35e0076a576cf3d3..7328f68b6ee5d02c918065e65a5262dd91a0ea68 100644
+index 4aa8b483841028fbcc43f9ed47730881263e5065..ec8a0dd595e8c7bdace6f1a7b64dcbf075414501 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 @@ -24,6 +24,14 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
@@ -781,7 +781,7 @@ index ee8f6838d774fd316178a10db5101102963c1847..bf093b68edcdc2691495435822722465
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 9a1e8589e6b371869b2199650172d61ae186c907..16c5ba4dfc6a6bb60da072624dc60100d3d64465 100644
+index 4705d7066207250c03a5f98eef61554c901f2e35..2fc234952f8dd4e821ae808feb9610f837e7242a 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -331,7 +331,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -809,7 +809,7 @@ index 9a1e8589e6b371869b2199650172d61ae186c907..16c5ba4dfc6a6bb60da072624dc60100
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index e9d3e34520b706627205e0d5b17b25e09f198e7e..8cee71926c4b2cff58536c114a92843f99d7f927 100644
+index 95a27d28f73039693ca64601954af62028413634..deed4af1ed99dc740aaacd08f8bfa8e55dc36c93 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -174,7 +174,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
@@ -822,10 +822,10 @@ index e9d3e34520b706627205e0d5b17b25e09f198e7e..8cee71926c4b2cff58536c114a92843f
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 1b232f8471a7ed95fb2e0d1ad759c288c467c959..695139f07d5f415020b9731f6f43b358f0f08b64 100644
+index 00256019a021e62d859fc7463f12731c91becc4f..d2e749aec008d8dfacfdda2ce7bd52406dd5480d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2918,5 +2918,10 @@ public final class CraftServer implements Server {
+@@ -2914,5 +2914,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
  
