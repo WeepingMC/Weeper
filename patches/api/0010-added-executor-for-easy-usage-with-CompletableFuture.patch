@@ -47,7 +47,7 @@ index 4eb639fbb46a0848be207149ea433455550fae1c..3a72e97a6c5ce06c5be2d16f93d8fcb4
       * Returns a value indicating whether or not this plugin is currently
       * enabled
 diff --git a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
-index a536c47fb5f05cad046c2f3374c69f4f83f7f32c..e9bab4a6175c900379e1e0bce2a0b0a07258e5b9 100644
+index 5cd236965de12392d8c7aa81307c0ff1cc8673b1..69405fc9098571e60b0b4f77553f4a94e68d8d30 100644
 --- a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
 +++ b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
 @@ -12,6 +12,7 @@ import java.io.Reader;
@@ -66,7 +66,7 @@ index a536c47fb5f05cad046c2f3374c69f4f83f7f32c..e9bab4a6175c900379e1e0bce2a0b0a0
  import org.jetbrains.annotations.NotNull;
  import org.jetbrains.annotations.Nullable;
  
-@@ -102,6 +104,18 @@ public abstract class JavaPlugin extends PluginBase {
+@@ -104,6 +106,18 @@ public abstract class JavaPlugin extends PluginBase {
          return server;
      }
  

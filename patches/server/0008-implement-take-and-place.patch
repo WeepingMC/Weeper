@@ -81,7 +81,7 @@ index 75d71b0b8a1f5b0712b76e52c8afded103f16b7b..ae6783f915e64a5c7724156803e7a103
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index c8cccfcf4d572a9e65fce09621aeed2a7045003c..1d23d2cdec64b1b257498d8d6621280297c84846 100644
+index 1b008e5217c5bbf566a213abb92e1c7c43a3a7c2..3d51f1f536cbd308b10c40d2ead7e3e1b2b83d89 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -1,5 +1,6 @@
@@ -91,15 +91,7 @@ index c8cccfcf4d572a9e65fce09621aeed2a7045003c..1d23d2cdec64b1b257498d8d66212802
  import com.google.common.base.Preconditions;
  import com.google.common.collect.ImmutableSet;
  import java.util.ArrayList;
-@@ -47,7 +48,6 @@ import org.bukkit.craftbukkit.inventory.CraftInventoryPlayer;
- import org.bukkit.craftbukkit.inventory.CraftInventoryView;
- import org.bukkit.craftbukkit.inventory.CraftItemStack;
- import org.bukkit.craftbukkit.inventory.CraftMerchantCustom;
--import org.bukkit.craftbukkit.util.CraftChatMessage;
- import org.bukkit.craftbukkit.util.CraftMagicNumbers;
- import org.bukkit.craftbukkit.util.CraftNamespacedKey;
- import org.bukkit.entity.Firework;
-@@ -56,6 +56,7 @@ import org.bukkit.entity.Villager;
+@@ -57,6 +58,7 @@ import org.bukkit.entity.Villager;
  import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
  import org.bukkit.inventory.EntityEquipment;
  import org.bukkit.inventory.Inventory;
@@ -107,7 +99,7 @@ index c8cccfcf4d572a9e65fce09621aeed2a7045003c..1d23d2cdec64b1b257498d8d66212802
  import org.bukkit.inventory.InventoryView;
  import org.bukkit.inventory.ItemStack;
  import org.bukkit.inventory.MainHand;
-@@ -66,6 +67,7 @@ import org.bukkit.permissions.Permission;
+@@ -67,6 +69,7 @@ import org.bukkit.permissions.Permission;
  import org.bukkit.permissions.PermissionAttachment;
  import org.bukkit.permissions.PermissionAttachmentInfo;
  import org.bukkit.plugin.Plugin;
@@ -115,7 +107,7 @@ index c8cccfcf4d572a9e65fce09621aeed2a7045003c..1d23d2cdec64b1b257498d8d66212802
  
  public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      private CraftInventoryPlayer inventory;
-@@ -314,6 +316,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -315,6 +318,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
  
      @Override
      public InventoryView openInventory(Inventory inventory) {
@@ -127,7 +119,7 @@ index c8cccfcf4d572a9e65fce09621aeed2a7045003c..1d23d2cdec64b1b257498d8d66212802
          if (!(this.getHandle() instanceof ServerPlayer)) return null;
          ServerPlayer player = (ServerPlayer) this.getHandle();
          AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
-@@ -343,7 +350,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -344,7 +352,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
          if (iinventory instanceof MenuProvider) {
              this.getHandle().openMenu(iinventory);
          } else {
@@ -136,7 +128,7 @@ index c8cccfcf4d572a9e65fce09621aeed2a7045003c..1d23d2cdec64b1b257498d8d66212802
          }
  
          if (this.getHandle().containerMenu == formerContainer) {
-@@ -354,9 +361,20 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -355,9 +363,20 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      }
  
      private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {
