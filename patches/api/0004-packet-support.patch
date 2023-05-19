@@ -314,10 +314,10 @@ index 0000000000000000000000000000000000000000..aafa50f0809a03dcdd3a8fcf914d04e7
 +    REMOVE_PLAYERS_FROM_TEAM
 +}
 diff --git a/src/main/java/org/bukkit/Bukkit.java b/src/main/java/org/bukkit/Bukkit.java
-index f1af93319d6b29d7bc709e7e273e8abe26c7b4af..366af0f901e04f31e4ce7c2dda2eb9938cd52144 100644
+index 15a9993c2705e2dcc0366394ded57acffab589c0..8a11a68541f49c32a959886edc245c2130e508c5 100644
 --- a/src/main/java/org/bukkit/Bukkit.java
 +++ b/src/main/java/org/bukkit/Bukkit.java
-@@ -2455,6 +2455,15 @@ public final class Bukkit {
+@@ -2454,6 +2454,15 @@ public final class Bukkit {
      public static @NotNull org.bukkit.potion.PotionBrewer getPotionBrewer() {
          return server.getPotionBrewer();
      }
@@ -334,10 +334,10 @@ index f1af93319d6b29d7bc709e7e273e8abe26c7b4af..366af0f901e04f31e4ce7c2dda2eb993
  
      @NotNull
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 8621dba7f10ab822b5b99ce0d05da58823605cb6..93a69b4b7e09350109f6192c7229405825d048b4 100644
+index 9f7029d327b55c8b1b9cfef8ea2678b87dad8ddb..9db5aaafed07b5b73644166278bd71a732d4c147 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2135,5 +2135,12 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2134,5 +2134,12 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       * @return the potion brewer
       */
      @NotNull org.bukkit.potion.PotionBrewer getPotionBrewer();
