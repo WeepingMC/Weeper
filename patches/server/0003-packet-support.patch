@@ -781,7 +781,7 @@ index ee8f6838d774fd316178a10db5101102963c1847..bf093b68edcdc2691495435822722465
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index df316ca580a0a3b4ba6b658f7d7bdf542f4ad85b..5a47b44c55b5fbac15f3c6a78868d97bfee387af 100644
+index 280ee1838106201f5e3ba7753caced6d030f7e55..f543aaa33a5222d9bcb4e70418350652d3d6b124 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -332,7 +332,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -822,10 +822,10 @@ index 95a27d28f73039693ca64601954af62028413634..deed4af1ed99dc740aaacd08f8bfa8e5
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 943351d5a732d7e733198c510d31a2c35c94b6db..20261b5cd0de2b4d6351784f68f31b9b31bb9dba 100644
+index 91d6a3d7594e269963a7144b5648aba6923363d8..0819a40dc4dccae30f8c02b082b848ed75a490c4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2915,5 +2915,10 @@ public final class CraftServer implements Server {
+@@ -2955,5 +2955,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
  
