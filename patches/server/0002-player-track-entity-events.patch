@@ -5,7 +5,7 @@ Subject: [PATCH] player track entity events
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index b7fd8e70413c38923d0719aff803449e392383ac..e9ae3a1437c5b4dab9b3ff76d86fd0f1eb4727ab 100644
+index 6670e657e08e130f7e0368f418379fd1ece00cdf..6dc5a31c9d6f86563dfd8b7832e63038d4e00b4a 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
 @@ -1,5 +1,6 @@
@@ -23,7 +23,15 @@ index b7fd8e70413c38923d0719aff803449e392383ac..e9ae3a1437c5b4dab9b3ff76d86fd0f1
  import net.minecraft.network.protocol.Packet;
  import net.minecraft.network.protocol.game.ClientGamePacketListener;
  import net.minecraft.network.protocol.game.ClientboundBundlePacket;
-@@ -282,6 +284,7 @@ public class ServerEntity {
+@@ -101,6 +103,7 @@ public class ServerEntity {
+ 
+                     entityplayer.connection.teleport(entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), entityplayer.getYRot(), entityplayer.getXRot());
+                 }
++                    }
+ 
+             });
+             this.lastPassengers = list;
+@@ -276,6 +279,7 @@ public class ServerEntity {
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
          player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));
@@ -31,16 +39,16 @@ index b7fd8e70413c38923d0719aff803449e392383ac..e9ae3a1437c5b4dab9b3ff76d86fd0f1
      }
  
      public void addPairing(ServerPlayer player) {
-@@ -304,7 +307,11 @@ public class ServerEntity {
+@@ -298,7 +302,11 @@ public class ServerEntity {
          Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket();
  
          this.yHeadRotp = Mth.floor(this.entity.getYHeadRot() * 256.0F / 360.0F);
--        consumer.accept(packet);
+-        sender.accept(packet);
 +        // Weeper start
-+        if (PlayerTrackEntityEvent.getHandlerList().getRegisteredListeners().length == 0 || new PlayerTrackEntityEvent((org.bukkit.entity.Player)entityplayer.getBukkitEntity(), this.entity.getBukkitEntity()).callEvent()) {
-+            consumer.accept(packet);
++        if (PlayerTrackEntityEvent.getHandlerList().getRegisteredListeners().length == 0 || new PlayerTrackEntityEvent((org.bukkit.entity.Player)player.getBukkitEntity(), this.entity.getBukkitEntity()).callEvent()) {
++            sender.accept(packet);
 +        }
 +        // Weeper end
          if (this.trackedDataValues != null) {
-             consumer.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
+             sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
