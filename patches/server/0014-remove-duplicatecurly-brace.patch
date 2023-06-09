@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Fri, 9 Jun 2023 17:55:57 +0200
+Subject: [PATCH] remove duplicatecurly brace
+
+
+diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
+index 6dc5a31c9d6f86563dfd8b7832e63038d4e00b4a..64b252a3b2532aa275dd9d4ffab84a0768b1148e 100644
+--- a/src/main/java/net/minecraft/server/level/ServerEntity.java
++++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
+@@ -103,8 +103,6 @@ public class ServerEntity {
+ 
+                     entityplayer.connection.teleport(entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), entityplayer.getYRot(), entityplayer.getXRot());
+                 }
+-                    }
+-
+             });
+             this.lastPassengers = list;
+         }
