@@ -781,7 +781,7 @@ index d5f404fb6dc09c48d84b4a3e75c12f2fbb53c224..857cfaaefc00ce5e8878d95560d1f0ba
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 92202262eff01ae3bbeff0e6ebdcf26ad613c169..a70139269e1c8e53d226694a0c158c0690f896f7 100644
+index b38c4cbcf0405d82c7b6e018e80a3174e460c1a4..3d8492ff5751370e27f2ce564d28a8f42d765244 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -334,7 +334,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -809,7 +809,7 @@ index 92202262eff01ae3bbeff0e6ebdcf26ad613c169..a70139269e1c8e53d226694a0c158c06
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 67627bbf84f5aab2872f636b1dcb6728c8494147..32279c58bf1c010b82f5b4dd0c70bb5de1b8eeba 100644
+index a189461330a4d427a7450d504ef13de3605497e3..400245ee32997249fe7b9b04a88cf073ca63a979 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -177,7 +177,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
@@ -822,10 +822,10 @@ index 67627bbf84f5aab2872f636b1dcb6728c8494147..32279c58bf1c010b82f5b4dd0c70bb5d
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index b501ba3aadebee6eaf1518afef0f15be802a8c49..41adeefebd84eb533d4a3ae73725521ef396a1f4 100644
+index f79e22fc97381121aed92f25bf6fc0561d6f2165..769d6e87a40722b6c648ddba2b5f097cc6b5e30e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2971,5 +2971,10 @@ public final class CraftServer implements Server {
+@@ -2988,5 +2988,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
  
@@ -837,10 +837,10 @@ index b501ba3aadebee6eaf1518afef0f15be802a8c49..41adeefebd84eb533d4a3ae73725521e
      // Paper end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-index fe57437155ff9471738d3b85e787350601b79584..62e9873be158d151e46a9f5c99797f4e19565c07 100644
+index 13190c4265bb83e682dede7e982ebcd19d80e334..ebc955787559f4b2edab6b1c8f5873aa1e1fbe9a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-@@ -21,7 +21,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
+@@ -20,7 +20,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
      final Scoreboard board;
      boolean registeredGlobally = false; // Paper
  
@@ -850,12 +850,12 @@ index fe57437155ff9471738d3b85e787350601b79584..62e9873be158d151e46a9f5c99797f4e
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-index 67efb0d38ae369ff5254f7b1ec85d32d4eee8291..847e9b99512b4a97fe6c747c368081a03efa410f 100644
+index 7098b77fe4275e39694ed7d8fb031b9397302b9f..3e044aa52f4608c9565e43e52d719f51a8cdfd17 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-@@ -14,14 +14,20 @@ import org.bukkit.scoreboard.Team;
- import org.bukkit.scoreboard.Team.Option;
- import org.bukkit.scoreboard.Team.OptionStatus;
+@@ -12,14 +12,20 @@ import org.bukkit.craftbukkit.util.CraftChatMessage;
+ import org.bukkit.scoreboard.NameTagVisibility;
+ import org.bukkit.scoreboard.Team;
  
 -final class CraftTeam extends CraftScoreboardComponent implements Team {
 +public final class CraftTeam extends CraftScoreboardComponent implements Team { // Weeper package private -> public
@@ -875,4 +875,4 @@ index 67efb0d38ae369ff5254f7b1ec85d32d4eee8291..847e9b99512b4a97fe6c747c368081a0
 +
      @Override
      public String getName() throws IllegalStateException {
-         CraftScoreboard scoreboard = this.checkState();
+         this.checkState();
