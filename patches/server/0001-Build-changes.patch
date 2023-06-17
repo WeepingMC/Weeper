@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index a0c5592530d2a59bfde87d1e9eb3752e7d4694da..4657c265b216ab18a90f019bf59cf92250b7271f 100644
+index 19186e436cd6a5f00f0b42ac11f8050ad2ef6713..e83f8b942a77c4b8d58fde3305b08db9d57b75dd 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -7,8 +7,8 @@ plugins {
@@ -19,7 +19,7 @@ index a0c5592530d2a59bfde87d1e9eb3752e7d4694da..4657c265b216ab18a90f019bf59cf922
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -63,7 +63,7 @@ tasks.jar {
+@@ -64,7 +64,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
@@ -84,7 +84,7 @@ index 80cf4852e4010eeeadaf920ab927a40df0179b40..baa698cda00e94822d8b25afa3e6ced9
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 9f8c5ceb8485b14a84f2a7b2ffc8192be5c6bdfd..f79e22fc97381121aed92f25bf6fc0561d6f2165 100644
+index 59984cb8ba9ffb66b59a2c907e4f04b5a51ea8ed..290bc08b4e6834df29a9f2d683f05976fc99bd1b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -261,7 +261,7 @@ import javax.annotation.Nullable; // Paper

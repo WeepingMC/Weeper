@@ -822,10 +822,10 @@ index a189461330a4d427a7450d504ef13de3605497e3..400245ee32997249fe7b9b04a88cf073
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index f79e22fc97381121aed92f25bf6fc0561d6f2165..769d6e87a40722b6c648ddba2b5f097cc6b5e30e 100644
+index 290bc08b4e6834df29a9f2d683f05976fc99bd1b..8c7cc7890707de294dab96b670aac2d0f5468197 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -2988,5 +2988,10 @@ public final class CraftServer implements Server {
+@@ -2992,5 +2992,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
  
