@@ -81,7 +81,7 @@ index 92699f79f19b4dcd7d349976cedc0408836263a6..bca106fb5662c3fbc39c02791f2cb3ee
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 0f3e696582cd288357598490e8af0131ab30bdfc..f096a6c6c2d36572adc53884506559dab4b5c8bb 100644
+index 7db63d9ef93902872937b69f431137336e4abc3a..b8854e05673417c6850963cb28d1a597854b557b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -1,5 +1,6 @@
@@ -147,5 +147,5 @@ index 0f3e696582cd288357598490e8af0131ab30bdfc..f096a6c6c2d36572adc53884506559da
 +        }
 +        // Weeper end - InventoryItemStackMoveStrategy
  
-         container = CraftEventFactory.callInventoryOpenEvent(player, container);
-         if (container == null) return;
+         // Paper start
+         final com.mojang.datafixers.util.Pair<net.kyori.adventure.text.Component, AbstractContainerMenu> result = CraftEventFactory.callInventoryOpenEventWithTitle(player, container);

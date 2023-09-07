@@ -721,7 +721,7 @@ index 2dce930e691731781a6700610271dd549cf34fe8..c7ec04ba498ca8d5bd19e2c5ed099f60
      @Override
      public void handle(ClientGamePacketListener listener) {
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
-index 4aa8b483841028fbcc43f9ed47730881263e5065..ec8a0dd595e8c7bdace6f1a7b64dcbf075414501 100644
+index 0a233051c75dddeb7a5f4de8de39fe1afce75e4a..59ae5a5603b7a39e1dda688eb4b9c5ccbf2977a7 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 @@ -24,6 +24,14 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
@@ -781,7 +781,7 @@ index d5f404fb6dc09c48d84b4a3e75c12f2fbb53c224..857cfaaefc00ce5e8878d95560d1f0ba
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 2edab21bb271405f200de5a19e9c748bb14aba7d..7efc78dac63d43e18ac672bc3cac7b306993ab14 100644
+index e8485fb900b25e911a858678a833852731cb2ace..3d9f35cfc0aaa11daab73147df57673fd130cb4f 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -346,7 +346,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
@@ -822,10 +822,10 @@ index e11d7283662834047b2ff81a2fd25a4263792deb..e8a0087480ec5e918ed9339a0af74da1
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index f14841ed8695fedbf5f322286054349a966daa1a..670bd270cdc4dbb36b2fe14b7152114c6c4381e9 100644
+index 2558c4672bc1248035e4eaa11b5b59e870480904..5166c131564bc2939a73057b10e468a251bd2b7b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3114,5 +3114,10 @@ public final class CraftServer implements Server {
+@@ -3144,5 +3144,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
  
