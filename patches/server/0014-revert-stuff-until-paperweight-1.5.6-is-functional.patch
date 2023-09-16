@@ -1,0 +1,21 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Fri, 22 Sep 2023 12:10:47 +0200
+Subject: [PATCH] revert stuff until paperweight 1.5.6 is functional!
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 09775eb202fad2a3c5d107ab8ceb870b55233f7d..01b4721b154ad92092418528a64fdc9868dcfe7a 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -205,7 +205,8 @@ val runtimeClasspathForRunDev = sourceSets.main.flatMap { src ->
+ }
+ tasks.registerRunTask("runDev") {
+     description = "Spin up a non-relocated Mojang-mapped test server"
+-    classpath(tasks.filterProjectDir.flatMap { it.outputJar })
++    classpath(sourceSets.main.map { it.runtimeClasspath })
++    /*classpath(tasks.filterProjectDir.flatMap { it.outputJar })
+     classpath(runtimeClasspathForRunDev)
+-    jvmArgs("-DPaper.isRunDev=true")
++    jvmArgs("-DPaper.isRunDev=true")*/
+ }
