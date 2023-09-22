@@ -809,7 +809,7 @@ index e8485fb900b25e911a858678a833852731cb2ace..3d9f35cfc0aaa11daab73147df57673f
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index e11d7283662834047b2ff81a2fd25a4263792deb..e8a0087480ec5e918ed9339a0af74da1783c42ea 100644
+index 78c98f38bc263664ea4cd344670243a7d372885c..8f7acfe153bec4811f42fe2a53bbc417791afda7 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -176,7 +176,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
@@ -822,10 +822,10 @@ index e11d7283662834047b2ff81a2fd25a4263792deb..e8a0087480ec5e918ed9339a0af74da1
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 2558c4672bc1248035e4eaa11b5b59e870480904..5166c131564bc2939a73057b10e468a251bd2b7b 100644
+index 542ba0e5cb65c21f20ae22fdc502bb85f2dbd025..a7f65cc21948b3ec96cabdcfb2a1ec449d477de3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3144,5 +3144,10 @@ public final class CraftServer implements Server {
+@@ -3124,5 +3124,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
  
