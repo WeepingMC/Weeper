@@ -5,15 +5,15 @@ Subject: [PATCH] do not check if registry is frozen
 
 
 diff --git a/src/main/java/net/minecraft/core/MappedRegistry.java b/src/main/java/net/minecraft/core/MappedRegistry.java
-index 1e33434f9f361542e03da3e4812bc6d76768a202..9aa011364128094dda5ab13ad55d444b80a08e12 100644
+index 26b92e27de1f079ab8440538c65377ed80e8b6ef..541bbc4181d75d803d4d3b7bbed1698eca73f281 100644
 --- a/src/main/java/net/minecraft/core/MappedRegistry.java
 +++ b/src/main/java/net/minecraft/core/MappedRegistry.java
-@@ -130,7 +130,7 @@ public class MappedRegistry<T> implements WritableRegistry<T> {
+@@ -129,7 +129,7 @@ public class MappedRegistry<T> implements WritableRegistry<T> {
+     }
  
-     @Override
-     public Holder.Reference<T> registerMapping(int i, ResourceKey<T> resourceKey, T object, Lifecycle lifecycle) {
--        this.validateWrite(resourceKey);
-+        // this.validateWrite(resourceKey); // Weepeer do not validate freeze
-         Validate.notNull(resourceKey);
-         Validate.notNull(object);
-         if (this.byLocation.containsKey(resourceKey.location())) {
+     public Holder.Reference<T> registerMapping(int rawId, ResourceKey<T> key, T value, Lifecycle lifecycle) {
+-        this.validateWrite(key);
++        // this.validateWrite(key); // Weepeer do not validate freeze
+         Validate.notNull(key);
+         Validate.notNull(value);
+         if (this.byLocation.containsKey(key.location())) {

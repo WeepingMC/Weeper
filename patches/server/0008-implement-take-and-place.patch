@@ -5,7 +5,7 @@ Subject: [PATCH] implement take and place
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index 706b354ac9a1a6a4a1e61b2a109180d1dd22bbbd..e047d10fa3e8c8a49a09d2e92b247de16d16f160 100644
+index ffd349c1b80df0f1e8c02bda23700184825170fd..ced8c7b5aba157c8ebf5f418838bce93b5a525e6 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 @@ -1,5 +1,6 @@
@@ -29,7 +29,7 @@ index 706b354ac9a1a6a4a1e61b2a109180d1dd22bbbd..e047d10fa3e8c8a49a09d2e92b247de1
          this.dataSlots.add(property);
          this.remoteDataSlots.add(0);
 diff --git a/src/main/java/net/minecraft/world/inventory/Slot.java b/src/main/java/net/minecraft/world/inventory/Slot.java
-index 92699f79f19b4dcd7d349976cedc0408836263a6..bca106fb5662c3fbc39c02791f2cb3ee9197dd5a 100644
+index a43b85b82fc83d0e5e3fd589bede0b279927a989..681c73e5e9d0fc751ba45c5370c4080deedc290c 100644
 --- a/src/main/java/net/minecraft/world/inventory/Slot.java
 +++ b/src/main/java/net/minecraft/world/inventory/Slot.java
 @@ -1,5 +1,7 @@
@@ -71,7 +71,7 @@ index 92699f79f19b4dcd7d349976cedc0408836263a6..bca106fb5662c3fbc39c02791f2cb3ee
      }
  
      public ItemStack getItem() {
-@@ -86,7 +96,7 @@ public class Slot {
+@@ -90,7 +100,7 @@ public class Slot {
      }
  
      public boolean mayPickup(Player playerEntity) {
@@ -81,7 +81,7 @@ index 92699f79f19b4dcd7d349976cedc0408836263a6..bca106fb5662c3fbc39c02791f2cb3ee
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 7db63d9ef93902872937b69f431137336e4abc3a..b8854e05673417c6850963cb28d1a597854b557b 100644
+index 017e97c1618b8ee4640b36a0ec1b07026047bfc3..99690ede4aed54362a9e696c829fbe87c4fa5ae4 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -1,5 +1,6 @@

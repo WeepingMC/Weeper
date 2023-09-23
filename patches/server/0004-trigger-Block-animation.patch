@@ -5,10 +5,10 @@ Subject: [PATCH] trigger Block animation
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 1a481fb4f4228f0fea8a7dc6132248c98b727c90..6d36aeef33121858a90d1a9725b9e9e72ac485c5 100644
+index 7aef2714791674086246ab4b5b92c8965dbfdae0..76127b761573ae6d1631754fcf8a1c297e520893 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -55,6 +55,7 @@ import net.minecraft.world.flag.FeatureFlags;
+@@ -56,6 +56,7 @@ import net.minecraft.world.flag.FeatureFlags;
  import net.minecraft.world.level.ChunkPos;
  import net.minecraft.world.level.ClipContext;
  import net.minecraft.world.level.GameRules;
@@ -16,7 +16,7 @@ index 1a481fb4f4228f0fea8a7dc6132248c98b727c90..6d36aeef33121858a90d1a9725b9e9e7
  import net.minecraft.world.level.chunk.ChunkAccess;
  import net.minecraft.world.level.chunk.ChunkStatus;
  import net.minecraft.world.level.chunk.ImposterProtoChunk;
-@@ -2290,6 +2291,17 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -2284,6 +2285,17 @@ public class CraftWorld extends CraftRegionAccessor implements World {
          return (this.getHandle().getDragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().getDragonFight());
      }
  

@@ -90,10 +90,10 @@ index 55026e1731e41b4e3e4c6a8fef5d96a32051a556..fbce1518459041c12436a6e42c6f4525
          BaseBeeGoal() {}
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Cat.java b/src/main/java/net/minecraft/world/entity/animal/Cat.java
-index 90ce201bc7c47cef9bc59d7b535a7453854bac75..3858d2d3f1ac0481c5a9d17bda7754b04d6cf416 100644
+index de51ce9875e12961e6e549e87d76f492d2f19787..663987f121e741dc0028a935db486529c255ac7d 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Cat.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Cat.java
-@@ -506,7 +506,7 @@ public class Cat extends TamableAnimal implements VariantHolder<CatVariant> {
+@@ -512,7 +512,7 @@ public class Cat extends TamableAnimal implements VariantHolder<CatVariant> {
          }
      }
  
@@ -102,7 +102,7 @@ index 90ce201bc7c47cef9bc59d7b535a7453854bac75..3858d2d3f1ac0481c5a9d17bda7754b0
  
          private final Cat cat;
          @Nullable
-@@ -652,7 +652,7 @@ public class Cat extends TamableAnimal implements VariantHolder<CatVariant> {
+@@ -658,7 +658,7 @@ public class Cat extends TamableAnimal implements VariantHolder<CatVariant> {
          }
      }
  
@@ -112,7 +112,7 @@ index 90ce201bc7c47cef9bc59d7b535a7453854bac75..3858d2d3f1ac0481c5a9d17bda7754b0
          private final Cat cat;
  
 diff --git a/src/main/java/net/minecraft/world/entity/raid/Raider.java b/src/main/java/net/minecraft/world/entity/raid/Raider.java
-index 57fdcdaf54fd1c92a6e51a3a81789029096e5abe..bfe4ba5a5b982ccc88c5c89807fdcce97b59b04a 100644
+index cdbc925ef61b8b439415f0a89368227890bcecb2..ce232a33fba5391031167ff08e82ba57cefc77f5 100644
 --- a/src/main/java/net/minecraft/world/entity/raid/Raider.java
 +++ b/src/main/java/net/minecraft/world/entity/raid/Raider.java
 @@ -352,7 +352,7 @@ public abstract class Raider extends PatrollingMonster {

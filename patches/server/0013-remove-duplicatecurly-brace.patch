@@ -5,10 +5,10 @@ Subject: [PATCH] remove duplicatecurly brace
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 6dc5a31c9d6f86563dfd8b7832e63038d4e00b4a..64b252a3b2532aa275dd9d4ffab84a0768b1148e 100644
+index 094684de6f67c21bdd4d07aa4c6280971ef40791..80bd298f4749052a1e87f89148d9aa0b93adf0e3 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
-@@ -103,8 +103,6 @@ public class ServerEntity {
+@@ -106,8 +106,6 @@ public class ServerEntity {
  
                      entityplayer.connection.teleport(entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), entityplayer.getYRot(), entityplayer.getXRot());
                  }
