@@ -5,10 +5,10 @@ Subject: [PATCH] add mechanix to generate comments to vanilla mob goals
 
 
 diff --git a/src/test/java/com/destroystokyo/paper/entity/ai/VanillaMobGoalTest.java b/src/test/java/com/destroystokyo/paper/entity/ai/VanillaMobGoalTest.java
-index b2d510459bcf90a3611f3d91dae4ccc3d29b4079..65ffa63322ddd94fbd7df229719c860efca31325 100644
+index 654ed436e99dd56f1fe7c1d4f38da34d95ce9349..2db270a39515af0525a0d82b508627d26285e930 100644
 --- a/src/test/java/com/destroystokyo/paper/entity/ai/VanillaMobGoalTest.java
 +++ b/src/test/java/com/destroystokyo/paper/entity/ai/VanillaMobGoalTest.java
-@@ -58,6 +58,11 @@ public class VanillaMobGoalTest {
+@@ -57,6 +57,11 @@ public class VanillaMobGoalTest {
          if (missingFromAPI.size() != 0) {
              System.out.println("Missing from API: ");
              for (GoalKey<?> key : missingFromAPI) {
@@ -18,5 +18,5 @@ index b2d510459bcf90a3611f3d91dae4ccc3d29b4079..65ffa63322ddd94fbd7df229719c860e
 +                        */
 +                        """, key.getNamespacedKey().getKey(), key.getEntityClass().getSimpleName());
                  System.out.println("GoalKey<" + key.getEntityClass().getSimpleName() + "> " + key.getNamespacedKey().getKey().toUpperCase() +
-                                    " = GoalKey.of(" + key.getEntityClass().getSimpleName() + ".class, NamespacedKey.minecraft(\"" + key.getNamespacedKey().getKey() + "\"));");
+                     " = GoalKey.of(" + key.getEntityClass().getSimpleName() + ".class, NamespacedKey.minecraft(\"" + key.getNamespacedKey().getKey() + "\"));");
              }
