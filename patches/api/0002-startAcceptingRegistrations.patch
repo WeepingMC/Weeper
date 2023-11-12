@@ -5,10 +5,10 @@ Subject: [PATCH] startAcceptingRegistrations
 
 
 diff --git a/src/main/java/org/bukkit/enchantments/Enchantment.java b/src/main/java/org/bukkit/enchantments/Enchantment.java
-index 69a048eb4e48c92db70c3d6b6aa4ae96326b9705..277fc660d9a199e1d2ecefcdf4d853089cbe4db5 100644
+index 8183f26545998e076ad93b4e28f3a3ff693d1032..a7050b5c6660dbdc831984c3fd16e234972d6abd 100644
 --- a/src/main/java/org/bukkit/enchantments/Enchantment.java
 +++ b/src/main/java/org/bukkit/enchantments/Enchantment.java
-@@ -391,6 +391,14 @@ public abstract class Enchantment implements Keyed, net.kyori.adventure.translat
+@@ -415,6 +415,14 @@ public abstract class Enchantment implements Keyed, net.kyori.adventure.translat
          byKey.put(enchantment.key, enchantment);
          byName.put(enchantment.getName(), enchantment);
      }
