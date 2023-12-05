@@ -1,0 +1,146 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Tue, 5 Dec 2023 18:48:50 +0100
+Subject: [PATCH] allow offline editing of playerData
+
+
+diff --git a/src/main/java/com/github/weepingmc/offline/CraftEditPlayer.java b/src/main/java/com/github/weepingmc/offline/CraftEditPlayer.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..3576337ceb2739fe24806691d31ccc5337f999b3
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/offline/CraftEditPlayer.java
+@@ -0,0 +1,30 @@
++package com.github.weepingmc.offline;
++
++import net.minecraft.server.level.ServerPlayer;
++import org.bukkit.entity.Player;
++import org.bukkit.inventory.PlayerInventory;
++import org.jetbrains.annotations.NotNull;
++
++public class CraftEditPlayer implements EditPlayer {
++
++    private final Player player;
++
++    public CraftEditPlayer(ServerPlayer serverPlayer){
++        this.player = serverPlayer.getBukkitEntity();
++    }
++
++    @Override
++    public @NotNull PlayerInventory getInventory() {
++        return player.getInventory();
++    }
++
++    @Override
++    public void setHealth(double health) {
++        player.setHealth(health);
++    }
++
++    @Override
++    public double getHealth() {
++        return player.getHealth();
++    }
++}
+diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
+index 33abcf12b4426572b74ca4c813e4392c823494bc..3edd34f14b95de7e836bef30ca6f06b3abb1aa07 100644
+--- a/src/main/java/net/minecraft/server/players/PlayerList.java
++++ b/src/main/java/net/minecraft/server/players/PlayerList.java
+@@ -1,6 +1,10 @@
+ package net.minecraft.server.players;
+ 
+ import co.aikar.timings.MinecraftTimings;
++import com.github.weepingmc.offline.CraftEditPlayer; // Weeper - allow offline editing of playerData
++import com.github.weepingmc.offline.EditPlayer; // Weeper - allow offline editing of playerData
++import java.util.concurrent.ConcurrentHashMap; // Weeper - allow offline editing of playerData
++import java.util.function.Consumer; // Weeper - allow offline editing of playerData
+ import com.google.common.collect.Lists;
+ import com.google.common.collect.Maps;
+ import com.google.common.collect.Sets;
+@@ -135,7 +139,8 @@ public abstract class PlayerList {
+     private static final int SEND_PLAYER_INFO_INTERVAL = 600;
+     private static final SimpleDateFormat BAN_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+     private final MinecraftServer server;
+-    public final List<ServerPlayer> players = new java.util.concurrent.CopyOnWriteArrayList(); // CraftBukkit - ArrayList -> CopyOnWriteArrayList: Iterator safety
++    public final List<ServerPlayer> players = new java.util.concurrent.CopyOnWriteArrayList<>(); // CraftBukkit - ArrayList -> CopyOnWriteArrayList: Iterator safety
++    private final Map<UUID, ServerPlayer> offlineEditedPlayers = new ConcurrentHashMap<>(); // Weeper allow offline editing of playerData
+     private final Map<UUID, ServerPlayer> playersByUUID = Maps.newHashMap();
+     private final UserBanList bans;
+     private final IpBanList ipBans;
+@@ -724,7 +729,17 @@ public abstract class PlayerList {
+         // depending on the outcome.
+         SocketAddress socketaddress = loginlistener.connection.getRemoteAddress();
+ 
+-        ServerPlayer entity = new ServerPlayer(this.server, this.server.getLevel(Level.OVERWORLD), gameprofile, ClientInformation.createDefault());
++        // Weeper start - allow offline editing of playerData
++        ServerPlayer entity = offlineEditedPlayers.remove(gameprofile.getId());
++        if(entity != null) {
++            // saves data edited by offline player editing mechanic
++            // server itself should load the playerdata some time later
++            entity.gameProfile = gameprofile; // set original game profile to so we do not end up with a lot of empty name player.
++            entity.getBukkitEntity().saveData();
++        } else {
++            entity = new ServerPlayer(this.server, this.server.getLevel(Level.OVERWORLD), gameprofile, ClientInformation.createDefault());
++        }
++        // Weeper end - allow offline editing of playerData
+         Player player = entity.getBukkitEntity();
+         PlayerLoginEvent event = new PlayerLoginEvent(player, loginlistener.connection.hostname, ((java.net.InetSocketAddress) socketaddress).getAddress(), ((java.net.InetSocketAddress) loginlistener.connection.channel.remoteAddress()).getAddress());
+ 
+@@ -1593,4 +1608,32 @@ public abstract class PlayerList {
+     public boolean isAllowCheatsForAllPlayers() {
+         return this.allowCheatsForAllPlayers;
+     }
++
++    // Weeper start - allow offline editing of playerData
++    public void editOfflinePlayer(GameProfile gameprofile, Consumer<EditPlayer> editPlayerConsumer) {
++        ServerPlayer serverPlayer = playersByUUID.get(gameprofile.getId());
++
++        if(serverPlayer == null) {
++            serverPlayer = offlineEditedPlayers.get(gameprofile.getId());
++        }
++        if(serverPlayer == null) {
++            serverPlayer = new ServerPlayer(
++                this.server,
++                this.server.getLevel(Level.OVERWORLD),
++                gameprofile,
++                ClientInformation.createDefault()
++            );
++            var target = serverPlayer.getBukkitEntity();
++            target.loadData();
++            offlineEditedPlayers.put(gameprofile.getId(), serverPlayer);
++        }
++        // ensure cleanup if user fucks something up
++        try {
++            editPlayerConsumer.accept(new CraftEditPlayer(serverPlayer));
++        } finally {
++            serverPlayer.getBukkitEntity().saveData();
++            offlineEditedPlayers.remove(gameprofile.getId());
++        }
++    }
++    // Weeper end - allow offline editing of playerData
+ }
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index 271e3ea4d76847726cbaad38c1a8a8b7691b2168..8d8e406e6600cd594133b5b58ec4214f425f0e49 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -1,5 +1,6 @@
+ package org.bukkit.craftbukkit;
+ 
++import com.github.weepingmc.offline.EditPlayer; // Weeper - allow offline editing of playerData
+ import com.google.common.base.Charsets;
+ import com.google.common.base.Function;
+ import com.google.common.base.Preconditions;
+@@ -380,6 +381,15 @@ public final class CraftServer implements Server {
+     }
+     // Paper end - Folia reagion threading API
+ 
++
++    // Weeper start - allow offline editing of playerData
++    @Override
++    public void editOfflinePlayer(UUID playerUUID, Consumer<EditPlayer> editPlayerConsumer) {
++        GameProfile gameProfile = ((CraftPlayerProfile) createPlayerProfile(playerUUID)).buildGameProfile();
++        playerList.editOfflinePlayer(gameProfile, editPlayerConsumer);
++    }
++    // Weeper end - allow offline editing of playerData
++
+     static {
+         ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
+         ConfigurationSerialization.registerClass(CraftPlayerProfile.class);

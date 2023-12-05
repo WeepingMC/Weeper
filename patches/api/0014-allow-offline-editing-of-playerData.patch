@@ -1,0 +1,69 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Tue, 5 Dec 2023 20:12:31 +0100
+Subject: [PATCH] allow offline editing of playerData
+
+
+diff --git a/src/main/java/com/github/weepingmc/offline/EditPlayer.java b/src/main/java/com/github/weepingmc/offline/EditPlayer.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..d12f899d0ef3caeea90f39f3dfeb17f1a1f30f09
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/offline/EditPlayer.java
+@@ -0,0 +1,29 @@
++package com.github.weepingmc.offline;
++
++import org.bukkit.inventory.PlayerInventory;
++import org.jetbrains.annotations.NotNull;
++
++public interface EditPlayer {
++
++    /**
++     * Retrieves the inventory of a player.
++     *
++     * @return The player's inventory.
++     */
++    @NotNull
++    PlayerInventory getInventory();
++
++    /**
++     * Sets the health of the player.
++     *
++     * @param health The new health value.
++     */
++    void setHealth(double health);
++
++    /**
++     * Retrieves the health of the player.
++     *
++     * @return The health value.
++     */
++    double getHealth();
++}
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 6f7408e5af20e03853dbf9a54e6a4c2eeb6e372b..a5bdae4cb1cd26170c75e381de2b5ac6aebe3b51 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -1,5 +1,6 @@
+ package org.bukkit;
+ 
++import com.github.weepingmc.offline.EditPlayer;
+ import com.google.common.collect.ImmutableList;
+ import java.awt.image.BufferedImage;
+ import java.io.File;
+@@ -2480,4 +2481,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+      */
+     boolean isOwnedByCurrentRegion(@NotNull Entity entity);
+     // Paper end - Folia region threading API
++
++    // Weeper start - allow offline editing of playerData
++
++    /**
++     * Edits the information of an offline player.
++     *
++     * @param playerUUID The UUID of the offline player to edit.
++     * @param editPlayerConsumer A consumer function that takes an {@link EditPlayer} object as input,
++     *                          allowing the caller to perform edits on the player's information.
++     */
++    void editOfflinePlayer(@NotNull UUID playerUUID, @NotNull Consumer<EditPlayer> editPlayerConsumer);
++    // Weeper end - allow offline editing of playerData
+ }
