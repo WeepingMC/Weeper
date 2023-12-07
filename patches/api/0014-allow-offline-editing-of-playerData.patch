@@ -6,13 +6,14 @@ Subject: [PATCH] allow offline editing of playerData
 
 diff --git a/src/main/java/com/github/weepingmc/offline/EditPlayer.java b/src/main/java/com/github/weepingmc/offline/EditPlayer.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..d12f899d0ef3caeea90f39f3dfeb17f1a1f30f09
+index 0000000000000000000000000000000000000000..6acdda82e91fabf159b22c89f62e43fa507c0ac4
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/offline/EditPlayer.java
-@@ -0,0 +1,29 @@
+@@ -0,0 +1,25 @@
 +package com.github.weepingmc.offline;
 +
 +import org.bukkit.inventory.PlayerInventory;
++import org.bukkit.persistence.PersistentDataContainer;
 +import org.jetbrains.annotations.NotNull;
 +
 +public interface EditPlayer {
@@ -26,18 +27,13 @@ index 0000000000000000000000000000000000000000..d12f899d0ef3caeea90f39f3dfeb17f1
 +    PlayerInventory getInventory();
 +
 +    /**
-+     * Sets the health of the player.
++     * Retrieves the PersistentDataContainer of a player.
 +     *
-+     * @param health The new health value.
++     * @return The player's PersistentDataContainer.
 +     */
-+    void setHealth(double health);
++    @NotNull
++    PersistentDataContainer getPersistentDataContainer();
 +
-+    /**
-+     * Retrieves the health of the player.
-+     *
-+     * @return The health value.
-+     */
-+    double getHealth();
 +}
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
 index 6f7408e5af20e03853dbf9a54e6a4c2eeb6e372b..a5bdae4cb1cd26170c75e381de2b5ac6aebe3b51 100644

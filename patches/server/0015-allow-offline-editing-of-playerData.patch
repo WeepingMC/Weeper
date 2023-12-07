@@ -6,15 +6,16 @@ Subject: [PATCH] allow offline editing of playerData
 
 diff --git a/src/main/java/com/github/weepingmc/offline/CraftEditPlayer.java b/src/main/java/com/github/weepingmc/offline/CraftEditPlayer.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..3576337ceb2739fe24806691d31ccc5337f999b3
+index 0000000000000000000000000000000000000000..82999ac66a92d04bf0499fe53bf4e268b7d07638
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/offline/CraftEditPlayer.java
-@@ -0,0 +1,30 @@
+@@ -0,0 +1,26 @@
 +package com.github.weepingmc.offline;
 +
 +import net.minecraft.server.level.ServerPlayer;
 +import org.bukkit.entity.Player;
 +import org.bukkit.inventory.PlayerInventory;
++import org.bukkit.persistence.PersistentDataContainer;
 +import org.jetbrains.annotations.NotNull;
 +
 +public class CraftEditPlayer implements EditPlayer {
@@ -31,13 +32,8 @@ index 0000000000000000000000000000000000000000..3576337ceb2739fe24806691d31ccc53
 +    }
 +
 +    @Override
-+    public void setHealth(double health) {
-+        player.setHealth(health);
-+    }
-+
-+    @Override
-+    public double getHealth() {
-+        return player.getHealth();
++    public @NotNull PersistentDataContainer getPersistentDataContainer() {
++        return player.getPersistentDataContainer();
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
