@@ -41,7 +41,7 @@ index 0000000000000000000000000000000000000000..be4156c71f9dd45d5fd97559952d8191
 +        int slot
 +) { }
 diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
-index 127c82c36bd37ef61385a758785bffc6ec1f4b5c..4c288ff5858b990387038d45dfe3625881de57df 100644
+index 8b0d04d5b39ee817555a36adddc39b18fc6f0d02..a8d2af1e6fb22f0d8f2398458ed67c496931c45d 100644
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
 @@ -2,6 +2,9 @@ package org.bukkit.entity;

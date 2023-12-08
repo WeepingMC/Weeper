@@ -7,7 +7,7 @@ Subject: [PATCH] Do not warn on event listener registration by declaring event
 All JavaPlugins listed do not throw the deprecated event register warning
 
 diff --git a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
-index 88d852c1a729ffd5951da803da424b31591c9f9a..57a61a818bb2841ce0e493a93d1c140db2a665b9 100644
+index eaefbb00e9993d54906cc8cf35cf753c0d6c7707..14dfad3a45e702c926dbca9f79a2f5e9581c6c2b 100644
 --- a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
 +++ b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
 @@ -13,6 +13,7 @@ import java.util.HashMap;
