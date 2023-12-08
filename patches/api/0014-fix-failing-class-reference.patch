@@ -1,0 +1,41 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 9 Dec 2023 00:18:22 +0100
+Subject: [PATCH] fix failing class reference
+
+
+diff --git a/src/main/java/io/papermc/paper/registry/RegistryKey.java b/src/main/java/io/papermc/paper/registry/RegistryKey.java
+index 5251f922d2d14da35f61098c11694371f591cd2a..16536352a8267b3c01c7ea0f534ef21628512a04 100644
+--- a/src/main/java/io/papermc/paper/registry/RegistryKey.java
++++ b/src/main/java/io/papermc/paper/registry/RegistryKey.java
+@@ -31,12 +31,10 @@ public sealed interface RegistryKey<T> extends Keyed permits RegistryKeyImpl {
+      * ******************* */
+     /**
+      * Built-in registry for game events
+-     * @see io.papermc.paper.registry.keys.GameEventKeys
+      */
+     RegistryKey<GameEvent> GAME_EVENT = create("game_event");
+     /**
+      * Built-in registry for structure types.
+-     * @see io.papermc.paper.registry.keys.StructureTypeKeys
+      */
+     RegistryKey<StructureType> STRUCTURE_TYPE = create("worldgen/structure_type");
+ 
+@@ -45,17 +43,14 @@ public sealed interface RegistryKey<T> extends Keyed permits RegistryKeyImpl {
+      * ********************** */
+     /**
+      * Data-driven registry for structure types.
+-     * @see io.papermc.paper.registry.keys.BiomeKeys
+      */
+     RegistryKey<Biome> BIOME = create("worldgen/biome");
+     /**
+      * Data-driven registry for structure types.
+-     * @see io.papermc.paper.registry.keys.TrimMaterialKeys
+      */
+     RegistryKey<TrimMaterial> TRIM_MATERIAL = create("trim_material");
+     /**
+      * Data-driven registry for structure types.
+-     * @see io.papermc.paper.registry.keys.TrimPatternKeys
+      */
+     RegistryKey<TrimPattern> TRIM_PATTERN = create("trim_pattern");
+ }
