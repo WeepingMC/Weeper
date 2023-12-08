@@ -5,10 +5,10 @@ Subject: [PATCH] Make goals public, needs migration to at sometime
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Bee.java b/src/main/java/net/minecraft/world/entity/animal/Bee.java
-index 55026e1731e41b4e3e4c6a8fef5d96a32051a556..fbce1518459041c12436a6e42c6f4525e0158836 100644
+index a87a34b0c4c8e5d0cf079025c230b1434c919b54..a61bc6726161329389b883c96a7784111ea6462e 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Bee.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Bee.java
-@@ -695,7 +695,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -702,7 +702,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          return pos.closerThan(this.blockPosition(), (double) distance);
      }
  
@@ -17,7 +17,7 @@ index 55026e1731e41b4e3e4c6a8fef5d96a32051a556..fbce1518459041c12436a6e42c6f4525
  
          private static final int MIN_POLLINATION_TICKS = 400;
          private static final int MIN_FIND_FLOWER_RETRY_COOLDOWN = 20;
-@@ -881,7 +881,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -888,7 +888,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  
@@ -26,7 +26,7 @@ index 55026e1731e41b4e3e4c6a8fef5d96a32051a556..fbce1518459041c12436a6e42c6f4525
  
          BeeLookControl(Mob entity) {
              super(entity);
-@@ -917,7 +917,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -924,7 +924,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  
@@ -35,7 +35,7 @@ index 55026e1731e41b4e3e4c6a8fef5d96a32051a556..fbce1518459041c12436a6e42c6f4525
  
          BeeEnterHiveGoal() {
              super();
-@@ -962,7 +962,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -969,7 +969,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  
@@ -44,7 +44,7 @@ index 55026e1731e41b4e3e4c6a8fef5d96a32051a556..fbce1518459041c12436a6e42c6f4525
  
          BeeLocateHiveGoal() {
              super();
-@@ -1194,7 +1194,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -1201,7 +1201,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  
@@ -53,7 +53,7 @@ index 55026e1731e41b4e3e4c6a8fef5d96a32051a556..fbce1518459041c12436a6e42c6f4525
  
          static final int GROW_CHANCE = 30;
  
-@@ -1258,7 +1258,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -1265,7 +1265,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  
@@ -62,7 +62,7 @@ index 55026e1731e41b4e3e4c6a8fef5d96a32051a556..fbce1518459041c12436a6e42c6f4525
  
          private static final int WANDER_THRESHOLD = 22;
  
-@@ -1305,7 +1305,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -1312,7 +1312,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  
@@ -71,7 +71,7 @@ index 55026e1731e41b4e3e4c6a8fef5d96a32051a556..fbce1518459041c12436a6e42c6f4525
  
          BeeHurtByOtherGoal(Bee entitybee) {
              super(entitybee);
-@@ -1325,7 +1325,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -1332,7 +1332,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  
@@ -80,7 +80,7 @@ index 55026e1731e41b4e3e4c6a8fef5d96a32051a556..fbce1518459041c12436a6e42c6f4525
  
          BeeBecomeAngryTargetGoal(Bee bee) {
              // Objects.requireNonNull(entitybee); // CraftBukkit - decompile error
-@@ -1356,7 +1356,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -1363,7 +1363,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  

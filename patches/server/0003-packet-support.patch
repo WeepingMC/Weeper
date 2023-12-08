@@ -698,7 +698,7 @@ index 2dce930e691731781a6700610271dd549cf34fe8..c7ec04ba498ca8d5bd19e2c5ed099f60
      @Override
      public void handle(ClientGamePacketListener listener) {
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
-index 929483116d05a803d317ece7a44861af8bd36665..d151a7b086867abf2018327d635abe84444fa9a4 100644
+index 9810d62c99f5d7dfca61ddfbbc356aebad2f7001..0241e2939396e6247b8ac5ff3efb8be945a4226e 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
 @@ -25,6 +25,14 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
@@ -758,10 +758,10 @@ index d5f404fb6dc09c48d84b4a3e75c12f2fbb53c224..857cfaaefc00ce5e8878d95560d1f0ba
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index c655c6fee393c62ba79301f76baa72f9b1154a9a..056013936f0e8d75489a330a64bcc2b96fa1ab9f 100644
+index 9abe817ae202edaa2d88cd59ae5c7db0b1c634be..ef339b8bcc49b461bc92aa856f563e905df83745 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -346,7 +346,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -347,7 +347,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
      public int invulnerableTime;
      protected boolean firstTick;
      protected final SynchedEntityData entityData;
@@ -770,7 +770,7 @@ index c655c6fee393c62ba79301f76baa72f9b1154a9a..056013936f0e8d75489a330a64bcc2b9
      protected static final int FLAG_ONFIRE = 0;
      private static final int FLAG_SHIFT_KEY_DOWN = 1;
      private static final int FLAG_SPRINTING = 3;
-@@ -355,11 +355,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource {
+@@ -356,11 +356,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
      protected static final int FLAG_GLOWING = 6;
      protected static final int FLAG_FALL_FLYING = 7;
      private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
@@ -786,7 +786,7 @@ index c655c6fee393c62ba79301f76baa72f9b1154a9a..056013936f0e8d75489a330a64bcc2b9
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index a76eb3d051db0229ed088b71c92ff3f131449007..0078c96fa7e1beed2feceba90ef7eedbdefd147e 100644
+index 45b1a182acf6b2aef40b714d31ca125d8f74619a..711278817995a093e6e22d6f0d78dd9af298be80 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -176,7 +176,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
@@ -799,10 +799,10 @@ index a76eb3d051db0229ed088b71c92ff3f131449007..0078c96fa7e1beed2feceba90ef7eedb
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index ffcdf16667bb1cebe7b16580c32861553e57bd68..deb5089c46018e0deb3f418103b798c9e2506c99 100644
+index 87da098ee1ef36df5b30d82c75f487ea002c6c4c..5807a990641fe337a12be8f008f5f359732cb762 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3195,5 +3195,10 @@ public final class CraftServer implements Server {
+@@ -3227,5 +3227,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
  
@@ -814,10 +814,10 @@ index ffcdf16667bb1cebe7b16580c32861553e57bd68..deb5089c46018e0deb3f418103b798c9
      // Paper end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-index a8c5bfc54ed2b8bd873f124c7080d73fe73a86ad..ddad998b9058e68724dd2be15e3cd7df6e9f9482 100644
+index 81889e30a634ac84d996f688d0a2466e9efa19ca..c32d411050d666c0bc29513a3e2f8a0b5124d5dc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-@@ -20,7 +20,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
+@@ -22,7 +22,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
      final Scoreboard board;
      boolean registeredGlobally = false; // Paper
  
