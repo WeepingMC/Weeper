@@ -5,7 +5,7 @@ Subject: [PATCH] implement take and place
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index ffd349c1b80df0f1e8c02bda23700184825170fd..ced8c7b5aba157c8ebf5f418838bce93b5a525e6 100644
+index 8fd82051bba33b4703e4d99fff886b63a319a5ba..39aab6e2865eb0cc5fbea2aa192a42e81f33816a 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 @@ -1,5 +1,6 @@
@@ -29,7 +29,7 @@ index ffd349c1b80df0f1e8c02bda23700184825170fd..ced8c7b5aba157c8ebf5f418838bce93
          this.dataSlots.add(property);
          this.remoteDataSlots.add(0);
 diff --git a/src/main/java/net/minecraft/world/inventory/Slot.java b/src/main/java/net/minecraft/world/inventory/Slot.java
-index a43b85b82fc83d0e5e3fd589bede0b279927a989..681c73e5e9d0fc751ba45c5370c4080deedc290c 100644
+index e2fd415b69e0213688561e9a19aec2cdcd267211..5292c50d1570aee05a26bb33da03b5b391a28dbe 100644
 --- a/src/main/java/net/minecraft/world/inventory/Slot.java
 +++ b/src/main/java/net/minecraft/world/inventory/Slot.java
 @@ -1,5 +1,7 @@
@@ -81,7 +81,7 @@ index a43b85b82fc83d0e5e3fd589bede0b279927a989..681c73e5e9d0fc751ba45c5370c4080d
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 017e97c1618b8ee4640b36a0ec1b07026047bfc3..99690ede4aed54362a9e696c829fbe87c4fa5ae4 100644
+index 8a1e765363aeb61078fd23980d3856dc680cb05e..9df9df132b336e73f35abba38a5e7325a77abc58 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -1,5 +1,6 @@
@@ -91,7 +91,7 @@ index 017e97c1618b8ee4640b36a0ec1b07026047bfc3..99690ede4aed54362a9e696c829fbe87
  import com.google.common.base.Preconditions;
  import com.google.common.collect.ImmutableSet;
  import java.util.ArrayList;
-@@ -57,6 +58,7 @@ import org.bukkit.entity.Villager;
+@@ -58,6 +59,7 @@ import org.bukkit.entity.Villager;
  import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
  import org.bukkit.inventory.EntityEquipment;
  import org.bukkit.inventory.Inventory;
@@ -99,7 +99,7 @@ index 017e97c1618b8ee4640b36a0ec1b07026047bfc3..99690ede4aed54362a9e696c829fbe87
  import org.bukkit.inventory.InventoryView;
  import org.bukkit.inventory.ItemStack;
  import org.bukkit.inventory.MainHand;
-@@ -67,6 +69,7 @@ import org.bukkit.permissions.Permission;
+@@ -68,6 +70,7 @@ import org.bukkit.permissions.Permission;
  import org.bukkit.permissions.PermissionAttachment;
  import org.bukkit.permissions.PermissionAttachmentInfo;
  import org.bukkit.plugin.Plugin;
@@ -107,7 +107,7 @@ index 017e97c1618b8ee4640b36a0ec1b07026047bfc3..99690ede4aed54362a9e696c829fbe87
  
  public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      private CraftInventoryPlayer inventory;
-@@ -313,6 +316,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -314,6 +317,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
  
      @Override
      public InventoryView openInventory(Inventory inventory) {
@@ -119,7 +119,7 @@ index 017e97c1618b8ee4640b36a0ec1b07026047bfc3..99690ede4aed54362a9e696c829fbe87
          if (!(this.getHandle() instanceof ServerPlayer)) return null;
          ServerPlayer player = (ServerPlayer) this.getHandle();
          AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
-@@ -342,7 +350,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -343,7 +351,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
          if (iinventory instanceof MenuProvider) {
              this.getHandle().openMenu(iinventory);
          } else {
@@ -128,7 +128,7 @@ index 017e97c1618b8ee4640b36a0ec1b07026047bfc3..99690ede4aed54362a9e696c829fbe87
          }
  
          if (this.getHandle().containerMenu == formerContainer) {
-@@ -353,9 +361,20 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -354,9 +362,20 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      }
  
      private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {
