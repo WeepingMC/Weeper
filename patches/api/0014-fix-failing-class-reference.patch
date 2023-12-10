@@ -5,10 +5,10 @@ Subject: [PATCH] fix failing class reference
 
 
 diff --git a/src/main/java/io/papermc/paper/registry/RegistryKey.java b/src/main/java/io/papermc/paper/registry/RegistryKey.java
-index 5251f922d2d14da35f61098c11694371f591cd2a..16536352a8267b3c01c7ea0f534ef21628512a04 100644
+index c4b30b16ce4db754b958c493ad86d0863592c263..3e39d859b1789ab7c5ab24121fe2f7a09d6a5f1e 100644
 --- a/src/main/java/io/papermc/paper/registry/RegistryKey.java
 +++ b/src/main/java/io/papermc/paper/registry/RegistryKey.java
-@@ -31,12 +31,10 @@ public sealed interface RegistryKey<T> extends Keyed permits RegistryKeyImpl {
+@@ -32,12 +32,10 @@ public sealed interface RegistryKey<T> extends Keyed permits RegistryKeyImpl {
       * ******************* */
      /**
       * Built-in registry for game events
@@ -21,20 +21,25 @@ index 5251f922d2d14da35f61098c11694371f591cd2a..16536352a8267b3c01c7ea0f534ef216
       */
      RegistryKey<StructureType> STRUCTURE_TYPE = create("worldgen/structure_type");
  
-@@ -45,17 +43,14 @@ public sealed interface RegistryKey<T> extends Keyed permits RegistryKeyImpl {
+@@ -46,22 +44,18 @@ public sealed interface RegistryKey<T> extends Keyed permits RegistryKeyImpl {
       * ********************** */
      /**
-      * Data-driven registry for structure types.
+      * Data-driven registry for biomes.
 -     * @see io.papermc.paper.registry.keys.BiomeKeys
       */
      RegistryKey<Biome> BIOME = create("worldgen/biome");
      /**
-      * Data-driven registry for structure types.
+      * Data-driven registry for structures.
+-     * @see io.papermc.paper.registry.keys.StructureKeys
+      */
+     RegistryKey<Structure> STRUCTURE = create("worldgen/structure");
+     /**
+      * Data-driven registry for trim materials.
 -     * @see io.papermc.paper.registry.keys.TrimMaterialKeys
       */
      RegistryKey<TrimMaterial> TRIM_MATERIAL = create("trim_material");
      /**
-      * Data-driven registry for structure types.
+      * Data-driven registry for trim patterns.
 -     * @see io.papermc.paper.registry.keys.TrimPatternKeys
       */
      RegistryKey<TrimPattern> TRIM_PATTERN = create("trim_pattern");
