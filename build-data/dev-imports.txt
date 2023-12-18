@@ -10,4 +10,5 @@ minecraft net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.
 minecraft net/minecraft/network/protocol/game/ClientboundPlayerInfoRemovePacket.java
 minecraft net/minecraft/network/protocol/game/ClientboundSetEntityDataPacket.java
 minecraft net/minecraft/network/protocol/game/ClientboundRemoveEntitiesPacket.java
+minecraft net/minecraft/network/protocol/game/ClientboundSetPassengersPacket.java
 minecraft net/minecraft/server/level/ServerEntity.java

@@ -1,0 +1,20 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Mon, 18 Dec 2023 21:08:56 +0100
+Subject: [PATCH] add mountability
+
+
+diff --git a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
+index 0877b45695ddc2795869f41d9cf937d049b85609..d2e500eb819b7d3f24dd7684f240e5637a4db701 100644
+--- a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
++++ b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
+@@ -48,6 +48,9 @@ public interface PacketStepBuilder {
+     @NotNull
+     PacketStepBuilder teleportEntity(int entityId, @NotNull Location location, boolean onGround);
+ 
++    @NotNull
++    PacketStepBuilder mountEntity(int entityId, int... passenger);
++
+     @NotNull
+     PacketStepBuilder sendBlockChange(@NotNull Location location, @NotNull BlockData blockData);
+ 

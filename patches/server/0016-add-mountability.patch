@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Mon, 18 Dec 2023 21:24:30 +0100
+Subject: [PATCH] add mountability
+
+
+diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+index 705089d71cb5af1f74a6e33cd6b6408c7210bc25..78da22842723f4203d20d4d515b90d439772583c 100644
+--- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
++++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+@@ -126,6 +126,13 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+         return this;
+     }
+ 
++    @Override
++    public @NotNull PacketStepBuilder mountEntity(int entityId, int... passenger) {
++        ClientboundSetPassengersPacket passengersPacket = new ClientboundSetPassengersPacket(entityId, passenger);
++        initial.setNext(of(passengersPacket));
++        return this;
++    }
++
+     @Override
+     @Nonnull
+     public PacketStepBuilder sendBlockChange(@Nonnull Location location, @Nonnull BlockData blockData) {
+diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundSetPassengersPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundSetPassengersPacket.java
+index 89b7e43a2938da79b7487db89980ac5ef2d48033..51b7a6f83820a85eb9d861dd3ec83832a24a42f5 100644
+--- a/src/main/java/net/minecraft/network/protocol/game/ClientboundSetPassengersPacket.java
++++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundSetPassengersPacket.java
+@@ -9,6 +9,13 @@ public class ClientboundSetPassengersPacket implements Packet<ClientGamePacketLi
+     private final int vehicle;
+     private final int[] passengers;
+ 
++    // Weeper - start
++    public ClientboundSetPassengersPacket(int vehicle, int[] passengers) {
++        this.vehicle = vehicle;
++        this.passengers = passengers;
++    }
++    // Weeper - end
++
+     public ClientboundSetPassengersPacket(Entity entity) {
+         this.vehicle = entity.getId();
+         List<Entity> list = entity.getPassengers();
