@@ -1,0 +1,71 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Thu, 21 Dec 2023 19:48:50 +0100
+Subject: [PATCH] enrich messages and display deopf name in hover if player
+ executed
+
+
+diff --git a/src/main/java/org/bukkit/EntityMetaResult.java b/src/main/java/org/bukkit/EntityMetaResult.java
+index cbe2b946f3b01540a1e95444044f78a7ca74c456..6b3b1fa911d22097a5976dc66156e50007527128 100644
+--- a/src/main/java/org/bukkit/EntityMetaResult.java
++++ b/src/main/java/org/bukkit/EntityMetaResult.java
+@@ -16,4 +16,10 @@ public interface EntityMetaResult {
+             accessorGenericType().getSimpleName() +
+             (isTypeGenericItself() ? ">" : "");
+     }
++
++    default String formattedDeObfedString() {
++        return (isTypeGenericItself() ? wrapperClass().getSimpleName() + "<" : "") +
++            deobfedName() +
++            (isTypeGenericItself() ? ">" : "");
++    }
+ }
+diff --git a/src/main/java/org/bukkit/command/defaults/ListAccessorCommand.java b/src/main/java/org/bukkit/command/defaults/ListAccessorCommand.java
+index 21a88c744455e5f60c86898e26bbd171adf7c8c4..384f6726f00b9cf1cae7ec2f6b5589c5bddc4454 100644
+--- a/src/main/java/org/bukkit/command/defaults/ListAccessorCommand.java
++++ b/src/main/java/org/bukkit/command/defaults/ListAccessorCommand.java
+@@ -5,10 +5,12 @@ import com.google.common.collect.ImmutableList;
+ import java.util.ArrayList;
+ import java.util.List;
+ import java.util.Map;
++import java.util.stream.Collectors;
+ import org.bukkit.Bukkit;
+ import org.bukkit.EntityMetaResult;
+ import org.bukkit.command.CommandSender;
+ import org.bukkit.entity.EntityType;
++import org.bukkit.entity.Player;
+ import org.bukkit.util.StringUtil;
+ import org.jetbrains.annotations.NotNull;
+ 
+@@ -33,13 +35,26 @@ public class ListAccessorCommand extends BukkitCommand {
+             return true;
+         }
+         long start = System.nanoTime();
+-        Map<Integer, EntityMetaResult> allAccessors = Bukkit.getServer().getUnsafe().getAllAccessors(entityType.getEntityClass());
++        Map<Integer, EntityMetaResult> allAccessors = Bukkit.getServer().getUnsafe().getAllAccessors(entityType.getEntityClass())
++            .entrySet()
++            .stream()
++            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
++
+         long result = System.nanoTime() - start;
+ 
+-        sender.sendMessage("Result generated in: " + result + " ns");
+-        allAccessors.forEach((id, entityMetaResult) -> {
+-            sender.sendMessage(id + ": " + entityMetaResult.formattedString());
+-        });
++        if (!(sender instanceof Player player)) {
++            sender.sendMessage("Result generated in: " + result + " ns");
++            allAccessors.forEach((id, entityMetaResult) -> {
++                sender.sendMessage(id + ": " + entityMetaResult.formattedString());
++            });
++        } else {
++            player.sendRichMessage("<gold>Result generated in: " + result + " ns");
++            player.sendRichMessage("<dark_gray>id: <hover:show_text:\"<green>MojangName\"><gray>Type");
++            allAccessors.forEach((id, entityMetaResult) -> {
++                player.sendRichMessage("<dark_gray>" + id + ": <hover:show_text:\"<green>" + entityMetaResult.formattedDeObfedString() + "\"><gray>" + entityMetaResult.formattedString());
++            });
++        }
++
+         return true;
+     }
+ 

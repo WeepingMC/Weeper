@@ -1,0 +1,163 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Wed, 20 Dec 2023 22:28:41 +0100
+Subject: [PATCH] add util to list all data accessors for entity type
+
+
+diff --git a/src/main/java/org/bukkit/EntityMetaResult.java b/src/main/java/org/bukkit/EntityMetaResult.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..cbe2b946f3b01540a1e95444044f78a7ca74c456
+--- /dev/null
++++ b/src/main/java/org/bukkit/EntityMetaResult.java
+@@ -0,0 +1,19 @@
++package org.bukkit;
++
++public interface EntityMetaResult {
++    int accessorId();
++
++    Class<?> entityClass();
++    Class<?> accessorGenericType();
++    Class<?> wrapperClass();
++
++    String deobfedName();
++
++    boolean isTypeGenericItself();
++
++    default String formattedString() {
++        return (isTypeGenericItself() ? wrapperClass().getSimpleName() + "<" : "") +
++            accessorGenericType().getSimpleName() +
++            (isTypeGenericItself() ? ">" : "");
++    }
++}
+diff --git a/src/main/java/org/bukkit/UnsafeValues.java b/src/main/java/org/bukkit/UnsafeValues.java
+index a4b38f284d4fea7df7f9df9bf44e4f68fefaf20f..322d8c8fcccf78f55f19b1050cc58adc0ca2cd7f 100644
+--- a/src/main/java/org/bukkit/UnsafeValues.java
++++ b/src/main/java/org/bukkit/UnsafeValues.java
+@@ -1,10 +1,13 @@
+ package org.bukkit;
+ 
+ import com.google.common.collect.Multimap;
++import java.util.Map;
++import java.util.Set;
+ import org.bukkit.advancement.Advancement;
+ import org.bukkit.attribute.Attribute;
+ import org.bukkit.attribute.AttributeModifier;
+ import org.bukkit.block.data.BlockData;
++import org.bukkit.entity.Entity;
+ import org.bukkit.entity.EntityType;
+ import org.bukkit.inventory.CreativeCategory;
+ import org.bukkit.inventory.EquipmentSlot;
+@@ -13,6 +16,7 @@ import org.bukkit.material.MaterialData;
+ import org.bukkit.plugin.InvalidPluginException;
+ import org.bukkit.plugin.PluginDescriptionFile;
+ import org.bukkit.potion.PotionType;
++import org.jetbrains.annotations.Contract;
+ import org.jetbrains.annotations.NotNull;
+ import org.jetbrains.annotations.Nullable;
+ 
+@@ -260,4 +264,12 @@ public interface UnsafeValues {
+ 
+     String getStatisticCriteriaKey(@NotNull org.bukkit.Statistic statistic);
+     // Paper end
++
++    // Weeper start - entity data accessors
++    @NotNull
++    Set<Class<? extends Entity>> getAvailableBukkitEntityClasses();
++
++    @NotNull
++    <T extends Entity> Map<Integer, EntityMetaResult> getAllAccessors(@NotNull Class<T> clazz);
++    // Weeper end - entity data accessors
+ }
+diff --git a/src/main/java/org/bukkit/command/SimpleCommandMap.java b/src/main/java/org/bukkit/command/SimpleCommandMap.java
+index ac9a28922f8a556944a4c3649d74c32c622f0cb0..410d24f095e125e552994fc361be633e17db634d 100644
+--- a/src/main/java/org/bukkit/command/SimpleCommandMap.java
++++ b/src/main/java/org/bukkit/command/SimpleCommandMap.java
+@@ -13,6 +13,7 @@ import org.bukkit.Location;
+ import org.bukkit.Server;
+ import org.bukkit.command.defaults.BukkitCommand;
+ import org.bukkit.command.defaults.HelpCommand;
++import org.bukkit.command.defaults.ListAccessorCommand;
+ import org.bukkit.command.defaults.PluginsCommand;
+ import org.bukkit.command.defaults.ReloadCommand;
+ import org.bukkit.command.defaults.VersionCommand;
+@@ -33,6 +34,7 @@ public class SimpleCommandMap implements CommandMap {
+     private void setDefaultCommands() {
+         register("bukkit", new VersionCommand("version"));
+         register("bukkit", new ReloadCommand("reload"));
++        register("bukkit", new ListAccessorCommand("entityacessor")); // Weeper - entity data accessors
+         //register("bukkit", new PluginsCommand("plugins")); // Paper
+         register("bukkit", new co.aikar.timings.TimingsCommand("timings")); // Paper
+     }
+diff --git a/src/main/java/org/bukkit/command/defaults/ListAccessorCommand.java b/src/main/java/org/bukkit/command/defaults/ListAccessorCommand.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..21a88c744455e5f60c86898e26bbd171adf7c8c4
+--- /dev/null
++++ b/src/main/java/org/bukkit/command/defaults/ListAccessorCommand.java
+@@ -0,0 +1,67 @@
++package org.bukkit.command.defaults;
++
++import com.google.common.base.Preconditions;
++import com.google.common.collect.ImmutableList;
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Map;
++import org.bukkit.Bukkit;
++import org.bukkit.EntityMetaResult;
++import org.bukkit.command.CommandSender;
++import org.bukkit.entity.EntityType;
++import org.bukkit.util.StringUtil;
++import org.jetbrains.annotations.NotNull;
++
++public class ListAccessorCommand extends BukkitCommand {
++
++    public ListAccessorCommand(@NotNull String name) {
++        super(name);
++        this.description = "Gets a list of entity accessors";
++        this.usageMessage = "/entityacessor <entity";
++        this.setPermission("weeper.list.accessor");
++    }
++
++    @Override
++    public boolean execute(@NotNull CommandSender sender, @NotNull String commandLabel, @NotNull String[] args) {
++        if (args.length != 1) {
++            return false;
++        }
++
++        EntityType entityType = EntityType.fromName(args[0]);
++        if(entityType == EntityType.UNKNOWN) {
++            sender.sendMessage("EntityType."+entityType + "is not supported.");
++            return true;
++        }
++        long start = System.nanoTime();
++        Map<Integer, EntityMetaResult> allAccessors = Bukkit.getServer().getUnsafe().getAllAccessors(entityType.getEntityClass());
++        long result = System.nanoTime() - start;
++
++        sender.sendMessage("Result generated in: " + result + " ns");
++        allAccessors.forEach((id, entityMetaResult) -> {
++            sender.sendMessage(id + ": " + entityMetaResult.formattedString());
++        });
++        return true;
++    }
++
++    @Override
++    public @NotNull List<String> tabComplete(@NotNull CommandSender sender, @NotNull String alias, @NotNull String[] args) throws IllegalArgumentException {
++        Preconditions.checkArgument(sender != null, "Sender cannot be null");
++        Preconditions.checkArgument(args != null, "Arguments cannot be null");
++        Preconditions.checkArgument(alias != null, "Alias cannot be null");
++
++        if (args.length == 1) {
++            List<String> completions = new ArrayList<>();
++            String toComplete = args[0].toLowerCase(java.util.Locale.ENGLISH);
++            for (EntityType value : EntityType.values()) {
++                if(value == EntityType.UNKNOWN) {
++                    continue;
++                }
++                if (StringUtil.startsWithIgnoreCase(value.name(), toComplete)) {
++                    completions.add(value.name());
++                }
++            }
++            return completions;
++        }
++        return ImmutableList.of();
++    }
++}
