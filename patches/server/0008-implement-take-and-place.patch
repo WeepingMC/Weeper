@@ -81,7 +81,7 @@ index e2fd415b69e0213688561e9a19aec2cdcd267211..5292c50d1570aee05a26bb33da03b5b3
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 8a1e765363aeb61078fd23980d3856dc680cb05e..9df9df132b336e73f35abba38a5e7325a77abc58 100644
+index c3dbcb317b7d366feb31f707ad1199c60169f07f..0edd4901e9b4928069baab225bd7431a814720b3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -1,5 +1,6 @@
@@ -91,7 +91,7 @@ index 8a1e765363aeb61078fd23980d3856dc680cb05e..9df9df132b336e73f35abba38a5e7325
  import com.google.common.base.Preconditions;
  import com.google.common.collect.ImmutableSet;
  import java.util.ArrayList;
-@@ -58,6 +59,7 @@ import org.bukkit.entity.Villager;
+@@ -57,6 +58,7 @@ import org.bukkit.entity.Villager;
  import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
  import org.bukkit.inventory.EntityEquipment;
  import org.bukkit.inventory.Inventory;
@@ -99,7 +99,7 @@ index 8a1e765363aeb61078fd23980d3856dc680cb05e..9df9df132b336e73f35abba38a5e7325
  import org.bukkit.inventory.InventoryView;
  import org.bukkit.inventory.ItemStack;
  import org.bukkit.inventory.MainHand;
-@@ -68,6 +70,7 @@ import org.bukkit.permissions.Permission;
+@@ -67,6 +69,7 @@ import org.bukkit.permissions.Permission;
  import org.bukkit.permissions.PermissionAttachment;
  import org.bukkit.permissions.PermissionAttachmentInfo;
  import org.bukkit.plugin.Plugin;
@@ -107,7 +107,7 @@ index 8a1e765363aeb61078fd23980d3856dc680cb05e..9df9df132b336e73f35abba38a5e7325
  
  public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      private CraftInventoryPlayer inventory;
-@@ -314,6 +317,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -313,6 +316,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
  
      @Override
      public InventoryView openInventory(Inventory inventory) {
@@ -119,7 +119,7 @@ index 8a1e765363aeb61078fd23980d3856dc680cb05e..9df9df132b336e73f35abba38a5e7325
          if (!(this.getHandle() instanceof ServerPlayer)) return null;
          ServerPlayer player = (ServerPlayer) this.getHandle();
          AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
-@@ -343,7 +351,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -342,7 +350,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
          if (iinventory instanceof MenuProvider) {
              this.getHandle().openMenu(iinventory);
          } else {
@@ -128,7 +128,7 @@ index 8a1e765363aeb61078fd23980d3856dc680cb05e..9df9df132b336e73f35abba38a5e7325
          }
  
          if (this.getHandle().containerMenu == formerContainer) {
-@@ -354,9 +362,20 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -353,9 +361,20 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      }
  
      private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {

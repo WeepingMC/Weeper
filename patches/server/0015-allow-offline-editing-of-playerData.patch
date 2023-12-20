@@ -114,7 +114,7 @@ index a35638a92479b90afa89cf201fc45b49c9e767f3..08db90a89884b0a11db4eb2992c8e6a2
 +    // Weeper end - allow offline editing of playerData
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 5807a990641fe337a12be8f008f5f359732cb762..3d3d71f73954462fda44ff0dbf8876a5ae8add78 100644
+index b28c5cd26894464b3264b5c9fa8916846eb4f01f..71dffefe3c03d9bf2a9ce9238784ba7fab207a2e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -1,5 +1,6 @@
@@ -124,7 +124,7 @@ index 5807a990641fe337a12be8f008f5f359732cb762..3d3d71f73954462fda44ff0dbf8876a5
  import com.google.common.base.Charsets;
  import com.google.common.base.Function;
  import com.google.common.base.Preconditions;
-@@ -381,6 +382,15 @@ public final class CraftServer implements Server {
+@@ -376,6 +377,15 @@ public final class CraftServer implements Server {
      }
      // Paper end - Folia reagion threading API
  

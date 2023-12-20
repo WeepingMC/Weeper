@@ -36,7 +36,7 @@ index 0000000000000000000000000000000000000000..6acdda82e91fabf159b22c89f62e43fa
 +
 +}
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 6f7408e5af20e03853dbf9a54e6a4c2eeb6e372b..a5bdae4cb1cd26170c75e381de2b5ac6aebe3b51 100644
+index e835fd261b1e2552c484231766bdadb1b14b94a7..9c626955ab6aa37a74faa38a684675c8666f291a 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
 @@ -1,5 +1,6 @@
@@ -46,7 +46,7 @@ index 6f7408e5af20e03853dbf9a54e6a4c2eeb6e372b..a5bdae4cb1cd26170c75e381de2b5ac6
  import com.google.common.collect.ImmutableList;
  import java.awt.image.BufferedImage;
  import java.io.File;
-@@ -2480,4 +2481,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2488,4 +2489,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      boolean isOwnedByCurrentRegion(@NotNull Entity entity);
      // Paper end - Folia region threading API
