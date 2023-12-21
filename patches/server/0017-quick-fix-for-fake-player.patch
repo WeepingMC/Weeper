@@ -5,10 +5,18 @@ Subject: [PATCH] quick fix for fake player
 
 
 diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-index a043c382c37058032548a5192e17f5f816abe5a6..571afbb6f2ee7c30128671dfbe6e6046f4f31f73 100644
+index a043c382c37058032548a5192e17f5f816abe5a6..d1ff1cf8d9b1978133d9951f8a58460641d0676d 100644
 --- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 +++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-@@ -187,6 +187,7 @@ public class SynchedEntityData {
+@@ -12,6 +12,7 @@ import java.util.ArrayList;
+ import java.util.Iterator;
+ import java.util.List;
+ import java.util.Locale;
++import java.util.Map;
+ import java.util.Objects;
+ import java.util.concurrent.locks.ReadWriteLock;
+ import java.util.concurrent.locks.ReentrantReadWriteLock;
+@@ -187,6 +188,7 @@ public class SynchedEntityData {
          return this.isDirty;
      }
  
@@ -16,7 +24,7 @@ index a043c382c37058032548a5192e17f5f816abe5a6..571afbb6f2ee7c30128671dfbe6e6046
      @Nullable
      public List<SynchedEntityData.DataValue<?>> packDirty() {
          List<SynchedEntityData.DataValue<?>> list = null;
-@@ -200,6 +201,7 @@ public class SynchedEntityData {
+@@ -200,6 +202,7 @@ public class SynchedEntityData {
  
                  if (datawatcher_item.isDirty()) {
                      datawatcher_item.setDirty(false);
@@ -24,7 +32,7 @@ index a043c382c37058032548a5192e17f5f816abe5a6..571afbb6f2ee7c30128671dfbe6e6046
                      if (list == null) {
                          list = new ArrayList();
                      }
-@@ -224,7 +226,7 @@ public class SynchedEntityData {
+@@ -224,7 +227,7 @@ public class SynchedEntityData {
  
          while (objectiterator.hasNext()) {
              SynchedEntityData.DataItem<?> datawatcher_item = (SynchedEntityData.DataItem) objectiterator.next();
@@ -33,7 +41,7 @@ index a043c382c37058032548a5192e17f5f816abe5a6..571afbb6f2ee7c30128671dfbe6e6046
              if (!datawatcher_item.isSetToDefault()) {
                  if (list == null) {
                      list = new ArrayList();
-@@ -296,6 +298,7 @@ public class SynchedEntityData {
+@@ -296,6 +299,7 @@ public class SynchedEntityData {
  
          List<SynchedEntityData.DataValue<?>> list = new ArrayList<>();
          for (DataItem<?> dataItem : this.itemsById.values()) {
@@ -41,7 +49,7 @@ index a043c382c37058032548a5192e17f5f816abe5a6..571afbb6f2ee7c30128671dfbe6e6046
              list.add(dataItem.value());
          }
  
-@@ -326,6 +329,7 @@ public class SynchedEntityData {
+@@ -326,6 +330,7 @@ public class SynchedEntityData {
          List<SynchedEntityData.DataValue<?>> values = new ArrayList<>(keys.size());
          for (EntityDataAccessor<?> key : keys) {
              SynchedEntityData.DataItem<?> synchedValue = this.getItem(key);
@@ -49,17 +57,23 @@ index a043c382c37058032548a5192e17f5f816abe5a6..571afbb6f2ee7c30128671dfbe6e6046
              values.add(synchedValue.value());
          }
  
-@@ -333,6 +337,17 @@ public class SynchedEntityData {
+@@ -333,6 +338,23 @@ public class SynchedEntityData {
      }
      // Paper end
  
 +    // Weeper start - quick fake player fix
++
++    private static final Map<Integer, EntityDataSerializer<?>> allowedForPlayer = Map.of(
++        15, EntityDataSerializers.FLOAT,
++        16, EntityDataSerializers.INT,
++        17, EntityDataSerializers.BYTE,
++        18, EntityDataSerializers.BYTE,
++        19, EntityDataSerializers.COMPOUND_TAG,
++        20, EntityDataSerializers.COMPOUND_TAG
++    );
 +    private boolean shouldSkip(EntityDataAccessor<?> dataAccessor) {
 +        return entity.getBukkitEntity().getPersistentDataContainer().has(skinKey, org.bukkit.persistence.PersistentDataType.STRING) &&
-+            (
-+                dataAccessor.getId() == 15 && EntityDataSerializers.BYTE.equals(dataAccessor.getSerializer()) ||
-+                dataAccessor.getId() == 16 && EntityDataSerializers.BOOLEAN.equals(dataAccessor.getSerializer()
-+            )
++            allowedForPlayer.containsKey(dataAccessor.getId()) && !allowedForPlayer.get(dataAccessor.getId()).equals(dataAccessor.getSerializer()
 +        );
 +    }
 +    // Weeper end - quick fake player fix
