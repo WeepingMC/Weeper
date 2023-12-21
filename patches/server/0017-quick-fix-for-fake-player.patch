@@ -5,7 +5,7 @@ Subject: [PATCH] quick fix for fake player
 
 
 diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-index a043c382c37058032548a5192e17f5f816abe5a6..f7df135609a531fe9e33053c7a41dd39141222d3 100644
+index a043c382c37058032548a5192e17f5f816abe5a6..571afbb6f2ee7c30128671dfbe6e6046f4f31f73 100644
 --- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 +++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 @@ -187,6 +187,7 @@ public class SynchedEntityData {
@@ -49,15 +49,18 @@ index a043c382c37058032548a5192e17f5f816abe5a6..f7df135609a531fe9e33053c7a41dd39
              values.add(synchedValue.value());
          }
  
-@@ -333,6 +337,14 @@ public class SynchedEntityData {
+@@ -333,6 +337,17 @@ public class SynchedEntityData {
      }
      // Paper end
  
 +    // Weeper start - quick fake player fix
 +    private boolean shouldSkip(EntityDataAccessor<?> dataAccessor) {
 +        return entity.getBukkitEntity().getPersistentDataContainer().has(skinKey, org.bukkit.persistence.PersistentDataType.STRING) &&
-+            dataAccessor.getId() == 15 &&
-+            EntityDataSerializers.BYTE.equals(dataAccessor.getSerializer());
++            (
++                dataAccessor.getId() == 15 && EntityDataSerializers.BYTE.equals(dataAccessor.getSerializer()) ||
++                dataAccessor.getId() == 16 && EntityDataSerializers.BOOLEAN.equals(dataAccessor.getSerializer()
++            )
++        );
 +    }
 +    // Weeper end - quick fake player fix
 +
