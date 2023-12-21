@@ -758,7 +758,7 @@ index d5f404fb6dc09c48d84b4a3e75c12f2fbb53c224..857cfaaefc00ce5e8878d95560d1f0ba
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 9abe817ae202edaa2d88cd59ae5c7db0b1c634be..ef339b8bcc49b461bc92aa856f563e905df83745 100644
+index 0c46a4aeafd03fbbfd590b0362d41bf2b1d5ca74..d49ce49cc4649a9df202d3ebff8a10629060647a 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -347,7 +347,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
@@ -799,10 +799,10 @@ index 45b1a182acf6b2aef40b714d31ca125d8f74619a..711278817995a093e6e22d6f0d78dd9a
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 87da098ee1ef36df5b30d82c75f487ea002c6c4c..5807a990641fe337a12be8f008f5f359732cb762 100644
+index b4ae94effd332f3719d7db0913c109fe4f5b781f..b28c5cd26894464b3264b5c9fa8916846eb4f01f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3227,5 +3227,10 @@ public final class CraftServer implements Server {
+@@ -3228,5 +3228,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
  
@@ -814,7 +814,7 @@ index 87da098ee1ef36df5b30d82c75f487ea002c6c4c..5807a990641fe337a12be8f008f5f359
      // Paper end
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-index 81889e30a634ac84d996f688d0a2466e9efa19ca..c32d411050d666c0bc29513a3e2f8a0b5124d5dc 100644
+index bd8a5bb2b84daf013750aec9887dcb4b02b382ad..a665eb011c72fe296b7fe7dfb4c84f3046d7fe69 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 @@ -22,7 +22,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
