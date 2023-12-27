@@ -5,10 +5,10 @@ Subject: [PATCH] add util to list all data accessors for entity type
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 9d31221673d27718ed39bb604b1eceb3ded2303e..f291100e5cb02d125e5624cb683185d42677bdc3 100644
+index 16def59b294f7132697d4a7b1086faf307fa24ea..a30fdea449465e3ce89f6c5b75a76e5d2a0c22bc 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -69,6 +69,7 @@ dependencies {
+@@ -55,6 +55,7 @@ dependencies {
      testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
      testImplementation("org.hamcrest:hamcrest:2.2")
      testImplementation("org.mockito:mockito-core:5.5.0")
