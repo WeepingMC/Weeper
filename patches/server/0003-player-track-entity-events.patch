@@ -1,0 +1,54 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 19 Jun 2021 15:46:18 +0200
+Subject: [PATCH] player track entity events
+
+
+diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
+index 529ab44baaf573b97cf7e89560c548642733188f..6c41ccfa46155197ceb9f27c07fedea784418ad9 100644
+--- a/src/main/java/net/minecraft/server/level/ServerEntity.java
++++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.server.level;
+ 
++import com.github.weepingmc.event.packet.PlayerTrackEntityEvent;
+ import com.google.common.collect.Lists;
+ import com.mojang.datafixers.util.Pair;
+ import com.mojang.logging.LogUtils;
+@@ -13,6 +14,7 @@ import java.util.Set;
+ import java.util.function.Consumer;
+ import java.util.stream.Stream;
+ import javax.annotation.Nullable;
++import com.github.weepingmc.event.packet.PlayerUntrackEntityEvent;
+ import net.minecraft.network.protocol.Packet;
+ import net.minecraft.network.protocol.game.ClientGamePacketListener;
+ import net.minecraft.network.protocol.game.ClientboundBundlePacket;
+@@ -104,6 +106,7 @@ public class ServerEntity {
+ 
+                     entityplayer.connection.teleport(entityplayer.getX(), entityplayer.getY(), entityplayer.getZ(), entityplayer.getYRot(), entityplayer.getXRot());
+                 }
++                    }
+ 
+             });
+             this.lastPassengers = list;
+@@ -279,6 +282,7 @@ public class ServerEntity {
+     public void removePairing(ServerPlayer player) {
+         this.entity.stopSeenByPlayer(player);
+         player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));
++        new PlayerUntrackEntityEvent(player.getBukkitEntity(), this.entity.getId(), this.entity.getBukkitEntity()).callEventIfRegistered(); // Weeper
+     }
+ 
+     public void addPairing(ServerPlayer player) {
+@@ -301,7 +305,11 @@ public class ServerEntity {
+         Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket();
+ 
+         this.yHeadRotp = Mth.floor(this.entity.getYHeadRot() * 256.0F / 360.0F);
+-        sender.accept(packet);
++        // Weeper start
++        if (PlayerTrackEntityEvent.getHandlerList().getRegisteredListeners().length == 0 || new PlayerTrackEntityEvent((org.bukkit.entity.Player)player.getBukkitEntity(), this.entity.getBukkitEntity()).callEvent()) {
++            sender.accept(packet);
++        }
++        // Weeper end
+         if (this.trackedDataValues != null) {
+             sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
+         }

@@ -1,12 +1,12 @@
 import io.papermc.paperweight.util.constants.PAPERCLIP_CONFIG
 
-var javaVersion = 17
+var javaVersion = 21
 var charSet: String = Charsets.UTF_8.name()
 
 plugins {
     java
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.github.johnrengelman.shadow") version "8.1.1-SNAPSHOT"
     id("io.papermc.paperweight.patcher") version "1.5.11"
 }
 
@@ -35,10 +35,6 @@ subprojects {
         filteringCharset = charSet
     }
 
-    if (name == "Weeperr-MojangAPI") {
-        return@subprojects
-    }
-
     repositories {
         mavenCentral()
         maven(paperMavenPublicUrl)
@@ -61,7 +57,7 @@ dependencies {
 }
 
 paperweight {
-    serverProject.set(project(":Weeper-Server"))
+    serverProject.set(project(":weeper-server"))
 
     remapRepo.set(paperMavenPublicUrl)
     decompileRepo.set(paperMavenPublicUrl)
@@ -86,7 +82,7 @@ paperweight {
                 isBareDirectory.set(true)
                 upstreamDirPath.set("paper-api-generator")
                 patchDir.set(layout.projectDirectory.dir("patches/api-generator"))
-                outputDir.set(layout.projectDirectory.dir("Weeper-ApiGenerator"))
+                outputDir.set(layout.projectDirectory.dir("weeper-api-generator"))
             }
         }
     }
@@ -97,7 +93,7 @@ tasks.register("cleanup"){
         layout.projectDirectory.dir("Weeper-API").asFile.deleteRecursively()
         layout.projectDirectory.dir("Weeper-MojangAPI").asFile.deleteRecursively()
         layout.projectDirectory.dir("Weeper-Server").asFile.deleteRecursively()
-        layout.projectDirectory.dir("Weeper-ApiGenerator").asFile.deleteRecursively()
+        layout.projectDirectory.dir("weeper-api-generator").asFile.deleteRecursively()
     }
 }
 

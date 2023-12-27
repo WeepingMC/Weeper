@@ -1,0 +1,81 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 19 Jun 2021 15:08:28 +0200
+Subject: [PATCH] trigger Block animation
+
+
+diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
+index b2494059a8b7eabb352e3b449879fd5410e598a1..c7e3556894aed7d09d8323155d9467a2a7930262 100644
+--- a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
++++ b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
+@@ -1,16 +1,15 @@
+ package com.github.weepingmc.packet;
+ 
+-import java.util.ArrayList;
+-import java.util.EnumMap;
+-import java.util.List;
+-import java.util.Set;
+-
+-import com.mojang.datafixers.util.Pair;
+-
+ import com.github.weepingmc.packet.options.Animation;
+ import com.github.weepingmc.packet.options.EntityStatus;
+ import com.github.weepingmc.packet.options.PlayerAbility;
+ import com.github.weepingmc.packet.options.ProfileAction;
++import com.mojang.datafixers.util.Pair;
++import java.util.ArrayList;
++import java.util.EnumMap;
++import java.util.List;
++import java.util.Set;
++import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
+ import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
+ import net.minecraft.world.entity.EquipmentSlot;
+ import net.minecraft.world.entity.player.Abilities;
+@@ -73,12 +72,11 @@ public final class CraftPacketConversion {
+ 
+     static int fromAnimation(Animation animation) {
+         return switch (animation) {
+-            case SWING_MAIN_ARM -> 0;
+-            case TAKE_DAMAGE -> 1;
+-            case LEAVE_BED -> 2;
+-            case SWING_OFFHAND -> 3;
+-            case CRITICAL_EFFECT -> 4;
+-            case MAGIC_CRITICAL_EFFECT -> 5;
++            case SWING_MAIN_ARM, SWING_MAIN_HAND -> ClientboundAnimatePacket.SWING_MAIN_HAND;
++            case LEAVE_BED -> ClientboundAnimatePacket.WAKE_UP;
++            case SWING_OFFHAND -> ClientboundAnimatePacket.SWING_OFF_HAND;
++            case CRITICAL_EFFECT, TAKE_DAMAGE, CRITICAL_HIT -> ClientboundAnimatePacket.CRITICAL_HIT;
++            case MAGIC_CRITICAL_EFFECT -> ClientboundAnimatePacket.MAGIC_CRITICAL_HIT;
+         };
+     }
+ 
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index bfb178c69026e9759e9afaebb9da141b62d1f144..c99c43050c19b61683b49bbb9cd41e75871fbc41 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -56,6 +56,7 @@ import net.minecraft.world.level.ChunkPos;
+ import net.minecraft.world.level.ClipContext;
+ import net.minecraft.world.level.GameRules;
+ import net.minecraft.world.level.biome.Climate;
++import net.minecraft.world.level.block.entity.BlockEntity;
+ import net.minecraft.world.level.chunk.ChunkAccess;
+ import net.minecraft.world.level.chunk.ChunkStatus;
+ import net.minecraft.world.level.chunk.ImposterProtoChunk;
+@@ -2388,6 +2389,17 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+         return (this.getHandle().getDragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().getDragonFight());
+     }
+ 
++
++    // Weeper start
++    @Override
++    public void triggerBlockAnimation(@NotNull Location location,
++                                      int action, int actionParameter) {
++        BlockPos position = new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ());
++        BlockEntity blockEntity = world.getBlockEntity(position, true);
++        world.blockEvent(position, blockEntity.getBlockState().getBlock(), action, actionParameter);
++    }
++    // Weeper end
++
+     @Override
+     public Collection<GeneratedStructure> getStructures(int x, int z) {
+         return this.getStructures(x, z, struct -> true);

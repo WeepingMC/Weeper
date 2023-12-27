@@ -1,0 +1,28 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sun, 10 Mar 2024 12:22:50 +0100
+Subject: [PATCH] build changes
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 3b86451bdc939aec0ec6b4bf82a789cab38345b4..dc3cc386bc8e25668791ef975d945146299c5ce8 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -14,14 +14,15 @@ minecraft {
+             mainClass("io.papermc.generator.Main")
+             accessWideners(projectDir.toPath().resolve("wideners.at"))
+             args(projectDir.toPath().resolve("generated").toString())
++            targetVersion(21) // Weeper - build changes
+         }
+     }
+ }
+ 
+ dependencies {
+     implementation("com.squareup:javapoet:1.13.0")
+-    implementation(project(":paper-api"))
+-    implementation("io.github.classgraph:classgraph:4.8.47")
++    implementation(project(":weeper-api")) // Weeper - build changes
++    implementation("io.github.classgraph:classgraph:4.8.168") // Weeper - build changes
+ }
+ 
+ group = "io.papermc.paper"

@@ -1,0 +1,65 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Thu, 21 Dec 2023 20:53:32 +0100
+Subject: [PATCH] quick fix for fake player
+
+
+diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
+index 58b602e550258c1062ee940bc46538dac95d8979..a613c5bb23b3be0e9d9952f695c9398ca88f1a08 100644
+--- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
++++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
+@@ -187,6 +187,7 @@ public class SynchedEntityData {
+         return this.isDirty;
+     }
+ 
++    private static final org.bukkit.NamespacedKey skinKey = new org.bukkit.NamespacedKey("npclib", "npclib-skin"); // Weeper - quick fake player fix
+     @Nullable
+     public List<SynchedEntityData.DataValue<?>> packDirty() {
+         List<SynchedEntityData.DataValue<?>> list = null;
+@@ -200,6 +201,7 @@ public class SynchedEntityData {
+ 
+                 if (datawatcher_item.isDirty()) {
+                     datawatcher_item.setDirty(false);
++                    if (shouldSkip(datawatcher_item.getAccessor())) continue; // Weeper - quick fake player fix
+                     if (list == null) {
+                         list = new ArrayList();
+                     }
+@@ -224,7 +226,7 @@ public class SynchedEntityData {
+ 
+         while (objectiterator.hasNext()) {
+             SynchedEntityData.DataItem<?> datawatcher_item = (SynchedEntityData.DataItem) objectiterator.next();
+-
++            if (shouldSkip(datawatcher_item.getAccessor())) continue; // Weeper - quick fake player fix
+             if (!datawatcher_item.isSetToDefault()) {
+                 if (list == null) {
+                     list = new ArrayList();
+@@ -296,6 +298,7 @@ public class SynchedEntityData {
+ 
+         List<SynchedEntityData.DataValue<?>> list = new ArrayList<>();
+         for (DataItem<?> dataItem : this.itemsById.values()) {
++            if (shouldSkip(dataItem.getAccessor())) continue; // Weeper - quick fake player fix
+             list.add(dataItem.value());
+         }
+ 
+@@ -326,6 +329,7 @@ public class SynchedEntityData {
+         List<SynchedEntityData.DataValue<?>> values = new ArrayList<>(keys.size());
+         for (EntityDataAccessor<?> key : keys) {
+             SynchedEntityData.DataItem<?> synchedValue = this.getItem(key);
++            if (shouldSkip(synchedValue.getAccessor())) continue; // Weeper - quick fake player fix
+             values.add(synchedValue.value());
+         }
+ 
+@@ -333,6 +337,13 @@ public class SynchedEntityData {
+     }
+     // Paper end
+ 
++    // Weeper start - quick fake player fix
++    private boolean shouldSkip(EntityDataAccessor<?> dataAccessor) {
++        return entity.getBukkitEntity().getPersistentDataContainer().has(skinKey, org.bukkit.persistence.PersistentDataType.STRING)
++            && io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(this.entity.getClass(), dataAccessor);
++    }
++    // Weeper end - quick fake player fix
++
+     public static class DataItem<T> {
+ 
+         final EntityDataAccessor<T> accessor;

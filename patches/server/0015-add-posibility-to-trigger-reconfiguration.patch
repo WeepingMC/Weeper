@@ -1,0 +1,32 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Wed, 31 Jan 2024 21:43:23 +0100
+Subject: [PATCH] add posibility to trigger reconfiguration
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+index 616d2e479d91673695ade0db151a0099b568904f..f0dbca4fa0ab5a6c3709d8fe066a48bdd7fc8572 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
+@@ -80,6 +80,7 @@ import net.minecraft.server.PlayerAdvancements;
+ import net.minecraft.server.level.ChunkMap;
+ import net.minecraft.server.level.ServerLevel;
+ import net.minecraft.server.level.ServerPlayer;
++import net.minecraft.server.network.ServerConfigurationPacketListenerImpl;
+ import net.minecraft.server.network.ServerGamePacketListenerImpl;
+ import net.minecraft.server.players.UserWhiteListEntry;
+ import net.minecraft.sounds.SoundEvent;
+@@ -3427,4 +3428,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+     public void setSendViewDistance(final int viewDistance) {
+         this.getHandle().setSendViewDistance(viewDistance);
+     }
++
++    // Weeper start - trigger reconfiguration
++    @Override
++    public void triggerReconfiguration() {
++        if(this.getHandle().connection.connection.getPacketListener() instanceof ServerConfigurationPacketListenerImpl serverConfigurationPacketListener){
++            serverConfigurationPacketListener.startConfiguration();
++        }
++    }
++    // Weeper end - trigger reconfiguration
+ }
