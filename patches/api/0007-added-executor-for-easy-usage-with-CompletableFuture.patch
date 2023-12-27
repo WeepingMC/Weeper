@@ -1,0 +1,77 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 6 Nov 2021 23:18:10 +0100
+Subject: [PATCH] added executor for easy usage with CompletableFutures
+
+
+diff --git a/src/main/java/org/bukkit/plugin/Plugin.java b/src/main/java/org/bukkit/plugin/Plugin.java
+index ef431219fd2bce48bad63b6b92c99d54348d480e..bb0d10ab1b2cc05dae86ad4388bd96209a780889 100644
+--- a/src/main/java/org/bukkit/plugin/Plugin.java
++++ b/src/main/java/org/bukkit/plugin/Plugin.java
+@@ -117,6 +117,22 @@ public interface Plugin extends TabExecutor, io.papermc.paper.plugin.lifecycle.e
+     @NotNull
+     public Server getServer();
+ 
++    // Weeper start - executors
++    /**
++     * Returns an executor of the mainthread
++     * @return executor
++     */
++    @NotNull
++    java.util.concurrent.Executor mainThreadExecutor();
++
++    /**
++     * Returns an async executor
++     * @return executor
++     */
++    @NotNull
++    java.util.concurrent.Executor asyncExecutor();
++    // Weeper stop - executors
++
+     /**
+      * Returns a value indicating whether or not this plugin is currently
+      * enabled
+diff --git a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
+index 34037d3da2c536bac088e0ff629ee8f1daccc65b..c6d38d19a77a8f85cd481174ba2c0c3cffa8248b 100644
+--- a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
++++ b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
+@@ -109,6 +109,18 @@ public abstract class JavaPlugin extends PluginBase {
+         return server;
+     }
+ 
++    // Weeper start - executors
++    @Override
++    public @NotNull java.util.concurrent.Executor mainThreadExecutor() {
++        return (runnable) -> getServer().getScheduler().runTask(this, runnable);
++    }
++
++    @Override
++    public @NotNull java.util.concurrent.Executor asyncExecutor() {
++        return (runnable) -> getServer().getScheduler().runTaskAsynchronously(this, runnable);
++    }
++    // Weeper stop - executors
++
+     /**
+      * Returns a value indicating whether or not this plugin is currently
+      * enabled
+diff --git a/src/test/java/org/bukkit/plugin/TestPlugin.java b/src/test/java/org/bukkit/plugin/TestPlugin.java
+index affe88cf8e98a787e197936f5fc443464a2343c6..c6ce4f3fda3afb936db8d8d098c875bc1fda381c 100644
+--- a/src/test/java/org/bukkit/plugin/TestPlugin.java
++++ b/src/test/java/org/bukkit/plugin/TestPlugin.java
+@@ -84,6 +84,16 @@ public class TestPlugin extends PluginBase {
+         throw new UnsupportedOperationException("Not supported.");
+     }
+ 
++    @Override
++    public java.util.concurrent.Executor mainThreadExecutor() {
++        throw new UnsupportedOperationException("Not supported.");
++    }
++
++    @Override
++    public java.util.concurrent.Executor asyncExecutor() {
++        throw new UnsupportedOperationException("Not supported.");
++    }
++
+     @Override
+     public boolean isEnabled() {
+         return enabled;

@@ -1,0 +1,82 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Mon, 16 Oct 2023 19:48:03 +0200
+Subject: [PATCH] modern player abilities
+
+
+diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
+index eacd3780aa20ceaa5c4a6ea003441ce5b79ce889..5b7d54e6a15cb19d6f58de8d3cfdfd078377dcba 100644
+--- a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
++++ b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
+@@ -1,5 +1,11 @@
+ package com.github.weepingmc.packet;
+ 
++import com.github.weepingmc.packet.options.abilities.AllowFlying;
++import com.github.weepingmc.packet.options.abilities.CreativeModeInstantBreak;
++import com.github.weepingmc.packet.options.abilities.FlySpeedAbility;
++import com.github.weepingmc.packet.options.abilities.Flying;
++import com.github.weepingmc.packet.options.abilities.Invulnerable;
++import com.github.weepingmc.packet.options.abilities.WalkSpeedAbility;
+ import java.util.ArrayList;
+ import java.util.EnumMap;
+ import java.util.List;
+@@ -81,7 +87,7 @@ public final class CraftPacketConversion {
+         };
+     }
+ 
+-    static Abilities mapPlayerAbilities(Set<PlayerAbility> playerAbilities) {
++    static Abilities mapPlayerAbilitiesOld(Set<PlayerAbility> playerAbilities) {
+         Abilities playerAbilitiesNMS = new Abilities();
+ 
+         for (PlayerAbility playerAbilitiy : playerAbilities) {
+@@ -94,4 +100,19 @@ public final class CraftPacketConversion {
+         }
+         return playerAbilitiesNMS;
+     }
++
++    static Abilities mapPlayerAbilities(Set<com.github.weepingmc.packet.options.abilities.PlayerAbility> playerAbilities) {
++        Abilities playerAbilitiesNMS = new Abilities();
++        for (com.github.weepingmc.packet.options.abilities.PlayerAbility playerAbilitiy : playerAbilities) {
++            switch (playerAbilitiy) {
++                case AllowFlying flying -> playerAbilitiesNMS.mayfly = true;
++                case CreativeModeInstantBreak creativeModeInstantBreak -> playerAbilitiesNMS.instabuild = true;
++                case com.github.weepingmc.packet.options.abilities.FlySpeedAbility(var speed) -> playerAbilitiesNMS.flyingSpeed = speed;
++                case Flying flying -> playerAbilitiesNMS.flying = true;
++                case Invulnerable invulnerable -> playerAbilitiesNMS.invulnerable = true;
++                case com.github.weepingmc.packet.options.abilities.WalkSpeedAbility(var speed) -> playerAbilitiesNMS.walkingSpeed = speed;
++            }
++        }
++        return playerAbilitiesNMS;
++    }
+ }
+diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+index c8f54a65f9a42d658c055c2648d924724098fce6..9caed5a0025fb8dd1fa98dce26d35531661af80e 100644
+--- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
++++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+@@ -259,8 +259,8 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+     }
+ 
+     @Override
+-    public PacketStepBuilder playerAbilities(@Nonnull Set<PlayerAbility> playerAbilities, float flySpeed, float fieldOfViewModifier) {
+-        Abilities playerAbilitiesNMS = mapPlayerAbilities(playerAbilities);
++    public @NotNull PacketStepBuilder playerAbilities(@Nonnull Set<PlayerAbility> playerAbilities, float flySpeed, float fieldOfViewModifier) {
++        Abilities playerAbilitiesNMS = com.github.weepingmc.packet.CraftPacketConversion.mapPlayerAbilitiesOld(playerAbilities);
+         playerAbilitiesNMS.flyingSpeed = flySpeed;
+         playerAbilitiesNMS.walkingSpeed = fieldOfViewModifier;
+         initial.setNext(of(new ClientboundPlayerAbilitiesPacket(playerAbilitiesNMS)));
+@@ -268,7 +268,14 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+     }
+ 
+     @Override
+-    public @NotNull PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull Color color, @org.jetbrains.annotations.Nullable String text, int time) {
++    public @NotNull PacketStepBuilder withPlayerAbilities(@NotNull Set<com.github.weepingmc.packet.options.abilities.PlayerAbility> playerAbilities) {
++        Abilities playerAbilitiesNMS = mapPlayerAbilities(playerAbilities);
++        initial.setNext(of(new ClientboundPlayerAbilitiesPacket(playerAbilitiesNMS)));
++        return this;
++    }
++
++    @Override
++    public @NotNull PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull java.awt.Color color, @org.jetbrains.annotations.Nullable String text, int time) {
+         var payload = new net.minecraft.network.protocol.common.custom.GameTestAddMarkerDebugPayload(
+             new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()),
+             org.bukkit.Color.fromARGB(color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue()).asARGB(),

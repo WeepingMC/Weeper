@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 19 Jun 2021 15:46:18 +0200
+Subject: [PATCH] player track entity events
+
+
+diff --git a/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java b/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
+index 9ee0348dab4f2c2b200ad08a39e3daf516d7d8cf..5b91da21f3f68b63c0c766e709ace6e7b8409c9a 100644
+--- a/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
++++ b/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
+@@ -15,7 +15,7 @@ public final class DisguiseUtil {
+     public static boolean tryDisguise(ServerPlayer player, Entity entity, ClientboundAddEntityPacket clientboundAddEntityPacket) {
+             switch (entity.getBukkitEntity().getDisguiseData()) {
+                 case DisguiseData.OriginalDisguise disguise -> {
+-                    return false;
++                    return !(com.github.weepingmc.event.packet.PlayerTrackEntityEvent.getHandlerList().getRegisteredListeners().length == 0 || new com.github.weepingmc.event.packet.PlayerTrackEntityEvent(player.getBukkitEntity(), entity.getBukkitEntity()).callEvent()); // Wepper - player track entity events
+                 }
+                 case com.github.weepingmc.disguise.EntityTypeDisguise(var type) -> {
+                     player.connection.send(new net.minecraft.network.protocol.game.ClientboundAddEntityPacket(
+@@ -67,7 +67,15 @@ public final class DisguiseUtil {
+             }
+         }
+ 
++    private static final org.bukkit.NamespacedKey skinKey = new org.bukkit.NamespacedKey("npclib", "npclib-skin"); // Weeper - track entity events
++
+     public static boolean shouldSkip(Entity entity, EntityDataAccessor<?> dataAccessor) {
++        // Weeper start - track entity events
++        if (entity.getBukkitEntity().getPersistentDataContainer().has(skinKey, org.bukkit.persistence.PersistentDataType.STRING)) {
++            return !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(ServerPlayer.class, dataAccessor);
++        }
++        // Weeper end - track entity events
++
+         return switch (entity.getBukkitEntity().getDisguiseData()) {
+             case DisguiseData.OriginalDisguise original -> {
+                 yield false;
+diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
+index 81dc19afb75f535b83c4625965d6be3419b46d42..9da03e9d1c183b3d85be781425f37fb3d0f63ae3 100644
+--- a/src/main/java/net/minecraft/server/level/ServerEntity.java
++++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
+@@ -279,6 +279,7 @@ public class ServerEntity {
+     public void removePairing(ServerPlayer player) {
+         this.entity.stopSeenByPlayer(player);
+         player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));
++        if(com.github.weepingmc.event.packet.PlayerUntrackEntityEvent.getHandlerList().getRegisteredListeners().length != 0) new com.github.weepingmc.event.packet.PlayerUntrackEntityEvent(player.getBukkitEntity(), this.entity.getId(), this.entity.getBukkitEntity()).callEvent(); // Weeper - player track entity events
+     }
+ 
+     public void addPairing(ServerPlayer player) {

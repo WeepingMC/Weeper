@@ -1,0 +1,58 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Tue, 5 Dec 2023 20:12:31 +0100
+Subject: [PATCH] allow offline editing of playerData
+
+
+diff --git a/src/main/java/com/github/weepingmc/offline/EditPlayer.java b/src/main/java/com/github/weepingmc/offline/EditPlayer.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..6acdda82e91fabf159b22c89f62e43fa507c0ac4
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/offline/EditPlayer.java
+@@ -0,0 +1,25 @@
++package com.github.weepingmc.offline;
++
++import org.bukkit.inventory.PlayerInventory;
++import org.bukkit.persistence.PersistentDataContainer;
++import org.jetbrains.annotations.NotNull;
++
++public interface EditPlayer {
++
++    /**
++     * Retrieves the inventory of a player.
++     *
++     * @return The player's inventory.
++     */
++    @NotNull
++    PlayerInventory getInventory();
++
++    /**
++     * Retrieves the PersistentDataContainer of a player.
++     *
++     * @return The player's PersistentDataContainer.
++     */
++    @NotNull
++    PersistentDataContainer getPersistentDataContainer();
++
++}
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index f433ee3dc9ec9cfacf440939d44b120730759dfe..6403b3c6873a36c8239cc7223dc78b3a9192ec3f 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -2519,4 +2519,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+      */
+     boolean isOwnedByCurrentRegion(@NotNull Entity entity);
+     // Paper end - Folia region threading API
++
++    // Weeper start - allow offline editing of playerData
++
++    /**
++     * Edits the information of an offline player.
++     *
++     * @param playerUUID The UUID of the offline player to edit.
++     * @param editPlayerConsumer A consumer function that takes an {@link com.github.weepingmc.offline.EditPlayer} object as input,
++     *                          allowing the caller to perform edits on the player's information.
++     */
++    void editOfflinePlayer(@NotNull UUID playerUUID, @NotNull Consumer<com.github.weepingmc.offline.EditPlayer> editPlayerConsumer);
++    // Weeper end - allow offline editing of playerData
+ }
