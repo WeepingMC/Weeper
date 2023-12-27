@@ -1,0 +1,113 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Wed, 27 Dec 2023 14:51:59 +0100
+Subject: [PATCH] introduce a concept of disguise that is paper prone
+
+
+diff --git a/src/main/java/com/github/weepingmc/disguise/DisguiseData.java b/src/main/java/com/github/weepingmc/disguise/DisguiseData.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..9e6d50684ae1425e719b7acb6109875cee11725a
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/disguise/DisguiseData.java
+@@ -0,0 +1,25 @@
++package com.github.weepingmc.disguise;
++
++import com.destroystokyo.paper.profile.PlayerProfile;
++import org.bukkit.entity.EntityType;
++import org.jetbrains.annotations.NotNull;
++
++public sealed interface DisguiseData permits DisguiseData.OriginalDisguise, EntityTypeDisguise, PlayerDisguise {
++    static @NotNull DisguiseData original() {
++        return new OriginalDisguise();
++    }
++
++    static @NotNull PlayerDisguise.Builder player(@NotNull PlayerProfile playerProfile) {
++        return new PlayerDisguise.Builder(playerProfile);
++    }
++
++    static @NotNull EntityTypeDisguise entity(@NotNull EntityType entityType) {
++        return new EntityTypeDisguise(entityType);
++    }
++
++    static @NotNull OriginalDisguise reset() {
++        return new OriginalDisguise();
++    }
++
++    record OriginalDisguise() implements DisguiseData{}
++}
+diff --git a/src/main/java/com/github/weepingmc/disguise/EntityTypeDisguise.java b/src/main/java/com/github/weepingmc/disguise/EntityTypeDisguise.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..d0801c94f96cdf4ecec8f540e57babb2576fb67e
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/disguise/EntityTypeDisguise.java
+@@ -0,0 +1,11 @@
++package com.github.weepingmc.disguise;
++
++import java.util.Objects;
++import org.bukkit.entity.EntityType;
++import org.jetbrains.annotations.NotNull;
++
++public record EntityTypeDisguise(@NotNull EntityType entityType) implements DisguiseData {
++    public EntityTypeDisguise {
++        Objects.requireNonNull(entityType, "type cannot be null");
++    }
++}
+diff --git a/src/main/java/com/github/weepingmc/disguise/PlayerDisguise.java b/src/main/java/com/github/weepingmc/disguise/PlayerDisguise.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..b8525cc42825c18d49e07f89f219a68ad7ea39c2
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/disguise/PlayerDisguise.java
+@@ -0,0 +1,33 @@
++package com.github.weepingmc.disguise;
++
++import com.destroystokyo.paper.profile.PlayerProfile;
++import java.util.Objects;
++import org.jetbrains.annotations.NotNull;
++
++public record PlayerDisguise(@NotNull PlayerProfile playerProfile, boolean listed) implements DisguiseData {
++
++    public  PlayerDisguise {
++        Objects.requireNonNull(playerProfile, "profile cannot be null");
++    }
++    public static @NotNull Builder builder(@NotNull PlayerProfile playerProfile) {
++        return new Builder(playerProfile);
++    }
++
++    public static class Builder {
++        private final PlayerProfile playerProfile;
++        private boolean listed;
++
++        public Builder(@NotNull PlayerProfile playerProfile) {
++            this.playerProfile = playerProfile;
++        }
++
++        public @NotNull Builder listed(boolean listed) {
++            this.listed = listed;
++            return this;
++        }
++
++        public @NotNull PlayerDisguise build() {
++            return new PlayerDisguise(playerProfile, listed);
++        }
++    }
++}
+diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
+index d9929d9311e4b2b0ae13a8f6f13563257263f298..cd627d59770fc4be203c1ebcc8faf8e003b1d843 100644
+--- a/src/main/java/org/bukkit/entity/Entity.java
++++ b/src/main/java/org/bukkit/entity/Entity.java
+@@ -1,5 +1,6 @@
+ package org.bukkit.entity;
+ 
++import com.github.weepingmc.disguise.DisguiseData;
+ import java.util.List;
+ import java.util.Set;
+ import java.util.UUID;
+@@ -1104,4 +1105,8 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+      */
+     @NotNull String getScoreboardEntryName();
+     // Paper end - entity scoreboard name
++    // Weeper start - disguise api
++    @NotNull DisguiseData getDisguiseData();
++    void setDisuiseData(@NotNull DisguiseData disguiseData);
++    // Weeper end - disguise api
+ }

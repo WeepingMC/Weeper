@@ -1,0 +1,151 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Tue, 12 Oct 2021 21:10:47 +0200
+Subject: [PATCH] implement take and place
+
+
+diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
+index 48f634a7521d31c1e9dfd3cfc83139d428dbd37a..c54efc8900549ade4dfb943afae3f95e01bd3101 100644
+--- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
++++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
+@@ -1,5 +1,6 @@
+ package net.minecraft.world.inventory;
+ 
++import com.github.weepingmc.inventory.InventoryItemStackMoveStrategy;
+ import com.google.common.base.Suppliers;
+ import com.google.common.collect.HashBasedTable;
+ import com.google.common.collect.Lists;
+@@ -157,6 +158,12 @@ public abstract class AbstractContainerMenu {
+         return slot;
+     }
+ 
++    // Weeper start - inventoryItemStackMoveStrategy
++    public void setItemStackMoveStrategy(InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy){
++        this.slots.forEach(slot -> slot.setInventoryItemstackMoveStrategy(inventoryItemStackMoveStrategy));
++    }
++    // Weeper end - inventoryItemStackMoveStrategy
++
+     protected DataSlot addDataSlot(DataSlot property) {
+         this.dataSlots.add(property);
+         this.remoteDataSlots.add(0);
+diff --git a/src/main/java/net/minecraft/world/inventory/Slot.java b/src/main/java/net/minecraft/world/inventory/Slot.java
+index e2fd415b69e0213688561e9a19aec2cdcd267211..5292c50d1570aee05a26bb33da03b5b391a28dbe 100644
+--- a/src/main/java/net/minecraft/world/inventory/Slot.java
++++ b/src/main/java/net/minecraft/world/inventory/Slot.java
+@@ -1,5 +1,7 @@
+ package net.minecraft.world.inventory;
+ 
++import com.github.weepingmc.inventory.InventoryItemStackMoveStrategy;
++import com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem;
+ import com.mojang.datafixers.util.Pair;
+ import java.util.Optional;
+ import javax.annotation.Nullable;
+@@ -7,6 +9,7 @@ import net.minecraft.resources.ResourceLocation;
+ import net.minecraft.world.Container;
+ import net.minecraft.world.entity.player.Player;
+ import net.minecraft.world.item.ItemStack;
++import org.bukkit.craftbukkit.inventory.CraftItemStack;
+ 
+ public class Slot {
+     public final int slot;
+@@ -14,6 +17,13 @@ public class Slot {
+     public int index;
+     public final int x;
+     public final int y;
++    private @Nullable InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy;
++
++    // Weeper start - inventoryItemStackMoveStrategy
++    public void setInventoryItemstackMoveStrategy(@Nullable InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy){
++        this.inventoryItemStackMoveStrategy = inventoryItemStackMoveStrategy;
++    }
++    // Weeper end - inventoryItemStackMoveStrategy
+ 
+     public Slot(Container inventory, int index, int x, int y) {
+         this.container = inventory;
+@@ -44,7 +54,7 @@ public class Slot {
+     }
+ 
+     public boolean mayPlace(ItemStack stack) {
+-        return true;
++        return this.inventoryItemStackMoveStrategy == null || inventoryItemStackMoveStrategy.canPlace(new SlotItemStackMovementStrategyItem(container.getOwner(), CraftItemStack.asBukkitCopy(stack), slot));
+     }
+ 
+     public ItemStack getItem() {
+@@ -90,7 +100,7 @@ public class Slot {
+     }
+ 
+     public boolean mayPickup(Player playerEntity) {
+-        return true;
++        return this.inventoryItemStackMoveStrategy == null || inventoryItemStackMoveStrategy.canTake(new SlotItemStackMovementStrategyItem(container.getOwner(), CraftItemStack.asBukkitCopy(this.getItem()), slot));
+     }
+ 
+     public boolean isActive() {
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+index acbb64010cd59668aa1bcb52ff1220789cadb1d3..7594e13d9483967e7c6e250235d7342028f37ed1 100644
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+@@ -1,5 +1,6 @@
+ package org.bukkit.craftbukkit.entity;
+ 
++import com.github.weepingmc.inventory.InventoryItemStackMoveStrategy;
+ import com.google.common.base.Preconditions;
+ import com.google.common.collect.ImmutableSet;
+ import java.util.ArrayList;
+@@ -57,6 +58,7 @@ import org.bukkit.entity.Villager;
+ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+ import org.bukkit.inventory.EntityEquipment;
+ import org.bukkit.inventory.Inventory;
++import org.bukkit.inventory.InventoryHolder;
+ import org.bukkit.inventory.InventoryView;
+ import org.bukkit.inventory.ItemStack;
+ import org.bukkit.inventory.MainHand;
+@@ -67,6 +69,7 @@ import org.bukkit.permissions.Permission;
+ import org.bukkit.permissions.PermissionAttachment;
+ import org.bukkit.permissions.PermissionAttachmentInfo;
+ import org.bukkit.plugin.Plugin;
++import org.checkerframework.checker.nullness.qual.Nullable;
+ 
+ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+     private CraftInventoryPlayer inventory;
+@@ -313,6 +316,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+ 
+     @Override
+     public InventoryView openInventory(Inventory inventory) {
++        return openInventory(inventory, (InventoryItemStackMoveStrategy) null);
++    }
++
++    @Override
++    public InventoryView openInventory(Inventory inventory, InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy) {
+         if (!(this.getHandle() instanceof ServerPlayer)) return null;
+         ServerPlayer player = (ServerPlayer) this.getHandle();
+         AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
+@@ -342,7 +350,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+         if (iinventory instanceof MenuProvider) {
+             this.getHandle().openMenu(iinventory);
+         } else {
+-            CraftHumanEntity.openCustomInventory(inventory, player, container);
++            CraftHumanEntity.openCustomInventory(inventory, player, container, inventoryItemStackMoveStrategy);
+         }
+ 
+         if (this.getHandle().containerMenu == formerContainer) {
+@@ -353,9 +361,20 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+     }
+ 
+     private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {
++    // Weeper start - InventoryItemStackMoveStrategy
++        openCustomInventory( inventory, player, windowType, null);
++    }
++
++    private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType, @Nullable InventoryItemStackMoveStrategy InventoryItemStackMoveStrategy) {
++    // Weeper end - InventoryItemStackMoveStrategy
+         if (player.connection == null) return;
+         Preconditions.checkArgument(windowType != null, "Unknown windowType");
+         AbstractContainerMenu container = new CraftContainer(inventory, player, player.nextContainerCounter());
++        // Weeper start - InventoryItemStackMoveStrategy
++        if(InventoryItemStackMoveStrategy != null){
++            container.setItemStackMoveStrategy(InventoryItemStackMoveStrategy);
++        }
++        // Weeper end - InventoryItemStackMoveStrategy
+ 
+         // Paper start - Add titleOverride to InventoryOpenEvent
+         final com.mojang.datafixers.util.Pair<net.kyori.adventure.text.Component, AbstractContainerMenu> result = CraftEventFactory.callInventoryOpenEventWithTitle(player, container);
