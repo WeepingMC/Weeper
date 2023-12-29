@@ -37,7 +37,7 @@ index 0000000000000000000000000000000000000000..82999ac66a92d04bf0499fe53bf4e268
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index a35638a92479b90afa89cf201fc45b49c9e767f3..08db90a89884b0a11db4eb2992c8e6a27928d65c 100644
+index e98a455b6bca9d094d0da323bddd7b3f2c07bb23..7c3273e93802e41a5a4669a95dda19e521a0e221 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -1,6 +1,10 @@
@@ -80,7 +80,7 @@ index a35638a92479b90afa89cf201fc45b49c9e767f3..08db90a89884b0a11db4eb2992c8e6a2
          Player player = entity.getBukkitEntity();
          PlayerLoginEvent event = new PlayerLoginEvent(player, loginlistener.connection.hostname, ((java.net.InetSocketAddress) socketaddress).getAddress(), ((java.net.InetSocketAddress) loginlistener.connection.channel.remoteAddress()).getAddress());
  
-@@ -1593,4 +1608,32 @@ public abstract class PlayerList {
+@@ -1599,4 +1614,32 @@ public abstract class PlayerList {
      public boolean isAllowCheatsForAllPlayers() {
          return this.allowCheatsForAllPlayers;
      }
@@ -114,7 +114,7 @@ index a35638a92479b90afa89cf201fc45b49c9e767f3..08db90a89884b0a11db4eb2992c8e6a2
 +    // Weeper end - allow offline editing of playerData
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index b28c5cd26894464b3264b5c9fa8916846eb4f01f..71dffefe3c03d9bf2a9ce9238784ba7fab207a2e 100644
+index 568438e4aac590947ad6ed766a1393dffa68ef6d..049f3a0e05b3f6f7d575401b342c25c05fcfd528 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -1,5 +1,6 @@
