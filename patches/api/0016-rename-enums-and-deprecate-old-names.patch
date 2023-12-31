@@ -5,7 +5,7 @@ Subject: [PATCH] rename enums and deprecate old names
 
 
 diff --git a/src/main/java/com/github/weepingmc/packet/options/Animation.java b/src/main/java/com/github/weepingmc/packet/options/Animation.java
-index eed9614c64f7fcb36ca2b10bb148931442a881ca..6a1ddd2fa2249cf9279bf6a7a1ef0915c62f367c 100644
+index eed9614c64f7fcb36ca2b10bb148931442a881ca..abf096481a41e2328f6bc6364c3d46824070921e 100644
 --- a/src/main/java/com/github/weepingmc/packet/options/Animation.java
 +++ b/src/main/java/com/github/weepingmc/packet/options/Animation.java
 @@ -1,10 +1,25 @@
@@ -14,20 +14,20 @@ index eed9614c64f7fcb36ca2b10bb148931442a881ca..6a1ddd2fa2249cf9279bf6a7a1ef0915
  public enum Animation {
 +
 +    /**
-+     * @use {@link #SWING_MAIN_HAND}
++     * use {@link #SWING_MAIN_HAND}
 +     */
 +    @Deprecated
      SWING_MAIN_ARM,
 +    SWING_MAIN_HAND,
 +    /**
-+     * @use {@link #CRITICAL_HIT}
++     * use {@link #CRITICAL_HIT}
 +     */
 +    @Deprecated
      TAKE_DAMAGE,
      LEAVE_BED,
      SWING_OFFHAND,
 +    /**
-+     * @use {@link #CRITICAL_HIT}
++     * use {@link #CRITICAL_HIT}
 +     */
 +    @Deprecated
      CRITICAL_EFFECT,
