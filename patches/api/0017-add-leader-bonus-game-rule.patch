@@ -1,0 +1,22 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Wed, 17 Jan 2024 22:27:02 +0100
+Subject: [PATCH] add leader bonus game rule
+
+
+diff --git a/src/main/java/org/bukkit/GameRule.java b/src/main/java/org/bukkit/GameRule.java
+index be827e7fef0acb17bd41aeff9dc3dc4da3718e5e..528ddcf7bd6158184a96177c8f92b92b0205d217 100644
+--- a/src/main/java/org/bukkit/GameRule.java
++++ b/src/main/java/org/bukkit/GameRule.java
+@@ -113,6 +113,11 @@ public final class GameRule<T> implements net.kyori.adventure.translation.Transl
+      */
+     public static final GameRule<Boolean> SEND_COMMAND_FEEDBACK = new GameRule<>("sendCommandFeedback", Boolean.class);
+ 
++    /**
++     * Whether the a zombie gets a leader bonus or not
++     */
++    public static final GameRule<Boolean> RULE_LEADER_ZOMBIE_BONUS = new GameRule<>("leaderZombieBonus", Boolean.class);
++
+     /**
+      * Whether a message appears in chat when a player dies.
+      */
