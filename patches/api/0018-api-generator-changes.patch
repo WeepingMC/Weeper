@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Thu, 18 Jan 2024 17:39:23 +0100
+Subject: [PATCH] api generator changes
+
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index f074d5f211f977252b49901ef6e1e85f5f2468f1..2b1f1f8307ff2fad2640a18d53c58a3a7dae8681 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -78,7 +78,7 @@ dependencies {
+ }
+ 
+ // Paper start
+-val generatedApiPath: java.nio.file.Path = rootProject.projectDir.toPath().resolve("paper-api-generator/generated")
++val generatedApiPath: java.nio.file.Path = rootProject.projectDir.toPath().resolve("Weeper-ApiGenerator/generated")
+ idea {
+     module {
+         generatedSourceDirs.add(generatedApiPath.toFile())

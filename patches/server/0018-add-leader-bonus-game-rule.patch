@@ -20,7 +20,7 @@ index 753defa8f8b48d004a2a53b2fc322fd9c083d95e..fb2a90147542ab277d80aae7a44bf582
          }
  
 diff --git a/src/main/java/net/minecraft/world/level/GameRules.java b/src/main/java/net/minecraft/world/level/GameRules.java
-index 4f2fa47d094348bb8f86a86e808019ddba56e187..4beba936590e95b4378a3f43d419d921772d1ccf 100644
+index a9be16e53a9df34af3495048aa9af7b1a3efea4a..3c5087533c9f83e08e55c9b54322928c85a408dd 100644
 --- a/src/main/java/net/minecraft/world/level/GameRules.java
 +++ b/src/main/java/net/minecraft/world/level/GameRules.java
 @@ -50,6 +50,7 @@ public class GameRules {

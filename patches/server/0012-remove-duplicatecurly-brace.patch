@@ -5,7 +5,7 @@ Subject: [PATCH] remove duplicatecurly brace
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 094684de6f67c21bdd4d07aa4c6280971ef40791..80bd298f4749052a1e87f89148d9aa0b93adf0e3 100644
+index 3fb1ef98ac2c62308dc41b20982c85904306aafd..f7959a65aa41c3ddde7ee79d664cb166fcc32dec 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
 @@ -106,8 +106,6 @@ public class ServerEntity {

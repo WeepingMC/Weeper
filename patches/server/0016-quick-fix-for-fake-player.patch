@@ -5,7 +5,7 @@ Subject: [PATCH] quick fix for fake player
 
 
 diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-index a043c382c37058032548a5192e17f5f816abe5a6..d1ff1cf8d9b1978133d9951f8a58460641d0676d 100644
+index 58b602e550258c1062ee940bc46538dac95d8979..871b2ef3fd836d97d0e53d2e19cacd3687f46ba6 100644
 --- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 +++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 @@ -12,6 +12,7 @@ import java.util.ArrayList;

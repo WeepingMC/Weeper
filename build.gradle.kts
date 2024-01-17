@@ -82,6 +82,12 @@ paperweight {
                 patchDir.set(layout.projectDirectory.dir("patches/mojangapi"))
                 outputDir.set(layout.projectDirectory.dir("Weeper-MojangAPI"))
             }
+            register("paperApiGenerator") {
+                isBareDirectory.set(true)
+                upstreamDirPath.set("paper-api-generator")
+                patchDir.set(layout.projectDirectory.dir("patches/api-generator"))
+                outputDir.set(layout.projectDirectory.dir("Weeper-ApiGenerator"))
+            }
         }
     }
 }
@@ -91,6 +97,7 @@ tasks.register("cleanup"){
         layout.projectDirectory.dir("Weeper-API").asFile.deleteRecursively()
         layout.projectDirectory.dir("Weeper-MojangAPI").asFile.deleteRecursively()
         layout.projectDirectory.dir("Weeper-Server").asFile.deleteRecursively()
+        layout.projectDirectory.dir("Weeper-ApiGenerator").asFile.deleteRecursively()
     }
 }
 

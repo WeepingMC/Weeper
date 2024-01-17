@@ -5,7 +5,7 @@ Subject: [PATCH] implement take and place
 
 
 diff --git a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
-index 8fd82051bba33b4703e4d99fff886b63a319a5ba..39aab6e2865eb0cc5fbea2aa192a42e81f33816a 100644
+index 47a3c18401e2df4c89908691348f2411d3ef6fda..20670a4e8c28e4d45ee286d7ca6738d477b0599a 100644
 --- a/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/src/main/java/net/minecraft/world/inventory/AbstractContainerMenu.java
 @@ -1,5 +1,6 @@
@@ -81,7 +81,7 @@ index e2fd415b69e0213688561e9a19aec2cdcd267211..5292c50d1570aee05a26bb33da03b5b3
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index c3dbcb317b7d366feb31f707ad1199c60169f07f..0edd4901e9b4928069baab225bd7431a814720b3 100644
+index 827fe201a7b74f485abb46b127a28bf0cb479c3b..59a53b5b7bbbeaafa364661cb4fd0b8cb5036fdc 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 @@ -1,5 +1,6 @@
@@ -147,5 +147,5 @@ index c3dbcb317b7d366feb31f707ad1199c60169f07f..0edd4901e9b4928069baab225bd7431a
 +        }
 +        // Weeper end - InventoryItemStackMoveStrategy
  
-         // Paper start
+         // Paper start - Add titleOverride to InventoryOpenEvent
          final com.mojang.datafixers.util.Pair<net.kyori.adventure.text.Component, AbstractContainerMenu> result = CraftEventFactory.callInventoryOpenEventWithTitle(player, container);
