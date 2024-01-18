@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Thu, 18 Jan 2024 21:09:16 +0100
+Subject: [PATCH] add api to configure additional resourcepacks in
+ configuration phase
+
+
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 9c626955ab6aa37a74faa38a684675c8666f291a..f906534cc020f23d91263588245018bc87c5bb0d 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -15,6 +15,7 @@ import java.util.Set;
+ import java.util.UUID;
+ import java.util.function.Consumer;
+ import java.util.logging.Logger;
++import net.kyori.adventure.text.Component;
+ import org.bukkit.Warning.WarningState;
+ import org.bukkit.advancement.Advancement;
+ import org.bukkit.block.data.BlockData;
+@@ -2501,4 +2502,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+      */
+     void editOfflinePlayer(@NotNull UUID playerUUID, @NotNull Consumer<EditPlayer> editPlayerConsumer);
+     // Weeper end - allow offline editing of playerData
++    // Weeper start - configuration phase resource pack
++    /**
++     * Configures a resource pack that is applied during configuration phase
++     *
++     * @param id the id of the pack
++     * @param url the resourcepack url
++     * @param hash the resourcepack hash
++     * @param isRequired if it is required to join
++     * @param prompt the text to show
++     */
++    void configureNewResourcePack(@NotNull UUID id, @NotNull String url, @NotNull String hash, boolean isRequired, @Nullable Component prompt);
++    // Weeper end - configuration phase resource pack
+ }
