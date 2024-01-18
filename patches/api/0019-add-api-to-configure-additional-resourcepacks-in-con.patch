@@ -6,18 +6,19 @@ Subject: [PATCH] add api to configure additional resourcepacks in
 
 
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 9c626955ab6aa37a74faa38a684675c8666f291a..e3166c925354a94bdbf93875efd336b03e36732a 100644
+index 9c626955ab6aa37a74faa38a684675c8666f291a..e9be0b77092a7a7ad8e6d94dcfa19e71114cec6b 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -15,6 +15,7 @@ import java.util.Set;
+@@ -15,6 +15,8 @@ import java.util.Set;
  import java.util.UUID;
  import java.util.function.Consumer;
  import java.util.logging.Logger;
++import net.kyori.adventure.resource.ResourcePackInfo;
 +import net.kyori.adventure.text.Component;
  import org.bukkit.Warning.WarningState;
  import org.bukkit.advancement.Advancement;
  import org.bukkit.block.data.BlockData;
-@@ -56,6 +57,7 @@ import org.bukkit.scoreboard.Criteria;
+@@ -56,6 +58,7 @@ import org.bukkit.scoreboard.Criteria;
  import org.bukkit.scoreboard.ScoreboardManager;
  import org.bukkit.structure.StructureManager;
  import org.bukkit.util.CachedServerIcon;
@@ -25,7 +26,7 @@ index 9c626955ab6aa37a74faa38a684675c8666f291a..e3166c925354a94bdbf93875efd336b0
  import org.jetbrains.annotations.Contract;
  import org.jetbrains.annotations.NotNull;
  import org.jetbrains.annotations.Nullable;
-@@ -2501,4 +2503,17 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2501,4 +2504,13 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      void editOfflinePlayer(@NotNull UUID playerUUID, @NotNull Consumer<EditPlayer> editPlayerConsumer);
      // Weeper end - allow offline editing of playerData
@@ -33,13 +34,9 @@ index 9c626955ab6aa37a74faa38a684675c8666f291a..e3166c925354a94bdbf93875efd336b0
 +    /**
 +     * Configures a resource pack that is applied during configuration phase
 +     *
-+     * @param id the id of the pack
-+     * @param url the resourcepack url
-+     * @param hash the resourcepack hash
-+     * @param isRequired if it is required to join
-+     * @param prompt the text to show
++     * @param resourcePackInfo the resourcepack info
 +     */
 +    @ApiStatus.Experimental
-+    void configureNewResourcePack(@NotNull UUID id, @NotNull String url, @NotNull String hash, boolean isRequired, @Nullable Component prompt);
++    void configureNewResourcePack(@NotNull ResourcePackInfo resourcePackInfo, boolean isRequired, @Nullable Component component);
 +    // Weeper end - configuration phase resource pack
  }

@@ -6,10 +6,18 @@ Subject: [PATCH] add api to configure additional resourcepacks in
 
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index da7b5ef5693e0bceb1719742f19def8e4e4ab8a3..670ede12a0f883655842255f5bf4c071b9e38fee 100644
+index da7b5ef5693e0bceb1719742f19def8e4e4ab8a3..4d2167276137bc955fc6213a7a0662433432bf0e 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -34,6 +34,7 @@ import java.util.Arrays;
+@@ -14,6 +14,7 @@ import com.mojang.authlib.GameProfileRepository;
+ import com.mojang.authlib.minecraft.MinecraftSessionService;
+ import com.mojang.datafixers.DataFixer;
+ import com.mojang.logging.LogUtils;
++import io.papermc.paper.adventure.PaperAdventure;
+ import it.unimi.dsi.fastutil.longs.LongIterator;
+ import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+ import java.awt.image.BufferedImage;
+@@ -34,6 +35,7 @@ import java.util.Arrays;
  import java.util.Collection;
  import java.util.Collections;
  import java.util.Comparator;
@@ -17,15 +25,23 @@ index da7b5ef5693e0bceb1719742f19def8e4e4ab8a3..670ede12a0f883655842255f5bf4c071
  import java.util.Iterator;
  import java.util.List;
  import java.util.Locale;
-@@ -2907,4 +2908,11 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -54,6 +56,7 @@ import java.util.stream.Collectors;
+ import java.util.stream.Stream;
+ import javax.annotation.Nullable;
+ import javax.imageio.ImageIO;
++import net.kyori.adventure.resource.ResourcePackInfo;
+ import net.minecraft.CrashReport;
+ import net.minecraft.ReportedException;
+ import net.minecraft.SharedConstants;
+@@ -2907,4 +2910,11 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          }
      }
      // Paper end
 +
 +    // Weeper start - configuration phase resource pack
 +    public final Set<MinecraftServer.ServerResourcePackInfo> pluginServerResourcePacks = new HashSet<>();
-+    public void configureNewResourcePack(UUID id, String url, String hash, boolean isRequired, @Nullable Component prompt) {
-+        this.pluginServerResourcePacks.add(new ServerResourcePackInfo(id, url, hash, isRequired, prompt));
++    public void configureNewResourcePack(ResourcePackInfo resourcePackInfo, boolean isRequired, net.kyori.adventure.text.Component component) {
++        this.pluginServerResourcePacks.add(new ServerResourcePackInfo(resourcePackInfo.id(), resourcePackInfo.uri().toString(), resourcePackInfo.hash(), isRequired, PaperAdventure.asVanilla(component)));
 +    }
 +    // Weeper start - configuration phase resource pack
  }
@@ -73,18 +89,19 @@ index 173c9d6c12e0f9d6cef46813cc7effc558d0e145..58e7e0bf5edad6a027a15297e27b7baa
  
      @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index f419fda3175a1f87d3365c183b2f8663547dbac3..2f2d8833512a74d48a01aa8e22db50784f865744 100644
+index f419fda3175a1f87d3365c183b2f8663547dbac3..7e2fb18ee27dfedb450abd416b4171521f6366eb 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -44,6 +44,7 @@ import java.util.logging.Logger;
+@@ -44,6 +44,8 @@ import java.util.logging.Logger;
  import java.util.stream.Collectors;
  import javax.imageio.ImageIO;
  // import jline.console.ConsoleReader;
++import net.kyori.adventure.resource.ResourcePackInfo;
 +import net.kyori.adventure.text.Component;
  import net.minecraft.advancements.AdvancementHolder;
  import net.minecraft.commands.CommandSourceStack;
  import net.minecraft.commands.Commands;
-@@ -254,6 +255,7 @@ import org.bukkit.scoreboard.Criteria;
+@@ -254,6 +256,7 @@ import org.bukkit.scoreboard.Criteria;
  import org.bukkit.structure.StructureManager;
  import org.bukkit.util.StringUtil;
  import org.bukkit.util.permissions.DefaultPermissions;
@@ -92,14 +109,14 @@ index f419fda3175a1f87d3365c183b2f8663547dbac3..2f2d8833512a74d48a01aa8e22db5078
  import org.yaml.snakeyaml.LoaderOptions;
  import org.yaml.snakeyaml.Yaml;
  import org.yaml.snakeyaml.constructor.SafeConstructor;
-@@ -386,6 +388,13 @@ public final class CraftServer implements Server {
+@@ -386,6 +389,13 @@ public final class CraftServer implements Server {
      }
      // Weeper end - allow offline editing of playerData
  
 +    // Weeper start - configuration phase resource pack
 +    @Override
-+    public void configureNewResourcePack(@NotNull UUID id, @NotNull String url, @NotNull String hash, boolean isRequired, @org.jetbrains.annotations.Nullable Component prompt) {
-+        getHandle().getServer().configureNewResourcePack(id, url, hash, isRequired, io.papermc.paper.adventure.PaperAdventure.asVanilla(prompt));
++    public void configureNewResourcePack(@NotNull ResourcePackInfo resourcePackInfo, boolean isRequired, @Nullable net.kyori.adventure.text.Component component) {
++        getHandle().getServer().configureNewResourcePack(resourcePackInfo, isRequired, component);
 +    }
 +    // Weeper end - configuration phase resource pack
 +
