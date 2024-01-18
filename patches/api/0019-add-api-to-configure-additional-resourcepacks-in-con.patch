@@ -6,7 +6,7 @@ Subject: [PATCH] add api to configure additional resourcepacks in
 
 
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 9c626955ab6aa37a74faa38a684675c8666f291a..f906534cc020f23d91263588245018bc87c5bb0d 100644
+index 9c626955ab6aa37a74faa38a684675c8666f291a..e3166c925354a94bdbf93875efd336b03e36732a 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
 @@ -15,6 +15,7 @@ import java.util.Set;
@@ -17,7 +17,15 @@ index 9c626955ab6aa37a74faa38a684675c8666f291a..f906534cc020f23d91263588245018bc
  import org.bukkit.Warning.WarningState;
  import org.bukkit.advancement.Advancement;
  import org.bukkit.block.data.BlockData;
-@@ -2501,4 +2502,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -56,6 +57,7 @@ import org.bukkit.scoreboard.Criteria;
+ import org.bukkit.scoreboard.ScoreboardManager;
+ import org.bukkit.structure.StructureManager;
+ import org.bukkit.util.CachedServerIcon;
++import org.jetbrains.annotations.ApiStatus;
+ import org.jetbrains.annotations.Contract;
+ import org.jetbrains.annotations.NotNull;
+ import org.jetbrains.annotations.Nullable;
+@@ -2501,4 +2503,17 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      void editOfflinePlayer(@NotNull UUID playerUUID, @NotNull Consumer<EditPlayer> editPlayerConsumer);
      // Weeper end - allow offline editing of playerData
@@ -31,6 +39,7 @@ index 9c626955ab6aa37a74faa38a684675c8666f291a..f906534cc020f23d91263588245018bc
 +     * @param isRequired if it is required to join
 +     * @param prompt the text to show
 +     */
++    @ApiStatus.Experimental
 +    void configureNewResourcePack(@NotNull UUID id, @NotNull String url, @NotNull String hash, boolean isRequired, @Nullable Component prompt);
 +    // Weeper end - configuration phase resource pack
  }
