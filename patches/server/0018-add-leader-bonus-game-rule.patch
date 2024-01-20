@@ -5,7 +5,7 @@ Subject: [PATCH] add leader bonus game rule
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Zombie.java b/src/main/java/net/minecraft/world/entity/monster/Zombie.java
-index 753defa8f8b48d004a2a53b2fc322fd9c083d95e..fb2a90147542ab277d80aae7a44bf582d87c9658 100644
+index 142650302dbab411e37bc1957825e3db0c50deac..9f7f384923f060affc35dcd1b8ae348f67440723 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Zombie.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Zombie.java
 @@ -581,7 +581,9 @@ public class Zombie extends Monster {
@@ -20,7 +20,7 @@ index 753defa8f8b48d004a2a53b2fc322fd9c083d95e..fb2a90147542ab277d80aae7a44bf582
          }
  
 diff --git a/src/main/java/net/minecraft/world/level/GameRules.java b/src/main/java/net/minecraft/world/level/GameRules.java
-index a9be16e53a9df34af3495048aa9af7b1a3efea4a..3c5087533c9f83e08e55c9b54322928c85a408dd 100644
+index c246981987017a2f86c5d632929356855e2b5714..65584c04825e010ddbc6ae21e6ad9a0a89a9a95d 100644
 --- a/src/main/java/net/minecraft/world/level/GameRules.java
 +++ b/src/main/java/net/minecraft/world/level/GameRules.java
 @@ -50,6 +50,7 @@ public class GameRules {
@@ -30,4 +30,4 @@ index a9be16e53a9df34af3495048aa9af7b1a3efea4a..3c5087533c9f83e08e55c9b54322928c
 +    public static final GameRules.Key<GameRules.BooleanValue> RULE_LEADER_ZOMBIE_BONUS = GameRules.register("leaderZombieBonus", Category.SPAWNING, GameRules.BooleanValue.create(true)); // Weeper - add game rule to disable leader zombie bonus
      public static final GameRules.Key<GameRules.BooleanValue> RULE_REDUCEDDEBUGINFO = GameRules.register("reducedDebugInfo", GameRules.Category.MISC, GameRules.BooleanValue.create(false, (minecraftserver, gamerules_gameruleboolean) -> {
          int i = gamerules_gameruleboolean.get() ? 22 : 23;
-         Iterator iterator = minecraftserver.players().iterator(); // Paper
+         Iterator iterator = minecraftserver.players().iterator(); // Paper - Pass ServerLevel for gamerule callbacks

@@ -4,10 +4,55 @@ Date: Thu, 8 Jul 2021 23:23:01 +0200
 Subject: [PATCH] add marker support
 
 
-diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+diff --git a/src/main/java/com/github/weepingmc/util/ColorUtil.java b/src/main/java/com/github/weepingmc/util/ColorUtil.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..db25a5ed8f50ec406ca77441e60cb142ea9596dd
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/util/ColorUtil.java
+@@ -0,0 +1,39 @@
++package com.github.weepingmc.util;
++
++import java.awt.Color;
++
++public class ColorUtil {
++
++        public static Color fromARGB(int argb){
++            return new Color(getR(argb), getG(argb), getB(argb), getA(argb));
++        }
++
++        public static int toARGB(Color color){
++            return getARGBInt(color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue());
++        }
++
++        private static int getA(int argb) {
++            return (argb >> 24) & 0xFF;
++        }
++
++        private static int getR(int argb) {
++            return (argb >> 16) & 0xFF;
++        }
++
++        private static int getG(int argb) {
++            return (argb >> 8) & 0xFF;
++        }
++
++        private static int getB(int argb) {
++            return argb & 0xFF;
++        }
++
++        private static int getARGBInt(int a, int r, int g, int b) {
++            int encoded = 0;
++            encoded = encoded | b;
++            encoded = encoded | (g << 8);
++            encoded = encoded | (r << 16);
++            encoded = encoded | (a << 24);
++            return encoded;
++        }
++}
+diff --git a/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 index d85c18befce2b290c7e17a6b12ae3cf676f27296..2f3297c8308acb6a8536ed1e81ddffd8b98246b5 100644
---- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-+++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+--- a/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
++++ b/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 @@ -5,15 +5,21 @@ import com.destroystokyo.paper.profile.PlayerProfile;
  import com.github.weepingmc.packet.ChainablePacketStep.DelayPacketStep;
  import com.github.weepingmc.packet.ChainablePacketStep.NmsPacketStep;
@@ -83,48 +128,3 @@ index d85c18befce2b290c7e17a6b12ae3cf676f27296..2f3297c8308acb6a8536ed1e81ddffd8
      @Override
      public void send(@Nonnull Collection<? extends org.bukkit.entity.Player> players) {
          initial.execute(players);
-diff --git a/src/main/java/com/github/weepingmc/util/ColorUtil.java b/src/main/java/com/github/weepingmc/util/ColorUtil.java
-new file mode 100644
-index 0000000000000000000000000000000000000000..db25a5ed8f50ec406ca77441e60cb142ea9596dd
---- /dev/null
-+++ b/src/main/java/com/github/weepingmc/util/ColorUtil.java
-@@ -0,0 +1,39 @@
-+package com.github.weepingmc.util;
-+
-+import java.awt.Color;
-+
-+public class ColorUtil {
-+
-+        public static Color fromARGB(int argb){
-+            return new Color(getR(argb), getG(argb), getB(argb), getA(argb));
-+        }
-+
-+        public static int toARGB(Color color){
-+            return getARGBInt(color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue());
-+        }
-+
-+        private static int getA(int argb) {
-+            return (argb >> 24) & 0xFF;
-+        }
-+
-+        private static int getR(int argb) {
-+            return (argb >> 16) & 0xFF;
-+        }
-+
-+        private static int getG(int argb) {
-+            return (argb >> 8) & 0xFF;
-+        }
-+
-+        private static int getB(int argb) {
-+            return argb & 0xFF;
-+        }
-+
-+        private static int getARGBInt(int a, int r, int g, int b) {
-+            int encoded = 0;
-+            encoded = encoded | b;
-+            encoded = encoded | (g << 8);
-+            encoded = encoded | (r << 16);
-+            encoded = encoded | (a << 24);
-+            return encoded;
-+        }
-+}

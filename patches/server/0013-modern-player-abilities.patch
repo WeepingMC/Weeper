@@ -4,10 +4,10 @@ Date: Mon, 16 Oct 2023 19:48:03 +0200
 Subject: [PATCH] modern player abilities
 
 
-diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
+diff --git a/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java b/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
 index dc53aa2aa5b9613c6f99c6429e70b6e4d6047144..f1378ca7a65fa10e101be0a5ed79b1f080a8dbb9 100644
---- a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
-+++ b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
+--- a/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
++++ b/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
 @@ -1,20 +1,26 @@
  package com.github.weepingmc.packet;
  
@@ -87,10 +87,10 @@ index dc53aa2aa5b9613c6f99c6429e70b6e4d6047144..f1378ca7a65fa10e101be0a5ed79b1f0
 +        return playerAbilitiesNMS;
 +    }
  }
-diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+diff --git a/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 index 311e94c1f0a3a2a81c2286981a2ef1bb4fa508ef..705089d71cb5af1f74a6e33cd6b6408c7210bc25 100644
---- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-+++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
+--- a/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
++++ b/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 @@ -45,6 +45,7 @@ import java.util.stream.Collectors;
  
  import static com.github.weepingmc.packet.CraftPacketConversion.from;
