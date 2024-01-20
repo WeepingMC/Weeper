@@ -5,7 +5,7 @@ Subject: [PATCH] player track entity events
 
 
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 892a334d1b1c0784ed6838d1aa066403998b9a9f..094684de6f67c21bdd4d07aa4c6280971ef40791 100644
+index ae188ae314336d971303023c7b7b8ecf32bae253..e1da0d504bd0369639fdc90b6d580ee0a5ab9668 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
 @@ -1,5 +1,6 @@
@@ -31,7 +31,7 @@ index 892a334d1b1c0784ed6838d1aa066403998b9a9f..094684de6f67c21bdd4d07aa4c628097
  
              });
              this.lastPassengers = list;
-@@ -273,6 +276,7 @@ public class ServerEntity {
+@@ -279,6 +282,7 @@ public class ServerEntity {
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
          player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));
@@ -39,7 +39,7 @@ index 892a334d1b1c0784ed6838d1aa066403998b9a9f..094684de6f67c21bdd4d07aa4c628097
      }
  
      public void addPairing(ServerPlayer player) {
-@@ -295,7 +299,11 @@ public class ServerEntity {
+@@ -301,7 +305,11 @@ public class ServerEntity {
          Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket();
  
          this.yHeadRotp = Mth.floor(this.entity.getYHeadRot() * 256.0F / 360.0F);
