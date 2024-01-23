@@ -6,7 +6,7 @@ Subject: [PATCH] add api to configure additional resourcepacks in
 
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index da7b5ef5693e0bceb1719742f19def8e4e4ab8a3..4d2167276137bc955fc6213a7a0662433432bf0e 100644
+index bf22940f508774a47b1992ee2db8642df247ad08..a49909ceee8a0163d4f4964de202a97e637ba88c 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -14,6 +14,7 @@ import com.mojang.authlib.GameProfileRepository;
@@ -33,10 +33,10 @@ index da7b5ef5693e0bceb1719742f19def8e4e4ab8a3..4d2167276137bc955fc6213a7a066243
  import net.minecraft.CrashReport;
  import net.minecraft.ReportedException;
  import net.minecraft.SharedConstants;
-@@ -2907,4 +2910,11 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -2906,4 +2909,11 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          }
      }
-     // Paper end
+     // Paper end - Add tick times API and /mspt command
 +
 +    // Weeper start - configuration phase resource pack
 +    public final Set<MinecraftServer.ServerResourcePackInfo> pluginServerResourcePacks = new HashSet<>();
@@ -46,7 +46,7 @@ index da7b5ef5693e0bceb1719742f19def8e4e4ab8a3..4d2167276137bc955fc6213a7a066243
 +    // Weeper start - configuration phase resource pack
  }
 diff --git a/src/main/java/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
-index cae10b963d153fb1777b18054796a45b2809342b..cc43a08a2fd0172a7e53e3ff6139441fec388dda 100644
+index 76f31845fe50200d09e5ab6a6c08da00444414ad..87882596e2054a98283344c7330b96f553f614be 100644
 --- a/src/main/java/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
 +++ b/src/main/java/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
 @@ -85,7 +85,7 @@ public class ServerConfigurationPacketListenerImpl extends ServerCommonPacketLis
@@ -89,7 +89,7 @@ index 173c9d6c12e0f9d6cef46813cc7effc558d0e145..58e7e0bf5edad6a027a15297e27b7baa
  
      @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index f419fda3175a1f87d3365c183b2f8663547dbac3..7e2fb18ee27dfedb450abd416b4171521f6366eb 100644
+index aaa1d0e0e609d01d1e2223666299ce6a3f36a0b5..c606c1ebcea497bab56292334195f77af254a196 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -44,6 +44,8 @@ import java.util.logging.Logger;

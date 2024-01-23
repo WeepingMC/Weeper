@@ -37,7 +37,7 @@ index 0000000000000000000000000000000000000000..82999ac66a92d04bf0499fe53bf4e268
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index ed11fec21b0c3a60fe8c14e699eb3a3823044d66..c32064fd53a6bca9e997cf92318f8b2001afb838 100644
+index e0ee45036b9bf14a6e2013fe291cde0402b85b1f..9218130386611ab91f35c953ab89c5ce2fb3f03d 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -1,6 +1,10 @@
@@ -61,7 +61,7 @@ index ed11fec21b0c3a60fe8c14e699eb3a3823044d66..c32064fd53a6bca9e997cf92318f8b20
      private final Map<UUID, ServerPlayer> playersByUUID = Maps.newHashMap();
      private final UserBanList bans;
      private final IpBanList ipBans;
-@@ -722,7 +727,17 @@ public abstract class PlayerList {
+@@ -721,7 +726,17 @@ public abstract class PlayerList {
          // depending on the outcome.
          SocketAddress socketaddress = loginlistener.connection.getRemoteAddress();
  
@@ -80,7 +80,7 @@ index ed11fec21b0c3a60fe8c14e699eb3a3823044d66..c32064fd53a6bca9e997cf92318f8b20
          Player player = entity.getBukkitEntity();
          PlayerLoginEvent event = new PlayerLoginEvent(player, loginlistener.connection.hostname, ((java.net.InetSocketAddress) socketaddress).getAddress(), ((java.net.InetSocketAddress) loginlistener.connection.channel.remoteAddress()).getAddress());
  
-@@ -1599,4 +1614,32 @@ public abstract class PlayerList {
+@@ -1598,4 +1613,32 @@ public abstract class PlayerList {
      public boolean isAllowCheatsForAllPlayers() {
          return this.allowCheatsForAllPlayers;
      }
@@ -114,7 +114,7 @@ index ed11fec21b0c3a60fe8c14e699eb3a3823044d66..c32064fd53a6bca9e997cf92318f8b20
 +    // Weeper end - allow offline editing of playerData
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 222ec7b61fabd067ef51f9fed45c8da5980df9cf..f419fda3175a1f87d3365c183b2f8663547dbac3 100644
+index 26e2d0e1c232835b23b0627857591c91a331d613..aaa1d0e0e609d01d1e2223666299ce6a3f36a0b5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -1,5 +1,6 @@
