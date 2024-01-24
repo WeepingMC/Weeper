@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Wed, 24 Jan 2024 11:16:34 +0100
+Subject: [PATCH] activate server pack command in normal game
+
+
+diff --git a/src/main/java/net/minecraft/commands/Commands.java b/src/main/java/net/minecraft/commands/Commands.java
+index b7f338e982d0dcab99137ab6dc200b82ac6b7cba..adfeb50a9ca77b4dc65b6a46228adf12adb0bef1 100644
+--- a/src/main/java/net/minecraft/commands/Commands.java
++++ b/src/main/java/net/minecraft/commands/Commands.java
+@@ -229,11 +229,12 @@ public class Commands {
+             DebugMobSpawningCommand.register(this.dispatcher);
+             WardenSpawnTrackerCommand.register(this.dispatcher);
+             SpawnArmorTrimsCommand.register(this.dispatcher);
+-            ServerPackCommand.register(this.dispatcher);
++            // Weeper - activate server pack command in normal game -> moved down
+             if (environment.includeDedicated) {
+                 DebugConfigCommand.register(this.dispatcher);
+             }
+         }
++        ServerPackCommand.register(this.dispatcher); // Weeper - activate server pack command in normal game
+ 
+         if (environment.includeDedicated) {
+             BanIpCommands.register(this.dispatcher);
