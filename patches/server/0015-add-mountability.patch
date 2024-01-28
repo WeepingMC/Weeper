@@ -23,7 +23,7 @@ index 89b7e43a2938da79b7487db89980ac5ef2d48033..51b7a6f83820a85eb9d861dd3ec83832
          this.vehicle = entity.getId();
          List<Entity> list = entity.getPassengers();
 diff --git a/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-index 705089d71cb5af1f74a6e33cd6b6408c7210bc25..78da22842723f4203d20d4d515b90d439772583c 100644
+index 705089d71cb5af1f74a6e33cd6b6408c7210bc25..ba58e022fdc3f7fd61d98d3b62cdcfc8f5c02f11 100644
 --- a/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 +++ b/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 @@ -126,6 +126,13 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
@@ -31,7 +31,7 @@ index 705089d71cb5af1f74a6e33cd6b6408c7210bc25..78da22842723f4203d20d4d515b90d43
      }
  
 +    @Override
-+    public @NotNull PacketStepBuilder mountEntity(int entityId, int... passenger) {
++    public @NotNull PacketStepBuilder mountEntity(int entityId, int @NotNull ... passenger) {
 +        ClientboundSetPassengersPacket passengersPacket = new ClientboundSetPassengersPacket(entityId, passenger);
 +        initial.setNext(of(passengersPacket));
 +        return this;

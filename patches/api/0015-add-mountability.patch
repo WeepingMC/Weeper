@@ -5,7 +5,7 @@ Subject: [PATCH] add mountability
 
 
 diff --git a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
-index 0877b45695ddc2795869f41d9cf937d049b85609..d2e500eb819b7d3f24dd7684f240e5637a4db701 100644
+index 0877b45695ddc2795869f41d9cf937d049b85609..6fe113e494a8434a09dd6124c60153a75dbdb24b 100644
 --- a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
 +++ b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
 @@ -48,6 +48,9 @@ public interface PacketStepBuilder {
@@ -13,7 +13,7 @@ index 0877b45695ddc2795869f41d9cf937d049b85609..d2e500eb819b7d3f24dd7684f240e563
      PacketStepBuilder teleportEntity(int entityId, @NotNull Location location, boolean onGround);
  
 +    @NotNull
-+    PacketStepBuilder mountEntity(int entityId, int... passenger);
++    PacketStepBuilder mountEntity(int entityId, int @NotNull ... passenger);
 +
      @NotNull
      PacketStepBuilder sendBlockChange(@NotNull Location location, @NotNull BlockData blockData);

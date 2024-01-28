@@ -6,7 +6,7 @@ Subject: [PATCH] add api to configure additional resourcepacks in
 
 
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index a130bcebc48dfac622b8341985c90b6ec3969ca5..602e7c7f1e12c48329a50837142f9f10468f2723 100644
+index 0280c008be8817564eed64c1bd0348ba5605f2d1..3b451a3156ec502fad9ea613efa22a14d6675c55 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -14,6 +14,7 @@ import com.mojang.authlib.GameProfileRepository;
@@ -33,7 +33,7 @@ index a130bcebc48dfac622b8341985c90b6ec3969ca5..602e7c7f1e12c48329a50837142f9f10
  import net.minecraft.CrashReport;
  import net.minecraft.ReportedException;
  import net.minecraft.SharedConstants;
-@@ -2905,4 +2908,11 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -2909,4 +2912,11 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
          }
      }
      // Paper end - Add tick times API and /mspt command
@@ -89,7 +89,7 @@ index 173c9d6c12e0f9d6cef46813cc7effc558d0e145..58e7e0bf5edad6a027a15297e27b7baa
  
      @Override
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 39665f94765daf7972bf4b5b9eae0cab43c24bd0..2b5265ed4a0a9a0d713345939fc639783ad117fc 100644
+index 138a5b32c00145a6d77ce296feb7de2f96f8da14..4b0de2d91da3cbbb0d58705eeb23a4e9fe777028 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -44,6 +44,8 @@ import java.util.logging.Logger;

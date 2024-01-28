@@ -5,10 +5,10 @@ Subject: [PATCH] add deprecation annotations where javadoc is bitching
 
 
 diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/World.java
-index beb475a729d30e824730cf51b2bb24b525ccfc13..0867474e4612ed2e8c1dff0b65980056eae4245e 100644
+index 6dec75095c7d0637b30326c7730ed5f983f665c9..89f3ef5188dccd1ffcfc4e2d36c9d9d1b69007b9 100644
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
-@@ -4307,7 +4307,7 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
+@@ -4311,7 +4311,7 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
      void triggerBlockAnimation(@NotNull Location location, int action, int actionParameter);
  
      /**
