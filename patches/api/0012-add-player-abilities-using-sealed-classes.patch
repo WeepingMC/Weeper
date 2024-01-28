@@ -36,11 +36,13 @@ index 0000000000000000000000000000000000000000..8d28e3e1ddd662fb15e0e9033c770d27
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/options/abilities/PlayerAbility.java b/src/main/java/com/github/weepingmc/packet/options/abilities/PlayerAbility.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..557b73cbdf1c2e1a31db83368ecf39a1fd53704b
+index 0000000000000000000000000000000000000000..cb5f3a1d55b89038b626638e29a18a8914b8c601
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/options/abilities/PlayerAbility.java
-@@ -0,0 +1,32 @@
+@@ -0,0 +1,34 @@
 +package com.github.weepingmc.packet.options.abilities;
++
++import org.jetbrains.annotations.NotNull;
 +
 +public sealed interface PlayerAbility permits AllowFlying, CreativeModeInstantBreak, WalkSpeedAbility, FlySpeedAbility, Flying, Invulnerable {
 +    PlayerAbility ALLOW_FLYING = new AllowFlying();
@@ -48,11 +50,11 @@ index 0000000000000000000000000000000000000000..557b73cbdf1c2e1a31db83368ecf39a1
 +    PlayerAbility FLYING = new Flying();
 +    PlayerAbility INVULNERABLE = new Invulnerable();
 +
-+    static PlayerAbility flySpeedAbilityOf(float speed){
++    static @NotNull PlayerAbility flySpeedAbilityOf(float speed){
 +        return new FlySpeedAbility(speed);
 +    }
 +
-+    static PlayerAbility walkSpeedAbilityOf(float speed){
++    static @NotNull PlayerAbility walkSpeedAbilityOf(float speed){
 +        return new WalkSpeedAbility(speed);
 +    }
 +}
