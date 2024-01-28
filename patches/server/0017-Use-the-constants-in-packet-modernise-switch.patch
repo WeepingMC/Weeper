@@ -4,10 +4,10 @@ Date: Wed, 27 Dec 2023 14:19:33 +0100
 Subject: [PATCH] Use the constants in packet, modernise switch
 
 
-diff --git a/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java b/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
+diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
 index f1378ca7a65fa10e101be0a5ed79b1f080a8dbb9..d238988ef96975c8e59c7a8784192f41715f0079 100644
---- a/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
-+++ b/src/main/java/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
+--- a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
++++ b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
 @@ -11,6 +11,7 @@ import java.util.ArrayList;
  import java.util.EnumMap;
  import java.util.List;
