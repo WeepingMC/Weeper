@@ -1,0 +1,21 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Wed, 31 Jan 2024 21:42:20 +0100
+Subject: [PATCH] add posibility to trigger reconfiguration
+
+
+diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
+index 815631a6157b87a9ead270fe0b11ac3892a3fbf4..01791aa07f1e4167e1978c65c1c5454f2f442edd 100644
+--- a/src/main/java/org/bukkit/entity/Player.java
++++ b/src/main/java/org/bukkit/entity/Player.java
+@@ -3578,4 +3578,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+     @Override
+     Spigot spigot();
+     // Spigot end
++    // Weeper start - trigger reconfiguration
++    /**
++     * Triggers Configuration phase
++     */
++    void triggerReconfiguration();
++    // Weeper end - trigger reconfiguration
+ }
