@@ -5,7 +5,7 @@ Subject: [PATCH] add posibility to trigger reconfiguration
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 5c1e016de183933c5458deaae257b978e6350307..590be5214acf2a76cbd8415eb08bc835662d54b6 100644
+index 39b25c2478eadd373383a3445a7f27ea30d18550..514083e4959bf500b9570dba0f1126d0b3bb7b1a 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 @@ -78,6 +78,7 @@ import net.minecraft.server.PlayerAdvancements;
@@ -16,7 +16,7 @@ index 5c1e016de183933c5458deaae257b978e6350307..590be5214acf2a76cbd8415eb08bc835
  import net.minecraft.server.network.ServerGamePacketListenerImpl;
  import net.minecraft.server.players.UserWhiteListEntry;
  import net.minecraft.sounds.SoundEvent;
-@@ -3361,4 +3362,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -3376,4 +3377,13 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
      public void setSendViewDistance(final int viewDistance) {
          this.getHandle().setSendViewDistance(viewDistance);
      }
