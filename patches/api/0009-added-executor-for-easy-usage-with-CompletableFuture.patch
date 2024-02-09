@@ -5,7 +5,7 @@ Subject: [PATCH] added executor for easy usage with CompletableFutures
 
 
 diff --git a/src/main/java/org/bukkit/plugin/Plugin.java b/src/main/java/org/bukkit/plugin/Plugin.java
-index 4eb639fbb46a0848be207149ea433455550fae1c..3a72e97a6c5ce06c5be2d16f93d8fcb44fe2c127 100644
+index ef431219fd2bce48bad63b6b92c99d54348d480e..b1c7ecf401dfaa5a4c22af2c73e3d6d1bf6f94c5 100644
 --- a/src/main/java/org/bukkit/plugin/Plugin.java
 +++ b/src/main/java/org/bukkit/plugin/Plugin.java
 @@ -2,12 +2,14 @@ package org.bukkit.plugin;
@@ -23,7 +23,7 @@ index 4eb639fbb46a0848be207149ea433455550fae1c..3a72e97a6c5ce06c5be2d16f93d8fcb4
  import org.jetbrains.annotations.NotNull;
  import org.jetbrains.annotations.Nullable;
  
-@@ -117,6 +119,22 @@ public interface Plugin extends TabExecutor {
+@@ -117,6 +119,22 @@ public interface Plugin extends TabExecutor, io.papermc.paper.plugin.lifecycle.e
      @NotNull
      public Server getServer();
  
@@ -47,7 +47,7 @@ index 4eb639fbb46a0848be207149ea433455550fae1c..3a72e97a6c5ce06c5be2d16f93d8fcb4
       * Returns a value indicating whether or not this plugin is currently
       * enabled
 diff --git a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
-index 5cd236965de12392d8c7aa81307c0ff1cc8673b1..69405fc9098571e60b0b4f77553f4a94e68d8d30 100644
+index 34037d3da2c536bac088e0ff629ee8f1daccc65b..d39317393fde69d3f8a56ec52b8c5e698acb80f0 100644
 --- a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
 +++ b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
 @@ -12,6 +12,7 @@ import java.io.Reader;
@@ -66,7 +66,7 @@ index 5cd236965de12392d8c7aa81307c0ff1cc8673b1..69405fc9098571e60b0b4f77553f4a94
  import org.jetbrains.annotations.NotNull;
  import org.jetbrains.annotations.Nullable;
  
-@@ -104,6 +106,18 @@ public abstract class JavaPlugin extends PluginBase {
+@@ -109,6 +111,18 @@ public abstract class JavaPlugin extends PluginBase {
          return server;
      }
  
@@ -86,7 +86,7 @@ index 5cd236965de12392d8c7aa81307c0ff1cc8673b1..69405fc9098571e60b0b4f77553f4a94
       * Returns a value indicating whether or not this plugin is currently
       * enabled
 diff --git a/src/test/java/org/bukkit/plugin/TestPlugin.java b/src/test/java/org/bukkit/plugin/TestPlugin.java
-index 43b58e920e739bb949ac0673e9ef73ba7b500dc9..d56bfe14a83b3df7fb64e4f16cc09cf42513a8e8 100644
+index affe88cf8e98a787e197936f5fc443464a2343c6..fb563802aea3fc9a7a18fdd92dcd8a8f6d33d837 100644
 --- a/src/test/java/org/bukkit/plugin/TestPlugin.java
 +++ b/src/test/java/org/bukkit/plugin/TestPlugin.java
 @@ -1,14 +1,18 @@
