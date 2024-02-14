@@ -5,10 +5,10 @@ Subject: [PATCH] trigger Block animation
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index a139601888b88e8580bdb9c2469386a94abae975..3f24a414bebcd8f430090d8f87a60677cecdd025 100644
+index bfb178c69026e9759e9afaebb9da141b62d1f144..c99c43050c19b61683b49bbb9cd41e75871fbc41 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -55,6 +55,7 @@ import net.minecraft.world.level.ChunkPos;
+@@ -56,6 +56,7 @@ import net.minecraft.world.level.ChunkPos;
  import net.minecraft.world.level.ClipContext;
  import net.minecraft.world.level.GameRules;
  import net.minecraft.world.level.biome.Climate;
@@ -16,7 +16,7 @@ index a139601888b88e8580bdb9c2469386a94abae975..3f24a414bebcd8f430090d8f87a60677
  import net.minecraft.world.level.chunk.ChunkAccess;
  import net.minecraft.world.level.chunk.ChunkStatus;
  import net.minecraft.world.level.chunk.ImposterProtoChunk;
-@@ -2375,6 +2376,17 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -2388,6 +2389,17 @@ public class CraftWorld extends CraftRegionAccessor implements World {
          return (this.getHandle().getDragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().getDragonFight());
      }
  
@@ -32,5 +32,5 @@ index a139601888b88e8580bdb9c2469386a94abae975..3f24a414bebcd8f430090d8f87a60677
 +    // Weeper end
 +
      @Override
-     public PersistentDataContainer getPersistentDataContainer() {
-         return this.persistentDataContainer;
+     public Collection<GeneratedStructure> getStructures(int x, int z) {
+         return this.getStructures(x, z, struct -> true);

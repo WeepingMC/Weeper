@@ -5,10 +5,10 @@ Subject: [PATCH] add posibility to trigger reconfiguration
 
 
 diff --git a/src/main/java/org/bukkit/entity/Player.java b/src/main/java/org/bukkit/entity/Player.java
-index 31aa6ef5fc2b3b88c72f5a15b8cc7a0e50c29f46..4c41aff3eec33c3a0ee0ec2429b5b173f0304101 100644
+index 254a02ddb5dc867c9dd6c2086791f7ab94247fd3..635f7ba441832af7e7db10f6276b84accee0f174 100644
 --- a/src/main/java/org/bukkit/entity/Player.java
 +++ b/src/main/java/org/bukkit/entity/Player.java
-@@ -3619,4 +3619,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
+@@ -3687,4 +3687,10 @@ public interface Player extends HumanEntity, Conversable, OfflinePlayer, PluginM
      @Override
      Spigot spigot();
      // Spigot end
