@@ -37,7 +37,7 @@ index 0000000000000000000000000000000000000000..82999ac66a92d04bf0499fe53bf4e268
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 91feb12732564c90656da487664dbc12e55397fc..6aee9d1c8df75713e5f884999cbeb4c8537474c0 100644
+index 1e5f709115007ff19901c0a6c3cf884d9e4d3a6c..0d0204d63f7e78f9e54783f4a988586f778cab19 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -1,6 +1,10 @@
@@ -51,7 +51,7 @@ index 91feb12732564c90656da487664dbc12e55397fc..6aee9d1c8df75713e5f884999cbeb4c8
  import com.google.common.collect.Lists;
  import com.google.common.collect.Maps;
  import com.google.common.collect.Sets;
-@@ -133,7 +137,8 @@ public abstract class PlayerList {
+@@ -134,7 +138,8 @@ public abstract class PlayerList {
      private static final int SEND_PLAYER_INFO_INTERVAL = 600;
      private static final SimpleDateFormat BAN_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
      private final MinecraftServer server;
@@ -61,7 +61,7 @@ index 91feb12732564c90656da487664dbc12e55397fc..6aee9d1c8df75713e5f884999cbeb4c8
      private final Map<UUID, ServerPlayer> playersByUUID = Maps.newHashMap();
      private final UserBanList bans;
      private final IpBanList ipBans;
-@@ -721,7 +726,17 @@ public abstract class PlayerList {
+@@ -722,7 +727,17 @@ public abstract class PlayerList {
          // depending on the outcome.
          SocketAddress socketaddress = loginlistener.connection.getRemoteAddress();
  
@@ -80,7 +80,7 @@ index 91feb12732564c90656da487664dbc12e55397fc..6aee9d1c8df75713e5f884999cbeb4c8
          Player player = entity.getBukkitEntity();
          PlayerLoginEvent event = new PlayerLoginEvent(player, loginlistener.connection.hostname, ((java.net.InetSocketAddress) socketaddress).getAddress(), ((java.net.InetSocketAddress) loginlistener.connection.channel.remoteAddress()).getAddress());
  
-@@ -1598,4 +1613,32 @@ public abstract class PlayerList {
+@@ -1599,4 +1614,32 @@ public abstract class PlayerList {
      public boolean isAllowCheatsForAllPlayers() {
          return this.allowCheatsForAllPlayers;
      }

@@ -5,7 +5,7 @@ Subject: [PATCH] Make goals public, needs migration to at sometime
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Bee.java b/src/main/java/net/minecraft/world/entity/animal/Bee.java
-index a87a34b0c4c8e5d0cf079025c230b1434c919b54..a61bc6726161329389b883c96a7784111ea6462e 100644
+index f9521a6e115f0c975a7885b024c99eae300b63bf..31c4a5e5c984bdefaf36fc45bf533cd4bc32a13b 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Bee.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Bee.java
 @@ -702,7 +702,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
@@ -90,7 +90,7 @@ index a87a34b0c4c8e5d0cf079025c230b1434c919b54..a61bc6726161329389b883c96a778411
          BaseBeeGoal() {}
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Cat.java b/src/main/java/net/minecraft/world/entity/animal/Cat.java
-index de51ce9875e12961e6e549e87d76f492d2f19787..663987f121e741dc0028a935db486529c255ac7d 100644
+index f760ce7d9df79ef58f8963de3e901cba3e12fcaa..ae44030b85c76f465c0b0ae320d60ed3d7c32922 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Cat.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Cat.java
 @@ -512,7 +512,7 @@ public class Cat extends TamableAnimal implements VariantHolder<CatVariant> {
@@ -112,10 +112,10 @@ index de51ce9875e12961e6e549e87d76f492d2f19787..663987f121e741dc0028a935db486529
          private final Cat cat;
  
 diff --git a/src/main/java/net/minecraft/world/entity/raid/Raider.java b/src/main/java/net/minecraft/world/entity/raid/Raider.java
-index cdbc925ef61b8b439415f0a89368227890bcecb2..ce232a33fba5391031167ff08e82ba57cefc77f5 100644
+index 93bbf7556f9599e9dd90761085a57d78bd521867..fbe77875f76e340e9c8f6dc7e7329d86c6600628 100644
 --- a/src/main/java/net/minecraft/world/entity/raid/Raider.java
 +++ b/src/main/java/net/minecraft/world/entity/raid/Raider.java
-@@ -352,7 +352,7 @@ public abstract class Raider extends PatrollingMonster {
+@@ -355,7 +355,7 @@ public abstract class Raider extends PatrollingMonster {
          }
      }
  
@@ -124,12 +124,3 @@ index cdbc925ef61b8b439415f0a89368227890bcecb2..ce232a33fba5391031167ff08e82ba57
  
          private final Raider raider;
          private final double speedModifier;
-@@ -500,7 +500,7 @@ public abstract class Raider extends PatrollingMonster {
-         }
-     }
- 
--    protected class HoldGroundAttackGoal extends Goal {
-+    public class HoldGroundAttackGoal extends Goal { // Weeper protected -> public
- 
-         private final Raider mob;
-         private final float hostileRadiusSqr;

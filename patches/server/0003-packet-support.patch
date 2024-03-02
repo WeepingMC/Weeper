@@ -758,10 +758,10 @@ index d5f404fb6dc09c48d84b4a3e75c12f2fbb53c224..857cfaaefc00ce5e8878d95560d1f0ba
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 906eded9a2ab61737a30cfe89292a71237ce4eb7..21d1e4944478e7f48224ffbbb35be0a06bd3f974 100644
+index 45439b0cc4ea69e409fd41d4684403c0e0feab12..cebbbdca4dbb4070fa42d21394d2ce8a8862a53b 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -348,7 +348,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -349,7 +349,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
      public int invulnerableTime;
      protected boolean firstTick;
      protected final SynchedEntityData entityData;
@@ -770,7 +770,7 @@ index 906eded9a2ab61737a30cfe89292a71237ce4eb7..21d1e4944478e7f48224ffbbb35be0a0
      protected static final int FLAG_ONFIRE = 0;
      private static final int FLAG_SHIFT_KEY_DOWN = 1;
      private static final int FLAG_SPRINTING = 3;
-@@ -357,11 +357,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+@@ -358,11 +358,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
      protected static final int FLAG_GLOWING = 6;
      protected static final int FLAG_FALL_FLYING = 7;
      private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
@@ -786,10 +786,10 @@ index 906eded9a2ab61737a30cfe89292a71237ce4eb7..21d1e4944478e7f48224ffbbb35be0a0
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 902c0e7f2a167845f46adef4578bc71ca8cabfe8..fd61657863a14216f1f1d3cb671e793f60c0ee4c 100644
+index 23570a0b1227a840b9c1e6ae326827ea655bb5f7..d6b465340b53f28b0e0251c041396bf0889e677a 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -176,7 +176,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -177,7 +177,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
      private static final EntityDataAccessor<Boolean> DATA_EFFECT_AMBIENCE_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
      public static final EntityDataAccessor<Integer> DATA_ARROW_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
      private static final EntityDataAccessor<Integer> DATA_STINGER_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);

@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 376e8983fdfdbb6c3e5fd8ad0f6a05e655b622bf..c7f3eed79e80183b656bf0b41e7b019b769362bf 100644
+index 241808d8619e17c0681f79acbbc98af5bf52dd89..d3e8d01a15f57fdc0cc50ce85307d20dcb1aab09 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,8 +13,8 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -19,7 +19,7 @@ index 376e8983fdfdbb6c3e5fd8ad0f6a05e655b622bf..c7f3eed79e80183b656bf0b41e7b019b
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -69,7 +69,7 @@ tasks.jar {
+@@ -71,7 +71,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
