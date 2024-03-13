@@ -1,2 +1,2 @@
 // Uncomment to enable the 'test-plugin' project
-include(":test-plugin")
+// include(":test-plugin")
