@@ -32,15 +32,11 @@ jobs:
         run: ./gradlew createReobfPaperclipJar
       - name: Generate moj Paperclip jar
         run: ./gradlew createMojmapPaperclipJar
-      - uses: "actions/upload-artifact@v3"
+      - uses: actions/upload-artifact@v4
         with:
           name: "paperclip"
           path: "build/libs/Weeper-paperclip-*-mojmap.jar"
-      - uses: "actions/upload-artifact@v3"
+      - uses: actions/upload-artifact@v4
         with:
           name: "paperclip reobf"
           path: "build/libs/Weeper-paperclip-*-reobf.jar"
-      - uses: "actions/upload-artifact@v3"
-        with:
-          name: "api"
-          path: "Weeper-API/build/libs/Weeper-API-*.jar"
