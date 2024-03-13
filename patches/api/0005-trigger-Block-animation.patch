@@ -5,10 +5,10 @@ Subject: [PATCH] trigger Block animation
 
 
 diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/World.java
-index c5fe36050eeaff80cfb989fe2f38370215af6fe5..116e00664c4af097ea4f3ed69625475f052068a2 100644
+index c5fe36050eeaff80cfb989fe2f38370215af6fe5..29260a5d313cc8c43b43d127e82c917db8780e43 100644
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
-@@ -4367,4 +4367,23 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
+@@ -4367,4 +4367,15 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
              }
          }
      }
@@ -22,13 +22,5 @@ index c5fe36050eeaff80cfb989fe2f38370215af6fe5..116e00664c4af097ea4f3ed69625475f
 +     * @param actionParameter the parameter of that action
 +     */
 +    void triggerBlockAnimation(@NotNull Location location, int action, int actionParameter);
-+
-+    /**
-+     * @see {@link #triggerBlockAnimation(Location, int, int)}
-+     */
-+    @Deprecated(forRemoval = true)
-+    default void triggerBlockEntityEvent(@NotNull Location location, int action, int actionParameter){
-+        triggerBlockAnimation(location, action, actionParameter);
-+    }
 +    // Weeper end
  }
