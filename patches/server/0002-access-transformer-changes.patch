@@ -1,0 +1,48 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 16 Mar 2024 23:30:52 +0100
+Subject: [PATCH] access transformer changes
+
+todo move to at file when at works for forks
+
+diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
+index be2220457e941803b14d78c550d0db777c79a886..5f24d8c491014a9bf5c19cdff4ae0310bdc26f18 100644
+--- a/src/main/java/net/minecraft/world/entity/Entity.java
++++ b/src/main/java/net/minecraft/world/entity/Entity.java
+@@ -349,7 +349,7 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+     public int invulnerableTime;
+     protected boolean firstTick;
+     protected final SynchedEntityData entityData;
+-    protected static final EntityDataAccessor<Byte> DATA_SHARED_FLAGS_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.BYTE);
++    public static final EntityDataAccessor<Byte> DATA_SHARED_FLAGS_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.BYTE); // Weeper private -> public
+     protected static final int FLAG_ONFIRE = 0;
+     private static final int FLAG_SHIFT_KEY_DOWN = 1;
+     private static final int FLAG_SPRINTING = 3;
+@@ -358,11 +358,11 @@ public abstract class Entity implements Nameable, EntityAccess, CommandSource, S
+     protected static final int FLAG_GLOWING = 6;
+     protected static final int FLAG_FALL_FLYING = 7;
+     private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
+-    private static final EntityDataAccessor<Optional<Component>> DATA_CUSTOM_NAME = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.OPTIONAL_COMPONENT);
+-    private static final EntityDataAccessor<Boolean> DATA_CUSTOM_NAME_VISIBLE = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.BOOLEAN);
++    public static final EntityDataAccessor<Optional<Component>> DATA_CUSTOM_NAME = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.OPTIONAL_COMPONENT); // Weeper private -> public
++    public static final EntityDataAccessor<Boolean> DATA_CUSTOM_NAME_VISIBLE = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.BOOLEAN); // Weeper private -> public
+     private static final EntityDataAccessor<Boolean> DATA_SILENT = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.BOOLEAN);
+     private static final EntityDataAccessor<Boolean> DATA_NO_GRAVITY = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.BOOLEAN);
+-    protected static final EntityDataAccessor<net.minecraft.world.entity.Pose> DATA_POSE = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.POSE);
++    public static final EntityDataAccessor<net.minecraft.world.entity.Pose> DATA_POSE = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.POSE); // Weeper -> public
+     private static final EntityDataAccessor<Integer> DATA_TICKS_FROZEN = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
+     private EntityInLevelCallback levelCallback;
+     private final VecDeltaCodec packetPositionCodec;
+diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+index 23570a0b1227a840b9c1e6ae326827ea655bb5f7..d6b465340b53f28b0e0251c041396bf0889e677a 100644
+--- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
++++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
+@@ -177,7 +177,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+     private static final EntityDataAccessor<Boolean> DATA_EFFECT_AMBIENCE_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
+     public static final EntityDataAccessor<Integer> DATA_ARROW_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
+     private static final EntityDataAccessor<Integer> DATA_STINGER_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
+-    private static final EntityDataAccessor<Optional<BlockPos>> SLEEPING_POS_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
++    public static final EntityDataAccessor<Optional<BlockPos>> SLEEPING_POS_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS); // Weeper private -> public
+     protected static final float DEFAULT_EYE_HEIGHT = 1.74F;
+     protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F);
+     public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
