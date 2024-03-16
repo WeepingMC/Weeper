@@ -5,10 +5,10 @@ Subject: [PATCH] allways update players added to team
 
 
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-index 8defc1b69d1b267d9cc07aed359e710ef9ba90ee..d639773964fb9a6ca07cee58b7cb41807b9334ae 100644
+index 1c5d3cae93442facd6453a09bbba6d9451640228..1c1954ae8bf79ead299d43ed3952511946a2d2df 100644
 --- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-@@ -106,7 +106,7 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+@@ -105,7 +105,7 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
      public PacketStepBuilder setPlayerTeam(@Nonnull Team team, @Nonnull TeamMode teamMode) {
          var nmsTeam = ((CraftTeam)team).getHandle();
          var packet = switch (teamMode){

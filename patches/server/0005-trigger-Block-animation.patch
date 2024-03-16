@@ -1,0 +1,50 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sat, 19 Jun 2021 15:08:28 +0200
+Subject: [PATCH] trigger Block animation
+
+
+diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
+index b2494059a8b7eabb352e3b449879fd5410e598a1..eacd3780aa20ceaa5c4a6ea003441ce5b79ce889 100644
+--- a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
++++ b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
+@@ -73,12 +73,11 @@ public final class CraftPacketConversion {
+ 
+     static int fromAnimation(Animation animation) {
+         return switch (animation) {
+-            case SWING_MAIN_ARM -> 0;
+-            case TAKE_DAMAGE -> 1;
+-            case LEAVE_BED -> 2;
+-            case SWING_OFFHAND -> 3;
+-            case CRITICAL_EFFECT -> 4;
+-            case MAGIC_CRITICAL_EFFECT -> 5;
++            case SWING_MAIN_ARM, SWING_MAIN_HAND -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.SWING_MAIN_HAND;
++            case LEAVE_BED -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.WAKE_UP;
++            case SWING_OFFHAND -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.SWING_OFF_HAND;
++            case CRITICAL_EFFECT, TAKE_DAMAGE, CRITICAL_HIT -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.CRITICAL_HIT;
++            case MAGIC_CRITICAL_EFFECT -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.MAGIC_CRITICAL_HIT;
+         };
+     }
+ 
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index bfb178c69026e9759e9afaebb9da141b62d1f144..b6df75cb36fde5082bd4fd5d92d11ab2cc98e24b 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -2388,6 +2388,17 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+         return (this.getHandle().getDragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().getDragonFight());
+     }
+ 
++
++    // Weeper start
++    @Override
++    public void triggerBlockAnimation(@NotNull Location location,
++                                      int action, int actionParameter) {
++        BlockPos position = new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ());
++        net.minecraft.world.level.block.entity.BlockEntity blockEntity = world.getBlockEntity(position, true);
++        world.blockEvent(position, blockEntity.getBlockState().getBlock(), action, actionParameter);
++    }
++    // Weeper end
++
+     @Override
+     public Collection<GeneratedStructure> getStructures(int x, int z) {
+         return this.getStructures(x, z, struct -> true);

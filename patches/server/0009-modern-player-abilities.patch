@@ -5,10 +5,10 @@ Subject: [PATCH] modern player abilities
 
 
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
-index c7e3556894aed7d09d8323155d9467a2a7930262..1fd861001d19ab3c14b6239764d53621b0b07c32 100644
+index eacd3780aa20ceaa5c4a6ea003441ce5b79ce889..3e01db6dd2bcda8a50c23d66a11ffd1b329ac6db 100644
 --- a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
-@@ -80,7 +80,7 @@ public final class CraftPacketConversion {
+@@ -81,7 +81,7 @@ public final class CraftPacketConversion {
          };
      }
  
@@ -17,7 +17,7 @@ index c7e3556894aed7d09d8323155d9467a2a7930262..1fd861001d19ab3c14b6239764d53621
          Abilities playerAbilitiesNMS = new Abilities();
  
          for (PlayerAbility playerAbilitiy : playerAbilities) {
-@@ -93,4 +93,26 @@ public final class CraftPacketConversion {
+@@ -94,4 +94,26 @@ public final class CraftPacketConversion {
          }
          return playerAbilitiesNMS;
      }
@@ -45,10 +45,10 @@ index c7e3556894aed7d09d8323155d9467a2a7930262..1fd861001d19ab3c14b6239764d53621
 +    }
  }
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-index d639773964fb9a6ca07cee58b7cb41807b9334ae..500ac16dd4a7b379dac0d45e90111a71e1027012 100644
+index 1c1954ae8bf79ead299d43ed3952511946a2d2df..c0846ea78dc75235e3d85a05ef42de356ed5bd64 100644
 --- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-@@ -268,14 +268,21 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+@@ -267,14 +267,21 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
      }
  
      @Override

@@ -5,7 +5,7 @@ Subject: [PATCH] api generator changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index f90897e646ebdf28c0f972b7d760d073c7b2b72d..0f09cdaae5f70172e2016288198b8759489251e6 100644
+index f90897e646ebdf28c0f972b7d760d073c7b2b72d..a1a6c08899511275666485760c576b29c7c7dd34 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -78,7 +78,7 @@ dependencies {
