@@ -236,10 +236,10 @@ index 0000000000000000000000000000000000000000..a51cf8bfda811b2162bef4d67122619b
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..b2494059a8b7eabb352e3b449879fd5410e598a1
+index 0000000000000000000000000000000000000000..eacd3780aa20ceaa5c4a6ea003441ce5b79ce889
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
-@@ -0,0 +1,98 @@
+@@ -0,0 +1,97 @@
 +package com.github.weepingmc.packet;
 +
 +import java.util.ArrayList;
@@ -315,12 +315,11 @@ index 0000000000000000000000000000000000000000..b2494059a8b7eabb352e3b449879fd54
 +
 +    static int fromAnimation(Animation animation) {
 +        return switch (animation) {
-+            case SWING_MAIN_ARM -> 0;
-+            case TAKE_DAMAGE -> 1;
-+            case LEAVE_BED -> 2;
-+            case SWING_OFFHAND -> 3;
-+            case CRITICAL_EFFECT -> 4;
-+            case MAGIC_CRITICAL_EFFECT -> 5;
++            case SWING_MAIN_ARM, SWING_MAIN_HAND -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.SWING_MAIN_HAND;
++            case LEAVE_BED -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.WAKE_UP;
++            case SWING_OFFHAND -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.SWING_OFF_HAND;
++            case CRITICAL_EFFECT, TAKE_DAMAGE, CRITICAL_HIT -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.CRITICAL_HIT;
++            case MAGIC_CRITICAL_EFFECT -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.MAGIC_CRITICAL_HIT;
 +        };
 +    }
 +
@@ -394,7 +393,7 @@ index 0000000000000000000000000000000000000000..6d65b30700692a9254998a94952d9938
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..f575091d72752efea85c05d998772e21281d815e
+index 0000000000000000000000000000000000000000..175f3a2a3d1d87c065707911d64a669ff0be5729
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 @@ -0,0 +1,266 @@
@@ -485,7 +484,7 @@ index 0000000000000000000000000000000000000000..f575091d72752efea85c05d998772e21
 +    public PacketStepBuilder setPlayerTeam(@Nonnull Team team, @Nonnull TeamMode teamMode) {
 +        var nmsTeam = ((CraftTeam)team).getHandle();
 +        var packet = switch (teamMode){
-+            case CREATE_TEAM, UPDATE_TEAM_INFO -> ClientboundSetPlayerTeamPacket.createAddOrModifyPacket(nmsTeam, teamMode == TeamMode.UPDATE_TEAM_INFO);
++            case CREATE_TEAM, UPDATE_TEAM_INFO -> ClientboundSetPlayerTeamPacket.createAddOrModifyPacket(nmsTeam, true);
 +            case REMOVE_TEAM -> ClientboundSetPlayerTeamPacket.createRemovePacket(nmsTeam);
 +            case ADD_PLAYERS_TO_TEAM, REMOVE_PLAYERS_FROM_TEAM -> {
 +                var operation = (teamMode == TeamMode.ADD_PLAYERS_TO_TEAM) ? Action.ADD : Action.REMOVE;
