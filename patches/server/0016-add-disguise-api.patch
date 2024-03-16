@@ -6,7 +6,7 @@ Subject: [PATCH] add disguise api
 
 diff --git a/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java b/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..afd8624722ab7a875eeca12ec327064f6857a5a9
+index 0000000000000000000000000000000000000000..bcaa6705055c553041f92265e72f6d8f820bca53
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
 @@ -0,0 +1,68 @@
@@ -46,7 +46,7 @@ index 0000000000000000000000000000000000000000..afd8624722ab7a875eeca12ec327064f
 +                    return true;
 +                }
 +                case com.github.weepingmc.disguise.PlayerDisguise(var playerProfile, var listed) -> {
-+                    PlayerProfile adapted = Bukkit.createProfile(entity.getUUID(), playerProfile.getName());
++                    PlayerProfile adapted = Bukkit.createProfile(entity.getUUID(), entity.hasCustomName()? entity.getBukkitEntity().getCustomName(): playerProfile.getName());
 +                    adapted.setProperties(playerProfile.getProperties());
 +                    net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket.Entry playerUpdate =
 +                        new net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket.Entry(
@@ -55,7 +55,7 @@ index 0000000000000000000000000000000000000000..afd8624722ab7a875eeca12ec327064f
 +                            listed,
 +                            0,
 +                            net.minecraft.world.level.GameType.DEFAULT_MODE,
-+                            null,
++                            entity.getCustomName(),
 +                            null
 +                        );
 +                    player.connection.send(new net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket(net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, Collections.singletonList(playerUpdate)));
@@ -79,35 +79,19 @@ index 0000000000000000000000000000000000000000..afd8624722ab7a875eeca12ec327064f
 +        }
 +    }
 diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-index a613c5bb23b3be0e9d9952f695c9398ca88f1a08..e0579a44a0b51e75180d9a1b3c5f155c040ab41d 100644
+index a613c5bb23b3be0e9d9952f695c9398ca88f1a08..e6b8167b8c4dccb6f590d295300a37bf62fb6e74 100644
 --- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 +++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-@@ -1,5 +1,7 @@
- package net.minecraft.network.syncher;
- 
-+import com.github.weepingmc.disguise.EntityTypeDisguise;
-+import com.github.weepingmc.disguise.PlayerDisguise;
- import com.mojang.logging.LogUtils;
- import io.netty.handler.codec.DecoderException;
- import io.netty.handler.codec.EncoderException;
-@@ -23,6 +25,7 @@ import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
- import net.minecraft.server.level.ServerPlayer;
- import net.minecraft.world.entity.Entity;
- import org.apache.commons.lang3.ObjectUtils;
-+import org.bukkit.craftbukkit.entity.CraftEntityType;
- import org.slf4j.Logger;
- 
- public class SynchedEntityData {
-@@ -339,8 +342,12 @@ public class SynchedEntityData {
+@@ -339,8 +339,12 @@ public class SynchedEntityData {
  
      // Weeper start - quick fake player fix
      private boolean shouldSkip(EntityDataAccessor<?> dataAccessor) {
 -        return entity.getBukkitEntity().getPersistentDataContainer().has(skinKey, org.bukkit.persistence.PersistentDataType.STRING)
 -            && io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(this.entity.getClass(), dataAccessor);
-+        if((entity.getBukkitEntity().getPersistentDataContainer().has(skinKey, org.bukkit.persistence.PersistentDataType.STRING) || entity.getBukkitEntity().getDisguiseData() instanceof PlayerDisguise)) {
++        if((entity.getBukkitEntity().getPersistentDataContainer().has(skinKey, org.bukkit.persistence.PersistentDataType.STRING) || entity.getBukkitEntity().getDisguiseData() instanceof com.github.weepingmc.disguise.PlayerDisguise)) {
 +            return !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(net.minecraft.server.level.ServerPlayer.class, dataAccessor);
-+        } else if (entity.getBukkitEntity().getDisguiseData() instanceof EntityTypeDisguise entityTypeDisguise) {
-+            return !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(CraftEntityType.bukkitToMinecraft(entityTypeDisguise.entityType()).getBaseClass(), dataAccessor);
++        } else if (entity.getBukkitEntity().getDisguiseData() instanceof com.github.weepingmc.disguise.EntityTypeDisguise entityTypeDisguise) {
++            return !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(org.bukkit.craftbukkit.entity.CraftEntityType.bukkitToMinecraft(entityTypeDisguise.entityType()).getBaseClass(), dataAccessor);
 +        }
 +        return false;
      }
@@ -158,37 +142,22 @@ index ff7f2bc867be71f1eeb4a8a98c1cc3633db89ba1..3bfa81966f84047ee95fd0f31fe66e0b
          }
          // Weeper end
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 0b5a31477e3b76833fb97a455842316193663c8e..e839bd66236842df38f25c24b3616f5d8876af11 100644
+index 0b5a31477e3b76833fb97a455842316193663c8e..21f13fe69df50ff7161dc50c153da29bbe411402 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1,5 +1,6 @@
- package org.bukkit.craftbukkit.entity;
- 
-+import com.github.weepingmc.disguise.DisguiseData;
- import com.google.common.base.Function;
- import com.google.common.base.Preconditions;
- import com.google.common.base.Predicates;
-@@ -57,6 +58,7 @@ import org.bukkit.util.NumberConversions;
- import org.bukkit.util.Vector;
- 
- import net.md_5.bungee.api.chat.BaseComponent; // Spigot
-+import org.jetbrains.annotations.NotNull;
- 
- public abstract class CraftEntity implements org.bukkit.entity.Entity {
-     private static PermissibleBase perm;
-@@ -1228,4 +1230,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1228,4 +1228,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return this.getHandle().getScoreboardName();
      }
      // Paper end - entity scoreboard name
 +    // Weeper start - disguise api
-+    private DisguiseData disguiseData = DisguiseData.original();
++    private com.github.weepingmc.disguise.DisguiseData disguiseData = com.github.weepingmc.disguise.DisguiseData.original();
 +    @Override
-+    public @NotNull DisguiseData getDisguiseData() {
++    public @org.jetbrains.annotations.NotNull com.github.weepingmc.disguise.DisguiseData getDisguiseData() {
 +        return disguiseData;
 +    }
 +
 +    @Override
-+    public void setDisuiseData(@NotNull DisguiseData disguiseData) {
++    public void setDisuiseData(@org.jetbrains.annotations.NotNull com.github.weepingmc.disguise.DisguiseData disguiseData) {
 +        this.disguiseData = disguiseData;
 +    }
 +    // Weeper end - disguise api
