@@ -36,17 +36,10 @@ index 0000000000000000000000000000000000000000..6acdda82e91fabf159b22c89f62e43fa
 +
 +}
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index f433ee3dc9ec9cfacf440939d44b120730759dfe..0c3a4143251fa31e81fd8e37165cd68c67d5b8ab 100644
+index f433ee3dc9ec9cfacf440939d44b120730759dfe..6403b3c6873a36c8239cc7223dc78b3a9192ec3f 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1,5 +1,6 @@
- package org.bukkit;
- 
-+import com.github.weepingmc.offline.EditPlayer;
- import com.google.common.collect.ImmutableList;
- import java.awt.image.BufferedImage;
- import java.io.File;
-@@ -2519,4 +2520,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2519,4 +2519,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      boolean isOwnedByCurrentRegion(@NotNull Entity entity);
      // Paper end - Folia region threading API
@@ -57,9 +50,9 @@ index f433ee3dc9ec9cfacf440939d44b120730759dfe..0c3a4143251fa31e81fd8e37165cd68c
 +     * Edits the information of an offline player.
 +     *
 +     * @param playerUUID The UUID of the offline player to edit.
-+     * @param editPlayerConsumer A consumer function that takes an {@link EditPlayer} object as input,
++     * @param editPlayerConsumer A consumer function that takes an {@link com.github.weepingmc.offline.EditPlayer} object as input,
 +     *                          allowing the caller to perform edits on the player's information.
 +     */
-+    void editOfflinePlayer(@NotNull UUID playerUUID, @NotNull Consumer<EditPlayer> editPlayerConsumer);
++    void editOfflinePlayer(@NotNull UUID playerUUID, @NotNull Consumer<com.github.weepingmc.offline.EditPlayer> editPlayerConsumer);
 +    // Weeper end - allow offline editing of playerData
  }

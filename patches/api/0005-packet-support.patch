@@ -92,10 +92,10 @@ index 0000000000000000000000000000000000000000..b9e036645e35ea07cf70e9e67b182cf9
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..e4db4fa403a1fec235d33b6e16c9bb1d21e09f46
+index 0000000000000000000000000000000000000000..1b01baa13d2ef96f4e573848df0c2f721e6d4803
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/PacketStepBuilder.java
-@@ -0,0 +1,112 @@
+@@ -0,0 +1,115 @@
 +package com.github.weepingmc.packet;
 +
 +import com.destroystokyo.paper.profile.PlayerProfile;
@@ -145,6 +145,9 @@ index 0000000000000000000000000000000000000000..e4db4fa403a1fec235d33b6e16c9bb1d
 +
 +    @NotNull
 +    PacketStepBuilder teleportEntity(int entityId, @NotNull Location location, boolean onGround);
++
++    @NotNull
++    PacketStepBuilder mountEntity(int entityId, int @NotNull ... passenger);
 +
 +    @NotNull
 +    PacketStepBuilder sendBlockChange(@NotNull Location location, @NotNull BlockData blockData);
