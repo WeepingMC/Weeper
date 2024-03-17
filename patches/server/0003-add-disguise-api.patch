@@ -6,15 +6,16 @@ Subject: [PATCH] add disguise api
 
 diff --git a/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java b/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..bcaa6705055c553041f92265e72f6d8f820bca53
+index 0000000000000000000000000000000000000000..9ee0348dab4f2c2b200ad08a39e3daf516d7d8cf
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
-@@ -0,0 +1,68 @@
+@@ -0,0 +1,85 @@
 +package com.github.weepingmc.disguise;
 +
 +import com.destroystokyo.paper.profile.PlayerProfile;
-+import java.util.Collections;
++import java.util.EnumSet;
 +import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
++import net.minecraft.network.syncher.EntityDataAccessor;
 +import net.minecraft.server.level.ServerPlayer;
 +import net.minecraft.world.entity.Entity;
 +import net.minecraft.world.phys.Vec3;
@@ -25,8 +26,8 @@ index 0000000000000000000000000000000000000000..bcaa6705055c553041f92265e72f6d8f
 +
 +    public static boolean tryDisguise(ServerPlayer player, Entity entity, ClientboundAddEntityPacket clientboundAddEntityPacket) {
 +            switch (entity.getBukkitEntity().getDisguiseData()) {
-+                case com.github.weepingmc.disguise.DisguiseData.OriginalDisguise disguise -> {
-+                    return !(com.github.weepingmc.event.packet.PlayerTrackEntityEvent.getHandlerList().getRegisteredListeners().length == 0 || new com.github.weepingmc.event.packet.PlayerTrackEntityEvent(player.getBukkitEntity(), entity.getBukkitEntity()).callEvent());
++                case DisguiseData.OriginalDisguise disguise -> {
++                    return false;
 +                }
 +                case com.github.weepingmc.disguise.EntityTypeDisguise(var type) -> {
 +                    player.connection.send(new net.minecraft.network.protocol.game.ClientboundAddEntityPacket(
@@ -58,7 +59,7 @@ index 0000000000000000000000000000000000000000..bcaa6705055c553041f92265e72f6d8f
 +                            entity.getCustomName(),
 +                            null
 +                        );
-+                    player.connection.send(new net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket(net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER, Collections.singletonList(playerUpdate)));
++                    player.connection.send(new net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket(EnumSet.of(net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket.Action.ADD_PLAYER), playerUpdate));
 +
 +                    player.connection.send(new net.minecraft.network.protocol.game.ClientboundAddEntityPacket(
 +                        clientboundAddEntityPacket.getId(),
@@ -77,39 +78,77 @@ index 0000000000000000000000000000000000000000..bcaa6705055c553041f92265e72f6d8f
 +                }
 +            }
 +        }
++
++    public static boolean shouldSkip(Entity entity, EntityDataAccessor<?> dataAccessor) {
++        return switch (entity.getBukkitEntity().getDisguiseData()) {
++            case DisguiseData.OriginalDisguise original -> {
++                yield false;
++            }
++            case EntityTypeDisguise entityTypeDisguise -> !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(
++                org.bukkit.craftbukkit.entity.CraftEntityType.bukkitToMinecraft(entityTypeDisguise.entityType()).getBaseClass(),
++                dataAccessor
++            );
++            case PlayerDisguise playerDisguise -> !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(
++                ServerPlayer.class,
++                dataAccessor
++            );
++        };
 +    }
++}
 diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-index a613c5bb23b3be0e9d9952f695c9398ca88f1a08..e6b8167b8c4dccb6f590d295300a37bf62fb6e74 100644
+index 58b602e550258c1062ee940bc46538dac95d8979..8ad90139bcfabd102f3ca7e9cbb49a0a2e85de7d 100644
 --- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 +++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-@@ -339,8 +339,12 @@ public class SynchedEntityData {
+@@ -200,6 +200,7 @@ public class SynchedEntityData {
  
-     // Weeper start - quick fake player fix
-     private boolean shouldSkip(EntityDataAccessor<?> dataAccessor) {
--        return entity.getBukkitEntity().getPersistentDataContainer().has(skinKey, org.bukkit.persistence.PersistentDataType.STRING)
--            && io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(this.entity.getClass(), dataAccessor);
-+        if((entity.getBukkitEntity().getPersistentDataContainer().has(skinKey, org.bukkit.persistence.PersistentDataType.STRING) || entity.getBukkitEntity().getDisguiseData() instanceof com.github.weepingmc.disguise.PlayerDisguise)) {
-+            return !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(net.minecraft.server.level.ServerPlayer.class, dataAccessor);
-+        } else if (entity.getBukkitEntity().getDisguiseData() instanceof com.github.weepingmc.disguise.EntityTypeDisguise entityTypeDisguise) {
-+            return !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(org.bukkit.craftbukkit.entity.CraftEntityType.bukkitToMinecraft(entityTypeDisguise.entityType()).getBaseClass(), dataAccessor);
-+        }
-+        return false;
-     }
-     // Weeper end - quick fake player fix
+                 if (datawatcher_item.isDirty()) {
+                     datawatcher_item.setDirty(false);
++                    if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip(entity, datawatcher_item.getAccessor())) continue; // Weeper - disguise api
+                     if (list == null) {
+                         list = new ArrayList();
+                     }
+@@ -224,7 +225,7 @@ public class SynchedEntityData {
+ 
+         while (objectiterator.hasNext()) {
+             SynchedEntityData.DataItem<?> datawatcher_item = (SynchedEntityData.DataItem) objectiterator.next();
+-
++            if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip(entity, datawatcher_item.getAccessor())) continue; // Weeper - disguise api
+             if (!datawatcher_item.isSetToDefault()) {
+                 if (list == null) {
+                     list = new ArrayList();
+@@ -296,6 +297,7 @@ public class SynchedEntityData {
+ 
+         List<SynchedEntityData.DataValue<?>> list = new ArrayList<>();
+         for (DataItem<?> dataItem : this.itemsById.values()) {
++            if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip(entity, dataItem.getAccessor())) continue; // Weeper - disguise api
+             list.add(dataItem.value());
+         }
+ 
+@@ -326,6 +328,7 @@ public class SynchedEntityData {
+         List<SynchedEntityData.DataValue<?>> values = new ArrayList<>(keys.size());
+         for (EntityDataAccessor<?> key : keys) {
+             SynchedEntityData.DataItem<?> synchedValue = this.getItem(key);
++            if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip(entity, synchedValue.getAccessor())) continue; // Weeper - disguise api
+             values.add(synchedValue.value());
+         }
  
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 97843d0c29f9b252b0e1e7c76a64db6680a017b3..23aec46d677d325085fbb6e03c79f492c9fb095b 100644
+index 529ab44baaf573b97cf7e89560c548642733188f..81dc19afb75f535b83c4625965d6be3419b46d42 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
-@@ -303,7 +303,7 @@ public class ServerEntity {
+@@ -301,7 +301,11 @@ public class ServerEntity {
+         Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket();
  
          this.yHeadRotp = Mth.floor(this.entity.getYHeadRot() * 256.0F / 360.0F);
-         // Weeper start
--        if (com.github.weepingmc.event.packet.PlayerTrackEntityEvent.getHandlerList().getRegisteredListeners().length == 0 || new com.github.weepingmc.event.packet.PlayerTrackEntityEvent((org.bukkit.entity.Player)player.getBukkitEntity(), this.entity.getBukkitEntity()).callEvent()) {
+-        sender.accept(packet);
++        // Weeper start - disguise api
 +        if(!com.github.weepingmc.disguise.DisguiseUtil.tryDisguise(player, entity, (net.minecraft.network.protocol.game.ClientboundAddEntityPacket) packet)){
-             sender.accept(packet);
++            sender.accept(packet);
++        }
++        // Weeper end - disguise api
+         if (this.trackedDataValues != null) {
+             sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
-         // Weeper end
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 index 0b5a31477e3b76833fb97a455842316193663c8e..21f13fe69df50ff7161dc50c153da29bbe411402 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
