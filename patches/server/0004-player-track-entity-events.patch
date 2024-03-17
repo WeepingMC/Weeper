@@ -5,7 +5,7 @@ Subject: [PATCH] player track entity events
 
 
 diff --git a/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java b/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
-index 9ee0348dab4f2c2b200ad08a39e3daf516d7d8cf..11c8b03dc3edb9bbde372205d998223bb39a94de 100644
+index 9ee0348dab4f2c2b200ad08a39e3daf516d7d8cf..5b91da21f3f68b63c0c766e709ace6e7b8409c9a 100644
 --- a/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
 +++ b/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
 @@ -15,7 +15,7 @@ public final class DisguiseUtil {
@@ -34,14 +34,14 @@ index 9ee0348dab4f2c2b200ad08a39e3daf516d7d8cf..11c8b03dc3edb9bbde372205d998223b
              case DisguiseData.OriginalDisguise original -> {
                  yield false;
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 81dc19afb75f535b83c4625965d6be3419b46d42..e6a0e09bce95c63bd1a861d3bcebb9812b29f874 100644
+index 81dc19afb75f535b83c4625965d6be3419b46d42..7ee15e99a69944ab1ee7a5b6d7550696ff87f425 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
 @@ -279,6 +279,7 @@ public class ServerEntity {
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
          player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));
-+        new com.github.weepingmc.event.packet.PlayerUntrackEntityEvent(player.getBukkitEntity(), this.entity.getId(), this.entity.getBukkitEntity()).callEventIfRegistered(); // Weeper - player track entity events
++        if(com.github.weepingmc.event.packet.PlayerUntrackEntityEvent.getHandlerList().getRegisteredListeners().length != 0) new com.github.weepingmc.event.packet.PlayerUntrackEntityEvent(player.getBukkitEntity(), this.entity.getId(), this.entity.getBukkitEntity()).callEventIfRegistered(); // Weeper - player track entity events
      }
  
      public void addPairing(ServerPlayer player) {
