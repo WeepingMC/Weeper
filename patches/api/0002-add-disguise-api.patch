@@ -92,22 +92,15 @@ index 0000000000000000000000000000000000000000..b8525cc42825c18d49e07f89f219a68a
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index d9929d9311e4b2b0ae13a8f6f13563257263f298..cd627d59770fc4be203c1ebcc8faf8e003b1d843 100644
+index d9929d9311e4b2b0ae13a8f6f13563257263f298..2dd5a4b2dd52e3e96771cadc7882f3d46d64966c 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1,5 +1,6 @@
- package org.bukkit.entity;
- 
-+import com.github.weepingmc.disguise.DisguiseData;
- import java.util.List;
- import java.util.Set;
- import java.util.UUID;
-@@ -1104,4 +1105,8 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1104,4 +1104,8 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      @NotNull String getScoreboardEntryName();
      // Paper end - entity scoreboard name
 +    // Weeper start - disguise api
-+    @NotNull DisguiseData getDisguiseData();
-+    void setDisuiseData(@NotNull DisguiseData disguiseData);
++    @NotNull com.github.weepingmc.disguise.DisguiseData getDisguiseData();
++    void setDisuiseData(@NotNull com.github.weepingmc.disguise.DisguiseData disguiseData);
 +    // Weeper end - disguise api
  }

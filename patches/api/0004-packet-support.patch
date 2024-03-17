@@ -5,41 +5,30 @@ Subject: [PATCH] packet support
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/SkinParts.java b/src/main/java/com/destroystokyo/paper/SkinParts.java
-index 4a0c39405d4fbed457787e3c6ded4cc6591bc8c2..6eeb26ac9d1fda673019e68f6e55c96049db34ff 100644
+index 4a0c39405d4fbed457787e3c6ded4cc6591bc8c2..7db62131bccaa218954fb56c5cdfe71f48aa59a1 100644
 --- a/src/main/java/com/destroystokyo/paper/SkinParts.java
 +++ b/src/main/java/com/destroystokyo/paper/SkinParts.java
-@@ -1,5 +1,10 @@
- package com.destroystokyo.paper;
- 
-+import org.jetbrains.annotations.NotNull;
-+
-+/**
-+ * Skin parts
-+ */
- public interface SkinParts {
- 
-     boolean hasCapeEnabled();
-@@ -17,4 +22,23 @@ public interface SkinParts {
+@@ -17,4 +17,23 @@ public interface SkinParts {
      boolean hasHatsEnabled();
  
      int getRaw();
 +
 +    interface Builder {
-+        @NotNull
++        @org.jetbrains.annotations.NotNull
 +        Builder withCape();
-+        @NotNull
++        @org.jetbrains.annotations.NotNull
 +        Builder withJacket();
-+        @NotNull
++        @org.jetbrains.annotations.NotNull
 +        Builder withLeftSleeve();
-+        @NotNull
++        @org.jetbrains.annotations.NotNull
 +        Builder withRightSleeve();
-+        @NotNull
++        @org.jetbrains.annotations.NotNull
 +        Builder withLeftPants();
-+        @NotNull
++        @org.jetbrains.annotations.NotNull
 +        Builder withRightPants();
-+        @NotNull
++        @org.jetbrains.annotations.NotNull
 +        Builder withHat();
-+        @NotNull
++        @org.jetbrains.annotations.NotNull
 +        SkinParts build();
 +    }
  }

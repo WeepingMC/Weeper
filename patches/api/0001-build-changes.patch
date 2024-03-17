@@ -63,23 +63,15 @@ index f0db59a556deaefefbdaca121585c0fd199c13c2..ad077dbad280331b5457b1e79232f905
          return offers;
      }
 diff --git a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
-index eaefbb00e9993d54906cc8cf35cf753c0d6c7707..14dfad3a45e702c926dbca9f79a2f5e9581c6c2b 100644
+index eaefbb00e9993d54906cc8cf35cf753c0d6c7707..037b1d0f3b187e40a1d9d0a8de45f9f9deedf613 100644
 --- a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
 +++ b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
-@@ -13,6 +13,7 @@ import java.util.HashMap;
- import java.util.HashSet;
- import java.util.List;
- import java.util.Map;
-+import java.util.Objects;
- import java.util.Set;
- import java.util.concurrent.CopyOnWriteArrayList;
- import java.util.jar.JarEntry;
-@@ -279,6 +280,12 @@ public final class JavaPluginLoader implements PluginLoader {
+@@ -279,6 +279,12 @@ public final class JavaPluginLoader implements PluginLoader {
                      if (!warningState.printFor(warning)) {
                          break;
                      }
 +                    // Weeper start - allow exclusion for own plugin
-+                    if(Objects.equals(clazz.getClassLoader(), plugin.getClass().getClassLoader())) {
++                    if(java.util.Objects.equals(clazz.getClassLoader(), plugin.getClass().getClassLoader())) {
 +                        break;
 +                    }
 +                    // Weeper end - allow exclusion for own plugin
