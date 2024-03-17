@@ -5,7 +5,7 @@ Subject: [PATCH] add marker support
 
 
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-index 175f3a2a3d1d87c065707911d64a669ff0be5729..1c1954ae8bf79ead299d43ed3952511946a2d2df 100644
+index 175f3a2a3d1d87c065707911d64a669ff0be5729..0e8516a3989cfa2891497b62b21826054f15bf3a 100644
 --- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 @@ -7,13 +7,18 @@ import com.github.weepingmc.packet.ChainablePacketStep.NmsPacketStep;
@@ -69,7 +69,7 @@ index 175f3a2a3d1d87c065707911d64a669ff0be5729..1c1954ae8bf79ead299d43ed39525119
 +    public @NotNull PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull Color color, @Nullable String text, int time) {
 +        var payload = new GameTestAddMarkerDebugPayload(
 +            new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()),
-+            com.github.weepingmc.util.ColorUtil.toARGB(color),
++            org.bukkit.Color.fromARGB(color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue()).asARGB(),
 +            text==null?"": text,
 +            time
 +        );
@@ -80,48 +80,3 @@ index 175f3a2a3d1d87c065707911d64a669ff0be5729..1c1954ae8bf79ead299d43ed39525119
      @Override
      public void send(@Nonnull Collection<? extends org.bukkit.entity.Player> players) {
          initial.execute(players);
-diff --git a/src/main/java/src/java/com/github/weepingmc/util/ColorUtil.java b/src/main/java/src/java/com/github/weepingmc/util/ColorUtil.java
-new file mode 100644
-index 0000000000000000000000000000000000000000..db25a5ed8f50ec406ca77441e60cb142ea9596dd
---- /dev/null
-+++ b/src/main/java/src/java/com/github/weepingmc/util/ColorUtil.java
-@@ -0,0 +1,39 @@
-+package com.github.weepingmc.util;
-+
-+import java.awt.Color;
-+
-+public class ColorUtil {
-+
-+        public static Color fromARGB(int argb){
-+            return new Color(getR(argb), getG(argb), getB(argb), getA(argb));
-+        }
-+
-+        public static int toARGB(Color color){
-+            return getARGBInt(color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue());
-+        }
-+
-+        private static int getA(int argb) {
-+            return (argb >> 24) & 0xFF;
-+        }
-+
-+        private static int getR(int argb) {
-+            return (argb >> 16) & 0xFF;
-+        }
-+
-+        private static int getG(int argb) {
-+            return (argb >> 8) & 0xFF;
-+        }
-+
-+        private static int getB(int argb) {
-+            return argb & 0xFF;
-+        }
-+
-+        private static int getARGBInt(int a, int r, int g, int b) {
-+            int encoded = 0;
-+            encoded = encoded | b;
-+            encoded = encoded | (g << 8);
-+            encoded = encoded | (r << 16);
-+            encoded = encoded | (a << 24);
-+            return encoded;
-+        }
-+}
