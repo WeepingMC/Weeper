@@ -45,10 +45,10 @@ index eacd3780aa20ceaa5c4a6ea003441ce5b79ce889..3e01db6dd2bcda8a50c23d66a11ffd1b
 +    }
  }
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-index 1c1954ae8bf79ead299d43ed3952511946a2d2df..c0846ea78dc75235e3d85a05ef42de356ed5bd64 100644
+index c8f54a65f9a42d658c055c2648d924724098fce6..9caed5a0025fb8dd1fa98dce26d35531661af80e 100644
 --- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-@@ -267,14 +267,21 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+@@ -259,8 +259,8 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
      }
  
      @Override
@@ -59,16 +59,19 @@ index 1c1954ae8bf79ead299d43ed3952511946a2d2df..c0846ea78dc75235e3d85a05ef42de35
          playerAbilitiesNMS.flyingSpeed = flySpeed;
          playerAbilitiesNMS.walkingSpeed = fieldOfViewModifier;
          initial.setNext(of(new ClientboundPlayerAbilitiesPacket(playerAbilitiesNMS)));
-         return this;
+@@ -268,7 +268,14 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
      }
  
-+    @Override
+     @Override
+-    public @NotNull PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull Color color, @org.jetbrains.annotations.Nullable String text, int time) {
 +    public @NotNull PacketStepBuilder withPlayerAbilities(@NotNull Set<com.github.weepingmc.packet.options.abilities.PlayerAbility> playerAbilities) {
 +        Abilities playerAbilitiesNMS = mapPlayerAbilities(playerAbilities);
 +        initial.setNext(of(new ClientboundPlayerAbilitiesPacket(playerAbilitiesNMS)));
 +        return this;
 +    }
 +
-     @Override
-     public @NotNull PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull Color color, @Nullable String text, int time) {
-         var payload = new GameTestAddMarkerDebugPayload(
++    @Override
++    public @NotNull PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull java.awt.Color color, @org.jetbrains.annotations.Nullable String text, int time) {
+         var payload = new net.minecraft.network.protocol.common.custom.GameTestAddMarkerDebugPayload(
+             new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()),
+             org.bukkit.Color.fromARGB(color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue()).asARGB(),
