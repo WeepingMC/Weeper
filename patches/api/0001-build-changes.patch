@@ -50,46 +50,6 @@ index 66bcd8f9a8fce8f920a0f1dd7ae0a2937da68e80..a1a6c08899511275666485760c576b29
  idea {
      module {
          generatedSourceDirs.add(generatedApiPath.toFile())
-diff --git a/src/main/java/io/papermc/paper/registry/RegistryKey.java b/src/main/java/io/papermc/paper/registry/RegistryKey.java
-index c4b30b16ce4db754b958c493ad86d0863592c263..3e39d859b1789ab7c5ab24121fe2f7a09d6a5f1e 100644
---- a/src/main/java/io/papermc/paper/registry/RegistryKey.java
-+++ b/src/main/java/io/papermc/paper/registry/RegistryKey.java
-@@ -32,12 +32,10 @@ public sealed interface RegistryKey<T> extends Keyed permits RegistryKeyImpl {
-      * ******************* */
-     /**
-      * Built-in registry for game events
--     * @see io.papermc.paper.registry.keys.GameEventKeys
-      */
-     RegistryKey<GameEvent> GAME_EVENT = create("game_event");
-     /**
-      * Built-in registry for structure types.
--     * @see io.papermc.paper.registry.keys.StructureTypeKeys
-      */
-     RegistryKey<StructureType> STRUCTURE_TYPE = create("worldgen/structure_type");
- 
-@@ -46,22 +44,18 @@ public sealed interface RegistryKey<T> extends Keyed permits RegistryKeyImpl {
-      * ********************** */
-     /**
-      * Data-driven registry for biomes.
--     * @see io.papermc.paper.registry.keys.BiomeKeys
-      */
-     RegistryKey<Biome> BIOME = create("worldgen/biome");
-     /**
-      * Data-driven registry for structures.
--     * @see io.papermc.paper.registry.keys.StructureKeys
-      */
-     RegistryKey<Structure> STRUCTURE = create("worldgen/structure");
-     /**
-      * Data-driven registry for trim materials.
--     * @see io.papermc.paper.registry.keys.TrimMaterialKeys
-      */
-     RegistryKey<TrimMaterial> TRIM_MATERIAL = create("trim_material");
-     /**
-      * Data-driven registry for trim patterns.
--     * @see io.papermc.paper.registry.keys.TrimPatternKeys
-      */
-     RegistryKey<TrimPattern> TRIM_PATTERN = create("trim_pattern");
- }
 diff --git a/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java b/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
 index f0db59a556deaefefbdaca121585c0fd199c13c2..ad077dbad280331b5457b1e79232f9052aa4dfa9 100644
 --- a/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
