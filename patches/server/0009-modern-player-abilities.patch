@@ -5,10 +5,22 @@ Subject: [PATCH] modern player abilities
 
 
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
-index eacd3780aa20ceaa5c4a6ea003441ce5b79ce889..3e01db6dd2bcda8a50c23d66a11ffd1b329ac6db 100644
+index eacd3780aa20ceaa5c4a6ea003441ce5b79ce889..5b7d54e6a15cb19d6f58de8d3cfdfd078377dcba 100644
 --- a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
-@@ -81,7 +81,7 @@ public final class CraftPacketConversion {
+@@ -1,5 +1,11 @@
+ package com.github.weepingmc.packet;
+ 
++import com.github.weepingmc.packet.options.abilities.AllowFlying;
++import com.github.weepingmc.packet.options.abilities.CreativeModeInstantBreak;
++import com.github.weepingmc.packet.options.abilities.FlySpeedAbility;
++import com.github.weepingmc.packet.options.abilities.Flying;
++import com.github.weepingmc.packet.options.abilities.Invulnerable;
++import com.github.weepingmc.packet.options.abilities.WalkSpeedAbility;
+ import java.util.ArrayList;
+ import java.util.EnumMap;
+ import java.util.List;
+@@ -81,7 +87,7 @@ public final class CraftPacketConversion {
          };
      }
  
@@ -17,7 +29,7 @@ index eacd3780aa20ceaa5c4a6ea003441ce5b79ce889..3e01db6dd2bcda8a50c23d66a11ffd1b
          Abilities playerAbilitiesNMS = new Abilities();
  
          for (PlayerAbility playerAbilitiy : playerAbilities) {
-@@ -94,4 +94,26 @@ public final class CraftPacketConversion {
+@@ -94,4 +100,19 @@ public final class CraftPacketConversion {
          }
          return playerAbilitiesNMS;
      }
@@ -25,20 +37,13 @@ index eacd3780aa20ceaa5c4a6ea003441ce5b79ce889..3e01db6dd2bcda8a50c23d66a11ffd1b
 +    static Abilities mapPlayerAbilities(Set<com.github.weepingmc.packet.options.abilities.PlayerAbility> playerAbilities) {
 +        Abilities playerAbilitiesNMS = new Abilities();
 +        for (com.github.weepingmc.packet.options.abilities.PlayerAbility playerAbilitiy : playerAbilities) {
-+            if (playerAbilitiy instanceof com.github.weepingmc.packet.options.abilities.FlySpeedAbility(float speed)) {
-+                playerAbilitiesNMS.flyingSpeed = speed;
-+            } else if (playerAbilitiy instanceof com.github.weepingmc.packet.options.abilities.WalkSpeedAbility(float speed)) {
-+                playerAbilitiesNMS.walkingSpeed = speed;
-+            } else if (playerAbilitiy == com.github.weepingmc.packet.options.abilities.PlayerAbility.INVULNERABLE) {
-+                playerAbilitiesNMS.invulnerable = true;
-+            } else if (playerAbilitiy == com.github.weepingmc.packet.options.abilities.PlayerAbility.FLYING) {
-+                playerAbilitiesNMS.flying = true;
-+            } else if (playerAbilitiy == com.github.weepingmc.packet.options.abilities.PlayerAbility.ALLOW_FLYING) {
-+                playerAbilitiesNMS.mayfly = true;
-+            } else if (playerAbilitiy == com.github.weepingmc.packet.options.abilities.PlayerAbility.CREATIVE_MODE_INSTANT_BREAK) {
-+                playerAbilitiesNMS.instabuild = true;
-+            } else {
-+                throw new IllegalStateException("Unexpected value: " + playerAbilitiy);
++            switch (playerAbilitiy) {
++                case AllowFlying flying -> playerAbilitiesNMS.mayfly = true;
++                case CreativeModeInstantBreak creativeModeInstantBreak -> playerAbilitiesNMS.instabuild = true;
++                case com.github.weepingmc.packet.options.abilities.FlySpeedAbility(var speed) -> playerAbilitiesNMS.flyingSpeed = speed;
++                case Flying flying -> playerAbilitiesNMS.flying = true;
++                case Invulnerable invulnerable -> playerAbilitiesNMS.invulnerable = true;
++                case com.github.weepingmc.packet.options.abilities.WalkSpeedAbility(var speed) -> playerAbilitiesNMS.walkingSpeed = speed;
 +            }
 +        }
 +        return playerAbilitiesNMS;

@@ -24,6 +24,28 @@ index 1b01baa13d2ef96f4e573848df0c2f721e6d4803..6fe113e494a8434a09dd6124c60153a7
      @NotNull
      PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull Color color, @Nullable String text, int time);
  
+diff --git a/src/main/java/com/github/weepingmc/packet/options/abilities/AllowFlying.java b/src/main/java/com/github/weepingmc/packet/options/abilities/AllowFlying.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..100bfda804d77e7c78d875aac737f0e3cb378244
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/packet/options/abilities/AllowFlying.java
+@@ -0,0 +1,5 @@
++package com.github.weepingmc.packet.options.abilities;
++
++public final class  AllowFlying implements PlayerAbility {
++    AllowFlying(){}
++}
+diff --git a/src/main/java/com/github/weepingmc/packet/options/abilities/CreativeModeInstantBreak.java b/src/main/java/com/github/weepingmc/packet/options/abilities/CreativeModeInstantBreak.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..41e02dc5ae9f29981218f18d78ba57c2bbf48ab7
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/packet/options/abilities/CreativeModeInstantBreak.java
+@@ -0,0 +1,5 @@
++package com.github.weepingmc.packet.options.abilities;
++
++public final class CreativeModeInstantBreak implements PlayerAbility {
++    CreativeModeInstantBreak(){}
++}
 diff --git a/src/main/java/com/github/weepingmc/packet/options/abilities/FlySpeedAbility.java b/src/main/java/com/github/weepingmc/packet/options/abilities/FlySpeedAbility.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..8d28e3e1ddd662fb15e0e9033c770d2775263ad0
@@ -34,12 +56,34 @@ index 0000000000000000000000000000000000000000..8d28e3e1ddd662fb15e0e9033c770d27
 +
 +public record FlySpeedAbility(float speed) implements PlayerAbility{
 +}
+diff --git a/src/main/java/com/github/weepingmc/packet/options/abilities/Flying.java b/src/main/java/com/github/weepingmc/packet/options/abilities/Flying.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..8e6195acbb5f4a7bc1d2ab0228a5701122025c32
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/packet/options/abilities/Flying.java
+@@ -0,0 +1,5 @@
++package com.github.weepingmc.packet.options.abilities;
++
++public final class Flying implements PlayerAbility {
++    Flying(){}
++}
+diff --git a/src/main/java/com/github/weepingmc/packet/options/abilities/Invulnerable.java b/src/main/java/com/github/weepingmc/packet/options/abilities/Invulnerable.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..4a153d9f68aea200582d53c9e44987796df5ae41
+--- /dev/null
++++ b/src/main/java/com/github/weepingmc/packet/options/abilities/Invulnerable.java
+@@ -0,0 +1,5 @@
++package com.github.weepingmc.packet.options.abilities;
++
++public final class Invulnerable implements PlayerAbility {
++    Invulnerable(){}
++}
 diff --git a/src/main/java/com/github/weepingmc/packet/options/abilities/PlayerAbility.java b/src/main/java/com/github/weepingmc/packet/options/abilities/PlayerAbility.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..cb5f3a1d55b89038b626638e29a18a8914b8c601
+index 0000000000000000000000000000000000000000..9b05325882878b8601b06e28c2e663d9177c0f04
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/options/abilities/PlayerAbility.java
-@@ -0,0 +1,34 @@
+@@ -0,0 +1,19 @@
 +package com.github.weepingmc.packet.options.abilities;
 +
 +import org.jetbrains.annotations.NotNull;
@@ -59,21 +103,6 @@ index 0000000000000000000000000000000000000000..cb5f3a1d55b89038b626638e29a18a89
 +    }
 +}
 +
-+final class  AllowFlying implements PlayerAbility {
-+    AllowFlying(){}
-+}
-+
-+final class CreativeModeInstantBreak implements PlayerAbility {
-+    CreativeModeInstantBreak(){}
-+}
-+
-+final class Flying implements PlayerAbility {
-+    Flying(){}
-+}
-+
-+final class Invulnerable implements PlayerAbility {
-+    Invulnerable(){}
-+}
 diff --git a/src/main/java/com/github/weepingmc/packet/options/abilities/WalkSpeedAbility.java b/src/main/java/com/github/weepingmc/packet/options/abilities/WalkSpeedAbility.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..8010fe740d38377aad68790c36afd5d69bb87569
