@@ -92,10 +92,10 @@ index 0000000000000000000000000000000000000000..b8525cc42825c18d49e07f89f219a68a
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index d9929d9311e4b2b0ae13a8f6f13563257263f298..2dd5a4b2dd52e3e96771cadc7882f3d46d64966c 100644
+index 967125e99adc1b5446f42811d60ef44ba56ef5f5..db6c05c79458ce9e07ff3ddc8817933d863bc095 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1104,4 +1104,8 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1138,4 +1138,8 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      @NotNull String getScoreboardEntryName();
      // Paper end - entity scoreboard name
