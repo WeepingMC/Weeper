@@ -51,8 +51,9 @@ ForkTest-API
 
 !gradle/wrapper/gradle-wrapper.jar
 
-Weeper-Server
-Weeper-API
-Weeper-MojangAPI
-weeper-paperclip.jar
+weeper-server
+weeper-api
+weeper-mojangapi
 weeper-api-generator
+weeper-paperclip.jar
+
