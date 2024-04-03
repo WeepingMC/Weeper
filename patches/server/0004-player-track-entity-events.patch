@@ -5,10 +5,10 @@ Subject: [PATCH] player track entity events
 
 
 diff --git a/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java b/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
-index 9ee0348dab4f2c2b200ad08a39e3daf516d7d8cf..5b91da21f3f68b63c0c766e709ace6e7b8409c9a 100644
+index e5c8fac57435a2f955e4de1061e8987933c71c4d..498907b411cf81daf0e6b4e6b9e1d299b44e9e0e 100644
 --- a/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
 +++ b/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
-@@ -15,7 +15,7 @@ public final class DisguiseUtil {
+@@ -18,7 +18,7 @@ public final class DisguiseUtil {
      public static boolean tryDisguise(ServerPlayer player, Entity entity, ClientboundAddEntityPacket clientboundAddEntityPacket) {
              switch (entity.getBukkitEntity().getDisguiseData()) {
                  case DisguiseData.OriginalDisguise disguise -> {
@@ -17,7 +17,7 @@ index 9ee0348dab4f2c2b200ad08a39e3daf516d7d8cf..5b91da21f3f68b63c0c766e709ace6e7
                  }
                  case com.github.weepingmc.disguise.EntityTypeDisguise(var type) -> {
                      player.connection.send(new net.minecraft.network.protocol.game.ClientboundAddEntityPacket(
-@@ -67,7 +67,15 @@ public final class DisguiseUtil {
+@@ -76,7 +76,15 @@ public final class DisguiseUtil {
              }
          }
  

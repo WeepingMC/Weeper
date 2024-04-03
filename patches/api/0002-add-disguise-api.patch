@@ -54,17 +54,19 @@ index 0000000000000000000000000000000000000000..d0801c94f96cdf4ecec8f540e57babb2
 +}
 diff --git a/src/main/java/com/github/weepingmc/disguise/PlayerDisguise.java b/src/main/java/com/github/weepingmc/disguise/PlayerDisguise.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..b8525cc42825c18d49e07f89f219a68ad7ea39c2
+index 0000000000000000000000000000000000000000..a1e1a69e6286d5a1e0568e08f77d320d81b5fa3b
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/disguise/PlayerDisguise.java
-@@ -0,0 +1,33 @@
+@@ -0,0 +1,41 @@
 +package com.github.weepingmc.disguise;
 +
++import com.destroystokyo.paper.SkinParts;
 +import com.destroystokyo.paper.profile.PlayerProfile;
 +import java.util.Objects;
 +import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.Nullable;
 +
-+public record PlayerDisguise(@NotNull PlayerProfile playerProfile, boolean listed) implements DisguiseData {
++public record PlayerDisguise(@NotNull PlayerProfile playerProfile, boolean listed, @Nullable SkinParts skinParts) implements DisguiseData {
 +
 +    public  PlayerDisguise {
 +        Objects.requireNonNull(playerProfile, "profile cannot be null");
@@ -76,6 +78,7 @@ index 0000000000000000000000000000000000000000..b8525cc42825c18d49e07f89f219a68a
 +    public static class Builder {
 +        private final PlayerProfile playerProfile;
 +        private boolean listed;
++        private SkinParts skinParts;
 +
 +        public Builder(@NotNull PlayerProfile playerProfile) {
 +            this.playerProfile = playerProfile;
@@ -86,8 +89,13 @@ index 0000000000000000000000000000000000000000..b8525cc42825c18d49e07f89f219a68a
 +            return this;
 +        }
 +
++        public @NotNull Builder skinParts(@NotNull SkinParts skinParts) {
++            this.skinParts = skinParts;
++            return this;
++        }
++
 +        public @NotNull PlayerDisguise build() {
-+            return new PlayerDisguise(playerProfile, listed);
++            return new PlayerDisguise(playerProfile, listed, skinParts);
 +        }
 +    }
 +}

@@ -6,18 +6,21 @@ Subject: [PATCH] add disguise api
 
 diff --git a/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java b/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..9ee0348dab4f2c2b200ad08a39e3daf516d7d8cf
+index 0000000000000000000000000000000000000000..e5c8fac57435a2f955e4de1061e8987933c71c4d
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
-@@ -0,0 +1,85 @@
+@@ -0,0 +1,94 @@
 +package com.github.weepingmc.disguise;
 +
 +import com.destroystokyo.paper.profile.PlayerProfile;
 +import java.util.EnumSet;
++import java.util.List;
 +import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 +import net.minecraft.network.syncher.EntityDataAccessor;
++import net.minecraft.network.syncher.SynchedEntityData;
 +import net.minecraft.server.level.ServerPlayer;
 +import net.minecraft.world.entity.Entity;
++import net.minecraft.world.entity.player.Player;
 +import net.minecraft.world.phys.Vec3;
 +import org.bukkit.Bukkit;
 +
@@ -46,7 +49,7 @@ index 0000000000000000000000000000000000000000..9ee0348dab4f2c2b200ad08a39e3daf5
 +
 +                    return true;
 +                }
-+                case com.github.weepingmc.disguise.PlayerDisguise(var playerProfile, var listed) -> {
++                case com.github.weepingmc.disguise.PlayerDisguise(var playerProfile, var listed, var skinParts) -> {
 +                    PlayerProfile adapted = Bukkit.createProfile(entity.getUUID(), entity.hasCustomName()? entity.getBukkitEntity().getCustomName(): playerProfile.getName());
 +                    adapted.setProperties(playerProfile.getProperties());
 +                    net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket.Entry playerUpdate =
@@ -74,6 +77,12 @@ index 0000000000000000000000000000000000000000..9ee0348dab4f2c2b200ad08a39e3daf5
 +                        Vec3.ZERO.add(clientboundAddEntityPacket.getX(), clientboundAddEntityPacket.getY(), clientboundAddEntityPacket.getZ()).scale(1/8000.0D),
 +                        clientboundAddEntityPacket.getYHeadRot()
 +                    ));
++                    if(skinParts != null) {
++                        player.connection.send(new net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket(
++                            clientboundAddEntityPacket.getId(),
++                            List.of(new SynchedEntityData.DataItem<>(Player.DATA_PLAYER_MODE_CUSTOMISATION, (byte) skinParts.getRaw()).value())
++                        ));
++                    }
 +                    return true;
 +                }
 +            }

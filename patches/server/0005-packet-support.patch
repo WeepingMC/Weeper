@@ -5,10 +5,18 @@ Subject: [PATCH] packet support
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
-index b6f4400df3d8ec7e06a996de54f8cabba57885e1..551b3a710d84c6aba29a8a69162ce61a3c0f05d9 100644
+index b6f4400df3d8ec7e06a996de54f8cabba57885e1..399295b28f0cbd3a7655dc46dfcfe2dafc567495 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
-@@ -71,4 +71,59 @@ public class PaperSkinParts implements SkinParts {
+@@ -3,6 +3,7 @@ package com.destroystokyo.paper;
+ import com.google.common.base.Objects;
+ 
+ import java.util.StringJoiner;
++import org.jetbrains.annotations.NotNull;
+ 
+ public class PaperSkinParts implements SkinParts {
+ 
+@@ -71,4 +72,59 @@ public class PaperSkinParts implements SkinParts {
              .add("hats=" + hasHatsEnabled())
              .toString();
      }
@@ -28,42 +36,42 @@ index b6f4400df3d8ec7e06a996de54f8cabba57885e1..551b3a710d84c6aba29a8a69162ce61a
 +        private static final int RIGHT_PANTS = 0x20;
 +        private static final int HAT = 0x40;
 +
-+        public Builder withCape(){
++        public @NotNull Builder withCape(){
 +            raw |= CAPE;
 +            return this;
 +        }
 +
-+        public Builder withJacket(){
++        public @NotNull Builder withJacket(){
 +            raw |= JACKET;
 +            return this;
 +        }
 +
-+        public Builder withLeftSleeve(){
++        public @NotNull Builder withLeftSleeve(){
 +            raw |= LEFT_SLEEVE;
 +            return this;
 +        }
 +
-+        public Builder withRightSleeve(){
++        public @NotNull Builder withRightSleeve(){
 +            raw |= RIGHT_SLEEVE;
 +            return this;
 +        }
 +
-+        public Builder withLeftPants(){
++        public @NotNull Builder withLeftPants(){
 +            raw |= LEFT_PANTS;
 +            return this;
 +        }
 +
-+        public Builder withRightPants(){
++        public @NotNull Builder withRightPants(){
 +            raw |= RIGHT_PANTS;
 +            return this;
 +        }
 +
-+        public Builder withHat(){
++        public @NotNull Builder withHat(){
 +            raw |= HAT;
 +            return this;
 +        }
 +
-+        public SkinParts build(){
++        public @NotNull SkinParts build(){
 +            return new PaperSkinParts(raw);
 +        }
 +    }
@@ -339,10 +347,10 @@ index 0000000000000000000000000000000000000000..eacd3780aa20ceaa5c4a6ea003441ce5
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketPipeline.java b/src/main/java/com/github/weepingmc/packet/CraftPacketPipeline.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..6d65b30700692a9254998a94952d9938d3824811
+index 0000000000000000000000000000000000000000..240bc89588f97914761c61d8c026cbc74c9e4ed9
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketPipeline.java
-@@ -0,0 +1,48 @@
+@@ -0,0 +1,49 @@
 +package com.github.weepingmc.packet;
 +
 +
@@ -357,6 +365,7 @@ index 0000000000000000000000000000000000000000..6d65b30700692a9254998a94952d9938
 +
 +import com.github.weepingmc.packet.options.EntityMetaBuilder;
 +import net.minecraft.world.scores.Scoreboard;
++import org.jetbrains.annotations.NotNull;
 +
 +public class CraftPacketPipeline implements PacketPipeline {
 +
@@ -373,7 +382,7 @@ index 0000000000000000000000000000000000000000..6d65b30700692a9254998a94952d9938
 +    }
 +
 +    @Override
-+    public Builder createSkinPartsBuilder() {
++    public @NotNull Builder createSkinPartsBuilder() {
 +        return PaperSkinParts.builder();
 +    }
 +
