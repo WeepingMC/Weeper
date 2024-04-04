@@ -60,7 +60,10 @@ public final class TestPlugin extends JavaPlugin implements Listener {
     private void spawnPlayerLikeEntity(Player player, Class<? extends Entity> entityClass, Location location) {
         player.getWorld().spawn(location, entityClass, entity -> {
             entity.customName(Component.text("Gollum"));
-            entity.setDisuiseData(DisguiseData.player(player.getPlayerProfile()).listed(false).build());
+            entity.setDisuiseData(DisguiseData
+                .player(player.getPlayerProfile()).listed(false)
+                .skinParts(Bukkit.getPacketPipeline().createSkinPartsBuilder().withJacket().withCape().build())
+                .build());
             Team team = player.getServer().getScoreboardManager().getMainScoreboard().registerNewTeam(Bukkit.getPacketPipeline().generateRandomString(10, true, true));
             team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
             team.addEntry(entity.getScoreboardEntryName());
