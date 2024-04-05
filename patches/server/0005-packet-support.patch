@@ -787,10 +787,10 @@ index 253574890a9ed23d38a84680ba1eb221dc72b310..6da0393ae632bb1e8c718121b1392b2e
      }
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-index 2b335c750ce5f9ccc2651a8701497ca9b8f46704..97620cb09df39350b2c968b9127157106d65eb5a 100644
+index 2b335c750ce5f9ccc2651a8701497ca9b8f46704..a840f9be4d4d14302f9361d76585f14a0ac65fa7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-@@ -12,14 +12,20 @@ import org.bukkit.craftbukkit.util.CraftChatMessage;
+@@ -12,7 +12,7 @@ import org.bukkit.craftbukkit.util.CraftChatMessage;
  import org.bukkit.scoreboard.NameTagVisibility;
  import org.bukkit.scoreboard.Team;
  
@@ -798,9 +798,8 @@ index 2b335c750ce5f9ccc2651a8701497ca9b8f46704..97620cb09df39350b2c968b912715710
 +public final class CraftTeam extends CraftScoreboardComponent implements Team { // Weeper package private -> public
      private final PlayerTeam team;
  
--    CraftTeam(CraftScoreboard scoreboard, PlayerTeam team) {
-+    public CraftTeam(CraftScoreboard scoreboard, PlayerTeam team) { // Weeper package private -> public
-         super(scoreboard);
+     CraftTeam(CraftScoreboard scoreboard, PlayerTeam team) {
+@@ -20,6 +20,12 @@ final class CraftTeam extends CraftScoreboardComponent implements Team {
          this.team = team;
      }
  
