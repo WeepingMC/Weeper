@@ -402,7 +402,7 @@ index 0000000000000000000000000000000000000000..240bc89588f97914761c61d8c026cbc7
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..175f3a2a3d1d87c065707911d64a669ff0be5729
+index 0000000000000000000000000000000000000000..e81c79ab5d33020a4d1a4e96e385b14a95b9549f
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 @@ -0,0 +1,266 @@
@@ -467,7 +467,7 @@ index 0000000000000000000000000000000000000000..175f3a2a3d1d87c065707911d64a669f
 +                    null,
 +                    null
 +                );
-+            ClientboundPlayerInfoUpdatePacket clientboundPlayerInfoUpdatePacket = new ClientboundPlayerInfoUpdatePacket(from(profileAction), Collections.singletonList(playerUpdate));
++            ClientboundPlayerInfoUpdatePacket clientboundPlayerInfoUpdatePacket = new ClientboundPlayerInfoUpdatePacket(EnumSet.of(from(profileAction)), Collections.singletonList(playerUpdate));
 +            initial.setNext(of(clientboundPlayerInfoUpdatePacket));
 +        }
 +
@@ -699,25 +699,6 @@ index 2dce930e691731781a6700610271dd549cf34fe8..c7ec04ba498ca8d5bd19e2c5ed099f60
  
      @Override
      public void handle(ClientGamePacketListener listener) {
-diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
-index 56eddd28429cf42c02d88b8bf79f8b616fa45289..031f46768c9a2b5ef5e059f0789b4ba281c89204 100644
---- a/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
-+++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundPlayerInfoUpdatePacket.java
-@@ -25,6 +25,14 @@ public class ClientboundPlayerInfoUpdatePacket implements Packet<ClientGamePacke
-         this.entries = players.stream().map(ClientboundPlayerInfoUpdatePacket.Entry::new).toList();
-     }
- 
-+    // Weeper start
-+    public ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action action, List<ClientboundPlayerInfoUpdatePacket.Entry> playerUpdates) {
-+                this.actions = EnumSet.of(action);
-+                this.entries = playerUpdates;
-+            }
-+    // Weeper end
-+
-+
-     public ClientboundPlayerInfoUpdatePacket(ClientboundPlayerInfoUpdatePacket.Action action, ServerPlayer player) {
-         this.actions = EnumSet.of(action);
-         this.entries = List.of(new ClientboundPlayerInfoUpdatePacket.Entry(player));
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java
 index 15ebf22e9ca11870e5f24ff5ab8bcbee8c571ee3..9e711248be49a784e3eb37e89902f876f4d69f67 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java
