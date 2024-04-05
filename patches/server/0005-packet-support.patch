@@ -402,10 +402,10 @@ index 0000000000000000000000000000000000000000..240bc89588f97914761c61d8c026cbc7
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..e81c79ab5d33020a4d1a4e96e385b14a95b9549f
+index 0000000000000000000000000000000000000000..22987e4a0c824d21c31c9e3700593e927af199fe
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-@@ -0,0 +1,266 @@
+@@ -0,0 +1,290 @@
 +package com.github.weepingmc.packet;
 +
 +import com.destroystokyo.paper.profile.CraftPlayerProfile;
@@ -484,7 +484,19 @@ index 0000000000000000000000000000000000000000..e81c79ab5d33020a4d1a4e96e385b14a
 +    @Override
 +    @Nonnull
 +    public PacketStepBuilder spawnPlayer(int entityId, @Nonnull UUID uuid, @Nonnull Location location) {
-+        initial.setNext(of(new ClientboundAddPlayerPacket(entityId, uuid, location)));
++        initial.setNext(of(new ClientboundAddEntityPacket(
++            entityId,
++            uuid,
++            location.x(),
++            location.y(),
++            location.z(),
++            location.getPitch(),
++            location.getYaw(),
++            net.minecraft.world.entity.EntityType.PLAYER,
++            0,
++            Vec3.ZERO,
++            location.getYaw()
++        )));
 +        return this;
 +    }
 +
@@ -660,6 +672,18 @@ index 0000000000000000000000000000000000000000..e81c79ab5d33020a4d1a4e96e385b14a
 +        playerAbilitiesNMS.flyingSpeed = flySpeed;
 +        playerAbilitiesNMS.walkingSpeed = fieldOfViewModifier;
 +        initial.setNext(of(new ClientboundPlayerAbilitiesPacket(playerAbilitiesNMS)));
++        return this;
++    }
++
++    @Override
++    public @NotNull PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull Color color, @org.jetbrains.annotations.Nullable String text, int time) {
++        var payload = new net.minecraft.network.protocol.common.custom.GameTestAddMarkerDebugPayload(
++            new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()),
++            org.bukkit.Color.fromARGB(color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue()).asARGB(),
++            text==null?"": text,
++            time
++        );
++        initial.setNext(of(new net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket(payload)));
 +        return this;
 +    }
 +

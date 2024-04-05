@@ -50,7 +50,7 @@ index eacd3780aa20ceaa5c4a6ea003441ce5b79ce889..5b7d54e6a15cb19d6f58de8d3cfdfd07
 +    }
  }
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-index c8f54a65f9a42d658c055c2648d924724098fce6..9caed5a0025fb8dd1fa98dce26d35531661af80e 100644
+index 22987e4a0c824d21c31c9e3700593e927af199fe..b82eb52c18297950bdefa82c760b8748874a4aef 100644
 --- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 @@ -259,8 +259,8 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
