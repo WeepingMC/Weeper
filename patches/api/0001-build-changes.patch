@@ -13,7 +13,7 @@ unwrap integer in unit test
 api generator changes
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 66bcd8f9a8fce8f920a0f1dd7ae0a2937da68e80..a1a6c08899511275666485760c576b29c7c7dd34 100644
+index 04853c43b99951bf0d4c96ef73724625bdaf018f..f6ff8e522cbdd69b65ad470f5986ba377c89a6e5 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,7 +13,7 @@ val annotationsVersion = "24.0.1"
@@ -25,23 +25,7 @@ index 66bcd8f9a8fce8f920a0f1dd7ae0a2937da68e80..a1a6c08899511275666485760c576b29
  val apiAndDocs: Configuration by configurations.creating {
      attributes {
          attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.DOCUMENTATION))
-@@ -52,8 +52,8 @@ dependencies {
-     api("org.apache.logging.log4j:log4j-api:$log4jVersion")
-     api("org.slf4j:slf4j-api:$slf4jVersion")
- 
--    implementation("org.ow2.asm:asm:9.5")
--    implementation("org.ow2.asm:asm-commons:9.5")
-+    implementation("org.ow2.asm:asm:9.6") // Weeper - bump asm
-+    implementation("org.ow2.asm:asm-commons:9.6") // Weeper - bump asm
-     // Paper end
- 
-     api("org.apache.maven:maven-resolver-provider:3.9.6") // Paper - make API dependency for Paper Plugins
-@@ -74,11 +74,11 @@ dependencies {
-     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
-     testImplementation("org.hamcrest:hamcrest:2.2")
-     testImplementation("org.mockito:mockito-core:5.5.0")
--    testImplementation("org.ow2.asm:asm-tree:9.5")
-+    testImplementation("org.ow2.asm:asm-tree:9.6") // Weeper - bump asm
+@@ -78,7 +78,7 @@ dependencies {
  }
  
  // Paper start

@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 241808d8619e17c0681f79acbbc98af5bf52dd89..bcd8898243363ec8ac5706de4740ffc175eee270 100644
+index bcfe59b6efb628ee1e7f9d60667360d4d885fb6a..fde9ce94d3091dedd51fa6e5c00dee0eae4f2cf1 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,8 +13,8 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -19,15 +19,6 @@ index 241808d8619e17c0681f79acbbc98af5bf52dd89..bcd8898243363ec8ac5706de4740ffc1
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -33,7 +33,7 @@ dependencies {
-     implementation("io.netty:netty-codec-haproxy:4.1.97.Final") // Paper - Add support for proxy protocol
-     // Paper end
-     implementation("org.apache.logging.log4j:log4j-iostreams:2.19.0") // Paper - remove exclusion
--    implementation("org.ow2.asm:asm-commons:9.5")
-+    implementation("org.ow2.asm:asm-commons:9.6") // Weeper - bump asm
-     implementation("org.spongepowered:configurate-yaml:4.2.0-SNAPSHOT") // Paper - config files
-     implementation("commons-lang:commons-lang:2.6")
-     implementation("net.fabricmc:mapping-io:0.5.0") // Paper - needed to read mappings for stacktrace deobfuscation
 @@ -58,6 +58,23 @@ dependencies {
      testImplementation("org.junit-pioneer:junit-pioneer:2.2.0") // Paper - CartesianTest
  }
@@ -104,7 +95,7 @@ index 9d687da5bdf398bb3f6c84cdf1249a7213d09f2e..1e6bd9d9227427b38fb731940bf8d129
          switch (distance) {
              case -1:
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index 93b661e9cb7743aeff7da3972942cb73049a5e4c..90d03aed51638ff8ecd435f4e705051ac94ee61f 100644
+index c8772c773f9933ed1d1debfe707af4373c458152..97e602395716b9fc80cd642655f343905f4aabca 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
 @@ -1865,7 +1865,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
@@ -151,7 +142,7 @@ index 66bdac50130f523f9dc4379b103b7a469f9ca36b..a399c8ce44d8be5540a3eded67686f68
      public boolean isEnabled() {
          return enabled;
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
-index 774556a62eb240da42e84db4502e2ed43495be17..793effdc5f473d11de41d932a0ebc35edd735a26 100644
+index 774556a62eb240da42e84db4502e2ed43495be17..4e2d964a7a5992d1e18cc7ee9e49180fd11035d5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 @@ -11,7 +11,7 @@ public final class Versioning {

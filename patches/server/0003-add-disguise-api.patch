@@ -159,10 +159,10 @@ index 529ab44baaf573b97cf7e89560c548642733188f..81dc19afb75f535b83c4625965d6be34
              sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 7cd7912cecbbbe2c32bfd9b85181115c6d316eb8..877b4edc4489ddc456f2810b71896eb46672efb5 100644
+index e8e4489bcd64fde1b3226bdc7a7cc612508bda3f..247c7fbe3fb9f5fde530dae9f075748047b86edf 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1252,4 +1252,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1270,4 +1270,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return this.getHandle().getScoreboardName();
      }
      // Paper end - entity scoreboard name

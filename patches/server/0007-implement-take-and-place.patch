@@ -58,10 +58,10 @@ index e2fd415b69e0213688561e9a19aec2cdcd267211..7df17df14631418095ea8799537dfccc
  
      public boolean isActive() {
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index acbb64010cd59668aa1bcb52ff1220789cadb1d3..265da2dd168a9598bd08d7fad9c8a7b3cf828c75 100644
+index 7984365c8290ac9e526a413b56e1c8c0841e330c..009f040b5e76335d79388e3098832c71ff312262 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-@@ -313,6 +313,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -314,6 +314,11 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
  
      @Override
      public InventoryView openInventory(Inventory inventory) {
@@ -73,16 +73,16 @@ index acbb64010cd59668aa1bcb52ff1220789cadb1d3..265da2dd168a9598bd08d7fad9c8a7b3
          if (!(this.getHandle() instanceof ServerPlayer)) return null;
          ServerPlayer player = (ServerPlayer) this.getHandle();
          AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
-@@ -342,7 +347,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
-         if (iinventory instanceof MenuProvider) {
-             this.getHandle().openMenu(iinventory);
+@@ -345,7 +350,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+             this.getHandle().openHorseInventory(horse.getHandle(), craft.getInventory());
          } else {
+             MenuType<?> container = CraftContainer.getNotchInventoryType(inventory);
 -            CraftHumanEntity.openCustomInventory(inventory, player, container);
 +            CraftHumanEntity.openCustomInventory(inventory, player, container, inventoryItemStackMoveStrategy);
          }
  
          if (this.getHandle().containerMenu == formerContainer) {
-@@ -353,9 +358,20 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -356,9 +361,20 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      }
  
      private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {
