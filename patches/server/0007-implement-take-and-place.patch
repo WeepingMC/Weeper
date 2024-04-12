@@ -22,7 +22,7 @@ index 48f634a7521d31c1e9dfd3cfc83139d428dbd37a..ae4a54d9a497c164a2da5d9ae94adb8c
          this.dataSlots.add(property);
          this.remoteDataSlots.add(0);
 diff --git a/src/main/java/net/minecraft/world/inventory/Slot.java b/src/main/java/net/minecraft/world/inventory/Slot.java
-index e2fd415b69e0213688561e9a19aec2cdcd267211..7df17df14631418095ea8799537dfccce1de2097 100644
+index 1b1d4c46827aa397183ca3dfec46c785e5531b71..c5f8c5f18ed6b8d24151bffc14f56bdbc05858db 100644
 --- a/src/main/java/net/minecraft/world/inventory/Slot.java
 +++ b/src/main/java/net/minecraft/world/inventory/Slot.java
 @@ -14,6 +14,13 @@ public class Slot {
@@ -39,7 +39,7 @@ index e2fd415b69e0213688561e9a19aec2cdcd267211..7df17df14631418095ea8799537dfccc
  
      public Slot(Container inventory, int index, int x, int y) {
          this.container = inventory;
-@@ -44,7 +51,7 @@ public class Slot {
+@@ -43,7 +50,7 @@ public class Slot {
      }
  
      public boolean mayPlace(ItemStack stack) {
@@ -48,7 +48,7 @@ index e2fd415b69e0213688561e9a19aec2cdcd267211..7df17df14631418095ea8799537dfccc
      }
  
      public ItemStack getItem() {
-@@ -90,7 +97,7 @@ public class Slot {
+@@ -89,7 +96,7 @@ public class Slot {
      }
  
      public boolean mayPickup(Player playerEntity) {
