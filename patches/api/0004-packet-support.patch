@@ -6,10 +6,10 @@ Subject: [PATCH] packet support
 
 diff --git a/src/main/java/com/github/weepingmc/packet/PacketPipeline.java b/src/main/java/com/github/weepingmc/packet/PacketPipeline.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..c13f90878e9feadd2fb2a6e8b6f20862e1439e0f
+index 0000000000000000000000000000000000000000..20bda7f5d8352dc8c7350ec3a617ce923ab80266
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/PacketPipeline.java
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,33 @@
 +package com.github.weepingmc.packet;
 +
 +import com.github.weepingmc.packet.options.EntityMetaBuilder;
@@ -27,7 +27,14 @@ index 0000000000000000000000000000000000000000..c13f90878e9feadd2fb2a6e8b6f20862
 +    @NotNull
 +    EntityMetaBuilder createEntityMetaBuilder();
 +
++    /**
++     * Creates a skin part builder
++     *
++     * @return skinpart builder
++     * @deprecated Use {@link org.bukkit.Server#newSkinPartsBuilder()}
++     */
 +    @NotNull
++    @Deprecated
 +    SkinParts.Builder createSkinPartsBuilder();
 +
 +    @NotNull
