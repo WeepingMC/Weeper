@@ -8,14 +8,6 @@ diff --git a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java b/src/mai
 index b6f4400df3d8ec7e06a996de54f8cabba57885e1..399295b28f0cbd3a7655dc46dfcfe2dafc567495 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
-@@ -3,6 +3,7 @@ package com.destroystokyo.paper;
- import com.google.common.base.Objects;
- 
- import java.util.StringJoiner;
-+import org.jetbrains.annotations.NotNull;
- 
- public class PaperSkinParts implements SkinParts {
- 
 @@ -71,4 +72,59 @@ public class PaperSkinParts implements SkinParts {
              .add("hats=" + hasHatsEnabled())
              .toString();
@@ -36,42 +28,42 @@ index b6f4400df3d8ec7e06a996de54f8cabba57885e1..399295b28f0cbd3a7655dc46dfcfe2da
 +        private static final int RIGHT_PANTS = 0x20;
 +        private static final int HAT = 0x40;
 +
-+        public @NotNull Builder withCape(){
++        public @org.jetbrains.annotations.NotNull Builder withCape(){
 +            raw |= CAPE;
 +            return this;
 +        }
 +
-+        public @NotNull Builder withJacket(){
++        public @org.jetbrains.annotations.NotNull Builder withJacket(){
 +            raw |= JACKET;
 +            return this;
 +        }
 +
-+        public @NotNull Builder withLeftSleeve(){
++        public @org.jetbrains.annotations.NotNull Builder withLeftSleeve(){
 +            raw |= LEFT_SLEEVE;
 +            return this;
 +        }
 +
-+        public @NotNull Builder withRightSleeve(){
++        public @org.jetbrains.annotations.NotNull Builder withRightSleeve(){
 +            raw |= RIGHT_SLEEVE;
 +            return this;
 +        }
 +
-+        public @NotNull Builder withLeftPants(){
++        public @org.jetbrains.annotations.NotNull Builder withLeftPants(){
 +            raw |= LEFT_PANTS;
 +            return this;
 +        }
 +
-+        public @NotNull Builder withRightPants(){
++        public @org.jetbrains.annotations.NotNull Builder withRightPants(){
 +            raw |= RIGHT_PANTS;
 +            return this;
 +        }
 +
-+        public @NotNull Builder withHat(){
++        public @org.jetbrains.annotations.NotNull Builder withHat(){
 +            raw |= HAT;
 +            return this;
 +        }
 +
-+        public @NotNull SkinParts build(){
++        public @org.jetbrains.annotations.NotNull SkinParts build(){
 +            return new PaperSkinParts(raw);
 +        }
 +    }
@@ -230,6 +222,23 @@ index 529ab44baaf573b97cf7e89560c548642733188f..81dc19afb75f535b83c4625965d6be34
          if (this.trackedDataValues != null) {
              sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+index deb75c82dc7e12986e90bb869250f9617f60877e..83dbfc70b7a4b9176b92c63024ed85bb1532b8fd 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
+@@ -377,6 +381,12 @@ public final class CraftServer implements Server {
+         return io.papermc.paper.util.TickThread.isTickThreadFor(((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandleRaw());
+     }
+     // Paper end - Folia reagion threading API
++    // Weeper start - add disguise api
++    @Override
++    public com.destroystokyo.paper.SkinParts.@org.jetbrains.annotations.NotNull Builder newSkinPartsBuilder() {
++        return new com.destroystokyo.paper.PaperSkinParts.Builder();
++    }
++    // Weeper end - add disguise api
+ 
+     static {
+         ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 index e8e4489bcd64fde1b3226bdc7a7cc612508bda3f..247c7fbe3fb9f5fde530dae9f075748047b86edf 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java

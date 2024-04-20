@@ -36,16 +36,14 @@ index 0000000000000000000000000000000000000000..6acdda82e91fabf159b22c89f62e43fa
 +
 +}
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 46240fd0e3c67e6584411a88052ce322974d5275..70d5b2b4e0a8c053833544b0f8c6049a702ff1f0 100644
+index 806b6d4377e744e6b37dc2a18f3db053d2950d03..4534164cd52fa06d46f6d073e2b28bd6e94cf36b 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2525,4 +2525,16 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2533,4 +2533,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
-     boolean isOwnedByCurrentRegion(@NotNull Entity entity);
-     // Paper end - Folia region threading API
-+
+     SkinParts.@NotNull Builder newSkinPartsBuilder();
+     // Weeper end - add disguise api
 +    // Weeper start - allow offline editing of playerData
-+
 +    /**
 +     * Edits the information of an offline player.
 +     *

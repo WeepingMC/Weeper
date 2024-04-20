@@ -127,6 +127,29 @@ index 0000000000000000000000000000000000000000..a1e1a69e6286d5a1e0568e08f77d320d
 +        }
 +    }
 +}
+diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
+index 4ff1b38eb65f97344257204cf018f176f247ed36..aef8861dbda8d964dcb4ade5e4f1d17a3922c402 100644
+--- a/src/main/java/org/bukkit/Server.java
++++ b/src/main/java/org/bukkit/Server.java
+@@ -1,5 +1,6 @@
+ package org.bukkit;
+ 
++import com.destroystokyo.paper.SkinParts;
+ import com.google.common.collect.ImmutableList;
+ import java.awt.image.BufferedImage;
+ import java.io.File;
+@@ -2518,4 +2519,11 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+      */
+     boolean isOwnedByCurrentRegion(@NotNull Entity entity);
+     // Paper end - Folia region threading API
++    // Weeper start - add disguise api
++    /**
++     * Creates a new skinparts builder used for overriding skin settintgs
++     * @return a new builder for skin parts
++     */
++    SkinParts.@NotNull Builder newSkinPartsBuilder();
++    // Weeper end - add disguise api
+ }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
 index 23def071492ccd715693d534cc506936e18f0f46..7195186db31942022c6c4c934c961e4690d51be0 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
