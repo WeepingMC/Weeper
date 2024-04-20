@@ -5,10 +5,10 @@ Subject: [PATCH] add disguise api
 
 
 diff --git a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
-index b6f4400df3d8ec7e06a996de54f8cabba57885e1..399295b28f0cbd3a7655dc46dfcfe2dafc567495 100644
+index b6f4400df3d8ec7e06a996de54f8cabba57885e1..ce28a4e9597b8c7a2d535eaac34d8babd67ed226 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
-@@ -71,4 +72,59 @@ public class PaperSkinParts implements SkinParts {
+@@ -71,4 +71,59 @@ public class PaperSkinParts implements SkinParts {
              .add("hats=" + hasHatsEnabled())
              .toString();
      }
@@ -223,10 +223,10 @@ index 529ab44baaf573b97cf7e89560c548642733188f..81dc19afb75f535b83c4625965d6be34
              sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index deb75c82dc7e12986e90bb869250f9617f60877e..83dbfc70b7a4b9176b92c63024ed85bb1532b8fd 100644
+index deb75c82dc7e12986e90bb869250f9617f60877e..86e43322a44ea80c09ca954283cd33d1e359f1eb 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -377,6 +381,12 @@ public final class CraftServer implements Server {
+@@ -377,6 +377,12 @@ public final class CraftServer implements Server {
          return io.papermc.paper.util.TickThread.isTickThreadFor(((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandleRaw());
      }
      // Paper end - Folia reagion threading API

@@ -128,17 +128,10 @@ index 0000000000000000000000000000000000000000..a1e1a69e6286d5a1e0568e08f77d320d
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 4ff1b38eb65f97344257204cf018f176f247ed36..aef8861dbda8d964dcb4ade5e4f1d17a3922c402 100644
+index 4ff1b38eb65f97344257204cf018f176f247ed36..15f32a9ba55362f14bbe701afbb745e53e96c88c 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -1,5 +1,6 @@
- package org.bukkit;
- 
-+import com.destroystokyo.paper.SkinParts;
- import com.google.common.collect.ImmutableList;
- import java.awt.image.BufferedImage;
- import java.io.File;
-@@ -2518,4 +2519,11 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2518,4 +2518,11 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      boolean isOwnedByCurrentRegion(@NotNull Entity entity);
      // Paper end - Folia region threading API
@@ -147,7 +140,7 @@ index 4ff1b38eb65f97344257204cf018f176f247ed36..aef8861dbda8d964dcb4ade5e4f1d17a
 +     * Creates a new skinparts builder used for overriding skin settintgs
 +     * @return a new builder for skin parts
 +     */
-+    SkinParts.@NotNull Builder newSkinPartsBuilder();
++    com.destroystokyo.paper.SkinParts.@NotNull Builder newSkinPartsBuilder();
 +    // Weeper end - add disguise api
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
