@@ -4,6 +4,78 @@ Date: Sat, 16 Mar 2024 22:58:19 +0100
 Subject: [PATCH] add disguise api
 
 
+diff --git a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
+index b6f4400df3d8ec7e06a996de54f8cabba57885e1..399295b28f0cbd3a7655dc46dfcfe2dafc567495 100644
+--- a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
++++ b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
+@@ -3,6 +3,7 @@ package com.destroystokyo.paper;
+ import com.google.common.base.Objects;
+ 
+ import java.util.StringJoiner;
++import org.jetbrains.annotations.NotNull;
+ 
+ public class PaperSkinParts implements SkinParts {
+ 
+@@ -71,4 +72,59 @@ public class PaperSkinParts implements SkinParts {
+             .add("hats=" + hasHatsEnabled())
+             .toString();
+     }
++
++    public static SkinParts.Builder builder(){
++        return new Builder();
++    }
++
++    public static class Builder implements SkinParts.Builder{
++        private int raw = 0;
++
++        private static final int CAPE = 0x01;
++        private static final int JACKET = 0x02;
++        private static final int LEFT_SLEEVE = 0x04;
++        private static final int RIGHT_SLEEVE = 0x08;
++        private static final int LEFT_PANTS = 0x10;
++        private static final int RIGHT_PANTS = 0x20;
++        private static final int HAT = 0x40;
++
++        public @NotNull Builder withCape(){
++            raw |= CAPE;
++            return this;
++        }
++
++        public @NotNull Builder withJacket(){
++            raw |= JACKET;
++            return this;
++        }
++
++        public @NotNull Builder withLeftSleeve(){
++            raw |= LEFT_SLEEVE;
++            return this;
++        }
++
++        public @NotNull Builder withRightSleeve(){
++            raw |= RIGHT_SLEEVE;
++            return this;
++        }
++
++        public @NotNull Builder withLeftPants(){
++            raw |= LEFT_PANTS;
++            return this;
++        }
++
++        public @NotNull Builder withRightPants(){
++            raw |= RIGHT_PANTS;
++            return this;
++        }
++
++        public @NotNull Builder withHat(){
++            raw |= HAT;
++            return this;
++        }
++
++        public @NotNull SkinParts build(){
++            return new PaperSkinParts(raw);
++        }
++    }
+ }
 diff --git a/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java b/src/main/java/com/github/weepingmc/disguise/DisguiseUtil.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..e5c8fac57435a2f955e4de1061e8987933c71c4d

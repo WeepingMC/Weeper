@@ -4,34 +4,6 @@ Date: Sat, 19 Jun 2021 15:21:16 +0200
 Subject: [PATCH] packet support
 
 
-diff --git a/src/main/java/com/destroystokyo/paper/SkinParts.java b/src/main/java/com/destroystokyo/paper/SkinParts.java
-index 4a0c39405d4fbed457787e3c6ded4cc6591bc8c2..7db62131bccaa218954fb56c5cdfe71f48aa59a1 100644
---- a/src/main/java/com/destroystokyo/paper/SkinParts.java
-+++ b/src/main/java/com/destroystokyo/paper/SkinParts.java
-@@ -17,4 +17,23 @@ public interface SkinParts {
-     boolean hasHatsEnabled();
- 
-     int getRaw();
-+
-+    interface Builder {
-+        @org.jetbrains.annotations.NotNull
-+        Builder withCape();
-+        @org.jetbrains.annotations.NotNull
-+        Builder withJacket();
-+        @org.jetbrains.annotations.NotNull
-+        Builder withLeftSleeve();
-+        @org.jetbrains.annotations.NotNull
-+        Builder withRightSleeve();
-+        @org.jetbrains.annotations.NotNull
-+        Builder withLeftPants();
-+        @org.jetbrains.annotations.NotNull
-+        Builder withRightPants();
-+        @org.jetbrains.annotations.NotNull
-+        Builder withHat();
-+        @org.jetbrains.annotations.NotNull
-+        SkinParts build();
-+    }
- }
 diff --git a/src/main/java/com/github/weepingmc/packet/PacketPipeline.java b/src/main/java/com/github/weepingmc/packet/PacketPipeline.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..c13f90878e9feadd2fb2a6e8b6f20862e1439e0f
