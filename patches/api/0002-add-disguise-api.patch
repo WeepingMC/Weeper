@@ -128,10 +128,10 @@ index 0000000000000000000000000000000000000000..a1e1a69e6286d5a1e0568e08f77d320d
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 4ff1b38eb65f97344257204cf018f176f247ed36..15f32a9ba55362f14bbe701afbb745e53e96c88c 100644
+index 27084402cf0e46dcd171074629b7c4156e48aa44..158d5324972b12a0671a38aad3c0e7bd23a55b05 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2518,4 +2518,11 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2537,4 +2537,11 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      boolean isOwnedByCurrentRegion(@NotNull Entity entity);
      // Paper end - Folia region threading API
@@ -144,10 +144,10 @@ index 4ff1b38eb65f97344257204cf018f176f247ed36..15f32a9ba55362f14bbe701afbb745e5
 +    // Weeper end - add disguise api
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 23def071492ccd715693d534cc506936e18f0f46..7195186db31942022c6c4c934c961e4690d51be0 100644
+index 62e3793903905b94eb1a120345015149abb33713..9fb0accddf448fec2015eccaeceeb8e38f7ad560 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1144,4 +1144,8 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1155,4 +1155,8 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
      @NotNull String getScoreboardEntryName();
      // Paper end - entity scoreboard name
