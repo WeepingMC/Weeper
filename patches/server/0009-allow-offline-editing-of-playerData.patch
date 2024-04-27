@@ -4,11 +4,11 @@ Date: Tue, 5 Dec 2023 18:48:50 +0100
 Subject: [PATCH] allow offline editing of playerData
 
 
-diff --git a/src/main/java/java/com/github/weepingmc/offline/CraftEditPlayer.java b/src/main/java/java/com/github/weepingmc/offline/CraftEditPlayer.java
+diff --git a/src/main/java/com/github/weepingmc/offline/CraftEditPlayer.java b/src/main/java/com/github/weepingmc/offline/CraftEditPlayer.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..82999ac66a92d04bf0499fe53bf4e268b7d07638
 --- /dev/null
-+++ b/src/main/java/java/com/github/weepingmc/offline/CraftEditPlayer.java
++++ b/src/main/java/com/github/weepingmc/offline/CraftEditPlayer.java
 @@ -0,0 +1,26 @@
 +package com.github.weepingmc.offline;
 +
