@@ -5,7 +5,7 @@ Subject: [PATCH] modern player abilities
 
 
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
-index eacd3780aa20ceaa5c4a6ea003441ce5b79ce889..5b7d54e6a15cb19d6f58de8d3cfdfd078377dcba 100644
+index 3ffe09d00926a03f3036728b2c65450349c9b9d1..a8db363f0488439703b9c97b96273b60c0ae5d5a 100644
 --- a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
 @@ -1,5 +1,11 @@
@@ -20,7 +20,7 @@ index eacd3780aa20ceaa5c4a6ea003441ce5b79ce889..5b7d54e6a15cb19d6f58de8d3cfdfd07
  import java.util.ArrayList;
  import java.util.EnumMap;
  import java.util.List;
-@@ -81,7 +87,7 @@ public final class CraftPacketConversion {
+@@ -82,7 +88,7 @@ public final class CraftPacketConversion {
          };
      }
  
@@ -29,7 +29,7 @@ index eacd3780aa20ceaa5c4a6ea003441ce5b79ce889..5b7d54e6a15cb19d6f58de8d3cfdfd07
          Abilities playerAbilitiesNMS = new Abilities();
  
          for (PlayerAbility playerAbilitiy : playerAbilities) {
-@@ -94,4 +100,19 @@ public final class CraftPacketConversion {
+@@ -95,4 +101,19 @@ public final class CraftPacketConversion {
          }
          return playerAbilitiesNMS;
      }
