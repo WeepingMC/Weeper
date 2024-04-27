@@ -109,10 +109,10 @@ index 0000000000000000000000000000000000000000..270f90c81b77732cf2db947d74aa23c2
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftEntityMetaBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftEntityMetaBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..a51cf8bfda811b2162bef4d67122619b2d7991ec
+index 0000000000000000000000000000000000000000..7353065a7e8ae9fe83deb141e434924fc0087cdf
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftEntityMetaBuilder.java
-@@ -0,0 +1,57 @@
+@@ -0,0 +1,64 @@
 +package com.github.weepingmc.packet;
 +
 +import com.destroystokyo.paper.SkinParts;
@@ -122,6 +122,7 @@ index 0000000000000000000000000000000000000000..a51cf8bfda811b2162bef4d67122619b
 +import net.md_5.bungee.api.chat.BaseComponent;
 +import net.minecraft.network.chat.Component;
 +import net.minecraft.network.syncher.SynchedEntityData;
++import net.minecraft.server.level.ServerLevel;
 +import net.minecraft.world.entity.Entity;
 +import net.minecraft.world.entity.player.Player;
 +
@@ -136,6 +137,12 @@ index 0000000000000000000000000000000000000000..a51cf8bfda811b2162bef4d67122619b
 +public class CraftEntityMetaBuilder implements EntityMetaBuilder {
 +
 +    private final List<SynchedEntityData.DataItem<?>> dataWatcherList = new ArrayList<>();
++
++    private final ServerLevel serverLevel;
++
++    public CraftEntityMetaBuilder(ServerLevel level) {
++        serverLevel = level;
++    }
 +
 +    public List<SynchedEntityData.DataItem<?>> build() {
 +        return new ArrayList<>(dataWatcherList);
@@ -164,7 +171,7 @@ index 0000000000000000000000000000000000000000..a51cf8bfda811b2162bef4d67122619b
 +
 +    private @Nonnull EntityMetaBuilder withCustomName(String jsonString) {
 +        SynchedEntityData.DataItem<Optional<Component>> chat = new SynchedEntityData.DataItem<>(Entity.DATA_CUSTOM_NAME,
-+            Optional.ofNullable(net.minecraft.network.chat.Component.Serializer.fromJson(jsonString)));
++            Optional.ofNullable(net.minecraft.network.chat.Component.Serializer.fromJson(jsonString, serverLevel.registryAccess())));
 +        dataWatcherList.add(chat);
 +        dataWatcherList.add(new SynchedEntityData.DataItem<>(Entity.DATA_CUSTOM_NAME_VISIBLE, true));
 +        return this;
@@ -275,15 +282,16 @@ index 0000000000000000000000000000000000000000..eacd3780aa20ceaa5c4a6ea003441ce5
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketPipeline.java b/src/main/java/com/github/weepingmc/packet/CraftPacketPipeline.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..240bc89588f97914761c61d8c026cbc74c9e4ed9
+index 0000000000000000000000000000000000000000..ccae430549db8409cfb9e25fecb8fd9f99db530e
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketPipeline.java
-@@ -0,0 +1,49 @@
+@@ -0,0 +1,56 @@
 +package com.github.weepingmc.packet;
 +
 +
 +import javax.annotation.Nonnull;
 +
++import net.minecraft.server.level.ServerLevel;
 +import org.apache.commons.lang.RandomStringUtils;
 +import org.bukkit.craftbukkit.scoreboard.CraftScoreboard;
 +import org.bukkit.scoreboard.Team;
@@ -297,6 +305,12 @@ index 0000000000000000000000000000000000000000..240bc89588f97914761c61d8c026cbc7
 +
 +public class CraftPacketPipeline implements PacketPipeline {
 +
++    private final ServerLevel serverLevel;
++
++    public CraftPacketPipeline(ServerLevel level) {
++        serverLevel = level;
++    }
++
 +    @Override
 +    @Nonnull
 +    public PacketStepBuilder create() {
@@ -306,7 +320,7 @@ index 0000000000000000000000000000000000000000..240bc89588f97914761c61d8c026cbc7
 +    @Override
 +    @Nonnull
 +    public EntityMetaBuilder createEntityMetaBuilder() {
-+        return new CraftEntityMetaBuilder();
++        return new CraftEntityMetaBuilder(serverLevel);
 +    }
 +
 +    @Override
@@ -702,7 +716,7 @@ index 04adac916a0be711fb3176756bbd009cd936692d..15e3f1ae7d0afe9946379f71305daf4f
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index c3e450bcb6d76adb07a2a7cf83a1fae26be48fee..91883ecb191ea2abb7095107ad4b21bb173673c3 100644
+index c3e450bcb6d76adb07a2a7cf83a1fae26be48fee..94e2c5c1abc01ae8829a743aa5d5443ddf75869b 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -3284,4 +3284,11 @@ public final class CraftServer implements Server {
@@ -710,7 +724,7 @@ index c3e450bcb6d76adb07a2a7cf83a1fae26be48fee..91883ecb191ea2abb7095107ad4b21bb
      }
      // Paper end
 +    //  Weeper start - packet support
-+    private final com.github.weepingmc.packet.PacketPipeline packetPipeline = new com.github.weepingmc.packet.CraftPacketPipeline();
++    private final com.github.weepingmc.packet.PacketPipeline packetPipeline = new com.github.weepingmc.packet.CraftPacketPipeline(((CraftWorld)getWorlds().getFirst()).getHandle());
 +    @Override
 +    public @Nonnull com.github.weepingmc.packet.PacketPipeline getPacketPipeline() {
 +        return packetPipeline;
