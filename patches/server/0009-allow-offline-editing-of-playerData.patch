@@ -103,7 +103,7 @@ index a2142930b4d4b05987c90496fb9d733d99040aa0..cc0160f4b972daa5197d864388a96662
 +    // Weeper end - allow offline editing of playerData
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 0dc140a3bae0cdf30aac8cc8d94b6721827b09fd..f702e903bdc70a7a503156bfef44ac4baeefe84f 100644
+index 91883ecb191ea2abb7095107ad4b21bb173673c3..2976bbd55d91499e0c557adddcf48753995667db 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -386,6 +386,15 @@ public final class CraftServer implements Server {
@@ -122,12 +122,3 @@ index 0dc140a3bae0cdf30aac8cc8d94b6721827b09fd..f702e903bdc70a7a503156bfef44ac4b
      static {
          ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
          ConfigurationSerialization.registerClass(CraftPlayerProfile.class);
-@@ -3284,7 +3293,7 @@ public final class CraftServer implements Server {
-         return this.potionBrewer;
-     }
-     // Paper end
--     // Weeper start - packet support
-+         eeper start - packet support
-     private final com.github.weepingmc.packet.PacketPipeline packetPipeline = new com.github.weepingmc.packet.CraftPacketPipeline();
-     @Override
-     public @Nonnull com.github.weepingmc.packet.PacketPipeline getPacketPipeline() {

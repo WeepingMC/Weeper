@@ -702,14 +702,14 @@ index 04adac916a0be711fb3176756bbd009cd936692d..15e3f1ae7d0afe9946379f71305daf4f
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index c3e450bcb6d76adb07a2a7cf83a1fae26be48fee..0dc140a3bae0cdf30aac8cc8d94b6721827b09fd 100644
+index c3e450bcb6d76adb07a2a7cf83a1fae26be48fee..91883ecb191ea2abb7095107ad4b21bb173673c3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -3284,4 +3284,11 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
      // Paper end
-+     // Weeper start - packet support
++    //  Weeper start - packet support
 +    private final com.github.weepingmc.packet.PacketPipeline packetPipeline = new com.github.weepingmc.packet.CraftPacketPipeline();
 +    @Override
 +    public @Nonnull com.github.weepingmc.packet.PacketPipeline getPacketPipeline() {
