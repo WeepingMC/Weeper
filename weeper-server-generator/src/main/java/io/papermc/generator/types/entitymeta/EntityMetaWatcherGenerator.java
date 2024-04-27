@@ -98,8 +98,8 @@ public class EntityMetaWatcherGenerator extends SimpleGenerator {
             .beginControlFlow("if(serializerMap == null)")
             .addStatement("return false")
             .endControlFlow()
-            .addStatement("var serializer = serializerMap.get(accessor.getId())")
-            .addStatement("return serializer != null && serializer == accessor.getSerializer()");
+            .addStatement("var serializer = serializerMap.get(accessor.id())")
+            .addStatement("return serializer != null && serializer == accessor.serializer()");
 
         builder.addMethod(methodBuilder.build());
     }
@@ -144,7 +144,7 @@ public class EntityMetaWatcherGenerator extends SimpleGenerator {
                 .addStatement("$T result = new $T<>()", GENERIC_ENTITY_DATA_SERIALIZER, hashMap);
 
             perClassResults.getValue().forEach(result -> {
-                builder.addStatement("result.put($LL, $T.$L)", result.getId(), EntityDataSerializers.class, dataAccessorStringMap.get(result.getSerializer()));
+                builder.addStatement("result.put($LL, $T.$L)", result.id(), EntityDataSerializers.class, dataAccessorStringMap.get(result.serializer()));
             });
 
             var method = builder.addStatement("return $T.copyOf(result)", Map.class)
