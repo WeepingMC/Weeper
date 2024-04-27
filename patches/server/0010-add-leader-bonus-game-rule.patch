@@ -5,7 +5,7 @@ Subject: [PATCH] add leader bonus game rule
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Zombie.java b/src/main/java/net/minecraft/world/entity/monster/Zombie.java
-index e42dfc62bb179be1ab01b0096c05c6549d38abbc..7f79c2a0c52e1fbed259cd1dcf356eb32e746c21 100644
+index e42dfc62bb179be1ab01b0096c05c6549d38abbc..fe74df3b9be4e33b71cdd7556c57578c613b6030 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Zombie.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Zombie.java
 @@ -570,7 +570,9 @@ public class Zombie extends Monster {
@@ -14,7 +14,7 @@ index e42dfc62bb179be1ab01b0096c05c6549d38abbc..7f79c2a0c52e1fbed259cd1dcf356eb3
              this.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).addPermanentModifier(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 0.25D + 0.5D, AttributeModifier.Operation.ADD_VALUE));
 -            this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 3.0D + 1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 +            if(this.level().getGameRules().getRule(GameRules.RULE_LEADER_ZOMBIE_BONUS).get()){ // Weeper start - add game rule to disable leader zombie bonus
-+                this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 3.0D + 1.0D, AttributeModifier.Operation.MULTIPLY_TOTAL));
++                this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 3.0D + 1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 +            } // Weeper end - add game rule to disable leader zombie bonus
              this.setCanBreakDoors(this.supportsBreakDoorGoal());
          }
