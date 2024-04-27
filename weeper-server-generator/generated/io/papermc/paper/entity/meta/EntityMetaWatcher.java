@@ -121,7 +121,7 @@ import net.minecraft.world.entity.projectile.ThrownEnderpearl;
 import net.minecraft.world.entity.projectile.ThrownExperienceBottle;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.entity.projectile.ThrownTrident;
-import net.minecraft.world.entity.projectile.WindCharge;
+import net.minecraft.world.entity.projectile.windcharge.WindCharge;
 import net.minecraft.world.entity.projectile.WitherSkull;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.ChestBoat;
@@ -2936,7 +2936,7 @@ public final class EntityMetaWatcher {
         if(serializerMap == null) {
             return false;
         }
-        var serializer = serializerMap.get(accessor.getId());
-        return serializer != null && serializer == accessor.getSerializer();
+        var serializer = serializerMap.get(accessor.id());
+        return serializer != null && serializer == accessor.serializer();
     }
 }
