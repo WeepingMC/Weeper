@@ -179,10 +179,10 @@ index 0000000000000000000000000000000000000000..7353065a7e8ae9fe83deb141e434924f
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..eacd3780aa20ceaa5c4a6ea003441ce5b79ce889
+index 0000000000000000000000000000000000000000..3ffe09d00926a03f3036728b2c65450349c9b9d1
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketConversion.java
-@@ -0,0 +1,97 @@
+@@ -0,0 +1,98 @@
 +package com.github.weepingmc.packet;
 +
 +import java.util.ArrayList;
@@ -226,6 +226,7 @@ index 0000000000000000000000000000000000000000..eacd3780aa20ceaa5c4a6ea003441ce5
 +            case LEGS -> EquipmentSlot.LEGS;
 +            case CHEST -> EquipmentSlot.CHEST;
 +            case HEAD -> EquipmentSlot.HEAD;
++            case BODY -> EquipmentSlot.BODY;
 +        };
 +    }
 +
