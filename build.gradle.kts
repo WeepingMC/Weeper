@@ -43,7 +43,7 @@ subprojects {
 
 repositories {
     mavenCentral()
-    maven("https://repo.papermc.io/repository/maven-public/") {
+    maven(paperMavenPublicUrl) {
         content {
             onlyForConfigurations(PAPERCLIP_CONFIG)
         }
