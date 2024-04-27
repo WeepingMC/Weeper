@@ -169,14 +169,14 @@ index 0000000000000000000000000000000000000000..e5c8fac57435a2f955e4de1061e89879
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-index 0f99733660f91280e4c6262cf75b3c9cae86f65a..96c5f09f206ea41f8d414fb1dd30128a178f96a8 100644
+index 0f99733660f91280e4c6262cf75b3c9cae86f65a..439211af09b50cd05ce99b6285ce39336ae7825b 100644
 --- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 +++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 @@ -100,6 +100,7 @@ public class SynchedEntityData {
  
                  if (datawatcher_item.isDirty()) {
                      datawatcher_item.setDirty(false);
-+                    if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip(entity, datawatcher_item.getAccessor())) continue; // Weeper - disguise api
++                    if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip((net.minecraft.world.entity.Entity) entity, datawatcher_item.getAccessor())) continue; // Weeper - disguise api
                      list.add(datawatcher_item.value());
                  }
              }
@@ -185,7 +185,7 @@ index 0f99733660f91280e4c6262cf75b3c9cae86f65a..96c5f09f206ea41f8d414fb1dd30128a
          for (int j = 0; j < i; ++j) {
              SynchedEntityData.DataItem<?> datawatcher_item = adatawatcher_item[j];
 -
-+            if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip(entity, datawatcher_item.getAccessor())) continue; // Weeper - disguise api
++            if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip((net.minecraft.world.entity.Entity) entity, datawatcher_item.getAccessor())) continue; // Weeper - disguise api
              if (!datawatcher_item.isSetToDefault()) {
                  if (list == null) {
                      list = new ArrayList();
@@ -194,7 +194,7 @@ index 0f99733660f91280e4c6262cf75b3c9cae86f65a..96c5f09f206ea41f8d414fb1dd30128a
              SynchedEntityData.DataValue<?> datawatcher_c = (SynchedEntityData.DataValue) iterator.next();
              SynchedEntityData.DataItem<?> datawatcher_item = this.itemsById[datawatcher_c.id];
 -
-+            if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip(entity, datawatcher_item.getAccessor())) continue; // Weeper - disguise api
++            if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip((net.minecraft.world.entity.Entity) entity, datawatcher_item.getAccessor())) continue; // Weeper - disguise api
              this.assignValue(datawatcher_item, datawatcher_c);
              this.entity.onSyncedDataUpdated(datawatcher_item.getAccessor());
          }
@@ -202,7 +202,7 @@ index 0f99733660f91280e4c6262cf75b3c9cae86f65a..96c5f09f206ea41f8d414fb1dd30128a
      public List<SynchedEntityData.DataValue<?>> packAll() {
          final List<SynchedEntityData.DataValue<?>> list = new ArrayList<>();
          for (final DataItem<?> dataItem : this.itemsById) {
-+            if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip(entity, dataItem.getAccessor())) continue; // Weeper - disguise api
++            if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip((net.minecraft.world.entity.Entity) entity, dataItem.getAccessor())) continue; // Weeper - disguise api
              list.add(dataItem.value());
          }
  
