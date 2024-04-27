@@ -5,10 +5,10 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index bcfe59b6efb628ee1e7f9d60667360d4d885fb6a..fde9ce94d3091dedd51fa6e5c00dee0eae4f2cf1 100644
+index 3b0cb2a4e200fb31b8789b2d99f033758b4f7145..1fa7457cfe1d4d104aea21d42bb02d7799ebdf6a 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -13,8 +13,8 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
+@@ -12,8 +12,8 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
  val alsoShade: Configuration by configurations.creating
  
  dependencies {
@@ -19,8 +19,8 @@ index bcfe59b6efb628ee1e7f9d60667360d4d885fb6a..fde9ce94d3091dedd51fa6e5c00dee0e
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -58,6 +58,23 @@ dependencies {
-     testImplementation("org.junit-pioneer:junit-pioneer:2.2.0") // Paper - CartesianTest
+@@ -61,6 +61,23 @@ dependencies {
+     // Paper end - Remap reflection
  }
  
 +
@@ -40,10 +40,10 @@ index bcfe59b6efb628ee1e7f9d60667360d4d885fb6a..fde9ce94d3091dedd51fa6e5c00dee0e
 +}
 +// Weeper end - api generator changes
 +
- val craftbukkitPackageVersion = "1_20_R3" // Paper
- tasks.jar {
-     archiveClassifier.set("dev")
-@@ -71,7 +88,7 @@ tasks.jar {
+ paperweight {
+     craftBukkitPackageVersion.set("v1_20_R4") // also needs to be updated in MappingEnvironment
+ }
+@@ -77,7 +94,7 @@ tasks.jar {
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
              "Implementation-Title" to "CraftBukkit",
@@ -95,10 +95,10 @@ index 9d687da5bdf398bb3f6c84cdf1249a7213d09f2e..1e6bd9d9227427b38fb731940bf8d129
          switch (distance) {
              case -1:
 diff --git a/src/main/java/net/minecraft/server/MinecraftServer.java b/src/main/java/net/minecraft/server/MinecraftServer.java
-index c8772c773f9933ed1d1debfe707af4373c458152..97e602395716b9fc80cd642655f343905f4aabca 100644
+index 8dc2f9df367c849ca333bf1a1fd92ff91617b548..38d22aafccc0b30f0de225ceb99cd95dcd3ecfa9 100644
 --- a/src/main/java/net/minecraft/server/MinecraftServer.java
 +++ b/src/main/java/net/minecraft/server/MinecraftServer.java
-@@ -1865,7 +1865,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
+@@ -1924,7 +1924,7 @@ public abstract class MinecraftServer extends ReentrantBlockableEventLoop<TickTa
  
      @DontObfuscate
      public String getServerModName() {
@@ -108,10 +108,10 @@ index c8772c773f9933ed1d1debfe707af4373c458152..97e602395716b9fc80cd642655f34390
  
      public SystemReport fillSystemReport(SystemReport details) {
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index c490a29bcf7410bc54959ee71375605964379ed5..deb75c82dc7e12986e90bb869250f9617f60877e 100644
+index 05e304f9fc8d0291fa779da589bd060ef4165b49..6380077ad12703b8dbe004eb58e6f69e2cd8e90d 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -266,7 +266,7 @@ import javax.annotation.Nullable; // Paper
+@@ -268,7 +268,7 @@ import javax.annotation.Nullable; // Paper
  import javax.annotation.Nonnull; // Paper
  
  public final class CraftServer implements Server {

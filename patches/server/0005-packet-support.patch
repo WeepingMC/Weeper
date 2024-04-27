@@ -625,37 +625,28 @@ index 0000000000000000000000000000000000000000..22987e4a0c824d21c31c9e3700593e92
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundAnimatePacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundAnimatePacket.java
-index 2dce930e691731781a6700610271dd549cf34fe8..c7ec04ba498ca8d5bd19e2c5ed099f60ccd4e49e 100644
+index 21858b0be70c125d15386fd940f7fc7d0064f582..c90bf153f698f7273a81d835eb7c00c4e655c7d7 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundAnimatePacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundAnimatePacket.java
-@@ -23,11 +23,18 @@ public class ClientboundAnimatePacket implements Packet<ClientGamePacketListener
+@@ -28,6 +28,13 @@ public class ClientboundAnimatePacket implements Packet<ClientGamePacketListener
          this.action = buf.readUnsignedByte();
      }
  
--    @Override
--    public void write(FriendlyByteBuf buf) {
--        buf.writeVarInt(this.id);
--        buf.writeByte(this.action);
 +    // Weeper start - allow packet creation without real entity
 +    public ClientboundAnimatePacket(int entityId, int animationId){
 +        this.id = entityId;
 +        this.action = animationId;
-     }
++    }
 +    // Weeper end
 +
-+  @Override
-+  public void write(FriendlyByteBuf buf) {
-+    buf.writeVarInt(this.id);
-+    buf.writeByte(this.action);
-+  }
- 
-     @Override
-     public void handle(ClientGamePacketListener listener) {
+     private void write(FriendlyByteBuf buf) {
+         buf.writeVarInt(this.id);
+         buf.writeByte(this.action);
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java
-index 15ebf22e9ca11870e5f24ff5ab8bcbee8c571ee3..9e711248be49a784e3eb37e89902f876f4d69f67 100644
+index 9a18277754fc1657e862b2ff4c077a54a4e24977..1cce6bd89f3a0f003d223fa95858842bac094703 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java
-@@ -14,6 +14,13 @@ public class ClientboundRotateHeadPacket implements Packet<ClientGamePacketListe
+@@ -19,6 +19,13 @@ public class ClientboundRotateHeadPacket implements Packet<ClientGamePacketListe
          this.yHeadRot = headYaw;
      }
  
@@ -666,14 +657,14 @@ index 15ebf22e9ca11870e5f24ff5ab8bcbee8c571ee3..9e711248be49a784e3eb37e89902f876
 +    }
 +    // Weeper end
 +
-     public ClientboundRotateHeadPacket(FriendlyByteBuf buf) {
+     private ClientboundRotateHeadPacket(FriendlyByteBuf buf) {
          this.entityId = buf.readVarInt();
          this.yHeadRot = buf.readByte();
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundSetPassengersPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundSetPassengersPacket.java
-index 2604e5952b3f046368bcca0f8e81dc9a3c78abdf..af0ab802b1be0f500a7229d7334e4fa8ae8445a5 100644
+index 690cbddccceb4bee7c85e4de9abc4659558029ca..64bf93ad2cef6fa71c9341409ec33590cece6f02 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundSetPassengersPacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundSetPassengersPacket.java
-@@ -9,6 +9,13 @@ public class ClientboundSetPassengersPacket implements Packet<ClientGamePacketLi
+@@ -14,6 +14,13 @@ public class ClientboundSetPassengersPacket implements Packet<ClientGamePacketLi
      private final int vehicle;
      private final int[] passengers;
  
@@ -688,10 +679,10 @@ index 2604e5952b3f046368bcca0f8e81dc9a3c78abdf..af0ab802b1be0f500a7229d7334e4fa8
          this.vehicle = entity.getId();
          List<Entity> list = entity.getPassengers();
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java
-index d5f404fb6dc09c48d84b4a3e75c12f2fbb53c224..857cfaaefc00ce5e8878d95560d1f0ba23daff26 100644
+index 04adac916a0be711fb3176756bbd009cd936692d..15e3f1ae7d0afe9946379f71305daf4fc48d1684 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java
-@@ -25,6 +25,18 @@ public class ClientboundTeleportEntityPacket implements Packet<ClientGamePacketL
+@@ -30,6 +30,18 @@ public class ClientboundTeleportEntityPacket implements Packet<ClientGamePacketL
          this.onGround = entity.onGround();
      }
  
@@ -707,23 +698,24 @@ index d5f404fb6dc09c48d84b4a3e75c12f2fbb53c224..857cfaaefc00ce5e8878d95560d1f0ba
 +    }
 +    // Weeper end
 +
-     public ClientboundTeleportEntityPacket(FriendlyByteBuf buf) {
+     private ClientboundTeleportEntityPacket(FriendlyByteBuf buf) {
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 86e43322a44ea80c09ca954283cd33d1e359f1eb..c6d2f51817d7175546d93536a65a3213e7ab52aa 100644
+index c3e450bcb6d76adb07a2a7cf83a1fae26be48fee..0dc140a3bae0cdf30aac8cc8d94b6721827b09fd 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3264,5 +3264,10 @@ public final class CraftServer implements Server {
+@@ -3284,4 +3284,11 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
- 
+     // Paper end
++     // Weeper start - packet support
 +    private final com.github.weepingmc.packet.PacketPipeline packetPipeline = new com.github.weepingmc.packet.CraftPacketPipeline();
 +    @Override
 +    public @Nonnull com.github.weepingmc.packet.PacketPipeline getPacketPipeline() {
 +        return packetPipeline;
 +    }
-     // Paper end
++    // Weeper end - packet support
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 index 253574890a9ed23d38a84680ba1eb221dc72b310..6da0393ae632bb1e8c718121b1392b2e92f86050 100644

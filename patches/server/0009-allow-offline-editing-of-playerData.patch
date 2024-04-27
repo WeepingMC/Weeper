@@ -4,11 +4,11 @@ Date: Tue, 5 Dec 2023 18:48:50 +0100
 Subject: [PATCH] allow offline editing of playerData
 
 
-diff --git a/src/main/java/com/github/weepingmc/offline/CraftEditPlayer.java b/src/main/java/com/github/weepingmc/offline/CraftEditPlayer.java
+diff --git a/src/main/java/java/com/github/weepingmc/offline/CraftEditPlayer.java b/src/main/java/java/com/github/weepingmc/offline/CraftEditPlayer.java
 new file mode 100644
 index 0000000000000000000000000000000000000000..82999ac66a92d04bf0499fe53bf4e268b7d07638
 --- /dev/null
-+++ b/src/main/java/com/github/weepingmc/offline/CraftEditPlayer.java
++++ b/src/main/java/java/com/github/weepingmc/offline/CraftEditPlayer.java
 @@ -0,0 +1,26 @@
 +package com.github.weepingmc.offline;
 +
@@ -37,10 +37,10 @@ index 0000000000000000000000000000000000000000..82999ac66a92d04bf0499fe53bf4e268
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 1e5f709115007ff19901c0a6c3cf884d9e4d3a6c..c9af9249faaeb0e485bee27734cb166d0f04837f 100644
+index a2142930b4d4b05987c90496fb9d733d99040aa0..cc0160f4b972daa5197d864388a9666217f07ebd 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -134,7 +134,8 @@ public abstract class PlayerList {
+@@ -136,7 +136,8 @@ public abstract class PlayerList {
      private static final int SEND_PLAYER_INFO_INTERVAL = 600;
      private static final SimpleDateFormat BAN_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
      private final MinecraftServer server;
@@ -50,7 +50,7 @@ index 1e5f709115007ff19901c0a6c3cf884d9e4d3a6c..c9af9249faaeb0e485bee27734cb166d
      private final Map<UUID, ServerPlayer> playersByUUID = Maps.newHashMap();
      private final UserBanList bans;
      private final IpBanList ipBans;
-@@ -722,7 +723,17 @@ public abstract class PlayerList {
+@@ -720,7 +721,17 @@ public abstract class PlayerList {
          // depending on the outcome.
          SocketAddress socketaddress = loginlistener.connection.getRemoteAddress();
  
@@ -66,12 +66,12 @@ index 1e5f709115007ff19901c0a6c3cf884d9e4d3a6c..c9af9249faaeb0e485bee27734cb166d
 +            entity = new ServerPlayer(this.server, this.server.getLevel(Level.OVERWORLD), gameprofile, ClientInformation.createDefault());
 +        }
 +        // Weeper end - allow offline editing of playerData
+         entity.transferCookieConnection = loginlistener;
          Player player = entity.getBukkitEntity();
          PlayerLoginEvent event = new PlayerLoginEvent(player, loginlistener.connection.hostname, ((java.net.InetSocketAddress) socketaddress).getAddress(), ((java.net.InetSocketAddress) loginlistener.connection.channel.remoteAddress()).getAddress());
- 
-@@ -1599,4 +1610,32 @@ public abstract class PlayerList {
-     public boolean isAllowCheatsForAllPlayers() {
-         return this.allowCheatsForAllPlayers;
+@@ -1598,4 +1609,32 @@ public abstract class PlayerList {
+     public boolean isAllowCommandsForAllPlayers() {
+         return this.allowCommandsForAllPlayers;
      }
 +
 +    // Weeper start - allow offline editing of playerData
@@ -103,10 +103,10 @@ index 1e5f709115007ff19901c0a6c3cf884d9e4d3a6c..c9af9249faaeb0e485bee27734cb166d
 +    // Weeper end - allow offline editing of playerData
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index c6d2f51817d7175546d93536a65a3213e7ab52aa..1d336353d2f4c37d1d371792100cc07acbca9274 100644
+index 0dc140a3bae0cdf30aac8cc8d94b6721827b09fd..f702e903bdc70a7a503156bfef44ac4baeefe84f 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -384,6 +384,15 @@ public final class CraftServer implements Server {
+@@ -386,6 +386,15 @@ public final class CraftServer implements Server {
      }
      // Weeper end - add disguise api
  
@@ -122,3 +122,12 @@ index c6d2f51817d7175546d93536a65a3213e7ab52aa..1d336353d2f4c37d1d371792100cc07a
      static {
          ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
          ConfigurationSerialization.registerClass(CraftPlayerProfile.class);
+@@ -3284,7 +3293,7 @@ public final class CraftServer implements Server {
+         return this.potionBrewer;
+     }
+     // Paper end
+-     // Weeper start - packet support
++         eeper start - packet support
+     private final com.github.weepingmc.packet.PacketPipeline packetPipeline = new com.github.weepingmc.packet.CraftPacketPipeline();
+     @Override
+     public @Nonnull com.github.weepingmc.packet.PacketPipeline getPacketPipeline() {

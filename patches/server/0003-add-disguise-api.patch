@@ -169,47 +169,48 @@ index 0000000000000000000000000000000000000000..e5c8fac57435a2f955e4de1061e89879
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-index 58b602e550258c1062ee940bc46538dac95d8979..8ad90139bcfabd102f3ca7e9cbb49a0a2e85de7d 100644
+index 0f99733660f91280e4c6262cf75b3c9cae86f65a..96c5f09f206ea41f8d414fb1dd30128a178f96a8 100644
 --- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 +++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-@@ -200,6 +200,7 @@ public class SynchedEntityData {
+@@ -100,6 +100,7 @@ public class SynchedEntityData {
  
                  if (datawatcher_item.isDirty()) {
                      datawatcher_item.setDirty(false);
 +                    if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip(entity, datawatcher_item.getAccessor())) continue; // Weeper - disguise api
-                     if (list == null) {
-                         list = new ArrayList();
-                     }
-@@ -224,7 +225,7 @@ public class SynchedEntityData {
+                     list.add(datawatcher_item.value());
+                 }
+             }
+@@ -116,7 +117,7 @@ public class SynchedEntityData {
  
-         while (objectiterator.hasNext()) {
-             SynchedEntityData.DataItem<?> datawatcher_item = (SynchedEntityData.DataItem) objectiterator.next();
+         for (int j = 0; j < i; ++j) {
+             SynchedEntityData.DataItem<?> datawatcher_item = adatawatcher_item[j];
 -
 +            if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip(entity, datawatcher_item.getAccessor())) continue; // Weeper - disguise api
              if (!datawatcher_item.isSetToDefault()) {
                  if (list == null) {
                      list = new ArrayList();
-@@ -296,6 +297,7 @@ public class SynchedEntityData {
- 
-         List<SynchedEntityData.DataValue<?>> list = new ArrayList<>();
-         for (DataItem<?> dataItem : this.itemsById.values()) {
+@@ -135,7 +136,7 @@ public class SynchedEntityData {
+         while (iterator.hasNext()) {
+             SynchedEntityData.DataValue<?> datawatcher_c = (SynchedEntityData.DataValue) iterator.next();
+             SynchedEntityData.DataItem<?> datawatcher_item = this.itemsById[datawatcher_c.id];
+-
++            if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip(entity, datawatcher_item.getAccessor())) continue; // Weeper - disguise api
+             this.assignValue(datawatcher_item, datawatcher_c);
+             this.entity.onSyncedDataUpdated(datawatcher_item.getAccessor());
+         }
+@@ -158,6 +159,7 @@ public class SynchedEntityData {
+     public List<SynchedEntityData.DataValue<?>> packAll() {
+         final List<SynchedEntityData.DataValue<?>> list = new ArrayList<>();
+         for (final DataItem<?> dataItem : this.itemsById) {
 +            if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip(entity, dataItem.getAccessor())) continue; // Weeper - disguise api
              list.add(dataItem.value());
          }
  
-@@ -326,6 +328,7 @@ public class SynchedEntityData {
-         List<SynchedEntityData.DataValue<?>> values = new ArrayList<>(keys.size());
-         for (EntityDataAccessor<?> key : keys) {
-             SynchedEntityData.DataItem<?> synchedValue = this.getItem(key);
-+            if (com.github.weepingmc.disguise.DisguiseUtil.shouldSkip(entity, synchedValue.getAccessor())) continue; // Weeper - disguise api
-             values.add(synchedValue.value());
-         }
- 
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 529ab44baaf573b97cf7e89560c548642733188f..81dc19afb75f535b83c4625965d6be3419b46d42 100644
+index 4f103f731623a8570238a6867fda1c5f83fca4e4..4d19ef2d01721ce6a9d1db3c03218bfdb57199b5 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
-@@ -301,7 +301,11 @@ public class ServerEntity {
+@@ -308,7 +308,11 @@ public class ServerEntity {
          Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket();
  
          this.yHeadRotp = Mth.floor(this.entity.getYHeadRot() * 256.0F / 360.0F);
@@ -223,10 +224,10 @@ index 529ab44baaf573b97cf7e89560c548642733188f..81dc19afb75f535b83c4625965d6be34
              sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index deb75c82dc7e12986e90bb869250f9617f60877e..43086c47530c365bc1c0e55eb4c0d60a9c7d7449 100644
+index 6380077ad12703b8dbe004eb58e6f69e2cd8e90d..c3e450bcb6d76adb07a2a7cf83a1fae26be48fee 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -377,6 +377,12 @@ public final class CraftServer implements Server {
+@@ -379,6 +379,12 @@ public final class CraftServer implements Server {
          return io.papermc.paper.util.TickThread.isTickThreadFor(((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandleRaw());
      }
      // Paper end - Folia reagion threading API
@@ -240,10 +241,10 @@ index deb75c82dc7e12986e90bb869250f9617f60877e..43086c47530c365bc1c0e55eb4c0d60a
      static {
          ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index e8e4489bcd64fde1b3226bdc7a7cc612508bda3f..247c7fbe3fb9f5fde530dae9f075748047b86edf 100644
+index a2d336ceb52b63db5c03432ee7bc94dc6a742b82..3c60bd79e2b41785f65b0714b7d6b8fd76009165 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1270,4 +1270,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1280,4 +1280,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return this.getHandle().getScoreboardName();
      }
      // Paper end - entity scoreboard name

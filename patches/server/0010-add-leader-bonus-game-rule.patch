@@ -5,14 +5,14 @@ Subject: [PATCH] add leader bonus game rule
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Zombie.java b/src/main/java/net/minecraft/world/entity/monster/Zombie.java
-index 5c40e994007dbf46ebc12c1e6a6ca90379471b74..3fd6c9c258ab456c70fb5a2ee43deeb7289285ec 100644
+index e42dfc62bb179be1ab01b0096c05c6549d38abbc..7f79c2a0c52e1fbed259cd1dcf356eb32e746c21 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Zombie.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Zombie.java
-@@ -581,7 +581,9 @@ public class Zombie extends Monster {
+@@ -570,7 +570,9 @@ public class Zombie extends Monster {
  
          if (this.random.nextFloat() < chanceMultiplier * 0.05F) {
-             this.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).addPermanentModifier(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 0.25D + 0.5D, AttributeModifier.Operation.ADDITION));
--            this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 3.0D + 1.0D, AttributeModifier.Operation.MULTIPLY_TOTAL));
+             this.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).addPermanentModifier(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 0.25D + 0.5D, AttributeModifier.Operation.ADD_VALUE));
+-            this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 3.0D + 1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 +            if(this.level().getGameRules().getRule(GameRules.RULE_LEADER_ZOMBIE_BONUS).get()){ // Weeper start - add game rule to disable leader zombie bonus
 +                this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 3.0D + 1.0D, AttributeModifier.Operation.MULTIPLY_TOTAL));
 +            } // Weeper end - add game rule to disable leader zombie bonus
@@ -20,10 +20,10 @@ index 5c40e994007dbf46ebc12c1e6a6ca90379471b74..3fd6c9c258ab456c70fb5a2ee43deeb7
          }
  
 diff --git a/src/main/java/net/minecraft/world/level/GameRules.java b/src/main/java/net/minecraft/world/level/GameRules.java
-index 4a340bd1f1859e43bb58e68aee4018fdb4ca7a5a..dff2cb5c01135562bebd5e78abf0ffc135b10125 100644
+index 89e327bc3a45879fe68887c7aadb077f31a770eb..4add3a3fe54be61c1c0aa3685819252b0c969c78 100644
 --- a/src/main/java/net/minecraft/world/level/GameRules.java
 +++ b/src/main/java/net/minecraft/world/level/GameRules.java
-@@ -51,6 +51,7 @@ public class GameRules {
+@@ -53,6 +53,7 @@ public class GameRules {
      public static final GameRules.Key<GameRules.BooleanValue> RULE_SHOWDEATHMESSAGES = GameRules.register("showDeathMessages", GameRules.Category.CHAT, GameRules.BooleanValue.create(true));
      public static final GameRules.Key<GameRules.IntegerValue> RULE_RANDOMTICKING = GameRules.register("randomTickSpeed", GameRules.Category.UPDATES, GameRules.IntegerValue.create(3));
      public static final GameRules.Key<GameRules.BooleanValue> RULE_SENDCOMMANDFEEDBACK = GameRules.register("sendCommandFeedback", GameRules.Category.CHAT, GameRules.BooleanValue.create(true));
