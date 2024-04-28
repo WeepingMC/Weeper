@@ -283,13 +283,14 @@ index 0000000000000000000000000000000000000000..3ffe09d00926a03f3036728b2c654503
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketPipeline.java b/src/main/java/com/github/weepingmc/packet/CraftPacketPipeline.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..ccae430549db8409cfb9e25fecb8fd9f99db530e
+index 0000000000000000000000000000000000000000..897b64bf92e4ab16a04d9b832070195a287b510b
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketPipeline.java
-@@ -0,0 +1,56 @@
+@@ -0,0 +1,57 @@
 +package com.github.weepingmc.packet;
 +
 +
++import java.util.function.Supplier;
 +import javax.annotation.Nonnull;
 +
 +import net.minecraft.server.level.ServerLevel;
@@ -306,9 +307,9 @@ index 0000000000000000000000000000000000000000..ccae430549db8409cfb9e25fecb8fd9f
 +
 +public class CraftPacketPipeline implements PacketPipeline {
 +
-+    private final ServerLevel serverLevel;
++    private final Supplier<ServerLevel> serverLevel;
 +
-+    public CraftPacketPipeline(ServerLevel level) {
++    public CraftPacketPipeline(Supplier<ServerLevel> level) {
 +        serverLevel = level;
 +    }
 +
@@ -321,7 +322,7 @@ index 0000000000000000000000000000000000000000..ccae430549db8409cfb9e25fecb8fd9f
 +    @Override
 +    @Nonnull
 +    public EntityMetaBuilder createEntityMetaBuilder() {
-+        return new CraftEntityMetaBuilder(serverLevel);
++        return new CraftEntityMetaBuilder(serverLevel.get());
 +    }
 +
 +    @Override
@@ -717,15 +718,33 @@ index 04adac916a0be711fb3176756bbd009cd936692d..15e3f1ae7d0afe9946379f71305daf4f
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index c3e450bcb6d76adb07a2a7cf83a1fae26be48fee..94e2c5c1abc01ae8829a743aa5d5443ddf75869b 100644
+index c3e450bcb6d76adb07a2a7cf83a1fae26be48fee..2484c0f53c3a1e8b7b0d0779c018eccc15a3d77c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -3284,4 +3284,11 @@ public final class CraftServer implements Server {
+@@ -394,6 +394,10 @@ public final class CraftServer implements Server {
+         CraftEntityFactory.instance();
+     }
+ 
++    // Weeper start - packet support
++    private final com.github.weepingmc.packet.PacketPipeline packetPipeline; // Weeper - packet support
++
++
+     public CraftServer(DedicatedServer console, PlayerList playerList) {
+         this.console = console;
+         this.playerList = (DedicatedPlayerList) playerList;
+@@ -472,6 +476,7 @@ public final class CraftServer implements Server {
+         }
+         this.potionBrewer = new io.papermc.paper.potion.PaperPotionBrewer(console); // Paper - custom potion mixes
+         datapackManager = new io.papermc.paper.datapack.PaperDatapackManager(console.getPackRepository()); // Paper
++        this.packetPipeline = new com.github.weepingmc.packet.CraftPacketPipeline(() -> ((CraftWorld)getWorlds().getFirst()).getHandle()); // Weeper - packet support
+     }
+ 
+     public boolean getCommandBlockOverride(String command) {
+@@ -3284,4 +3289,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
      // Paper end
 +    //  Weeper start - packet support
-+    private final com.github.weepingmc.packet.PacketPipeline packetPipeline = new com.github.weepingmc.packet.CraftPacketPipeline(((CraftWorld)getWorlds().getFirst()).getHandle());
 +    @Override
 +    public @Nonnull com.github.weepingmc.packet.PacketPipeline getPacketPipeline() {
 +        return packetPipeline;
