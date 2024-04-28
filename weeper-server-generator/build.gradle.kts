@@ -1,22 +1,14 @@
-import org.spongepowered.gradle.vanilla.repository.MinecraftPlatform
+import io.papermc.paperweight.PaperweightSourceGeneratorHelper
+import io.papermc.paperweight.extension.PaperweightSourceGeneratorExt
 
 plugins {
     java
-    id("org.spongepowered.gradle.vanilla") version "0.2.1-SNAPSHOT"
 }
 
-minecraft {
-    version(property("mcVersion").toString())
-    platform(MinecraftPlatform.SERVER)
+plugins.apply(PaperweightSourceGeneratorHelper::class)
 
-    runs {
-        server("generate") {
-            mainClass("io.papermc.generator.Main")
-            accessWideners(projectDir.toPath().resolve("wideners.at"))
-            args(projectDir.toPath().resolve("generated").toString())
-            targetVersion(21)
-        }
-    }
+extensions.configure(PaperweightSourceGeneratorExt::class) {
+    atFile.set(projectDir.toPath().resolve("wideners.at").toFile())
 }
 
 dependencies {
@@ -24,6 +16,20 @@ dependencies {
     implementation(project(":weeper-api"))
     implementation(project(":weeper-server"))
     implementation("io.github.classgraph:classgraph:4.8.168")
+    implementation("org.jetbrains:annotations:24.0.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+
+tasks.register<JavaExec>("generate") {
+    dependsOn(tasks.check)
+    mainClass.set("io.papermc.generator.Main")
+    classpath(sourceSets.main.map { it.runtimeClasspath })
+    args(projectDir.toPath().resolve("generated").toString())
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
 
 group = "io.papermc.paper"
