@@ -15,6 +15,7 @@ import net.minecraft.world.entity.GlowSquid;
 import net.minecraft.world.entity.Interaction;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.Marker;
+import net.minecraft.world.entity.OminousItemSpawner;
 import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.animal.Cat;
@@ -40,6 +41,7 @@ import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.animal.Wolf;
 import net.minecraft.world.entity.animal.allay.Allay;
+import net.minecraft.world.entity.animal.armadillo.Armadillo;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.animal.camel.Camel;
 import net.minecraft.world.entity.animal.frog.Frog;
@@ -66,6 +68,7 @@ import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.Bogged;
 import net.minecraft.world.entity.monster.CaveSpider;
 import net.minecraft.world.entity.monster.Creeper;
 import net.minecraft.world.entity.monster.Drowned;
@@ -121,8 +124,9 @@ import net.minecraft.world.entity.projectile.ThrownEnderpearl;
 import net.minecraft.world.entity.projectile.ThrownExperienceBottle;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.entity.projectile.ThrownTrident;
-import net.minecraft.world.entity.projectile.windcharge.WindCharge;
 import net.minecraft.world.entity.projectile.WitherSkull;
+import net.minecraft.world.entity.projectile.windcharge.BreezeWindCharge;
+import net.minecraft.world.entity.projectile.windcharge.WindCharge;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.entity.vehicle.ChestBoat;
 import net.minecraft.world.entity.vehicle.Minecart;
@@ -134,39 +138,14 @@ import net.minecraft.world.entity.vehicle.MinecartSpawner;
 import net.minecraft.world.entity.vehicle.MinecartTNT;
 
 @SuppressWarnings({
-        "unused",
-        "SpellCheckingInspection"
+    "unused",
+    "SpellCheckingInspection"
 })
-@GeneratedFrom("1.20.4")
+@GeneratedFrom("1.20.6")
 public final class EntityMetaWatcher {
     private static final Map<Class<? extends Entity>, Map<Long, EntityDataSerializer<?>>> VALID_ENTITY_META_MAP = initialize();
 
-    private static final Map<Long, EntityDataSerializer<?>> parrot() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(19L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.OPTIONAL_UUID);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> chicken() {
+    private static final Map<Long, EntityDataSerializer<?>> minecart() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -176,15 +155,12 @@ public final class EntityMetaWatcher {
         result.put(5L, EntityDataSerializers.BOOLEAN);
         result.put(6L, EntityDataSerializers.POSE);
         result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(8L, EntityDataSerializers.INT);
+        result.put(9L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.FLOAT);
+        result.put(11L, EntityDataSerializers.INT);
         result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(13L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -201,7 +177,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -210,22 +186,14 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> shulkerBullet() {
+    private static final Map<Long, EntityDataSerializer<?>> turtle() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> slime() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.INT);
+        result.put(17L, EntityDataSerializers.BLOCK_POS);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
+        result.put(20L, EntityDataSerializers.BLOCK_POS);
+        result.put(21L, EntityDataSerializers.BOOLEAN);
+        result.put(22L, EntityDataSerializers.BOOLEAN);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -236,28 +204,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> cod() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -267,7 +214,7 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> evoker() {
+    private static final Map<Long, EntityDataSerializer<?>> donkey() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -279,7 +226,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -287,362 +234,11 @@ public final class EntityMetaWatcher {
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(17L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> spectralArrow() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> snowGolem() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.BYTE);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> panda() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(18L, EntityDataSerializers.INT);
-        result.put(19L, EntityDataSerializers.INT);
-        result.put(20L, EntityDataSerializers.BYTE);
-        result.put(21L, EntityDataSerializers.BYTE);
-        result.put(22L, EntityDataSerializers.BYTE);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> caveSpider() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> glowItemFrame() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.ITEM_STACK);
-        result.put(9L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> experienceOrb() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> husk() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
         result.put(18L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> interaction() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(8L, EntityDataSerializers.FLOAT);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> frog() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.FROG_VARIANT);
-        result.put(18L, EntityDataSerializers.OPTIONAL_UNSIGNED_INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> dolphin() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.BLOCK_POS);
-        result.put(17L, EntityDataSerializers.BOOLEAN);
-        result.put(18L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> chestBoat() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.INT);
-        result.put(9L, EntityDataSerializers.INT);
-        result.put(10L, EntityDataSerializers.FLOAT);
-        result.put(11L, EntityDataSerializers.INT);
-        result.put(12L, EntityDataSerializers.BOOLEAN);
-        result.put(13L, EntityDataSerializers.BOOLEAN);
-        result.put(14L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> cow() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> ocelot() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> tadpole() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> creeper() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.INT);
-        result.put(17L, EntityDataSerializers.BOOLEAN);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> giant() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> thrownTrident() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(10L, EntityDataSerializers.BYTE);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> minecartChest() {
+    private static final Map<Long, EntityDataSerializer<?>> minecartTNT() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -675,7 +271,30 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> magmaCube() {
+    private static final Map<Long, EntityDataSerializer<?>> witch() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> breeze() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -687,13 +306,124 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> allay() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> drowned() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.INT);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> fishingHook() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(8L, EntityDataSerializers.INT);
+        result.put(9L, EntityDataSerializers.BOOLEAN);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> fox() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.INT);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.OPTIONAL_UUID);
+        result.put(20L, EntityDataSerializers.OPTIONAL_UUID);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> dolphin() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.BLOCK_POS);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
         return Map.copyOf(result);
     }
 
@@ -710,7 +440,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -719,8 +449,11 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> ravager() {
+    private static final Map<Long, EntityDataSerializer<?>> creeper() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.INT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -731,97 +464,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> enderDragonPart() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> pufferfish() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> dragonFireball() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> minecartHopper() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.INT);
-        result.put(9L, EntityDataSerializers.INT);
-        result.put(10L, EntityDataSerializers.FLOAT);
-        result.put(11L, EntityDataSerializers.INT);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> witherSkeleton() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -843,87 +486,12 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> turtle() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.BLOCK_POS);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        result.put(19L, EntityDataSerializers.BOOLEAN);
-        result.put(20L, EntityDataSerializers.BLOCK_POS);
-        result.put(21L, EntityDataSerializers.BOOLEAN);
-        result.put(22L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> witherBoss() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.INT);
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(18L, EntityDataSerializers.INT);
-        result.put(19L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> salmon() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -946,7 +514,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -954,7 +522,145 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> blaze() {
+    private static final Map<Long, EntityDataSerializer<?>> llama() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(19L, EntityDataSerializers.INT);
+        result.put(20L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> breezeWindCharge() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> snowball() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.ITEM_STACK);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> ghast() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> serverPlayer() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.FLOAT);
+        result.put(16L, EntityDataSerializers.INT);
+        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.COMPOUND_TAG);
+        result.put(20L, EntityDataSerializers.COMPOUND_TAG);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> villager() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(18L, EntityDataSerializers.VILLAGER_DATA);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> experienceOrb() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> ironGolem() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(16L, EntityDataSerializers.BYTE);
         result.put(0L, EntityDataSerializers.BYTE);
@@ -967,7 +673,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -976,7 +682,7 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> minecart() {
+    private static final Map<Long, EntityDataSerializer<?>> windCharge() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -986,172 +692,62 @@ public final class EntityMetaWatcher {
         result.put(5L, EntityDataSerializers.BOOLEAN);
         result.put(6L, EntityDataSerializers.POSE);
         result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.INT);
-        result.put(9L, EntityDataSerializers.INT);
-        result.put(10L, EntityDataSerializers.FLOAT);
-        result.put(11L, EntityDataSerializers.INT);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> itemFrame() {
+    private static final Map<Long, EntityDataSerializer<?>> wolf() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(19L, EntityDataSerializers.BOOLEAN);
+        result.put(20L, EntityDataSerializers.INT);
+        result.put(21L, EntityDataSerializers.INT);
+        result.put(22L, EntityDataSerializers.WOLF_VARIANT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(18L, EntityDataSerializers.OPTIONAL_UUID);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> salmon() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> ominousItemSpawner() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(8L, EntityDataSerializers.ITEM_STACK);
-        result.put(9L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> warden() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> horse() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(18L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> breeze() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> minecartCommandBlock() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(14L, EntityDataSerializers.STRING);
-        result.put(15L, EntityDataSerializers.COMPONENT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.INT);
-        result.put(9L, EntityDataSerializers.INT);
-        result.put(10L, EntityDataSerializers.FLOAT);
-        result.put(11L, EntityDataSerializers.INT);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> fox() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(18L, EntityDataSerializers.BYTE);
-        result.put(19L, EntityDataSerializers.OPTIONAL_UUID);
-        result.put(20L, EntityDataSerializers.OPTIONAL_UUID);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> donkey() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> endCrystal() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(8L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(9L, EntityDataSerializers.BOOLEAN);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -1177,7 +773,31 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> zombieHorse() {
+    private static final Map<Long, EntityDataSerializer<?>> frog() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.FROG_VARIANT);
+        result.put(18L, EntityDataSerializers.OPTIONAL_UNSIGNED_INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> piglinBrute() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -1189,7 +809,433 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> spectralArrow() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> areaEffectCloud() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(8L, EntityDataSerializers.FLOAT);
+        result.put(9L, EntityDataSerializers.BOOLEAN);
+        result.put(10L, EntityDataSerializers.PARTICLE);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> piglin() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> llamaSpit() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> arrow() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(10L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> blaze() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.BYTE);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> dragonFireball() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> wanderingTrader() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> endCrystal() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(8L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(9L, EntityDataSerializers.BOOLEAN);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> ravager() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> thrownEgg() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.ITEM_STACK);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> zombieVillager() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(19L, EntityDataSerializers.BOOLEAN);
+        result.put(20L, EntityDataSerializers.VILLAGER_DATA);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.INT);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> bee() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(18L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> goat() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> cow() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> shulker() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.DIRECTION);
+        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> silverfish() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> pufferfish() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> guardian() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> caveSpider() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> evoker() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -1200,9 +1246,8 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> skeleton() {
+    private static final Map<Long, EntityDataSerializer<?>> evokerFangs() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -1211,18 +1256,30 @@ public final class EntityMetaWatcher {
         result.put(5L, EntityDataSerializers.BOOLEAN);
         result.put(6L, EntityDataSerializers.POSE);
         result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> squid() {
+    private static final Map<Long, EntityDataSerializer<?>> minecartFurnace() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(14L, EntityDataSerializers.BOOLEAN);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.INT);
+        result.put(9L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.FLOAT);
+        result.put(11L, EntityDataSerializers.INT);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> chicken() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -1234,12 +1291,65 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> itemFrame() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(8L, EntityDataSerializers.ITEM_STACK);
+        result.put(9L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> ocelot() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> itemEntity() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(8L, EntityDataSerializers.ITEM_STACK);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -1258,7 +1368,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -1268,9 +1378,26 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> ghast() {
+    private static final Map<Long, EntityDataSerializer<?>> fireworkRocketEntity() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(8L, EntityDataSerializers.ITEM_STACK);
+        result.put(9L, EntityDataSerializers.OPTIONAL_UNSIGNED_INT);
+        result.put(10L, EntityDataSerializers.BOOLEAN);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> sniffer() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.SNIFFER_STATE);
+        result.put(18L, EntityDataSerializers.INT);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -1281,16 +1408,17 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> snowball() {
+    private static final Map<Long, EntityDataSerializer<?>> smallFireball() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -1304,23 +1432,9 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> lightningBolt() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> pig() {
+    private static final Map<Long, EntityDataSerializer<?>> polarBear() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(17L, EntityDataSerializers.BOOLEAN);
-        result.put(18L, EntityDataSerializers.INT);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -1331,7 +1445,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -1341,7 +1455,7 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> silverfish() {
+    private static final Map<Long, EntityDataSerializer<?>> enderDragonPart() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -1351,115 +1465,6 @@ public final class EntityMetaWatcher {
         result.put(5L, EntityDataSerializers.BOOLEAN);
         result.put(6L, EntityDataSerializers.POSE);
         result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> villager() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(18L, EntityDataSerializers.VILLAGER_DATA);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> fishingHook() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(8L, EntityDataSerializers.INT);
-        result.put(9L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> mushroomCow() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.STRING);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> areaEffectCloud() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(8L, EntityDataSerializers.FLOAT);
-        result.put(9L, EntityDataSerializers.INT);
-        result.put(10L, EntityDataSerializers.BOOLEAN);
-        result.put(11L, EntityDataSerializers.PARTICLE);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> enderDragon() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
         return Map.copyOf(result);
     }
 
@@ -1493,169 +1498,7 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> wolf() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(19L, EntityDataSerializers.BOOLEAN);
-        result.put(20L, EntityDataSerializers.INT);
-        result.put(21L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.OPTIONAL_UUID);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> guardian() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> piglin() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.BOOLEAN);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        result.put(19L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> minecartTNT() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.INT);
-        result.put(9L, EntityDataSerializers.INT);
-        result.put(10L, EntityDataSerializers.FLOAT);
-        result.put(11L, EntityDataSerializers.INT);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> camel() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        result.put(19L, EntityDataSerializers.LONG);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> minecartFurnace() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(14L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.INT);
-        result.put(9L, EntityDataSerializers.INT);
-        result.put(10L, EntityDataSerializers.FLOAT);
-        result.put(11L, EntityDataSerializers.INT);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> polarBear() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> windCharge() {
+    private static final Map<Long, EntityDataSerializer<?>> leashFenceKnotEntity() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -1668,114 +1511,7 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> itemEntity() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(8L, EntityDataSerializers.ITEM_STACK);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> zombie() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> sheep() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> enderMan() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.OPTIONAL_BLOCK_STATE);
-        result.put(17L, EntityDataSerializers.BOOLEAN);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> vex() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.BYTE);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> skeletonHorse() {
+    private static final Map<Long, EntityDataSerializer<?>> tadpole() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -1787,94 +1523,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> bee() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> wanderingTrader() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> smallFireball() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.ITEM_STACK);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> goat() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.BOOLEAN);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        result.put(19L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -1917,7 +1566,31 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> phantom() {
+    private static final Map<Long, EntityDataSerializer<?>> husk() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.INT);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> enderDragon() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(16L, EntityDataSerializers.INT);
         result.put(0L, EntityDataSerializers.BYTE);
@@ -1930,7 +1603,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -1939,79 +1612,12 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> zombifiedPiglin() {
+    private static final Map<Long, EntityDataSerializer<?>> witherBoss() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(16L, EntityDataSerializers.INT);
         result.put(17L, EntityDataSerializers.INT);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> strider() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        result.put(19L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> boat() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(11L, EntityDataSerializers.INT);
-        result.put(12L, EntityDataSerializers.BOOLEAN);
-        result.put(13L, EntityDataSerializers.BOOLEAN);
-        result.put(14L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.INT);
-        result.put(9L, EntityDataSerializers.INT);
-        result.put(10L, EntityDataSerializers.FLOAT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> sniffer() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.SNIFFER_STATE);
         result.put(18L, EntityDataSerializers.INT);
+        result.put(19L, EntityDataSerializers.INT);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -2022,31 +1628,16 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> eyeOfEnder() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(8L, EntityDataSerializers.ITEM_STACK);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> thrownEgg() {
+    private static final Map<Long, EntityDataSerializer<?>> glowItemFrame() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -2057,13 +1648,27 @@ public final class EntityMetaWatcher {
         result.put(6L, EntityDataSerializers.POSE);
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.ITEM_STACK);
+        result.put(9L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> zombieVillager() {
+    private static final Map<Long, EntityDataSerializer<?>> fallingBlockEntity() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(19L, EntityDataSerializers.BOOLEAN);
-        result.put(20L, EntityDataSerializers.VILLAGER_DATA);
+        result.put(8L, EntityDataSerializers.BLOCK_POS);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> warden() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.INT);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -2074,61 +1679,12 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> allay() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> tropicalFish() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -2146,134 +1702,10 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> cat() {
+    private static final Map<Long, EntityDataSerializer<?>> minecartCommandBlock() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(19L, EntityDataSerializers.CAT_VARIANT);
-        result.put(20L, EntityDataSerializers.BOOLEAN);
-        result.put(21L, EntityDataSerializers.BOOLEAN);
-        result.put(22L, EntityDataSerializers.INT);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.OPTIONAL_UUID);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> thrownExperienceBottle() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.ITEM_STACK);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> elderGuardian() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> drowned() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> hoglin() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> thrownPotion() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.ITEM_STACK);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> minecartSpawner() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(14L, EntityDataSerializers.STRING);
+        result.put(15L, EntityDataSerializers.COMPONENT);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -2291,7 +1723,7 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> piglinBrute() {
+    private static final Map<Long, EntityDataSerializer<?>> thrownPotion() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -2301,23 +1733,13 @@ public final class EntityMetaWatcher {
         result.put(5L, EntityDataSerializers.BOOLEAN);
         result.put(6L, EntityDataSerializers.POSE);
         result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(8L, EntityDataSerializers.ITEM_STACK);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> zoglin() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> shulker() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.DIRECTION);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.BYTE);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -2328,7 +1750,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -2337,22 +1759,8 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> llamaSpit() {
+    private static final Map<Long, EntityDataSerializer<?>> giant() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> rabbit() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(17L, EntityDataSerializers.INT);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -2363,26 +1771,12 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> evokerFangs() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -2415,90 +1809,11 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> marker() {
+    private static final Map<Long, EntityDataSerializer<?>> strider() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> serverPlayer() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.FLOAT);
-        result.put(16L, EntityDataSerializers.INT);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.BYTE);
-        result.put(19L, EntityDataSerializers.COMPOUND_TAG);
-        result.put(20L, EntityDataSerializers.COMPOUND_TAG);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> fireworkRocketEntity() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(8L, EntityDataSerializers.ITEM_STACK);
-        result.put(9L, EntityDataSerializers.OPTIONAL_UNSIGNED_INT);
-        result.put(10L, EntityDataSerializers.BOOLEAN);
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> traderLlama() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(17L, EntityDataSerializers.INT);
         result.put(18L, EntityDataSerializers.BOOLEAN);
-        result.put(19L, EntityDataSerializers.INT);
-        result.put(20L, EntityDataSerializers.INT);
-        result.put(21L, EntityDataSerializers.INT);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> endermite() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(19L, EntityDataSerializers.BOOLEAN);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -2509,28 +1824,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> vindicator() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -2540,9 +1834,8 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> zoglin() {
+    private static final Map<Long, EntityDataSerializer<?>> zombieHorse() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -2553,16 +1846,31 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BYTE);
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> witch() {
+    private static final Map<Long, EntityDataSerializer<?>> lightningBolt() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> hoglin() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(17L, EntityDataSerializers.BOOLEAN);
         result.put(0L, EntityDataSerializers.BYTE);
@@ -2575,7 +1883,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -2585,9 +1893,8 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> fallingBlockEntity() {
+    private static final Map<Long, EntityDataSerializer<?>> shulkerBullet() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(8L, EntityDataSerializers.BLOCK_POS);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -2599,10 +1906,9 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> primedTnt() {
+    private static final Map<Long, EntityDataSerializer<?>> skeleton() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(8L, EntityDataSerializers.INT);
-        result.put(9L, EntityDataSerializers.BLOCK_STATE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -2611,10 +1917,18 @@ public final class EntityMetaWatcher {
         result.put(5L, EntityDataSerializers.BOOLEAN);
         result.put(6L, EntityDataSerializers.POSE);
         result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> ironGolem() {
+    private static final Map<Long, EntityDataSerializer<?>> snowGolem() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(16L, EntityDataSerializers.BYTE);
         result.put(0L, EntityDataSerializers.BYTE);
@@ -2627,7 +1941,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -2636,7 +1950,7 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> illusioner() {
+    private static final Map<Long, EntityDataSerializer<?>> stray() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -2648,7 +1962,51 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> pillager() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> skeletonHorse() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -2673,7 +2031,30 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> leashFenceKnotEntity() {
+    private static final Map<Long, EntityDataSerializer<?>> rabbit() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> endermite() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -2683,6 +2064,313 @@ public final class EntityMetaWatcher {
         result.put(5L, EntityDataSerializers.BOOLEAN);
         result.put(6L, EntityDataSerializers.POSE);
         result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> elderGuardian() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> phantom() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> zombifiedPiglin() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.INT);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> minecartHopper() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.INT);
+        result.put(9L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.FLOAT);
+        result.put(11L, EntityDataSerializers.INT);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> cod() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> panda() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.INT);
+        result.put(18L, EntityDataSerializers.INT);
+        result.put(19L, EntityDataSerializers.INT);
+        result.put(20L, EntityDataSerializers.BYTE);
+        result.put(21L, EntityDataSerializers.BYTE);
+        result.put(22L, EntityDataSerializers.BYTE);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> zombie() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.INT);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> sheep() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> parrot() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(19L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(18L, EntityDataSerializers.OPTIONAL_UUID);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> tropicalFish() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> squid() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> traderLlama() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(19L, EntityDataSerializers.INT);
+        result.put(20L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> minecartChest() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.INT);
+        result.put(9L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.FLOAT);
+        result.put(11L, EntityDataSerializers.INT);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -2698,7 +2386,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -2710,9 +2398,10 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> arrow() {
+    private static final Map<Long, EntityDataSerializer<?>> thrownTrident() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.BYTE);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -2726,9 +2415,11 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> pillager() {
+    private static final Map<Long, EntityDataSerializer<?>> enderMan() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.OPTIONAL_BLOCK_STATE);
         result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -2739,7 +2430,64 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> thrownExperienceBottle() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.ITEM_STACK);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> boat() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(11L, EntityDataSerializers.INT);
+        result.put(12L, EntityDataSerializers.BOOLEAN);
+        result.put(13L, EntityDataSerializers.BOOLEAN);
+        result.put(14L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.INT);
+        result.put(9L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.FLOAT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> pig() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -2749,8 +2497,9 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> stray() {
+    private static final Map<Long, EntityDataSerializer<?>> bogged() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -2761,7 +2510,7 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -2770,11 +2519,24 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> llama() {
+    private static final Map<Long, EntityDataSerializer<?>> interaction() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(19L, EntityDataSerializers.INT);
-        result.put(20L, EntityDataSerializers.INT);
-        result.put(21L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.FLOAT);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.BOOLEAN);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> witherSkeleton() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
         result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
@@ -2785,7 +2547,47 @@ public final class EntityMetaWatcher {
         result.put(7L, EntityDataSerializers.INT);
         result.put(8L, EntityDataSerializers.BYTE);
         result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> minecartSpawner() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.INT);
+        result.put(9L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.FLOAT);
+        result.put(11L, EntityDataSerializers.INT);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> illusioner() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
         result.put(11L, EntityDataSerializers.BOOLEAN);
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
@@ -2793,145 +2595,421 @@ public final class EntityMetaWatcher {
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(17L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> magmaCube() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> cat() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(19L, EntityDataSerializers.CAT_VARIANT);
+        result.put(20L, EntityDataSerializers.BOOLEAN);
+        result.put(21L, EntityDataSerializers.BOOLEAN);
+        result.put(22L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(18L, EntityDataSerializers.OPTIONAL_UUID);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> mushroomCow() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.STRING);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> horse() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(18L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> eyeOfEnder() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(8L, EntityDataSerializers.ITEM_STACK);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> marker() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> camel() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(19L, EntityDataSerializers.LONG);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> armadillo() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(17L, EntityDataSerializers.ARMADILLO_STATE);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> chestBoat() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.INT);
+        result.put(9L, EntityDataSerializers.INT);
+        result.put(10L, EntityDataSerializers.FLOAT);
+        result.put(11L, EntityDataSerializers.INT);
+        result.put(12L, EntityDataSerializers.BOOLEAN);
+        result.put(13L, EntityDataSerializers.BOOLEAN);
+        result.put(14L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> primedTnt() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(8L, EntityDataSerializers.INT);
+        result.put(9L, EntityDataSerializers.BLOCK_STATE);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> slime() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.INT);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> vex() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(16L, EntityDataSerializers.BYTE);
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> vindicator() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
     private static final Map<Class<? extends Entity>, Map<Long, EntityDataSerializer<?>>> initialize(
-            ) {
+    ) {
         Map<Class<? extends Entity>, Map<Long, EntityDataSerializer<?>>> result = new HashMap<>();
-        result.put(Parrot.class, parrot());
-        result.put(Chicken.class, chicken());
-        result.put(GlowSquid.class, glowSquid());
-        result.put(ShulkerBullet.class, shulkerBullet());
-        result.put(Slime.class, slime());
-        result.put(Cod.class, cod());
-        result.put(Evoker.class, evoker());
-        result.put(SpectralArrow.class, spectralArrow());
-        result.put(SnowGolem.class, snowGolem());
-        result.put(Panda.class, panda());
-        result.put(CaveSpider.class, caveSpider());
-        result.put(GlowItemFrame.class, glowItemFrame());
-        result.put(ExperienceOrb.class, experienceOrb());
-        result.put(Husk.class, husk());
-        result.put(Interaction.class, interaction());
-        result.put(Frog.class, frog());
-        result.put(Dolphin.class, dolphin());
-        result.put(ChestBoat.class, chestBoat());
-        result.put(Cow.class, cow());
-        result.put(Ocelot.class, ocelot());
-        result.put(Tadpole.class, tadpole());
-        result.put(Creeper.class, creeper());
-        result.put(Giant.class, giant());
-        result.put(ThrownTrident.class, thrownTrident());
-        result.put(MinecartChest.class, minecartChest());
-        result.put(ThrownEnderpearl.class, thrownEnderpearl());
-        result.put(MagmaCube.class, magmaCube());
-        result.put(Spider.class, spider());
-        result.put(Ravager.class, ravager());
-        result.put(EnderDragonPart.class, enderDragonPart());
-        result.put(Pufferfish.class, pufferfish());
-        result.put(DragonFireball.class, dragonFireball());
-        result.put(MinecartHopper.class, minecartHopper());
-        result.put(WitherSkeleton.class, witherSkeleton());
-        result.put(Bat.class, bat());
-        result.put(Turtle.class, turtle());
-        result.put(WitherBoss.class, witherBoss());
-        result.put(Salmon.class, salmon());
-        result.put(ArmorStand.class, armorStand());
-        result.put(Blaze.class, blaze());
         result.put(Minecart.class, minecart());
-        result.put(ItemFrame.class, itemFrame());
-        result.put(Warden.class, warden());
-        result.put(Horse.class, horse());
-        result.put(Breeze.class, breeze());
-        result.put(MinecartCommandBlock.class, minecartCommandBlock());
-        result.put(Fox.class, fox());
+        result.put(GlowSquid.class, glowSquid());
+        result.put(Turtle.class, turtle());
         result.put(Donkey.class, donkey());
-        result.put(EndCrystal.class, endCrystal());
-        result.put(WitherSkull.class, witherSkull());
-        result.put(ZombieHorse.class, zombieHorse());
-        result.put(Skeleton.class, skeleton());
-        result.put(Squid.class, squid());
-        result.put(Axolotl.class, axolotl());
-        result.put(Ghast.class, ghast());
-        result.put(Snowball.class, snowball());
-        result.put(LightningBolt.class, lightningBolt());
-        result.put(Pig.class, pig());
-        result.put(Silverfish.class, silverfish());
-        result.put(Villager.class, villager());
-        result.put(FishingHook.class, fishingHook());
-        result.put(MushroomCow.class, mushroomCow());
-        result.put(AreaEffectCloud.class, areaEffectCloud());
-        result.put(EnderDragon.class, enderDragon());
-        result.put(Display.ItemDisplay.class, itemDisplay());
-        result.put(Wolf.class, wolf());
-        result.put(Guardian.class, guardian());
-        result.put(Piglin.class, piglin());
         result.put(MinecartTNT.class, minecartTNT());
-        result.put(Camel.class, camel());
-        result.put(MinecartFurnace.class, minecartFurnace());
-        result.put(PolarBear.class, polarBear());
+        result.put(ThrownEnderpearl.class, thrownEnderpearl());
+        result.put(Witch.class, witch());
+        result.put(Breeze.class, breeze());
+        result.put(Allay.class, allay());
+        result.put(Drowned.class, drowned());
+        result.put(FishingHook.class, fishingHook());
+        result.put(Fox.class, fox());
+        result.put(Dolphin.class, dolphin());
+        result.put(Spider.class, spider());
+        result.put(Creeper.class, creeper());
+        result.put(Bat.class, bat());
+        result.put(ArmorStand.class, armorStand());
+        result.put(Llama.class, llama());
+        result.put(BreezeWindCharge.class, breezeWindCharge());
+        result.put(Snowball.class, snowball());
+        result.put(Ghast.class, ghast());
+        result.put(ServerPlayer.class, serverPlayer());
+        result.put(Villager.class, villager());
+        result.put(ExperienceOrb.class, experienceOrb());
+        result.put(IronGolem.class, ironGolem());
         result.put(WindCharge.class, windCharge());
-        result.put(ItemEntity.class, itemEntity());
-        result.put(Zombie.class, zombie());
-        result.put(Sheep.class, sheep());
-        result.put(EnderMan.class, enderMan());
-        result.put(Vex.class, vex());
-        result.put(SkeletonHorse.class, skeletonHorse());
-        result.put(Bee.class, bee());
+        result.put(Wolf.class, wolf());
+        result.put(Salmon.class, salmon());
+        result.put(OminousItemSpawner.class, ominousItemSpawner());
+        result.put(WitherSkull.class, witherSkull());
+        result.put(Frog.class, frog());
+        result.put(PiglinBrute.class, piglinBrute());
+        result.put(SpectralArrow.class, spectralArrow());
+        result.put(AreaEffectCloud.class, areaEffectCloud());
+        result.put(Piglin.class, piglin());
+        result.put(LlamaSpit.class, llamaSpit());
+        result.put(Arrow.class, arrow());
+        result.put(Blaze.class, blaze());
+        result.put(DragonFireball.class, dragonFireball());
         result.put(WanderingTrader.class, wanderingTrader());
-        result.put(SmallFireball.class, smallFireball());
-        result.put(Goat.class, goat());
-        result.put(Display.TextDisplay.class, textDisplay());
-        result.put(Phantom.class, phantom());
-        result.put(ZombifiedPiglin.class, zombifiedPiglin());
-        result.put(Strider.class, strider());
-        result.put(Boat.class, boat());
-        result.put(Sniffer.class, sniffer());
-        result.put(EyeOfEnder.class, eyeOfEnder());
+        result.put(EndCrystal.class, endCrystal());
+        result.put(Ravager.class, ravager());
         result.put(ThrownEgg.class, thrownEgg());
         result.put(ZombieVillager.class, zombieVillager());
-        result.put(Allay.class, allay());
-        result.put(TropicalFish.class, tropicalFish());
-        result.put(Painting.class, painting());
-        result.put(Cat.class, cat());
-        result.put(ThrownExperienceBottle.class, thrownExperienceBottle());
-        result.put(ElderGuardian.class, elderGuardian());
-        result.put(Drowned.class, drowned());
-        result.put(Hoglin.class, hoglin());
-        result.put(ThrownPotion.class, thrownPotion());
-        result.put(MinecartSpawner.class, minecartSpawner());
-        result.put(PiglinBrute.class, piglinBrute());
+        result.put(Bee.class, bee());
+        result.put(Goat.class, goat());
+        result.put(Cow.class, cow());
         result.put(Shulker.class, shulker());
-        result.put(LlamaSpit.class, llamaSpit());
-        result.put(Rabbit.class, rabbit());
+        result.put(Silverfish.class, silverfish());
+        result.put(Pufferfish.class, pufferfish());
+        result.put(Guardian.class, guardian());
+        result.put(CaveSpider.class, caveSpider());
+        result.put(Evoker.class, evoker());
         result.put(EvokerFangs.class, evokerFangs());
-        result.put(Display.BlockDisplay.class, blockDisplay());
-        result.put(Marker.class, marker());
-        result.put(ServerPlayer.class, serverPlayer());
+        result.put(MinecartFurnace.class, minecartFurnace());
+        result.put(Chicken.class, chicken());
+        result.put(ItemFrame.class, itemFrame());
+        result.put(Ocelot.class, ocelot());
+        result.put(ItemEntity.class, itemEntity());
+        result.put(Axolotl.class, axolotl());
         result.put(FireworkRocketEntity.class, fireworkRocketEntity());
-        result.put(TraderLlama.class, traderLlama());
-        result.put(Endermite.class, endermite());
-        result.put(Vindicator.class, vindicator());
-        result.put(Zoglin.class, zoglin());
-        result.put(Witch.class, witch());
-        result.put(FallingBlockEntity.class, fallingBlockEntity());
-        result.put(PrimedTnt.class, primedTnt());
-        result.put(IronGolem.class, ironGolem());
-        result.put(Illusioner.class, illusioner());
-        result.put(LargeFireball.class, largeFireball());
+        result.put(Sniffer.class, sniffer());
+        result.put(SmallFireball.class, smallFireball());
+        result.put(PolarBear.class, polarBear());
+        result.put(EnderDragonPart.class, enderDragonPart());
+        result.put(Display.ItemDisplay.class, itemDisplay());
         result.put(LeashFenceKnotEntity.class, leashFenceKnotEntity());
-        result.put(Mule.class, mule());
-        result.put(Arrow.class, arrow());
-        result.put(Pillager.class, pillager());
+        result.put(Tadpole.class, tadpole());
+        result.put(Display.TextDisplay.class, textDisplay());
+        result.put(Husk.class, husk());
+        result.put(EnderDragon.class, enderDragon());
+        result.put(WitherBoss.class, witherBoss());
+        result.put(GlowItemFrame.class, glowItemFrame());
+        result.put(FallingBlockEntity.class, fallingBlockEntity());
+        result.put(Warden.class, warden());
+        result.put(Painting.class, painting());
+        result.put(MinecartCommandBlock.class, minecartCommandBlock());
+        result.put(ThrownPotion.class, thrownPotion());
+        result.put(Zoglin.class, zoglin());
+        result.put(Giant.class, giant());
+        result.put(Display.BlockDisplay.class, blockDisplay());
+        result.put(Strider.class, strider());
+        result.put(ZombieHorse.class, zombieHorse());
+        result.put(LightningBolt.class, lightningBolt());
+        result.put(Hoglin.class, hoglin());
+        result.put(ShulkerBullet.class, shulkerBullet());
+        result.put(Skeleton.class, skeleton());
+        result.put(SnowGolem.class, snowGolem());
         result.put(Stray.class, stray());
-        result.put(Llama.class, llama());
+        result.put(Pillager.class, pillager());
+        result.put(SkeletonHorse.class, skeletonHorse());
+        result.put(LargeFireball.class, largeFireball());
+        result.put(Rabbit.class, rabbit());
+        result.put(Endermite.class, endermite());
+        result.put(ElderGuardian.class, elderGuardian());
+        result.put(Phantom.class, phantom());
+        result.put(ZombifiedPiglin.class, zombifiedPiglin());
+        result.put(MinecartHopper.class, minecartHopper());
+        result.put(Cod.class, cod());
+        result.put(Panda.class, panda());
+        result.put(Zombie.class, zombie());
+        result.put(Sheep.class, sheep());
+        result.put(Parrot.class, parrot());
+        result.put(TropicalFish.class, tropicalFish());
+        result.put(Squid.class, squid());
+        result.put(TraderLlama.class, traderLlama());
+        result.put(MinecartChest.class, minecartChest());
+        result.put(Mule.class, mule());
+        result.put(ThrownTrident.class, thrownTrident());
+        result.put(EnderMan.class, enderMan());
+        result.put(ThrownExperienceBottle.class, thrownExperienceBottle());
+        result.put(Boat.class, boat());
+        result.put(Pig.class, pig());
+        result.put(Bogged.class, bogged());
+        result.put(Interaction.class, interaction());
+        result.put(WitherSkeleton.class, witherSkeleton());
+        result.put(MinecartSpawner.class, minecartSpawner());
+        result.put(Illusioner.class, illusioner());
+        result.put(MagmaCube.class, magmaCube());
+        result.put(Cat.class, cat());
+        result.put(MushroomCow.class, mushroomCow());
+        result.put(Horse.class, horse());
+        result.put(EyeOfEnder.class, eyeOfEnder());
+        result.put(Marker.class, marker());
+        result.put(Camel.class, camel());
+        result.put(Armadillo.class, armadillo());
+        result.put(ChestBoat.class, chestBoat());
+        result.put(PrimedTnt.class, primedTnt());
+        result.put(Slime.class, slime());
+        result.put(Vex.class, vex());
+        result.put(Vindicator.class, vindicator());
         return Map.copyOf(result);
     }
 
     public static final boolean isValidForClass(Class<? extends Entity> clazz,
-            EntityDataAccessor accessor) {
+                                                EntityDataAccessor accessor) {
         Map<Long, EntityDataSerializer<?>> serializerMap = VALID_ENTITY_META_MAP.get(clazz);
         if(serializerMap == null) {
             return false;
