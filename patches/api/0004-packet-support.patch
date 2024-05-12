@@ -325,10 +325,10 @@ index 5d1b55fdbcbe63f6b42b694d05211a3cc691a09d..42dbaa01b334377082cda3ef8b02ccc2
  
      // Paper start - Folia region threading API
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index eaf64c7a7b29863aaeb0b69ff82b3cde38799e0b..2f85354ffb5bd71c32552c6d9edd5b2eeae4ef9d 100644
+index afe84740f32ade2bdd48c854097f82f474961b4e..1aaa7d01cdcc6775ce21707c6cc20b792bbd9afe 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2424,6 +2424,13 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2426,6 +2426,13 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       * @return the potion brewer
       */
      @NotNull org.bukkit.potion.PotionBrewer getPotionBrewer();

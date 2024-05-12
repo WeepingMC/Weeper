@@ -34,10 +34,10 @@ index e5c8fac57435a2f955e4de1061e8987933c71c4d..498907b411cf81daf0e6b4e6b9e1d299
              case DisguiseData.OriginalDisguise original -> {
                  yield false;
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 4d19ef2d01721ce6a9d1db3c03218bfdb57199b5..66ff526171673bd53d0a79c8290982f207c4709f 100644
+index 0d4adf1e67597348a5592a539d93390c8b7254b3..a561201df2e8a0380482ec2df69b0d2abe0bbf44 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
-@@ -286,6 +286,7 @@ public class ServerEntity {
+@@ -294,6 +294,7 @@ public class ServerEntity {
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
          player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));

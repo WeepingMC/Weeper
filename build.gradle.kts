@@ -7,7 +7,7 @@ plugins {
     java
     `maven-publish`
     id("com.github.johnrengelman.shadow") version "8.1.1-SNAPSHOT"
-    id("io.papermc.paperweight.patcher") version "1.6.3"
+    id("io.papermc.paperweight.patcher") version "1.7.1"
 }
 
 val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
@@ -72,12 +72,6 @@ paperweight {
         }
 
         patchTasks {
-            register("mojangApi") {
-                isBareDirectory.set(true)
-                upstreamDirPath.set("Paper-MojangAPI")
-                patchDir.set(layout.projectDirectory.dir("patches/mojangapi"))
-                outputDir.set(layout.projectDirectory.dir("weeper-mojangapi"))
-            }
             register("paperApiGenerator") {
                 isBareDirectory.set(true)
                 upstreamDirPath.set("paper-api-generator")
@@ -99,7 +93,6 @@ tasks.register("cleanup"){
 
 tasks.generateDevelopmentBundle {
     apiCoordinates.set("com.github.weepingmc.weeper:Weeper-API")
-    mojangApiCoordinates.set("com.github.weepingmc.weeper:Weeper-MojangAPI")
     libraryRepositories.addAll(
         "https://repo.maven.apache.org/maven2/",
         paperMavenPublicUrl

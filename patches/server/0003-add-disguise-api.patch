@@ -207,10 +207,10 @@ index 0f99733660f91280e4c6262cf75b3c9cae86f65a..439211af09b50cd05ce99b6285ce3933
          }
  
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 4f103f731623a8570238a6867fda1c5f83fca4e4..4d19ef2d01721ce6a9d1db3c03218bfdb57199b5 100644
+index f16a69775332a08ed0e87d27acd0fc959359694c..0d4adf1e67597348a5592a539d93390c8b7254b3 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
-@@ -308,7 +308,11 @@ public class ServerEntity {
+@@ -316,7 +316,11 @@ public class ServerEntity {
          Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket();
  
          this.yHeadRotp = Mth.floor(this.entity.getYHeadRot() * 256.0F / 360.0F);
@@ -224,10 +224,10 @@ index 4f103f731623a8570238a6867fda1c5f83fca4e4..4d19ef2d01721ce6a9d1db3c03218bfd
              sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 6380077ad12703b8dbe004eb58e6f69e2cd8e90d..c3e450bcb6d76adb07a2a7cf83a1fae26be48fee 100644
+index 8aff6ffb6f25c90cfb21ce9c710fc0f55b4b17c9..4fb1253177114511d2fbc7255756bade36ec6959 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -379,6 +379,12 @@ public final class CraftServer implements Server {
+@@ -380,6 +380,12 @@ public final class CraftServer implements Server {
          return io.papermc.paper.util.TickThread.isTickThreadFor(((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandleRaw());
      }
      // Paper end - Folia reagion threading API

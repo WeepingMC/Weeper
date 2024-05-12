@@ -2,7 +2,6 @@ version = "1.0.0-SNAPSHOT"
 
 dependencies {
     compileOnly(project(":weeper-api"))
-    compileOnly(project(":weeper-mojangapi"))
 }
 
 tasks.processResources {
