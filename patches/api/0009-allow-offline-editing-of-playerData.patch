@@ -36,10 +36,10 @@ index 0000000000000000000000000000000000000000..6acdda82e91fabf159b22c89f62e43fa
 +
 +}
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 2f85354ffb5bd71c32552c6d9edd5b2eeae4ef9d..8edfca338d19ef32bddc7c55349d76cafed58c39 100644
+index 1aaa7d01cdcc6775ce21707c6cc20b792bbd9afe..98956aecc964553c00e471eaa273c3299b986049 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2554,4 +2554,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2556,4 +2556,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      com.destroystokyo.paper.SkinParts.@NotNull Builder newSkinPartsBuilder();
      // Weeper end - add disguise api

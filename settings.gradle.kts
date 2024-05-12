@@ -14,7 +14,7 @@ plugins {
 
 rootProject.name = "Weeper"
 
-for (name in listOf("weeper-api", "weeper-server", "weeper-mojangapi")) {
+for (name in listOf("weeper-api", "weeper-server")) {
     val projName = name.lowercase(Locale.ENGLISH)
     include(projName)
     findProject(":$projName")!!.projectDir = file(name)
