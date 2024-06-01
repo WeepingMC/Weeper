@@ -1,22 +1,24 @@
 package io.papermc.testplugin;
 
 import com.destroystokyo.paper.MaterialTags;
-import com.github.weepingmc.disguise.DisguiseData;
-import com.github.weepingmc.disguise.EntityTypeDisguise;
+import io.papermc.paper.disguise.DisguiseData;
+import io.papermc.paper.disguise.EntityTypeDisguise;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Allay;
-import org.bukkit.entity.Blaze;
+import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Shulker;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
 public final class TestPlugin extends JavaPlugin implements Listener {
@@ -28,7 +30,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
 
 
     @EventHandler
-    public void onEntityTrack(PlayerInteractEvent playerInteractEvent) {
+    public void onSpawn(PlayerInteractEvent playerInteractEvent) {
         if (playerInteractEvent.getAction().isLeftClick() || playerInteractEvent.getAction() == Action.RIGHT_CLICK_AIR) {
             return;
         }
@@ -36,7 +38,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
             return;
         }
         var stack = playerInteractEvent.getItem();
-        if (stack == null || !MaterialTags.SPAWN_EGGS.isTagged(stack)) {
+        if (stack == null || !(MaterialTags.SPAWN_EGGS.isTagged(stack) || stack.getType() == Material.ARMOR_STAND)) {
             return;
         }
         if (playerInteractEvent.getInteractionPoint() == null) {
@@ -45,30 +47,40 @@ public final class TestPlugin extends JavaPlugin implements Listener {
         var player = playerInteractEvent.getPlayer();
 
         switch (stack.getType()) {
-            case BLAZE_SPAWN_EGG -> spawnOtherEntity(Blaze.class, DisguiseData.entity(EntityType.BEE), playerInteractEvent.getInteractionPoint());
-            case ALLAY_SPAWN_EGG -> spawnPlayerLikeEntity(player, Allay.class, playerInteractEvent.getInteractionPoint());
+            case ARMOR_STAND ->
+                spawnOtherEntity(ArmorStand.class, DisguiseData.entity(EntityType.BEE), playerInteractEvent.getInteractionPoint());
+            case SHULKER_SPAWN_EGG ->
+                spawnPlayerLikeEntity(player, Shulker.class, playerInteractEvent.getInteractionPoint());
         };
         playerInteractEvent.setCancelled(true);
     }
 
     private void spawnOtherEntity(Class<? extends Entity> entityClass, EntityTypeDisguise entityTypeDisguise, Location location) {
         location.getWorld().spawn(location, entityClass, entity -> {
-            entity.setDisuiseData(entityTypeDisguise);
+            entity.setDisguiseData(entityTypeDisguise);
         });
     }
 
     private void spawnPlayerLikeEntity(Player player, Class<? extends Entity> entityClass, Location location) {
         player.getWorld().spawn(location, entityClass, entity -> {
-            entity.customName(Component.text("Gollum"));
-            entity.setDisuiseData(DisguiseData
+            entity.setDisguiseData(DisguiseData
                 .player(player.getPlayerProfile()).listed(false)
-                .skinParts(Bukkit.getPacketPipeline().createSkinPartsBuilder().withJacket().withCape().build())
+                .skinParts(Bukkit.getServer().newSkinPartsBuilder().withJacket(true).withCape(true).withHat(true).build())
                 .build());
-            Team team = player.getServer().getScoreboardManager().getMainScoreboard().registerNewTeam(Bukkit.getPacketPipeline().generateRandomString(10, true, true));
+
+
+            entity.customName(Component.text("Gollum"));
+            Scoreboard scoreboard = player.getScoreboard();
+
+            Team team = scoreboard.getTeam("test");
+            if (team == null) {
+                team = scoreboard.registerNewTeam("test");
+            }
             team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
             team.addEntry(entity.getScoreboardEntryName());
             team.prefix(Component.text("Happy Coding ", NamedTextColor.GOLD));
             team.suffix(Component.text(" :D", NamedTextColor.RED));
+            team.addEntry(entity.getName());
         });
     }
 }

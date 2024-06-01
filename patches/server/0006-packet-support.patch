@@ -718,7 +718,7 @@ index 04adac916a0be711fb3176756bbd009cd936692d..15e3f1ae7d0afe9946379f71305daf4f
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index cc813ebddbfe790c33565a9fa16fd704d3aa2ab7..6992d01f9f4d95d45879207f854ba75b611fcbab 100644
+index cb126c840f21f48b60ea231c379768a787a5f3d5..e6e8f858315c952d2936178b10d3cf2fbb54c87c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -390,6 +390,10 @@ public final class CraftServer implements Server {

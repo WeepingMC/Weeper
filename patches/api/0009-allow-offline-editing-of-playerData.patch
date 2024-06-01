@@ -36,13 +36,22 @@ index 0000000000000000000000000000000000000000..6acdda82e91fabf159b22c89f62e43fa
 +
 +}
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index f59dd1c217c05983a1f80f075108db479ab19bd5..c55f82d8ae6037cd8d8303ed355cf4d7b965a13f 100644
+index 4cb289fc84ecb6c089990d93436e8826c5a1b78b..4f2904d66a5135377613c79bbcb555a48bfcbf7f 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2560,4 +2560,14 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2553,11 +2553,21 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+      */
+     boolean isOwnedByCurrentRegion(@NotNull Entity entity);
+     // Paper end - Folia region threading API
+-    // Paper start - add disguise api
++    // Weeper start - add disguise api
+     /**
+      * Creates a new skinparts builder used for overriding skin settings
+      * @return a new builder for skin parts
       */
      com.destroystokyo.paper.SkinParts.@NotNull Builder newSkinPartsBuilder();
-     // Weeper end - add disguise api
+-    // Paper end - add disguise api
++    // Weeper end - add disguise api
 +    // Weeper start - allow offline editing of playerData
 +    /**
 +     * Edits the information of an offline player.

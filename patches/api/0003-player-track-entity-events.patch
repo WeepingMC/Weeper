@@ -6,13 +6,13 @@ Subject: [PATCH] player track entity events
 
 diff --git a/src/main/java/com/github/weepingmc/event/packet/PlayerTrackEntityEvent.java b/src/main/java/com/github/weepingmc/event/packet/PlayerTrackEntityEvent.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..ca949d2a50e0ef35442bf33a6cb8e122aaa080ee
+index 0000000000000000000000000000000000000000..30f6b52fe921aac0319520158205224138c15110
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/event/packet/PlayerTrackEntityEvent.java
 @@ -0,0 +1,66 @@
 +package com.github.weepingmc.event.packet;
 +
-+import com.github.weepingmc.disguise.DisguiseData;
++import io.papermc.paper.disguise.DisguiseData;
 +import org.bukkit.entity.Entity;
 +import org.bukkit.entity.Player;
 +import org.bukkit.event.Cancellable;
@@ -22,7 +22,7 @@ index 0000000000000000000000000000000000000000..ca949d2a50e0ef35442bf33a6cb8e122
 +
 +/**
 + * Is called before a {@link Player} tracks an {@link Entity}.
-+ *
++ * <p>
 + * E.g. can be used for the following:
 + *
 + * <ul>
@@ -31,7 +31,7 @@ index 0000000000000000000000000000000000000000..ca949d2a50e0ef35442bf33a6cb8e122
 + *         Cancel the event and replace it with a playerpacket with the same entity id.
 + *     </li>
 + * </ul>
-+ * @deprecated for entity disguising use {@link Entity#setDisuiseData(DisguiseData)}
++ * @deprecated for entity disguising use {@link Entity#setDisguiseData(DisguiseData)}
 + * for cancellation {@link io.papermc.paper.event.player.PlayerTrackEntityEvent}
 + */
 +@Deprecated
