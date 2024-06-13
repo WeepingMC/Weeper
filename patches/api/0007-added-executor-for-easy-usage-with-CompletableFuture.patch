@@ -32,10 +32,10 @@ index ef431219fd2bce48bad63b6b92c99d54348d480e..bb0d10ab1b2cc05dae86ad4388bd9620
       * Returns a value indicating whether or not this plugin is currently
       * enabled
 diff --git a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
-index 34037d3da2c536bac088e0ff629ee8f1daccc65b..c6d38d19a77a8f85cd481174ba2c0c3cffa8248b 100644
+index d5a3c3dce76c4ed0f1184ab5ba21db9c5f1c01ec..45d54a1bb6da55cf2a81c0c9a9d93d5e09cf6f53 100644
 --- a/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
 +++ b/src/main/java/org/bukkit/plugin/java/JavaPlugin.java
-@@ -109,6 +109,18 @@ public abstract class JavaPlugin extends PluginBase {
+@@ -110,6 +110,18 @@ public abstract class JavaPlugin extends PluginBase {
          return server;
      }
  
