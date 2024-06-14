@@ -38,10 +38,10 @@ index 32107f434600ce0a349a07817dfb93d44a3a2014..8657804b7793dfbd6903aaad6bb9d445
              case DisguiseData.OriginalDisguise original -> false;
              case EntityTypeDisguise entityTypeDisguise -> !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index ce7e434a3286ebf55370061664a5c685384b4691..ff4bec593d401eac0a4604dd166aa7f66756a4fe 100644
+index cdc92f8b9c7028ca5c340bc4c65e85ea932f6912..f393847c1b28c54601b32cb463716ccdc5f694ad 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
-@@ -295,6 +295,7 @@ public class ServerEntity {
+@@ -285,6 +285,7 @@ public class ServerEntity {
          this.entity.stopSeenByPlayer(player);
          io.papermc.paper.disguise.DisguiseUtil.tryDespawn(player, this.entity); // Paper - disguise api
          player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));

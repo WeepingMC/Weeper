@@ -37,7 +37,7 @@ index 0000000000000000000000000000000000000000..82999ac66a92d04bf0499fe53bf4e268
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index a2142930b4d4b05987c90496fb9d733d99040aa0..cc0160f4b972daa5197d864388a9666217f07ebd 100644
+index 8ba99f6ef2b50ceb8e279ed559a375ada6877576..234568820c3e5b6b45d80acace65927dc69bb413 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -136,7 +136,8 @@ public abstract class PlayerList {
@@ -50,7 +50,7 @@ index a2142930b4d4b05987c90496fb9d733d99040aa0..cc0160f4b972daa5197d864388a96662
      private final Map<UUID, ServerPlayer> playersByUUID = Maps.newHashMap();
      private final UserBanList bans;
      private final IpBanList ipBans;
-@@ -720,7 +721,17 @@ public abstract class PlayerList {
+@@ -713,7 +714,17 @@ public abstract class PlayerList {
          // depending on the outcome.
          SocketAddress socketaddress = loginlistener.connection.getRemoteAddress();
  
@@ -69,7 +69,7 @@ index a2142930b4d4b05987c90496fb9d733d99040aa0..cc0160f4b972daa5197d864388a96662
          entity.transferCookieConnection = loginlistener;
          Player player = entity.getBukkitEntity();
          PlayerLoginEvent event = new PlayerLoginEvent(player, loginlistener.connection.hostname, ((java.net.InetSocketAddress) socketaddress).getAddress(), ((java.net.InetSocketAddress) loginlistener.connection.channel.remoteAddress()).getAddress());
-@@ -1598,4 +1609,32 @@ public abstract class PlayerList {
+@@ -1538,4 +1549,32 @@ public abstract class PlayerList {
      public boolean isAllowCommandsForAllPlayers() {
          return this.allowCommandsForAllPlayers;
      }
@@ -103,10 +103,10 @@ index a2142930b4d4b05987c90496fb9d733d99040aa0..cc0160f4b972daa5197d864388a96662
 +    // Weeper end - allow offline editing of playerData
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 011b3a02a9bf64a4a0e26e9627f5197be93c0436..7a9fefba5724d30b26e05bb9e1a6bc405113cf35 100644
+index 9655a2f8d89801045972d55d7409a487dc04d403..93bdea397e647c05a022ebceb0c77ee4189fcf43 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -384,6 +384,15 @@ public final class CraftServer implements Server {
+@@ -386,6 +386,15 @@ public final class CraftServer implements Server {
      }
      // Paper end - add disguise api
  

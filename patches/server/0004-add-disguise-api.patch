@@ -206,7 +206,7 @@ index 0000000000000000000000000000000000000000..32107f434600ce0a349a07817dfb93d4
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-index 0f99733660f91280e4c6262cf75b3c9cae86f65a..c49606b5f8e459a1574c3111c10f2c66c0888f87 100644
+index 02bf2705ca1c99023a83a22d92e1962181102297..9f7b7144c5edb3650d24a2514d09b326d6b7b578 100644
 --- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 +++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 @@ -100,6 +100,7 @@ public class SynchedEntityData {
@@ -233,19 +233,11 @@ index 0f99733660f91280e4c6262cf75b3c9cae86f65a..c49606b5f8e459a1574c3111c10f2c66
              this.assignValue(datawatcher_item, datawatcher_c);
              this.entity.onSyncedDataUpdated(datawatcher_item.getAccessor());
          }
-@@ -158,6 +161,7 @@ public class SynchedEntityData {
-     public List<SynchedEntityData.DataValue<?>> packAll() {
-         final List<SynchedEntityData.DataValue<?>> list = new ArrayList<>();
-         for (final DataItem<?> dataItem : this.itemsById) {
-+            if (io.papermc.paper.disguise.DisguiseUtil.shouldSkip((net.minecraft.world.entity.Entity) entity, dataItem.getAccessor())) continue; // Paper - disguise api
-             list.add(dataItem.value());
-         }
- 
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index a2279262c93408c11f5d2290b48fd794975e8cfe..ce7e434a3286ebf55370061664a5c685384b4691 100644
+index 1d849ce4e2c85f149af25318b8ffb6dcef6c6788..cdc92f8b9c7028ca5c340bc4c65e85ea932f6912 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
-@@ -293,6 +293,7 @@ public class ServerEntity {
+@@ -283,6 +283,7 @@ public class ServerEntity {
  
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
@@ -253,23 +245,24 @@ index a2279262c93408c11f5d2290b48fd794975e8cfe..ce7e434a3286ebf55370061664a5c685
          player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));
      }
  
-@@ -316,7 +317,11 @@ public class ServerEntity {
-         Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket();
+@@ -305,7 +306,11 @@ public class ServerEntity {
  
-         this.yHeadRotp = Mth.floor(this.entity.getYHeadRot() * 256.0F / 360.0F);
+         Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket(this);
+ 
+-        sender.accept(packet);
 +        // Paper start - disguise api
 +        if(!io.papermc.paper.disguise.DisguiseUtil.tryDisguise(player, entity, packet)){
-         sender.accept(packet);
++            sender.accept(packet);
 +        }
 +        // Paper end - disguise api
          if (this.trackedDataValues != null) {
              sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 5db08432b6afd3639688830e717f40ceaf599248..032f002bc7adf2e3dbfd8ff33b919c47563c6426 100644
+index 77f3ac4e45a691181a94831cf49f7840c9f88e3a..63f3126004676a80d54c532899fe2ff748322b41 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -377,6 +377,12 @@ public final class CraftServer implements Server {
+@@ -379,6 +379,12 @@ public final class CraftServer implements Server {
          return io.papermc.paper.util.TickThread.isTickThreadFor(((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandleRaw());
      }
      // Paper end - Folia reagion threading API
@@ -283,10 +276,10 @@ index 5db08432b6afd3639688830e717f40ceaf599248..032f002bc7adf2e3dbfd8ff33b919c47
      static {
          ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index a2d336ceb52b63db5c03432ee7bc94dc6a742b82..ba8a0c525505d0211666304c698e19312ae07470 100644
+index b8eb9166e44da8745a056bf68f2f9316ce25d7a7..b2bae6f55a651e8eba29b69bacecbf4a8e8dec81 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1280,4 +1280,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1293,4 +1293,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return this.getHandle().getScoreboardName();
      }
      // Paper end - entity scoreboard name

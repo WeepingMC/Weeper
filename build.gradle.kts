@@ -92,7 +92,7 @@ tasks.register("cleanup"){
 }
 
 tasks.generateDevelopmentBundle {
-    apiCoordinates.set("com.github.weepingmc.weeper:Weeper-API")
+    apiCoordinates.set("com.github.weepingmc.weeper:weeper-api")
     libraryRepositories.addAll(
         "https://repo.maven.apache.org/maven2/",
         paperMavenPublicUrl

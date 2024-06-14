@@ -5,16 +5,16 @@ Subject: [PATCH] add leader bonus game rule
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Zombie.java b/src/main/java/net/minecraft/world/entity/monster/Zombie.java
-index e42dfc62bb179be1ab01b0096c05c6549d38abbc..fe74df3b9be4e33b71cdd7556c57578c613b6030 100644
+index 2280004638fd19ed018cb3e77d53a018b34ec516..6a6764b8cac9c32ff541724e1ba5df88f5cff338 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Zombie.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Zombie.java
-@@ -570,7 +570,9 @@ public class Zombie extends Monster {
+@@ -581,7 +581,9 @@ public class Zombie extends Monster {
  
          if (this.random.nextFloat() < chanceMultiplier * 0.05F) {
-             this.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).addPermanentModifier(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 0.25D + 0.5D, AttributeModifier.Operation.ADD_VALUE));
--            this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 3.0D + 1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
+             this.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).addOrReplacePermanentModifier(new AttributeModifier(Zombie.LEADER_ZOMBIE_BONUS_ID, this.random.nextDouble() * 0.25D + 0.5D, AttributeModifier.Operation.ADD_VALUE));
+-            this.getAttribute(Attributes.MAX_HEALTH).addOrReplacePermanentModifier(new AttributeModifier(Zombie.LEADER_ZOMBIE_BONUS_ID, this.random.nextDouble() * 3.0D + 1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 +            if(this.level().getGameRules().getRule(GameRules.RULE_LEADER_ZOMBIE_BONUS).get()){ // Weeper start - add game rule to disable leader zombie bonus
-+                this.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(new AttributeModifier("Leader zombie bonus", this.random.nextDouble() * 3.0D + 1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
++                this.getAttribute(Attributes.MAX_HEALTH).addOrReplacePermanentModifier(new AttributeModifier(Zombie.LEADER_ZOMBIE_BONUS_ID, this.random.nextDouble() * 3.0D + 1.0D, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
 +            } // Weeper end - add game rule to disable leader zombie bonus
              this.setCanBreakDoors(this.supportsBreakDoorGoal());
          }

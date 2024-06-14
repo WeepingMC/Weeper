@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 4998aff0b7cb084dcda15c6a18bbe45e99b6000a..87c656ade7c453cb17e94adfeab0126d618c1112 100644
+index b06f38b87765d084565bc11cf5da6076562b6be8..2371b9d9efa3860ee5e3488821f0f6590b6611aa 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,7 +13,7 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -17,7 +17,7 @@ index 4998aff0b7cb084dcda15c6a18bbe45e99b6000a..87c656ade7c453cb17e94adfeab0126d
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -63,6 +63,23 @@ dependencies {
+@@ -58,6 +58,23 @@ dependencies {
      // Paper end - Remap reflection
  }
  
@@ -39,7 +39,7 @@ index 4998aff0b7cb084dcda15c6a18bbe45e99b6000a..87c656ade7c453cb17e94adfeab0126d
 +// Weeper end - api generator changes
 +
  paperweight {
-     craftBukkitPackageVersion.set("v1_20_R4") // also needs to be updated in MappingEnvironment
+     craftBukkitPackageVersion.set("v1_21_R1") // also needs to be updated in MappingEnvironment
  }
 diff --git a/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java b/src/main/java/com/destroystokyo/paper/PaperVersionFetcher.java
 index 532306cacd52579cdf37e4aca25887b1ed3ba6a1..9af59d536a8c88af9318dc4630ad4e56079702d2 100644
