@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index b06f38b87765d084565bc11cf5da6076562b6be8..d8da2dd2a692b4e8d67f36052d935ccff90b5e9c 100644
+index 299b7b029384c58fed80d53cc0b77c420d62eed7..74e94ddb80e87c4cde75b550c59c6c770b9e5ace 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,7 +13,7 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -17,7 +17,7 @@ index b06f38b87765d084565bc11cf5da6076562b6be8..d8da2dd2a692b4e8d67f36052d935ccf
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -58,6 +58,23 @@ dependencies {
+@@ -63,6 +63,23 @@ dependencies {
      // Paper end - Remap reflection
  }
  
@@ -41,7 +41,7 @@ index b06f38b87765d084565bc11cf5da6076562b6be8..d8da2dd2a692b4e8d67f36052d935ccf
  paperweight {
      craftBukkitPackageVersion.set("v1_21_R1") // also needs to be updated in MappingEnvironment
  }
-@@ -75,14 +92,14 @@ tasks.jar {
+@@ -80,14 +97,14 @@ tasks.jar {
          val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim() // Paper
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
