@@ -206,7 +206,7 @@ index 0000000000000000000000000000000000000000..32107f434600ce0a349a07817dfb93d4
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-index 02bf2705ca1c99023a83a22d92e1962181102297..9f7b7144c5edb3650d24a2514d09b326d6b7b578 100644
+index 0f99733660f91280e4c6262cf75b3c9cae86f65a..011596e06990a6c93814065e49edfa1fe44eeafd 100644
 --- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 +++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 @@ -100,6 +100,7 @@ public class SynchedEntityData {
@@ -259,7 +259,7 @@ index 1d849ce4e2c85f149af25318b8ffb6dcef6c6788..cdc92f8b9c7028ca5c340bc4c65e85ea
              sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 77f3ac4e45a691181a94831cf49f7840c9f88e3a..63f3126004676a80d54c532899fe2ff748322b41 100644
+index caf6ff33b42472d30f28629470e12889f50490cc..e9fa9348ac0b4c41197fcb988028706b0e3203bd 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -379,6 +379,12 @@ public final class CraftServer implements Server {
@@ -276,10 +276,10 @@ index 77f3ac4e45a691181a94831cf49f7840c9f88e3a..63f3126004676a80d54c532899fe2ff7
      static {
          ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index b8eb9166e44da8745a056bf68f2f9316ce25d7a7..b2bae6f55a651e8eba29b69bacecbf4a8e8dec81 100644
+index 2cde808bfa797256409879505ba205a71f381981..60f0937fbde08727743d3996c96aab26090ea9fe 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1293,4 +1293,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1297,4 +1297,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          return this.getHandle().getScoreboardName();
      }
      // Paper end - entity scoreboard name
