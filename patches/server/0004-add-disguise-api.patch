@@ -206,7 +206,7 @@ index 0000000000000000000000000000000000000000..32107f434600ce0a349a07817dfb93d4
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
-index 0f99733660f91280e4c6262cf75b3c9cae86f65a..011596e06990a6c93814065e49edfa1fe44eeafd 100644
+index 0f99733660f91280e4c6262cf75b3c9cae86f65a..c49606b5f8e459a1574c3111c10f2c66c0888f87 100644
 --- a/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 +++ b/src/main/java/net/minecraft/network/syncher/SynchedEntityData.java
 @@ -100,6 +100,7 @@ public class SynchedEntityData {
@@ -233,6 +233,14 @@ index 0f99733660f91280e4c6262cf75b3c9cae86f65a..011596e06990a6c93814065e49edfa1f
              this.assignValue(datawatcher_item, datawatcher_c);
              this.entity.onSyncedDataUpdated(datawatcher_item.getAccessor());
          }
+@@ -158,6 +161,7 @@ public class SynchedEntityData {
+     public List<SynchedEntityData.DataValue<?>> packAll() {
+         final List<SynchedEntityData.DataValue<?>> list = new ArrayList<>();
+         for (final DataItem<?> dataItem : this.itemsById) {
++            if (io.papermc.paper.disguise.DisguiseUtil.shouldSkip((net.minecraft.world.entity.Entity) entity, dataItem.getAccessor())) continue; // Paper - disguise api
+             list.add(dataItem.value());
+         }
+ 
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
 index 1d849ce4e2c85f149af25318b8ffb6dcef6c6788..cdc92f8b9c7028ca5c340bc4c65e85ea932f6912 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
