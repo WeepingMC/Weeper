@@ -5,10 +5,10 @@ Subject: [PATCH] added executor for easy usage with CompletableFutures
 
 
 diff --git a/src/main/java/org/bukkit/plugin/Plugin.java b/src/main/java/org/bukkit/plugin/Plugin.java
-index ef431219fd2bce48bad63b6b92c99d54348d480e..bb0d10ab1b2cc05dae86ad4388bd96209a780889 100644
+index ef431219fd2bce48bad63b6b92c99d54348d480e..66fcc77ebd1738740851df95564954781bf97d0b 100644
 --- a/src/main/java/org/bukkit/plugin/Plugin.java
 +++ b/src/main/java/org/bukkit/plugin/Plugin.java
-@@ -117,6 +117,22 @@ public interface Plugin extends TabExecutor, io.papermc.paper.plugin.lifecycle.e
+@@ -117,6 +117,26 @@ public interface Plugin extends TabExecutor, io.papermc.paper.plugin.lifecycle.e
      @NotNull
      public Server getServer();
  
@@ -18,14 +18,18 @@ index ef431219fd2bce48bad63b6b92c99d54348d480e..bb0d10ab1b2cc05dae86ad4388bd9620
 +     * @return executor
 +     */
 +    @NotNull
-+    java.util.concurrent.Executor mainThreadExecutor();
++    default java.util.concurrent.Executor mainThreadExecutor() {
++        return (runnable) -> getServer().getScheduler().runTask(this, runnable);
++    }
 +
 +    /**
 +     * Returns an async executor
 +     * @return executor
 +     */
 +    @NotNull
-+    java.util.concurrent.Executor asyncExecutor();
++    default java.util.concurrent.Executor asyncExecutor() {
++        return (runnable) -> getServer().getScheduler().runTaskAsynchronously(this, runnable);
++    }
 +    // Weeper stop - executors
 +
      /**

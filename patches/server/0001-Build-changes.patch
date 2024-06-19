@@ -96,27 +96,6 @@ index 790bad0494454ca12ee152e3de6da3da634d9b20..08e34ea9dc9db0cc601cb6a021a3c697
  
      private static final String BUILD_DEV = "DEV";
  
-diff --git a/src/main/java/org/bukkit/craftbukkit/scheduler/MinecraftInternalPlugin.java b/src/main/java/org/bukkit/craftbukkit/scheduler/MinecraftInternalPlugin.java
-index 66bdac50130f523f9dc4379b103b7a469f9ca36b..a399c8ce44d8be5540a3eded67686f68bdb23127 100644
---- a/src/main/java/org/bukkit/craftbukkit/scheduler/MinecraftInternalPlugin.java
-+++ b/src/main/java/org/bukkit/craftbukkit/scheduler/MinecraftInternalPlugin.java
-@@ -94,6 +94,16 @@ public class MinecraftInternalPlugin extends PluginBase {
-         throw new UnsupportedOperationException("Not supported.");
-     }
- 
-+    @Override
-+    public @NotNull java.util.concurrent.Executor mainThreadExecutor() {
-+        throw new UnsupportedOperationException("Not supported.");
-+    }
-+
-+    @Override
-+    public @NotNull java.util.concurrent.Executor asyncExecutor() {
-+        throw new UnsupportedOperationException("Not supported.");
-+    }
-+
-     @Override
-     public boolean isEnabled() {
-         return enabled;
 diff --git a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java b/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
 index 774556a62eb240da42e84db4502e2ed43495be17..4e2d964a7a5992d1e18cc7ee9e49180fd11035d5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/util/Versioning.java
@@ -130,24 +109,3 @@ index 774556a62eb240da42e84db4502e2ed43495be17..4e2d964a7a5992d1e18cc7ee9e49180f
          Properties properties = new Properties();
  
          if (stream != null) {
-diff --git a/src/test/java/io/papermc/paper/plugin/PaperTestPlugin.java b/src/test/java/io/papermc/paper/plugin/PaperTestPlugin.java
-index 90cf0c702ca2ff9de64d9718ecba5f2d128953a6..79c532c7a873003e12de7286199572761ace5e37 100644
---- a/src/test/java/io/papermc/paper/plugin/PaperTestPlugin.java
-+++ b/src/test/java/io/papermc/paper/plugin/PaperTestPlugin.java
-@@ -91,6 +91,16 @@ public class PaperTestPlugin extends PluginBase {
-         throw new UnsupportedOperationException("Not supported.");
-     }
- 
-+    @Override
-+    public @org.jetbrains.annotations.NotNull java.util.concurrent.Executor mainThreadExecutor() {
-+        throw new UnsupportedOperationException("Not supported.");
-+    }
-+
-+    @Override
-+    public @org.jetbrains.annotations.NotNull java.util.concurrent.Executor asyncExecutor() {
-+        throw new UnsupportedOperationException("Not supported.");
-+    }
-+
-     @Override
-     public boolean isEnabled() {
-         return enabled;
