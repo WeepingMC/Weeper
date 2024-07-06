@@ -37,7 +37,7 @@ index 0000000000000000000000000000000000000000..82999ac66a92d04bf0499fe53bf4e268
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index ef177f21d654d69c128f3f39ea58f2d8ee598628..cc458a3eeef9d19f235e5af8177da463857efef1 100644
+index 5f20606cc2c79ad9a4c4d4d6c9e6a2a31a88b282..3ef464ec756647bf946cebdb794c3c4cfb3fa5ed 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -136,7 +136,8 @@ public abstract class PlayerList {
@@ -69,7 +69,7 @@ index ef177f21d654d69c128f3f39ea58f2d8ee598628..cc458a3eeef9d19f235e5af8177da463
          entity.transferCookieConnection = loginlistener;
          Player player = entity.getBukkitEntity();
          PlayerLoginEvent event = new PlayerLoginEvent(player, loginlistener.connection.hostname, ((java.net.InetSocketAddress) socketaddress).getAddress(), ((java.net.InetSocketAddress) loginlistener.connection.channel.remoteAddress()).getAddress());
-@@ -1538,4 +1549,32 @@ public abstract class PlayerList {
+@@ -1539,4 +1550,32 @@ public abstract class PlayerList {
      public boolean isAllowCommandsForAllPlayers() {
          return this.allowCommandsForAllPlayers;
      }
