@@ -6,7 +6,6 @@ var charSet: String = Charsets.UTF_8.name()
 plugins {
     java
     `maven-publish`
-    id("com.github.johnrengelman.shadow") version "8.1.1-SNAPSHOT"
     id("io.papermc.paperweight.patcher") version "1.7.1"
 }
 

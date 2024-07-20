@@ -242,10 +242,10 @@ index 0f99733660f91280e4c6262cf75b3c9cae86f65a..c49606b5f8e459a1574c3111c10f2c66
          }
  
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 1d849ce4e2c85f149af25318b8ffb6dcef6c6788..cdc92f8b9c7028ca5c340bc4c65e85ea932f6912 100644
+index 8ea2f24695f5dad55e21f238b69442513e7a90c6..0ed320adc75b80474b1dbac3f9252e276c806fe6 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
-@@ -283,6 +283,7 @@ public class ServerEntity {
+@@ -296,6 +296,7 @@ public class ServerEntity {
  
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
@@ -253,7 +253,7 @@ index 1d849ce4e2c85f149af25318b8ffb6dcef6c6788..cdc92f8b9c7028ca5c340bc4c65e85ea
          player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));
      }
  
-@@ -305,7 +306,11 @@ public class ServerEntity {
+@@ -318,7 +319,11 @@ public class ServerEntity {
  
          Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket(this);
  
@@ -267,11 +267,11 @@ index 1d849ce4e2c85f149af25318b8ffb6dcef6c6788..cdc92f8b9c7028ca5c340bc4c65e85ea
              sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index caf6ff33b42472d30f28629470e12889f50490cc..e9fa9348ac0b4c41197fcb988028706b0e3203bd 100644
+index 3a91faeb6957e4e783b1de3e1145e7d1d164a857..a77d6114e4810acc556b67c28179fa52c5ce431e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -379,6 +379,12 @@ public final class CraftServer implements Server {
-         return io.papermc.paper.util.TickThread.isTickThreadFor(((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandleRaw());
+         return ca.spottedleaf.moonrise.common.util.TickThread.isTickThreadFor(((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandleRaw());
      }
      // Paper end - Folia reagion threading API
 +    // Paper start - add disguise api

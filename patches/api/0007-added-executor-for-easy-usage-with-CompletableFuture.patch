@@ -5,10 +5,10 @@ Subject: [PATCH] added executor for easy usage with CompletableFutures
 
 
 diff --git a/src/main/java/org/bukkit/plugin/Plugin.java b/src/main/java/org/bukkit/plugin/Plugin.java
-index ef431219fd2bce48bad63b6b92c99d54348d480e..66fcc77ebd1738740851df95564954781bf97d0b 100644
+index 29ce61fce75606fbcc63b798fc8f13d3eafd2b74..4e2563ef430165882517f1d021242d0bc771f86d 100644
 --- a/src/main/java/org/bukkit/plugin/Plugin.java
 +++ b/src/main/java/org/bukkit/plugin/Plugin.java
-@@ -117,6 +117,26 @@ public interface Plugin extends TabExecutor, io.papermc.paper.plugin.lifecycle.e
+@@ -130,6 +130,26 @@ public interface Plugin extends TabExecutor, io.papermc.paper.plugin.lifecycle.e
      @NotNull
      public Server getServer();
  
