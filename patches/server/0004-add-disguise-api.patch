@@ -267,10 +267,10 @@ index 8ea2f24695f5dad55e21f238b69442513e7a90c6..0ed320adc75b80474b1dbac3f9252e27
              sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 3a91faeb6957e4e783b1de3e1145e7d1d164a857..a77d6114e4810acc556b67c28179fa52c5ce431e 100644
+index c8b82bc41f2042bb4b067f06265a3a22e51f7629..98bba9983f07593fc7468f4871360c76583d7aa5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -379,6 +379,12 @@ public final class CraftServer implements Server {
+@@ -380,6 +380,12 @@ public final class CraftServer implements Server {
          return ca.spottedleaf.moonrise.common.util.TickThread.isTickThreadFor(((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandleRaw());
      }
      // Paper end - Folia reagion threading API

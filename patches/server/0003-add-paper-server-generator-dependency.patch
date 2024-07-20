@@ -5,7 +5,7 @@ Subject: [PATCH] add paper server generator dependency
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 74e94ddb80e87c4cde75b550c59c6c770b9e5ace..5e8d84a79a6f15405cbf131d7569580ea1e83ac5 100644
+index e6a558745b45d5cd976c92d1110cc15b57f82bcf..280c61c6e1e8675bb0bfa470c4bae7eb17288626 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -4,6 +4,7 @@ import java.time.Instant
@@ -16,7 +16,7 @@ index 74e94ddb80e87c4cde75b550c59c6c770b9e5ace..5e8d84a79a6f15405cbf131d7569580e
  }
  
  val log4jPlugins = sourceSets.create("log4jPlugins")
-@@ -138,6 +139,17 @@ tasks.check {
+@@ -142,6 +143,17 @@ tasks.check {
      dependsOn(scanJar)
  }
  // Paper end
