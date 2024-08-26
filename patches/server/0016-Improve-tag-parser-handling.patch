@@ -1,0 +1,204 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Nassim Jahnke <nassim@njahnke.dev>
+Date: Mon, 5 Feb 2024 11:54:04 +0100
+Subject: [PATCH] Improve tag parser handling
+
+
+diff --git a/src/main/java/com/mojang/brigadier/CommandDispatcher.java b/src/main/java/com/mojang/brigadier/CommandDispatcher.java
+index c7cfb3b8ba3f64fb04dfebd5d724aa8d3f2698ab..f8c2ba9f1c4b34a8219d72dc728b69b8c9f116dc 100644
+--- a/src/main/java/com/mojang/brigadier/CommandDispatcher.java
++++ b/src/main/java/com/mojang/brigadier/CommandDispatcher.java
+@@ -362,9 +362,15 @@ public class CommandDispatcher<S> {
+             }
+             final CommandContextBuilder<S> context = contextSoFar.copy();
+             final StringReader reader = new StringReader(originalReader);
++            boolean stop = false; // Paper - Handle non-recoverable exceptions
+             try {
+                 try {
+                     child.parse(reader, context);
++                    // Paper start - Handle non-recoverable exceptions
++                } catch (final io.papermc.paper.brigadier.TagParseCommandSyntaxException e) {
++                    stop = true;
++                    throw e;
++                    // Paper end - Handle non-recoverable exceptions
+                 } catch (final RuntimeException ex) {
+                     throw CommandSyntaxException.BUILT_IN_EXCEPTIONS.dispatcherParseException().createWithContext(reader, ex.getMessage());
+                 }
+@@ -379,6 +385,7 @@ public class CommandDispatcher<S> {
+                 }
+                 errors.put(child, ex);
+                 reader.setCursor(cursor);
++                if (stop) return new ParseResults<>(contextSoFar, originalReader, errors); // Paper - Handle non-recoverable exceptions
+                 continue;
+             }
+ 
+diff --git a/src/main/java/io/papermc/paper/brigadier/TagParseCommandSyntaxException.java b/src/main/java/io/papermc/paper/brigadier/TagParseCommandSyntaxException.java
+new file mode 100644
+index 0000000000000000000000000000000000000000..a375ad4ba9db990b24a2b9ff366fcba66b753815
+--- /dev/null
++++ b/src/main/java/io/papermc/paper/brigadier/TagParseCommandSyntaxException.java
+@@ -0,0 +1,15 @@
++package io.papermc.paper.brigadier;
++
++import com.mojang.brigadier.LiteralMessage;
++import com.mojang.brigadier.exceptions.CommandSyntaxException;
++import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
++import net.minecraft.network.chat.Component;
++
++public final class TagParseCommandSyntaxException extends CommandSyntaxException {
++
++    private static final SimpleCommandExceptionType EXCEPTION_TYPE = new SimpleCommandExceptionType(new LiteralMessage("Error parsing NBT"));
++
++    public TagParseCommandSyntaxException(final String message) {
++        super(EXCEPTION_TYPE, Component.literal(message));
++    }
++}
+diff --git a/src/main/java/net/minecraft/nbt/TagParser.java b/src/main/java/net/minecraft/nbt/TagParser.java
+index ee012f1ef1ff7f2adf76d1690dbd5611af7deb4d..a5ce99501a625b7051e474004767a210e70583c6 100644
+--- a/src/main/java/net/minecraft/nbt/TagParser.java
++++ b/src/main/java/net/minecraft/nbt/TagParser.java
+@@ -48,6 +48,7 @@ public class TagParser {
+         }
+     }, CompoundTag::toString);
+     private final StringReader reader;
++    private int depth; // Paper
+ 
+     public static CompoundTag parseTag(String string) throws CommandSyntaxException {
+         return (new TagParser(new StringReader(string))).readSingleStruct();
+@@ -156,6 +157,7 @@ public class TagParser {
+ 
+     public CompoundTag readStruct() throws CommandSyntaxException {
+         this.expect('{');
++        this.increaseDepth(); // Paper
+         CompoundTag compoundTag = new CompoundTag();
+         this.reader.skipWhitespace();
+ 
+@@ -179,6 +181,7 @@ public class TagParser {
+         }
+ 
+         this.expect('}');
++        this.depth--; // Paper
+         return compoundTag;
+     }
+ 
+@@ -188,6 +191,7 @@ public class TagParser {
+         if (!this.reader.canRead()) {
+             throw ERROR_EXPECTED_VALUE.createWithContext(this.reader);
+         } else {
++            this.increaseDepth(); // Paper
+             ListTag listTag = new ListTag();
+             TagType<?> tagType = null;
+ 
+@@ -213,6 +217,7 @@ public class TagParser {
+             }
+ 
+             this.expect(']');
++            this.depth--; // Paper
+             return listTag;
+         }
+     }
+@@ -251,11 +256,11 @@ public class TagParser {
+                 }
+ 
+                 if (typeReader == ByteTag.TYPE) {
+-                    list.add((T)((NumericTag)tag).getAsByte());
++                    list.add((T) Byte.valueOf(((NumericTag)tag).getAsByte()));
+                 } else if (typeReader == LongTag.TYPE) {
+-                    list.add((T)((NumericTag)tag).getAsLong());
++                    list.add((T) Long.valueOf(((NumericTag)tag).getAsLong()));
+                 } else {
+-                    list.add((T)((NumericTag)tag).getAsInt());
++                    list.add((T) Integer.valueOf(((NumericTag)tag).getAsInt()));
+                 }
+ 
+                 if (this.hasElementSeparator()) {
+@@ -286,4 +291,11 @@ public class TagParser {
+         this.reader.skipWhitespace();
+         this.reader.expect(c);
+     }
++
++    private void increaseDepth() throws CommandSyntaxException {
++        this.depth++;
++        if (this.depth > 512) {
++            throw new io.papermc.paper.brigadier.TagParseCommandSyntaxException("NBT tag is too complex, depth > 512");
++        }
++    }
+ }
+diff --git a/src/main/java/net/minecraft/network/chat/contents/TranslatableContents.java b/src/main/java/net/minecraft/network/chat/contents/TranslatableContents.java
+index 8a68baf6bd46b59cf57c94ffe5651d47a7cae99c..b88fda9e7d63968088df080549bf4b3e9e0421ca 100644
+--- a/src/main/java/net/minecraft/network/chat/contents/TranslatableContents.java
++++ b/src/main/java/net/minecraft/network/chat/contents/TranslatableContents.java
+@@ -134,6 +134,15 @@ public class TranslatableContents implements ComponentContents {
+ 
+     @Override
+     public <T> Optional<T> visit(FormattedText.ContentConsumer<T> visitor) {
++        // Paper start - Count visited parts
++        try {
++            return this.visit(new TranslatableContentConsumer<>(visitor));
++        } catch (IllegalArgumentException ignored) {
++            return visitor.accept("...");
++        }
++    }
++    private <T> Optional<T> visit(TranslatableContentConsumer<T> visitor) {
++        // Paper end - Count visited parts
+         this.decompose();
+ 
+         for(FormattedText formattedText : this.decomposedParts) {
+@@ -145,6 +154,25 @@ public class TranslatableContents implements ComponentContents {
+ 
+         return Optional.empty();
+     }
++    // Paper start - Count visited parts
++    private static final class TranslatableContentConsumer<T> implements FormattedText.ContentConsumer<T> {
++        private static final IllegalArgumentException EX = new IllegalArgumentException("Too long");
++        private final FormattedText.ContentConsumer<T> visitor;
++        private int visited;
++
++        private TranslatableContentConsumer(FormattedText.ContentConsumer<T> visitor) {
++            this.visitor = visitor;
++        }
++
++        @Override
++        public Optional<T> accept(final String asString) {
++            if (visited++ > 32) {
++                throw EX;
++            }
++            return this.visitor.accept(asString);
++        }
++    }
++    // Paper end - Count visited parts
+ 
+     @Override
+     public MutableComponent resolve(@Nullable CommandSourceStack source, @Nullable Entity sender, int depth) throws CommandSyntaxException {
+diff --git a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+index 65bb221993147a558995b36fb835f7b82e0eb4bd..1f8b02631d6357620646d909befd63528b7f68fc 100644
+--- a/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
++++ b/src/main/java/net/minecraft/server/network/ServerGamePacketListenerImpl.java
+@@ -775,9 +775,9 @@ public class ServerGamePacketListenerImpl extends ServerCommonPacketListenerImpl
+             return;
+         }
+         // Paper start
+-        String str = packet.getCommand(); int index = -1;
+-        if (str.length() > 64 && ((index = str.indexOf(' ')) == -1 || index >= 64)) {
+-            server.scheduleOnMain(() -> this.disconnect(Component.translatable("disconnect.spam", new Object[0]))); // Paper
++        final int index;
++        if (packet.getCommand().length() > 64 && ((index = packet.getCommand().indexOf(' ')) == -1 || index >= 64)) {
++            this.disconnect(Component.translatable("disconnect.spam"), org.bukkit.event.player.PlayerKickEvent.Cause.SPAM);
+             return;
+         }
+         // Paper end
+@@ -805,6 +805,14 @@ public class ServerGamePacketListenerImpl extends ServerCommonPacketListenerImpl
+                     this.server.scheduleOnMain(() -> { // This needs to be on main
+                         ParseResults<CommandSourceStack> parseresults = this.server.getCommands().getDispatcher().parse(stringreader, this.player.createCommandSourceStack());
+ 
++                        // Paper start - Handle non-recoverable exceptions
++                        if (!parseresults.getExceptions().isEmpty()
++                            && parseresults.getExceptions().values().stream().anyMatch(e -> e instanceof io.papermc.paper.brigadier.TagParseCommandSyntaxException)) {
++                            this.disconnect(Component.translatable("disconnect.spam"), org.bukkit.event.player.PlayerKickEvent.Cause.SPAM);
++                            return;
++                        }
++                        // Paper end - Handle non-recoverable exceptions
++
+                         this.server.getCommands().getDispatcher().getCompletionSuggestions(parseresults).thenAccept((suggestions) -> {
+                             // Paper start - Don't tab-complete namespaced commands if send-namespaced is false
+                             if (!org.spigotmc.SpigotConfig.sendNamespaced && suggestions.getRange().getStart() <= 1) {
