@@ -41,7 +41,7 @@ index 0000000000000000000000000000000000000000..be4156c71f9dd45d5fd97559952d8191
 +        int slot
 +) { }
 diff --git a/src/main/java/org/bukkit/entity/HumanEntity.java b/src/main/java/org/bukkit/entity/HumanEntity.java
-index 8b0d04d5b39ee817555a36adddc39b18fc6f0d02..a8d2af1e6fb22f0d8f2398458ed67c496931c45d 100644
+index 773651350c17cae9058346a590eda758071b7447..8590ffaf658cd4396ecdc6cb5d9811161b3ffc8c 100644
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
 @@ -2,6 +2,9 @@ package org.bukkit.entity;
@@ -54,7 +54,7 @@ index 8b0d04d5b39ee817555a36adddc39b18fc6f0d02..a8d2af1e6fb22f0d8f2398458ed67c49
  import org.bukkit.GameMode;
  import org.bukkit.Location;
  import org.bukkit.Material;
-@@ -111,6 +114,37 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
+@@ -113,6 +116,37 @@ public interface HumanEntity extends LivingEntity, AnimalTamer, InventoryHolder
      @Nullable
      public InventoryView openInventory(@NotNull Inventory inventory);
  
