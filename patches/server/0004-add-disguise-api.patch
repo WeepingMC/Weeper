@@ -92,7 +92,7 @@ index b6f4400df3d8ec7e06a996de54f8cabba57885e1..23a6026dda4ce5befa1d5e78b0434c27
  }
 diff --git a/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java b/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..32107f434600ce0a349a07817dfb93d44a3a2014
+index 0000000000000000000000000000000000000000..793582f9e86fc732c278145603fa856cb573b3d7
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
 @@ -0,0 +1,109 @@
@@ -133,7 +133,7 @@ index 0000000000000000000000000000000000000000..32107f434600ce0a349a07817dfb93d4
 +                    yield  true;
 +                }
 +                case PlayerDisguise(var playerProfile, var listed, var skinParts) -> {
-+                    PlayerProfile adapted = Bukkit.createProfile(entity.getUUID(), entity.hasCustomName() ? entity.getBukkitEntity().getCustomName() : playerProfile.getName());
++                    PlayerProfile adapted = Bukkit.createProfile(entity.getUUID(), playerProfile.getName());
 +                    adapted.setProperties(playerProfile.getProperties());
 +                    Entry playerUpdate = new Entry(
 +                            entity.getUUID(),
