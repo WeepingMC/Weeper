@@ -5,10 +5,10 @@ Subject: [PATCH] player track entity events
 
 
 diff --git a/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java b/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
-index 793582f9e86fc732c278145603fa856cb573b3d7..5bd3ef0e876656779848343f3d64a6dde6cede61 100644
+index bb2292257d3c45b8c84392557a1b82751dc66f88..98f0b439b7839be7b0c72ec8c9fd62bfe7371192 100644
 --- a/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
 +++ b/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
-@@ -27,7 +27,7 @@ public final class DisguiseUtil {
+@@ -26,7 +26,7 @@ public final class DisguiseUtil {
  
      public static boolean tryDisguise(ServerPlayer player, Entity entity, Packet<?> packet) {
              if(!(packet instanceof ClientboundAddEntityPacket clientboundAddEntityPacket)) {
@@ -17,7 +17,7 @@ index 793582f9e86fc732c278145603fa856cb573b3d7..5bd3ef0e876656779848343f3d64a6dd
              }
              return switch (entity.getBukkitEntity().getDisguiseData()) {
                  case DisguiseData.OriginalDisguise disguise -> false;
-@@ -88,6 +88,7 @@ public final class DisguiseUtil {
+@@ -87,6 +87,7 @@ public final class DisguiseUtil {
          );
      }
  
@@ -25,7 +25,7 @@ index 793582f9e86fc732c278145603fa856cb573b3d7..5bd3ef0e876656779848343f3d64a6dd
  
      /*
       * Is used to skip entity meta that doesn't fit the disguised type.
-@@ -95,6 +96,11 @@ public final class DisguiseUtil {
+@@ -94,6 +95,11 @@ public final class DisguiseUtil {
       * that has a byte at that index.
       */
      public static boolean shouldSkip(Entity entity, EntityDataAccessor<?> dataAccessor) {

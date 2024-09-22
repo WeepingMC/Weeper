@@ -5,10 +5,10 @@ Subject: [PATCH] add leader bonus game rule
 
 
 diff --git a/src/main/java/net/minecraft/world/entity/monster/Zombie.java b/src/main/java/net/minecraft/world/entity/monster/Zombie.java
-index 2280004638fd19ed018cb3e77d53a018b34ec516..6a6764b8cac9c32ff541724e1ba5df88f5cff338 100644
+index 2b43337ac63d051718a2074fcc46e128a1d65129..f779d80513641f79e9a76c04ce27d6bc8daad795 100644
 --- a/src/main/java/net/minecraft/world/entity/monster/Zombie.java
 +++ b/src/main/java/net/minecraft/world/entity/monster/Zombie.java
-@@ -581,7 +581,9 @@ public class Zombie extends Monster {
+@@ -578,7 +578,9 @@ public class Zombie extends Monster {
  
          if (this.random.nextFloat() < chanceMultiplier * 0.05F) {
              this.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE).addOrReplacePermanentModifier(new AttributeModifier(Zombie.LEADER_ZOMBIE_BONUS_ID, this.random.nextDouble() * 0.25D + 0.5D, AttributeModifier.Operation.ADD_VALUE));

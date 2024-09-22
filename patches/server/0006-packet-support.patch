@@ -718,7 +718,7 @@ index 04adac916a0be711fb3176756bbd009cd936692d..15e3f1ae7d0afe9946379f71305daf4f
          this.id = buf.readVarInt();
          this.x = buf.readDouble();
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 98bba9983f07593fc7468f4871360c76583d7aa5..f09cb2348a68eef74d33d13e1692fb68eda773f0 100644
+index aac64c13a76385b142032d10c341d2769dc3659e..aa359e34f9dc0191734c7dc30518bbdfcf8abcc3 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -395,6 +395,10 @@ public final class CraftServer implements Server {
@@ -740,7 +740,7 @@ index 98bba9983f07593fc7468f4871360c76583d7aa5..f09cb2348a68eef74d33d13e1692fb68
      }
  
      public boolean getCommandBlockOverride(String command) {
-@@ -3224,4 +3229,10 @@ public final class CraftServer implements Server {
+@@ -3221,4 +3226,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
      // Paper end
