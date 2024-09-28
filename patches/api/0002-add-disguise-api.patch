@@ -180,7 +180,7 @@ index 0000000000000000000000000000000000000000..24afc6a26d9b19c647a55d80e845fa9a
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index 5aa64ea39ebd92e5067c53cea49a8685c0b9eee4..f8567b1093f3580bc8c7f219ee1021a435c775d8 100644
+index 6246251caf2c6f025c824b8e7a944b8d48751fa1..7916aca80c18747a76874960da60a12403d8cf03 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
 @@ -2554,4 +2554,11 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
@@ -196,13 +196,13 @@ index 5aa64ea39ebd92e5067c53cea49a8685c0b9eee4..f8567b1093f3580bc8c7f219ee1021a4
 +    // Paper end - add disguise api
  }
 diff --git a/src/main/java/org/bukkit/entity/Entity.java b/src/main/java/org/bukkit/entity/Entity.java
-index 725ef320f929d5e3d141c1ed3246d73a7d741f31..d159839f3ddcb01d295d12b8562aff529d74d9a3 100644
+index d0ae8a94db20281d3664d74718c65234eb2e5f83..87caf3490af05be6710eb8f730d8c3d7754323fd 100644
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1159,4 +1159,34 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
+@@ -1172,4 +1172,34 @@ public interface Entity extends Metadatable, CommandSender, Nameable, Persistent
       */
-     @NotNull String getScoreboardEntryName();
-     // Paper end - entity scoreboard name
+     void broadcastHurtAnimation(@NotNull java.util.Collection<Player> players);
+     // Paper end - broadcast hurt animation
 +    // Paper start - disguise api
 +
 +    /**

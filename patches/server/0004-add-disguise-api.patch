@@ -92,7 +92,7 @@ index b6f4400df3d8ec7e06a996de54f8cabba57885e1..23a6026dda4ce5befa1d5e78b0434c27
  }
 diff --git a/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java b/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..793582f9e86fc732c278145603fa856cb573b3d7
+index 0000000000000000000000000000000000000000..bb2292257d3c45b8c84392557a1b82751dc66f88
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
 @@ -0,0 +1,109 @@
@@ -267,7 +267,7 @@ index 8ea2f24695f5dad55e21f238b69442513e7a90c6..0ed320adc75b80474b1dbac3f9252e27
              sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 1b36e94617d4e777c419660936460d5cf8a4b3e8..274e348ed53d30d5b6269cb4f1e5aa60d3926643 100644
+index b7af2d4300facf41a025c8ca322bf6541949b3ab..aac64c13a76385b142032d10c341d2769dc3659e 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -380,6 +380,12 @@ public final class CraftServer implements Server {
@@ -284,13 +284,13 @@ index 1b36e94617d4e777c419660936460d5cf8a4b3e8..274e348ed53d30d5b6269cb4f1e5aa60
      static {
          ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index cd789c235acf740ec29c30b180e7fbe1a140caa9..0ef32950e70a0108635c2ae405a7ca54af9d53dc 100644
+index 89c8713d2c2206d1b0d8c0a392c9d13b3e736f0c..fa08ee1b047d0e2f8a0c592f2b124e79dba108c8 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1299,4 +1299,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
-         return this.getHandle().getScoreboardName();
+@@ -1310,4 +1310,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+         }
      }
-     // Paper end - entity scoreboard name
+     // Paper end - broadcast hurt animation
 +    // Paper start - disguise api
 +    private io.papermc.paper.disguise.DisguiseData disguiseData = io.papermc.paper.disguise.DisguiseData.original();
 +    @Override
