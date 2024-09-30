@@ -5,10 +5,10 @@ Subject: [PATCH] trigger Block animation
 
 
 diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/World.java
-index adcd8161846b06fd1a7895750f98b629204a8406..8e087ef0ec5161cb8a8a1a7aa5f4ddf775ca611c 100644
+index ef32a937e6faf1e8a5d6b1207986715bae5a246c..cc9ce8bf4e09a307a2642132a4cef25376d02762 100644
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
-@@ -4315,4 +4315,17 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
+@@ -4363,4 +4363,17 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
              }
          }
      }

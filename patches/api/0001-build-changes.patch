@@ -13,7 +13,7 @@ unwrap integer in unit test
 api generator changes
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index fd39ed209b20c927054b8482c400beeeeab460a3..bc9edf804f3a7cfc0bf03b4907a0fed0431e5c84 100644
+index ab84a1405acc1f0d5f267892243b82b8dab03e21..ace3ebd33ec5a6d30e4b5144136883b941294403 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,7 +13,7 @@ val annotationsVersion = "24.1.0"
@@ -25,7 +25,7 @@ index fd39ed209b20c927054b8482c400beeeeab460a3..bc9edf804f3a7cfc0bf03b4907a0fed0
  val apiAndDocs: Configuration by configurations.creating {
      attributes {
          attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.DOCUMENTATION))
-@@ -79,7 +79,7 @@ dependencies {
+@@ -80,7 +80,7 @@ dependencies {
  }
  
  // Paper start
@@ -35,7 +35,7 @@ index fd39ed209b20c927054b8482c400beeeeab460a3..bc9edf804f3a7cfc0bf03b4907a0fed0
      module {
          generatedSourceDirs.add(generatedApiPath.toFile())
 diff --git a/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java b/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
-index f05ce4fd6c4bbd79edc5f65e7edd1e4a63e93fb8..d14027a85e2b819ad12315dcedf31d6b1524aa20 100644
+index 27564727edbd9f093e3a021ce6f30e1146a8ddbb..842b00d5e19624fe1248402e4f09c82641457f71 100644
 --- a/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
 +++ b/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
 @@ -86,6 +86,7 @@ public class PrepareItemEnchantEvent extends InventoryEvent implements Cancellab
