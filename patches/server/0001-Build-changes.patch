@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index de0474b8dce58cb419c00b7614d7dd66be832a02..03371cc4a257f531cc202902d5b19bd77de435d1 100644
+index 9966576652ed6007d2228237f292c1dc83ede485..5c12256e1946bb3f8368e6458f05b7028479e821 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,7 +13,7 @@ configurations.named(log4jPlugins.compileClasspathConfigurationName) {
@@ -17,8 +17,8 @@ index de0474b8dce58cb419c00b7614d7dd66be832a02..03371cc4a257f531cc202902d5b19bd7
      // Paper start
      implementation("org.jline:jline-terminal-jansi:3.21.0")
      implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -68,6 +68,23 @@ dependencies {
-     // Paper end - spark
+@@ -64,6 +64,23 @@ dependencies {
+     // Paper end - Remap reflection
  }
  
 +
@@ -39,9 +39,9 @@ index de0474b8dce58cb419c00b7614d7dd66be832a02..03371cc4a257f531cc202902d5b19bd7
 +// Weeper end - api generator changes
 +
  paperweight {
-     craftBukkitPackageVersion.set("v1_21_R1") // also needs to be updated in MappingEnvironment
+     craftBukkitPackageVersion.set("v1_21_R2") // also needs to be updated in MappingEnvironment
  }
-@@ -85,14 +102,14 @@ tasks.jar {
+@@ -81,14 +98,14 @@ tasks.jar {
          val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim() // Paper
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",

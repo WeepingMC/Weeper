@@ -659,10 +659,10 @@ index 21858b0be70c125d15386fd940f7fc7d0064f582..c90bf153f698f7273a81d835eb7c00c4
          buf.writeVarInt(this.id);
          buf.writeByte(this.action);
 diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java
-index 9a18277754fc1657e862b2ff4c077a54a4e24977..1cce6bd89f3a0f003d223fa95858842bac094703 100644
+index ab44c24ce5f4570dee9d84b4216299bedfa800d8..81b5001c20b8fc716e07aeddb4cc9d538361805f 100644
 --- a/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java
 +++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundRotateHeadPacket.java
-@@ -19,6 +19,13 @@ public class ClientboundRotateHeadPacket implements Packet<ClientGamePacketListe
+@@ -20,6 +20,13 @@ public class ClientboundRotateHeadPacket implements Packet<ClientGamePacketListe
          this.yHeadRot = headYaw;
      }
  
@@ -694,34 +694,11 @@ index 690cbddccceb4bee7c85e4de9abc4659558029ca..64bf93ad2cef6fa71c9341409ec33590
      public ClientboundSetPassengersPacket(Entity entity) {
          this.vehicle = entity.getId();
          List<Entity> list = entity.getPassengers();
-diff --git a/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java b/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java
-index 04adac916a0be711fb3176756bbd009cd936692d..15e3f1ae7d0afe9946379f71305daf4fc48d1684 100644
---- a/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java
-+++ b/src/main/java/net/minecraft/network/protocol/game/ClientboundTeleportEntityPacket.java
-@@ -30,6 +30,18 @@ public class ClientboundTeleportEntityPacket implements Packet<ClientGamePacketL
-         this.onGround = entity.onGround();
-     }
- 
-+    // Weeper start
-+    public ClientboundTeleportEntityPacket(int entityId, org.bukkit.Location location, boolean isOnGround) {
-+        this.id = entityId;
-+        this.x = location.getX();
-+        this.y = location.getY();
-+        this.z = location.getZ();
-+        this.yRot = (byte) ((int) (location.getYaw() * 256.0F / 360.0F));
-+        this.xRot = (byte) ((int) (location.getPitch() * 256.0F / 360.0F));
-+        this.onGround = isOnGround;
-+    }
-+    // Weeper end
-+
-     private ClientboundTeleportEntityPacket(FriendlyByteBuf buf) {
-         this.id = buf.readVarInt();
-         this.x = buf.readDouble();
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 1cfb016a662c08b7f4643705dd667455dac76d86..1c70dd7d1d01d874b846e9fbaa74e7737af938e8 100644
+index 0165f19fda3ccef03cae9cf260b19f91d765c2f5..e84c79f8c71d02ed4b65e74fead7da5a83991182 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -395,6 +395,10 @@ public final class CraftServer implements Server {
+@@ -397,6 +397,10 @@ public final class CraftServer implements Server {
          CraftEntityFactory.instance();
      }
  
@@ -732,15 +709,16 @@ index 1cfb016a662c08b7f4643705dd667455dac76d86..1c70dd7d1d01d874b846e9fbaa74e773
      public CraftServer(DedicatedServer console, PlayerList playerList) {
          this.console = console;
          this.playerList = (DedicatedPlayerList) playerList;
-@@ -483,6 +487,7 @@ public final class CraftServer implements Server {
+@@ -484,6 +488,8 @@ public final class CraftServer implements Server {
+         }
          this.potionBrewer = new io.papermc.paper.potion.PaperPotionBrewer(console); // Paper - custom potion mixes
          datapackManager = new io.papermc.paper.datapack.PaperDatapackManager(console.getPackRepository()); // Paper
-         this.spark = new io.papermc.paper.SparksFly(this); // Paper - spark
++        this.spark = new io.papermc.paper.SparksFly(this); // Paper - spark
 +        this.packetPipeline = new com.github.weepingmc.packet.CraftPacketPipeline(() -> ((CraftWorld)getWorlds().getFirst()).getHandle()); // Weeper - packet support
      }
  
      public boolean getCommandBlockOverride(String command) {
-@@ -3223,4 +3228,10 @@ public final class CraftServer implements Server {
+@@ -3201,4 +3207,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
      // Paper end

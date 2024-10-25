@@ -242,10 +242,10 @@ index 0f99733660f91280e4c6262cf75b3c9cae86f65a..c49606b5f8e459a1574c3111c10f2c66
          }
  
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index 8ea2f24695f5dad55e21f238b69442513e7a90c6..0ed320adc75b80474b1dbac3f9252e276c806fe6 100644
+index 5bbc7ceaafc163f12344e5d5d355ad2ff30ddca2..4c9615d7c72598e57a138e2fae5530eccf6ef292 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
-@@ -296,6 +296,7 @@ public class ServerEntity {
+@@ -326,6 +326,7 @@ public class ServerEntity {
  
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
@@ -253,7 +253,7 @@ index 8ea2f24695f5dad55e21f238b69442513e7a90c6..0ed320adc75b80474b1dbac3f9252e27
          player.connection.send(new ClientboundRemoveEntitiesPacket(new int[]{this.entity.getId()}));
      }
  
-@@ -318,7 +319,11 @@ public class ServerEntity {
+@@ -348,7 +349,11 @@ public class ServerEntity {
  
          Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket(this);
  
@@ -267,10 +267,10 @@ index 8ea2f24695f5dad55e21f238b69442513e7a90c6..0ed320adc75b80474b1dbac3f9252e27
              sender.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
          }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index b7af2d4300facf41a025c8ca322bf6541949b3ab..aac64c13a76385b142032d10c341d2769dc3659e 100644
+index a34e40e273a79a234c3d79b6ad360ce3a4d35ba3..0165f19fda3ccef03cae9cf260b19f91d765c2f5 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -380,6 +380,12 @@ public final class CraftServer implements Server {
+@@ -382,6 +382,12 @@ public final class CraftServer implements Server {
          return ca.spottedleaf.moonrise.common.util.TickThread.isTickThreadFor(((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandleRaw());
      }
      // Paper end - Folia reagion threading API
@@ -284,10 +284,10 @@ index b7af2d4300facf41a025c8ca322bf6541949b3ab..aac64c13a76385b142032d10c341d276
      static {
          ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index 89c8713d2c2206d1b0d8c0a392c9d13b3e736f0c..fa08ee1b047d0e2f8a0c592f2b124e79dba108c8 100644
+index 179886dcbda29c5cdb7dbd43e44951ae38d9df96..cf9c3be8e574024178c2557c0dfbcd3943d21108 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1310,4 +1310,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
+@@ -1311,4 +1311,16 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
          }
      }
      // Paper end - broadcast hurt animation

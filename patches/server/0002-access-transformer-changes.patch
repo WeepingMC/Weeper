@@ -6,10 +6,10 @@ Subject: [PATCH] access transformer changes
 todo move to at file when at works for forks
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index e0827d8bb3fa17d4f590a5342ff41a514f623e68..ff5727135e618df03f8be4b21bccfc88693e0ed2 100644
+index b36a915e6d337d7ec3f797bf1773b14c5b231d76..072abb2b112e28ae55263326eb21686432465d98 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -354,7 +354,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -355,7 +355,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
      public int invulnerableTime;
      protected boolean firstTick;
      protected final SynchedEntityData entityData;
@@ -18,7 +18,7 @@ index e0827d8bb3fa17d4f590a5342ff41a514f623e68..ff5727135e618df03f8be4b21bccfc88
      protected static final int FLAG_ONFIRE = 0;
      private static final int FLAG_SHIFT_KEY_DOWN = 1;
      private static final int FLAG_SPRINTING = 3;
-@@ -363,11 +363,11 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -364,11 +364,11 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
      protected static final int FLAG_GLOWING = 6;
      protected static final int FLAG_FALL_FLYING = 7;
      private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
@@ -34,10 +34,10 @@ index e0827d8bb3fa17d4f590a5342ff41a514f623e68..ff5727135e618df03f8be4b21bccfc88
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index ccd9dff20a60f019e0c320acfb526b8bf3e5f806..f7dd75ceb6e14858ffc0cfb5a6569e48e7434c57 100644
+index 22b3d3d945cbddae25abfca7d900324c79d32293..d531087e0d7950adf1d63ea06d3fb03cbdf9ea89 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -191,7 +191,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -195,7 +195,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
      private static final EntityDataAccessor<Boolean> DATA_EFFECT_AMBIENCE_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
      public static final EntityDataAccessor<Integer> DATA_ARROW_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
      private static final EntityDataAccessor<Integer> DATA_STINGER_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
@@ -47,20 +47,11 @@ index ccd9dff20a60f019e0c320acfb526b8bf3e5f806..f7dd75ceb6e14858ffc0cfb5a6569e48
      protected static final EntityDimensions SLEEPING_DIMENSIONS = EntityDimensions.fixed(0.2F, 0.2F).withEyeHeight(0.2F);
      public static final float EXTRA_RENDER_CULLING_SIZE_WITH_BIG_HAT = 0.5F;
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Bee.java b/src/main/java/net/minecraft/world/entity/animal/Bee.java
-index 1b3978f4ea7e8491e0c0cb6de23c141f44fab414..f8293c8cf3702a2eab78f8b4c5bebc49004895a6 100644
+index 42276acfeadec6e7aa9a91d3f446f4fedb04829d..1202c46c433fc9af0b419182f8a2d6b3032fa6f3 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Bee.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Bee.java
-@@ -697,7 +697,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -701,7 +701,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          this.hivePos = pos;
-     }
- 
--    private class BeePollinateGoal extends Bee.BaseBeeGoal {
-+    public class BeePollinateGoal extends Bee.BaseBeeGoal { // Weeper private -> public
- 
-         private static final int MIN_POLLINATION_TICKS = 400;
-         private static final int MIN_FIND_FLOWER_RETRY_COOLDOWN = 20;
-@@ -883,7 +883,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
-         }
      }
  
 -    private class BeeLookControl extends LookControl {
@@ -68,16 +59,7 @@ index 1b3978f4ea7e8491e0c0cb6de23c141f44fab414..f8293c8cf3702a2eab78f8b4c5bebc49
  
          BeeLookControl(final Mob entity) {
              super(entity);
-@@ -919,7 +919,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
-         }
-     }
- 
--    private class BeeEnterHiveGoal extends Bee.BaseBeeGoal {
-+    public class BeeEnterHiveGoal extends Bee.BaseBeeGoal { // Weeper private -> public
- 
-         BeeEnterHiveGoal() {
-             super();
-@@ -962,7 +962,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -1021,7 +1021,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  
@@ -86,7 +68,7 @@ index 1b3978f4ea7e8491e0c0cb6de23c141f44fab414..f8293c8cf3702a2eab78f8b4c5bebc49
  
          BeeLocateHiveGoal() {
              super();
-@@ -1194,7 +1194,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -1250,7 +1250,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  
@@ -95,16 +77,16 @@ index 1b3978f4ea7e8491e0c0cb6de23c141f44fab414..f8293c8cf3702a2eab78f8b4c5bebc49
  
          static final int GROW_CHANCE = 30;
  
-@@ -1258,7 +1258,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -1319,7 +1319,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  
 -    private class BeeWanderGoal extends Goal {
 +    public class BeeWanderGoal extends Goal { // Weeper private -> public
  
-         private static final int WANDER_THRESHOLD = 22;
- 
-@@ -1305,7 +1305,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+         BeeWanderGoal() {
+             this.setFlags(EnumSet.of(Goal.Flag.MOVE));
+@@ -1370,7 +1370,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  
@@ -113,7 +95,7 @@ index 1b3978f4ea7e8491e0c0cb6de23c141f44fab414..f8293c8cf3702a2eab78f8b4c5bebc49
  
          BeeHurtByOtherGoal(final Bee entitybee) {
              super(entitybee);
-@@ -1325,7 +1325,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -1390,7 +1390,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  
@@ -122,7 +104,7 @@ index 1b3978f4ea7e8491e0c0cb6de23c141f44fab414..f8293c8cf3702a2eab78f8b4c5bebc49
  
          BeeBecomeAngryTargetGoal(Bee bee) {
              // Objects.requireNonNull(entitybee); // CraftBukkit - decompile error
-@@ -1356,7 +1356,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
+@@ -1421,7 +1421,7 @@ public class Bee extends Animal implements NeutralMob, FlyingAnimal {
          }
      }
  
@@ -132,10 +114,10 @@ index 1b3978f4ea7e8491e0c0cb6de23c141f44fab414..f8293c8cf3702a2eab78f8b4c5bebc49
          BaseBeeGoal() {}
  
 diff --git a/src/main/java/net/minecraft/world/entity/animal/Cat.java b/src/main/java/net/minecraft/world/entity/animal/Cat.java
-index 23d4dcc82115fd1a0a77565a0472304042d5f12d..382ad9448a9a5c425ebd9c64624287911edaa24b 100644
+index 471d5727b964922d8e898be9e1d5c30f9d3bac97..432daaf0fea2fc951f355af32de3804072d055d0 100644
 --- a/src/main/java/net/minecraft/world/entity/animal/Cat.java
 +++ b/src/main/java/net/minecraft/world/entity/animal/Cat.java
-@@ -507,7 +507,7 @@ public class Cat extends TamableAnimal implements VariantHolder<Holder<CatVarian
+@@ -518,7 +518,7 @@ public class Cat extends TamableAnimal implements VariantHolder<Holder<CatVarian
          }
      }
  
@@ -144,7 +126,7 @@ index 23d4dcc82115fd1a0a77565a0472304042d5f12d..382ad9448a9a5c425ebd9c6462428791
  
          private final Cat cat;
          @Nullable
-@@ -653,7 +653,7 @@ public class Cat extends TamableAnimal implements VariantHolder<Holder<CatVarian
+@@ -656,7 +656,7 @@ public class Cat extends TamableAnimal implements VariantHolder<Holder<CatVarian
          }
      }
  
@@ -154,10 +136,10 @@ index 23d4dcc82115fd1a0a77565a0472304042d5f12d..382ad9448a9a5c425ebd9c6462428791
          private final Cat cat;
  
 diff --git a/src/main/java/net/minecraft/world/entity/raid/Raider.java b/src/main/java/net/minecraft/world/entity/raid/Raider.java
-index bbf21ea433f9e3963aac0ede597ed8d3c8e50ed8..804b5e1e4d9b9f51938a65b5eb656256c7d85d3b 100644
+index ab132041982df2a701e4baea8195873f31b4a5fb..1e16246a528ab3fa322cd575f5e8050243e190ba 100644
 --- a/src/main/java/net/minecraft/world/entity/raid/Raider.java
 +++ b/src/main/java/net/minecraft/world/entity/raid/Raider.java
-@@ -332,7 +332,7 @@ public abstract class Raider extends PatrollingMonster {
+@@ -381,7 +381,7 @@ public abstract class Raider extends PatrollingMonster {
          }
      }
  

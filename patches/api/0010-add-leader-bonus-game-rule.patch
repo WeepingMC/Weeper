@@ -5,10 +5,10 @@ Subject: [PATCH] add leader bonus game rule
 
 
 diff --git a/src/main/java/org/bukkit/GameRule.java b/src/main/java/org/bukkit/GameRule.java
-index be827e7fef0acb17bd41aeff9dc3dc4da3718e5e..528ddcf7bd6158184a96177c8f92b92b0205d217 100644
+index 8b6584fae0a9d5cccbe350d889fa8b4a14c78ca3..56854e11011df65fe280b23bb89ab7e8d3376669 100644
 --- a/src/main/java/org/bukkit/GameRule.java
 +++ b/src/main/java/org/bukkit/GameRule.java
-@@ -113,6 +113,11 @@ public final class GameRule<T> implements net.kyori.adventure.translation.Transl
+@@ -118,6 +118,11 @@ public final class GameRule<T> implements net.kyori.adventure.translation.Transl
       */
      public static final GameRule<Boolean> SEND_COMMAND_FEEDBACK = new GameRule<>("sendCommandFeedback", Boolean.class);
  
