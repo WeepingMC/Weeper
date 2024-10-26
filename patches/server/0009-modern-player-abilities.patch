@@ -50,10 +50,10 @@ index 3ffe09d00926a03f3036728b2c65450349c9b9d1..a8db363f0488439703b9c97b96273b60
 +    }
  }
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-index b48b092a933215764d6aa91b1907c52eb4e47f25..e68e360f157a65dddebb6fc90b0dc0278a2df09f 100644
+index d3f6b3fbd11f711cebfdbb8ba8e75befa45f405b..dd95e92286276fda51108d98c88ca9fe17967d4a 100644
 --- a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-@@ -261,8 +261,8 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+@@ -266,8 +266,8 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
      }
  
      @Override
@@ -64,7 +64,7 @@ index b48b092a933215764d6aa91b1907c52eb4e47f25..e68e360f157a65dddebb6fc90b0dc027
          playerAbilitiesNMS.flyingSpeed = flySpeed;
          playerAbilitiesNMS.walkingSpeed = fieldOfViewModifier;
          initial.setNext(of(new ClientboundPlayerAbilitiesPacket(playerAbilitiesNMS)));
-@@ -270,7 +270,14 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
+@@ -275,7 +275,14 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
      }
  
      @Override
