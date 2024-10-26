@@ -346,10 +346,10 @@ index 0000000000000000000000000000000000000000..897b64bf92e4ab16a04d9b832070195a
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..22987e4a0c824d21c31c9e3700593e927af199fe
+index 0000000000000000000000000000000000000000..b48b092a933215764d6aa91b1907c52eb4e47f25
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-@@ -0,0 +1,290 @@
+@@ -0,0 +1,292 @@
 +package com.github.weepingmc.packet;
 +
 +import com.destroystokyo.paper.profile.CraftPlayerProfile;
@@ -368,6 +368,7 @@ index 0000000000000000000000000000000000000000..22987e4a0c824d21c31c9e3700593e92
 +import net.minecraft.world.entity.Entity;
 +import net.minecraft.world.entity.LivingEntity;
 +import net.minecraft.world.entity.Pose;
++import net.minecraft.world.entity.PositionMoveRotation;
 +import net.minecraft.world.entity.player.Abilities;
 +import net.minecraft.world.level.GameType;
 +import net.minecraft.world.phys.Vec3;
@@ -409,6 +410,7 @@ index 0000000000000000000000000000000000000000..22987e4a0c824d21c31c9e3700593e92
 +                    0,
 +                    GameType.DEFAULT_MODE,
 +                    null,
++                    0,
 +                    null
 +                );
 +            ClientboundPlayerInfoUpdatePacket clientboundPlayerInfoUpdatePacket = new ClientboundPlayerInfoUpdatePacket(EnumSet.of(from(profileAction)), Collections.singletonList(playerUpdate));
@@ -463,7 +465,7 @@ index 0000000000000000000000000000000000000000..22987e4a0c824d21c31c9e3700593e92
 +    @Override
 +    @Nonnull
 +    public PacketStepBuilder teleportEntity(int entityId, @Nonnull Location location, boolean onGround) {
-+        ClientboundTeleportEntityPacket teleportEntityPacket = new ClientboundTeleportEntityPacket(entityId, location, onGround);
++        ClientboundTeleportEntityPacket teleportEntityPacket = ClientboundTeleportEntityPacket.teleport(entityId, location, onGround);
 +        initial.setNext(of(teleportEntityPacket));
 +        return this;
 +    }

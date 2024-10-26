@@ -5,7 +5,7 @@ Subject: [PATCH] player track entity events
 
 
 diff --git a/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java b/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
-index bb2292257d3c45b8c84392557a1b82751dc66f88..98f0b439b7839be7b0c72ec8c9fd62bfe7371192 100644
+index f591aec5a8525a7f1c3c329d357f0bb0b199c0be..0231747c436bacdd103afb86f976c0bc652431d3 100644
 --- a/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
 +++ b/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
 @@ -26,7 +26,7 @@ public final class DisguiseUtil {
@@ -17,7 +17,7 @@ index bb2292257d3c45b8c84392557a1b82751dc66f88..98f0b439b7839be7b0c72ec8c9fd62bf
              }
              return switch (entity.getBukkitEntity().getDisguiseData()) {
                  case DisguiseData.OriginalDisguise disguise -> false;
-@@ -87,6 +87,7 @@ public final class DisguiseUtil {
+@@ -88,6 +88,7 @@ public final class DisguiseUtil {
          );
      }
  
@@ -25,7 +25,7 @@ index bb2292257d3c45b8c84392557a1b82751dc66f88..98f0b439b7839be7b0c72ec8c9fd62bf
  
      /*
       * Is used to skip entity meta that doesn't fit the disguised type.
-@@ -94,6 +95,11 @@ public final class DisguiseUtil {
+@@ -95,6 +96,11 @@ public final class DisguiseUtil {
       * that has a byte at that index.
       */
      public static boolean shouldSkip(Entity entity, EntityDataAccessor<?> dataAccessor) {

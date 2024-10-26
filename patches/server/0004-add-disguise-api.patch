@@ -92,10 +92,10 @@ index b6f4400df3d8ec7e06a996de54f8cabba57885e1..23a6026dda4ce5befa1d5e78b0434c27
  }
 diff --git a/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java b/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..bb2292257d3c45b8c84392557a1b82751dc66f88
+index 0000000000000000000000000000000000000000..f591aec5a8525a7f1c3c329d357f0bb0b199c0be
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
-@@ -0,0 +1,109 @@
+@@ -0,0 +1,110 @@
 +package io.papermc.paper.disguise;
 +
 +import com.destroystokyo.paper.profile.CraftPlayerProfile;
@@ -142,6 +142,7 @@ index 0000000000000000000000000000000000000000..bb2292257d3c45b8c84392557a1b8275
 +                            0,
 +                            net.minecraft.world.level.GameType.DEFAULT_MODE,
 +                            entity.getCustomName(),
++                            0,
 +                            null
 +                        );
 +                    player.connection.send(new ClientboundPlayerInfoUpdatePacket(EnumSet.of(Action.ADD_PLAYER), playerUpdate));
