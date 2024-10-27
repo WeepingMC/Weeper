@@ -5,7 +5,7 @@ Subject: [PATCH] build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index 05d16d0b95104bd43d09203981b4248d605cc54f..ca45fd63bd4d6bd5f7e7371e2c34fedf432b0cc7 100644
+index 62ceb696a547285a546f5de08636ae8060cc3ec7..925c6c0b4b36f27863e36426ce92430f06dfaa0e 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,8 +13,8 @@ extensions.configure(PaperweightSourceGeneratorExt::class) {
@@ -16,6 +16,6 @@ index 05d16d0b95104bd43d09203981b4248d605cc54f..ca45fd63bd4d6bd5f7e7371e2c34fedf
 -    implementation("io.github.classgraph:classgraph:4.8.47")
 +    implementation(project(":weeper-api")) // Weeper - build changes
 +    implementation("io.github.classgraph:classgraph:4.8.168") // Weeper - build changes
-     implementation("org.jetbrains:annotations:24.0.1")
+     implementation("org.jetbrains:annotations:24.1.0")
      testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
      testRuntimeOnly("org.junit.platform:junit-platform-launcher")
