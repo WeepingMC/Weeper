@@ -6,7 +6,7 @@ Subject: [PATCH] access transformer changes
 todo move to at file when at works for forks
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index b36a915e6d337d7ec3f797bf1773b14c5b231d76..072abb2b112e28ae55263326eb21686432465d98 100644
+index 6574219da33a7b9a4906883e65b78d7806f6e67b..b7b46fb05f363ab8ccb72ef3933bc37174089239 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -355,7 +355,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
@@ -34,10 +34,10 @@ index b36a915e6d337d7ec3f797bf1773b14c5b231d76..072abb2b112e28ae55263326eb216864
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index 22b3d3d945cbddae25abfca7d900324c79d32293..d531087e0d7950adf1d63ea06d3fb03cbdf9ea89 100644
+index 9c61225a728a2ca91a1c71dead75fc7cd93668b6..e7202428909e28b02092c07b828702eeea1cda39 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-@@ -195,7 +195,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -193,7 +193,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
      private static final EntityDataAccessor<Boolean> DATA_EFFECT_AMBIENCE_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.BOOLEAN);
      public static final EntityDataAccessor<Integer> DATA_ARROW_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);
      private static final EntityDataAccessor<Integer> DATA_STINGER_COUNT_ID = SynchedEntityData.defineId(LivingEntity.class, EntityDataSerializers.INT);

@@ -37,10 +37,10 @@ index 0000000000000000000000000000000000000000..82999ac66a92d04bf0499fe53bf4e268
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index f8f8e8f602f416fe97fc23ef6efeee7af2749292..1cafe537f375bd3d88c92a6228ee2053ec748004 100644
+index 1fcd9cd9344b0d2c4752042b07142db7d727dce8..edc5bb84bc212e743afaa80fc8ee354be141063a 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
-@@ -137,7 +137,8 @@ public abstract class PlayerList {
+@@ -136,7 +136,8 @@ public abstract class PlayerList {
      private static final int SEND_PLAYER_INFO_INTERVAL = 600;
      private static final SimpleDateFormat BAN_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
      private final MinecraftServer server;
@@ -50,7 +50,7 @@ index f8f8e8f602f416fe97fc23ef6efeee7af2749292..1cafe537f375bd3d88c92a6228ee2053
      private final Map<UUID, ServerPlayer> playersByUUID = Maps.newHashMap();
      private final UserBanList bans;
      private final IpBanList ipBans;
-@@ -672,7 +673,17 @@ public abstract class PlayerList {
+@@ -677,7 +678,17 @@ public abstract class PlayerList {
          // depending on the outcome.
          SocketAddress socketaddress = loginlistener.connection.getRemoteAddress();
  
@@ -69,7 +69,7 @@ index f8f8e8f602f416fe97fc23ef6efeee7af2749292..1cafe537f375bd3d88c92a6228ee2053
          entity.transferCookieConnection = loginlistener;
          Player player = entity.getBukkitEntity();
          PlayerLoginEvent event = new PlayerLoginEvent(player, loginlistener.connection.hostname, ((java.net.InetSocketAddress) socketaddress).getAddress(), ((java.net.InetSocketAddress) loginlistener.connection.channel.remoteAddress()).getAddress());
-@@ -1522,4 +1533,32 @@ public abstract class PlayerList {
+@@ -1526,4 +1537,32 @@ public abstract class PlayerList {
      public boolean isAllowCommandsForAllPlayers() {
          return this.allowCommandsForAllPlayers;
      }
@@ -103,7 +103,7 @@ index f8f8e8f602f416fe97fc23ef6efeee7af2749292..1cafe537f375bd3d88c92a6228ee2053
 +    // Weeper end - allow offline editing of playerData
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 350656a8a28a6e4c7e070872f7964c846900c8f9..c50f9241c962a0d358b1dc0875085b2802770f65 100644
+index 3f80adadc84cdf5ebd68000875ce1a334fc5cb50..3be01d01b6c7b325d2670cc665951008658a242c 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -390,6 +390,15 @@ public final class CraftServer implements Server {

@@ -702,7 +702,7 @@ index 690cbddccceb4bee7c85e4de9abc4659558029ca..64bf93ad2cef6fa71c9341409ec33590
          this.vehicle = entity.getId();
          List<Entity> list = entity.getPassengers();
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 56fbd19ad3004c8afc4f681a26d94d76943d2152..350656a8a28a6e4c7e070872f7964c846900c8f9 100644
+index 7487ae2050a57e83c5d115a423371afe4467f830..3f80adadc84cdf5ebd68000875ce1a334fc5cb50 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -398,6 +398,10 @@ public final class CraftServer implements Server {
@@ -716,7 +716,7 @@ index 56fbd19ad3004c8afc4f681a26d94d76943d2152..350656a8a28a6e4c7e070872f7964c84
      public CraftServer(DedicatedServer console, PlayerList playerList) {
          this.console = console;
          this.playerList = (DedicatedPlayerList) playerList;
-@@ -486,6 +490,7 @@ public final class CraftServer implements Server {
+@@ -485,6 +489,7 @@ public final class CraftServer implements Server {
          this.potionBrewer = new io.papermc.paper.potion.PaperPotionBrewer(console); // Paper - custom potion mixes
          datapackManager = new io.papermc.paper.datapack.PaperDatapackManager(console.getPackRepository()); // Paper
          this.spark = new io.papermc.paper.SparksFly(this); // Paper - spark
@@ -724,7 +724,7 @@ index 56fbd19ad3004c8afc4f681a26d94d76943d2152..350656a8a28a6e4c7e070872f7964c84
      }
  
      public boolean getCommandBlockOverride(String command) {
-@@ -3243,4 +3248,10 @@ public final class CraftServer implements Server {
+@@ -3242,4 +3247,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
      // Paper end
