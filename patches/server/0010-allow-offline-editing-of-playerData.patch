@@ -37,7 +37,7 @@ index 0000000000000000000000000000000000000000..82999ac66a92d04bf0499fe53bf4e268
 +    }
 +}
 diff --git a/src/main/java/net/minecraft/server/players/PlayerList.java b/src/main/java/net/minecraft/server/players/PlayerList.java
-index 1fcd9cd9344b0d2c4752042b07142db7d727dce8..edc5bb84bc212e743afaa80fc8ee354be141063a 100644
+index 30de3d1a7792c38ae946f19cb0e14637919b5001..8224e8f8ec2f1ffb3532ae60d24f1c2a380e355e 100644
 --- a/src/main/java/net/minecraft/server/players/PlayerList.java
 +++ b/src/main/java/net/minecraft/server/players/PlayerList.java
 @@ -136,7 +136,8 @@ public abstract class PlayerList {
@@ -69,7 +69,7 @@ index 1fcd9cd9344b0d2c4752042b07142db7d727dce8..edc5bb84bc212e743afaa80fc8ee354b
          entity.transferCookieConnection = loginlistener;
          Player player = entity.getBukkitEntity();
          PlayerLoginEvent event = new PlayerLoginEvent(player, loginlistener.connection.hostname, ((java.net.InetSocketAddress) socketaddress).getAddress(), ((java.net.InetSocketAddress) loginlistener.connection.channel.remoteAddress()).getAddress());
-@@ -1526,4 +1537,32 @@ public abstract class PlayerList {
+@@ -1530,4 +1541,32 @@ public abstract class PlayerList {
      public boolean isAllowCommandsForAllPlayers() {
          return this.allowCommandsForAllPlayers;
      }
@@ -103,7 +103,7 @@ index 1fcd9cd9344b0d2c4752042b07142db7d727dce8..edc5bb84bc212e743afaa80fc8ee354b
 +    // Weeper end - allow offline editing of playerData
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 3f80adadc84cdf5ebd68000875ce1a334fc5cb50..3be01d01b6c7b325d2670cc665951008658a242c 100644
+index 35f51e6afad343130d1db3feed9e452312559833..8925948cca76a5b840ca1a004e29b14cf46da6db 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -390,6 +390,15 @@ public final class CraftServer implements Server {
