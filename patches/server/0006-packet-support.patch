@@ -702,7 +702,7 @@ index 690cbddccceb4bee7c85e4de9abc4659558029ca..64bf93ad2cef6fa71c9341409ec33590
          this.vehicle = entity.getId();
          List<Entity> list = entity.getPassengers();
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 7487ae2050a57e83c5d115a423371afe4467f830..3f80adadc84cdf5ebd68000875ce1a334fc5cb50 100644
+index 281dbbce83d9cec3852b991ac8284525465074f1..ff12ba65430e5296517ef4e66aa0d428363a0e93 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -398,6 +398,10 @@ public final class CraftServer implements Server {
@@ -724,7 +724,7 @@ index 7487ae2050a57e83c5d115a423371afe4467f830..3f80adadc84cdf5ebd68000875ce1a33
      }
  
      public boolean getCommandBlockOverride(String command) {
-@@ -3242,4 +3247,10 @@ public final class CraftServer implements Server {
+@@ -3252,4 +3257,10 @@ public final class CraftServer implements Server {
          return this.potionBrewer;
      }
      // Paper end
