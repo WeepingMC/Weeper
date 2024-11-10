@@ -13,11 +13,13 @@ import io.papermc.generator.utils.Annotations;
 import io.papermc.generator.utils.ReflectionHelper;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import javax.lang.model.element.Modifier;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -32,13 +34,9 @@ import org.checkerframework.framework.qual.DefaultQualifier;
 @DefaultQualifier(NonNull.class)
 public class EntityMetaWatcherGenerator extends SimpleGenerator {
 
-
     private static final ParameterizedTypeName GENERIC_ENTITY_DATA_SERIALIZER = ParameterizedTypeName.get(ClassName.get(Map.class), ClassName.get(Long.class), ParameterizedTypeName.get(ClassName.get(EntityDataSerializer.class), WildcardTypeName.subtypeOf(Object.class)));
-
-    private static final ParameterizedTypeName ENTITY_CLASS = ParameterizedTypeName.get(
-        ClassName.get(Class.class), WildcardTypeName.subtypeOf(Entity.class));
+    private static final ParameterizedTypeName ENTITY_CLASS = ParameterizedTypeName.get(ClassName.get(Class.class), WildcardTypeName.subtypeOf(Entity.class));
     private static final ParameterizedTypeName OUTER_MAP_TYPE = ParameterizedTypeName.get(ClassName.get(Map.class), ENTITY_CLASS, GENERIC_ENTITY_DATA_SERIALIZER);
-
 
     public EntityMetaWatcherGenerator(String className, String packageName) {
         super(className, packageName);
@@ -46,7 +44,6 @@ public class EntityMetaWatcherGenerator extends SimpleGenerator {
 
     @Override
     protected TypeSpec getTypeSpec() {
-
         Map<EntityDataSerializer<?>, String> dataAccessorStringMap = serializerMap();
 
         List<Class<?>> classes;
@@ -54,17 +51,15 @@ public class EntityMetaWatcherGenerator extends SimpleGenerator {
             classes = scanResult.getSubclasses(net.minecraft.world.entity.Entity.class.getName()).loadClasses();
         }
 
-
         classes = classes.stream()
             .filter(clazz -> !java.lang.reflect.Modifier.isAbstract(clazz.getModifiers()))
             .toList();
 
-        record Pair(Class<?> clazz, List<? extends EntityDataAccessor<?>> metaResults) {
-        }
+        record Pair(Class<?> clazz, List<? extends EntityDataAccessor<?>> metaResults) {}
 
         final List<Pair> list = classes.stream()
             .map(clazz -> new Pair(
-                    clazz,
+                clazz,
                     ReflectionHelper.getAllForAllParents(clazz, EntityMetaWatcherGenerator::doFilter)
                         .stream()
                         .map(this::createData)
@@ -74,8 +69,9 @@ public class EntityMetaWatcherGenerator extends SimpleGenerator {
             )
             .toList();
 
-        Map<Class<?>, List<? extends EntityDataAccessor<?>>> vanillaNames = list.stream()
-            .collect(Collectors.toMap(pair -> pair.clazz, pair -> pair.metaResults));
+        Map<Class<?>, List<? extends EntityDataAccessor<?>>> vanillaNames = new TreeMap<>(Comparator.comparing(Class::getSimpleName));
+        vanillaNames.putAll(list.stream()
+            .collect(Collectors.toMap(pair -> pair.clazz, pair -> pair.metaResults)));
 
         TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(this.className)
             .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
@@ -93,20 +89,19 @@ public class EntityMetaWatcherGenerator extends SimpleGenerator {
             .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
             .returns(boolean.class)
             .addParameter(ParameterizedTypeName.get(ClassName.get(Class.class), WildcardTypeName.subtypeOf(Entity.class)), "clazz")
-            .addParameter(EntityDataAccessor.class, "accessor")
+            .addParameter(ParameterizedTypeName.get(ClassName.get(EntityDataSerializer.class), WildcardTypeName.subtypeOf(Object.class)), "entityDataSerializer")
+            .addParameter(int.class, "id")
             .addStatement("Map<Long, EntityDataSerializer<?>> serializerMap = VALID_ENTITY_META_MAP.get(clazz)")
             .beginControlFlow("if(serializerMap == null)")
             .addStatement("return false")
             .endControlFlow()
-            .addStatement("var serializer = serializerMap.get(accessor.id())")
-            .addStatement("return serializer != null && serializer == accessor.serializer()");
+            .addStatement("var serializer = serializerMap.get(id)")
+            .addStatement("return serializer != null && serializer == entityDataSerializer");
 
         builder.addMethod(methodBuilder.build());
     }
 
-    private void generateClassToTypeMap(TypeSpec.Builder typeBuilder, Set<Class<?>> classes) {
-
-
+    private void generateClassToTypeMap(TypeSpec.Builder typeBuilder, Set<Class<?>> classes){
         typeBuilder.addField(
             FieldSpec.builder(OUTER_MAP_TYPE, "VALID_ENTITY_META_MAP", Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
                 .initializer("initialize()")
@@ -120,7 +115,7 @@ public class EntityMetaWatcherGenerator extends SimpleGenerator {
 
         classes.forEach(aClass -> {
             String name = StringUtils.uncapitalize(aClass.getSimpleName());
-            if (!name.isBlank()) {
+            if(!name.isBlank()) {
                 builder.addStatement("result.put($T.class, $L())", aClass, name);
             }
         });
@@ -130,7 +125,6 @@ public class EntityMetaWatcherGenerator extends SimpleGenerator {
 
     private static void generateIdAccessorMethods(Map<Class<?>, List<? extends EntityDataAccessor<?>>> vanillaNames, Map<EntityDataSerializer<?>, String> dataAccessorStringMap, TypeSpec.Builder typeBuilder) {
         for (final Map.Entry<Class<?>, List<? extends EntityDataAccessor<?>>> perClassResults : vanillaNames.entrySet()) {
-
             if (perClassResults.getKey().getSimpleName().isBlank()) {
                 continue;
             }
@@ -157,7 +151,7 @@ public class EntityMetaWatcherGenerator extends SimpleGenerator {
     private @Nullable EntityDataAccessor<?> createData(Field field) {
         try {
             field.setAccessible(true);
-            return (EntityDataAccessor<?>) field.get(null);
+             return (EntityDataAccessor<?>) field.get(null);
         } catch (IllegalAccessException e) {
             return null;
         }
@@ -172,13 +166,12 @@ public class EntityMetaWatcherGenerator extends SimpleGenerator {
         return builder.skipJavaLangImports(true);
     }
 
-
-    private Map<EntityDataSerializer<?>, String> serializerMap() {
+    private Map<EntityDataSerializer<?>, String> serializerMap(){
         return Arrays.stream(EntityDataSerializers.class.getDeclaredFields())
             .filter(field -> field.getType() == EntityDataSerializer.class)
             .map(field -> {
                 try {
-                    return Map.entry((EntityDataSerializer<?>) field.get(0), field.getName());
+                    return Map.entry((EntityDataSerializer<?>)field.get(0), field.getName());
                 } catch (IllegalAccessException e) {
                     return null;
                 }

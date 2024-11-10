@@ -48,7 +48,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
 
         switch (stack.getType()) {
             case ARMOR_STAND ->
-                spawnOtherEntity(ArmorStand.class, DisguiseData.entity(EntityType.BEE), playerInteractEvent.getInteractionPoint());
+                spawnOtherEntity(ArmorStand.class, DisguiseData.entity(EntityType.BEE).build(), playerInteractEvent.getInteractionPoint());
             case SHULKER_SPAWN_EGG ->
                 spawnPlayerLikeEntity(player, Shulker.class, playerInteractEvent.getInteractionPoint());
         };

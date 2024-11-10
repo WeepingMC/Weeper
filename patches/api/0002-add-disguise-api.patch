@@ -26,20 +26,22 @@ index 4a0c39405d4fbed457787e3c6ded4cc6591bc8c2..c4cc74b95bd1a8378c53a6dee6887599
  }
 diff --git a/src/main/java/io/papermc/paper/disguise/DisguiseData.java b/src/main/java/io/papermc/paper/disguise/DisguiseData.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..3bcc252eac8b47eae54d2dff976eec95670a90d3
+index 0000000000000000000000000000000000000000..d83666c349d19b4341c1335434653f7a0be199f1
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/disguise/DisguiseData.java
-@@ -0,0 +1,61 @@
+@@ -0,0 +1,66 @@
 +package io.papermc.paper.disguise;
 +
 +import com.destroystokyo.paper.profile.PlayerProfile;
 +import org.bukkit.entity.EntityType;
-+import org.jetbrains.annotations.NotNull;
++import org.jetbrains.annotations.ApiStatus;
++import org.jspecify.annotations.NullMarked;
 +
 +/**
 + * Represents the data used to disguise an entity as another.
 + * Also supports disguising an entity as a player commonly known as `FakePlayer`.
 + */
++@NullMarked
 +public sealed interface DisguiseData permits DisguiseData.OriginalDisguise, EntityTypeDisguise, PlayerDisguise {
 +
 +    /**
@@ -52,7 +54,7 @@ index 0000000000000000000000000000000000000000..3bcc252eac8b47eae54d2dff976eec95
 +     *
 +     * @return an original disguise data
 +     */
-+    static @NotNull DisguiseData original() {
++    static DisguiseData original() {
 +        return reset();
 +    }
 +
@@ -63,19 +65,19 @@ index 0000000000000000000000000000000000000000..3bcc252eac8b47eae54d2dff976eec95
 +     * @param playerProfile a already completed player profile that will be the fake players skin
 +     * @return a builder to configure certain attributes
 +     */
-+    static @NotNull PlayerDisguise.Builder player(@NotNull PlayerProfile playerProfile) {
++    static PlayerDisguise.Builder player(PlayerProfile playerProfile) {
 +        return new PlayerDisguise.Builder(playerProfile);
 +    }
 +
 +    /**
-+     * Creates a {@link EntityTypeDisguise} to allow disguising your entity as the given {@link EntityType}.
++     * Creates a {@link EntityTypeDisguise.Builder} to allow disguising your entity as the given {@link EntityType}.
 +     *
 +     *
 +     * @param entityType the entity type as which the entity should appear as.
 +     * @return an entity disguise
 +     */
-+    static @NotNull EntityTypeDisguise entity(@NotNull EntityType entityType) {
-+        return new EntityTypeDisguise(entityType);
++    static EntityTypeDisguise.Builder entity(EntityType entityType) {
++        return new EntityTypeDisguise.Builder(entityType);
 +    }
 +
 +    /**
@@ -85,37 +87,62 @@ index 0000000000000000000000000000000000000000..3bcc252eac8b47eae54d2dff976eec95
 +     *
 +     * @return an original disguise data
 +     */
-+    static @NotNull OriginalDisguise reset() {
++    static OriginalDisguise reset() {
 +        return new OriginalDisguise();
 +    }
 +
-+    record OriginalDisguise() implements DisguiseData{}
++    record OriginalDisguise() implements DisguiseData{
++        @ApiStatus.Internal
++        public OriginalDisguise() {}
++    }
 +}
 diff --git a/src/main/java/io/papermc/paper/disguise/EntityTypeDisguise.java b/src/main/java/io/papermc/paper/disguise/EntityTypeDisguise.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..7f63227b1b8bf1e8c98e71979feeeb47bcda0d8b
+index 0000000000000000000000000000000000000000..1482b831df9d33e9694fedff6638fe32e15a14a7
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/disguise/EntityTypeDisguise.java
-@@ -0,0 +1,13 @@
+@@ -0,0 +1,35 @@
 +package io.papermc.paper.disguise;
 +
 +import java.util.Objects;
 +import org.bukkit.entity.EntityType;
 +import org.jetbrains.annotations.ApiStatus;
-+import org.jetbrains.annotations.NotNull;
++import org.jspecify.annotations.NullMarked;
 +
++@NullMarked
++public record EntityTypeDisguise(EntityType entityType) implements DisguiseData {
 +@ApiStatus.Internal
-+public record EntityTypeDisguise(@NotNull EntityType entityType) implements DisguiseData {
 +    public EntityTypeDisguise {
 +        Objects.requireNonNull(entityType, "type cannot be null");
++    }
++
++    /**
++     * Represents the builder to configure certain appearance settings.
++     */
++    public static class Builder {
++        private final EntityType entityType;
++
++        @ApiStatus.Internal
++        public Builder(EntityType entityType) {
++            this.entityType = entityType;
++        }
++
++        /**
++         * Builds the disguise
++         *
++         * @return the built disguise
++         */
++        public EntityTypeDisguise build() {
++            return new EntityTypeDisguise(entityType);
++        }
 +    }
 +}
 diff --git a/src/main/java/io/papermc/paper/disguise/PlayerDisguise.java b/src/main/java/io/papermc/paper/disguise/PlayerDisguise.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..24afc6a26d9b19c647a55d80e845fa9adcf07a63
+index 0000000000000000000000000000000000000000..534867703242a1e943a19143af82c2b2607fb20b
 --- /dev/null
 +++ b/src/main/java/io/papermc/paper/disguise/PlayerDisguise.java
-@@ -0,0 +1,63 @@
+@@ -0,0 +1,69 @@
 +package io.papermc.paper.disguise;
 +
 +import com.destroystokyo.paper.SkinParts;
@@ -123,16 +150,17 @@ index 0000000000000000000000000000000000000000..24afc6a26d9b19c647a55d80e845fa9a
 +import java.util.Objects;
 +import org.bukkit.Server;
 +import org.jetbrains.annotations.ApiStatus;
-+import org.jetbrains.annotations.NotNull;
 +import org.jetbrains.annotations.Nullable;
++import org.jspecify.annotations.NullMarked;
++
++@NullMarked
++public record PlayerDisguise(PlayerProfile playerProfile, boolean listed, @Nullable SkinParts skinParts) implements DisguiseData {
 +
 +@ApiStatus.Internal
-+public record PlayerDisguise(@NotNull PlayerProfile playerProfile, boolean listed, @Nullable SkinParts skinParts) implements DisguiseData {
-+
 +    public  PlayerDisguise {
 +        Objects.requireNonNull(playerProfile, "profile cannot be null");
 +    }
-+    public static @NotNull Builder builder(@NotNull PlayerProfile playerProfile) {
++    public static Builder builder(PlayerProfile playerProfile) {
 +        return new Builder(playerProfile);
 +    }
 +
@@ -142,10 +170,11 @@ index 0000000000000000000000000000000000000000..24afc6a26d9b19c647a55d80e845fa9a
 +    public static class Builder {
 +        private final PlayerProfile playerProfile;
 +        private boolean listed;
++        @Nullable
 +        private SkinParts skinParts;
 +
 +        @ApiStatus.Internal
-+        public Builder(@NotNull PlayerProfile playerProfile) {
++        public Builder(PlayerProfile playerProfile) {
 +            this.playerProfile = playerProfile;
 +        }
 +
@@ -155,7 +184,7 @@ index 0000000000000000000000000000000000000000..24afc6a26d9b19c647a55d80e845fa9a
 +         * @param listed true, if the player should be listed else false
 +         * @return the builder instance
 +         */
-+        public @NotNull Builder listed(boolean listed) {
++        public Builder listed(boolean listed) {
 +            this.listed = listed;
 +            return this;
 +        }
@@ -168,13 +197,17 @@ index 0000000000000000000000000000000000000000..24afc6a26d9b19c647a55d80e845fa9a
 +         * @param skinParts the skin parts that should be shown.
 +         * @return the builder instance
 +         */
-+        public @NotNull Builder skinParts(@NotNull SkinParts skinParts) {
++        public Builder skinParts(SkinParts skinParts) {
 +            this.skinParts = skinParts;
 +            return this;
 +        }
 +
-+        @ApiStatus.Internal
-+        public @NotNull PlayerDisguise build() {
++        /**
++         * Builds the disguise
++         *
++         * @return the built disguise
++         */
++        public PlayerDisguise build() {
 +            return new PlayerDisguise(playerProfile, listed, skinParts);
 +        }
 +    }

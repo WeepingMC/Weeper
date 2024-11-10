@@ -3,7 +3,6 @@ package io.papermc.paper.entity.meta;
 import io.papermc.paper.generated.GeneratedFrom;
 import java.util.HashMap;
 import java.util.Map;
-import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerPlayer;
@@ -142,8 +141,8 @@ import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.entity.vehicle.Raft;
 
 @SuppressWarnings({
-    "unused",
-    "SpellCheckingInspection"
+        "unused",
+        "SpellCheckingInspection"
 })
 @GeneratedFrom("1.21.3")
 public final class EntityMetaWatcher {
@@ -2965,7 +2964,7 @@ public final class EntityMetaWatcher {
     }
 
     private static final Map<Class<? extends Entity>, Map<Long, EntityDataSerializer<?>>> initialize(
-    ) {
+            ) {
         Map<Class<? extends Entity>, Map<Long, EntityDataSerializer<?>>> result = new HashMap<>();
         result.put(Allay.class, allay());
         result.put(AreaEffectCloud.class, areaEffectCloud());
@@ -3106,12 +3105,12 @@ public final class EntityMetaWatcher {
     }
 
     public static final boolean isValidForClass(Class<? extends Entity> clazz,
-                                                EntityDataAccessor accessor) {
+            EntityDataSerializer<?> entityDataSerializer, int id) {
         Map<Long, EntityDataSerializer<?>> serializerMap = VALID_ENTITY_META_MAP.get(clazz);
         if(serializerMap == null) {
             return false;
         }
-        var serializer = serializerMap.get(accessor.id());
-        return serializer != null && serializer == accessor.serializer();
+        var serializer = serializerMap.get(id);
+        return serializer != null && serializer == entityDataSerializer;
     }
 }
