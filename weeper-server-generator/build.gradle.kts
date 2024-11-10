@@ -13,8 +13,8 @@ extensions.configure(PaperweightSourceGeneratorExt::class) {
 
 dependencies {
     implementation("com.squareup:javapoet:1.13.0")
-    implementation(project(":paper-api"))
-    implementation(project(":paper-api-generator"))
+    implementation(project(":weeper-api"))
+    implementation(project(":weeper-api-generator"))
     implementation("io.github.classgraph:classgraph:4.8.112")
     implementation("org.jetbrains:annotations:24.0.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
