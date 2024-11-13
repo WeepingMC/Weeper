@@ -5,10 +5,10 @@ Subject: [PATCH] trigger Block animation
 
 
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index d41c81158c00931e6b11093cce141f6a3085ba05..22dc1694bb7d9ab811b359d07280e7aa5e40ff0d 100644
+index 3134fab97260897601d7c8e2810f11b8be86dbec..8a23b89c90d5cc1e545d314112bb0ac257be8ae6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -2399,6 +2399,16 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -2391,6 +2391,16 @@ public class CraftWorld extends CraftRegionAccessor implements World {
          return (this.getHandle().getDragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().getDragonFight());
      }
  
