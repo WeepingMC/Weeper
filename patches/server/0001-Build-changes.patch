@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index c209eb393670fd8d6c97ca65a801c8032b582a35..e0a054f57fd586862c653aba4ffbb7a159780189 100644
+index ee5f662ed0e84be997807a9faf97191ef4fc0449..3389b8b8448e71ded790576704afb5adcfc48483 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -25,7 +25,7 @@ abstract class MockitoAgentProvider : CommandLineArgumentProvider {
@@ -15,9 +15,9 @@ index c209eb393670fd8d6c97ca65a801c8032b582a35..e0a054f57fd586862c653aba4ffbb7a1
 -    implementation(project(":paper-api"))
 +    implementation(project(":weeper-api")) // Weeper
      // Paper start
-     implementation("org.jline:jline-terminal-jansi:3.21.0")
-     implementation("net.minecrell:terminalconsoleappender:1.3.0")
-@@ -81,6 +81,23 @@ dependencies {
+     implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
+     implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
+@@ -82,6 +82,23 @@ dependencies {
      // Paper end - spark
  }
  
@@ -41,7 +41,7 @@ index c209eb393670fd8d6c97ca65a801c8032b582a35..e0a054f57fd586862c653aba4ffbb7a1
  paperweight {
      craftBukkitPackageVersion.set("v1_21_R2") // also needs to be updated in MappingEnvironment
  }
-@@ -98,14 +115,14 @@ tasks.jar {
+@@ -99,14 +116,14 @@ tasks.jar {
          val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim() // Paper
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
