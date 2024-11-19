@@ -326,7 +326,7 @@ index 90eb4927fa51ce3df86aa7b6c71f49150a03e337..dafc35b8e8cdee2852a73922f10cf2ef
  
              set.clear();
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index cffbd3300967e5d80b5973b35a76235bb2aa1b73..a8f8eca417b9cea50ac690e15e79e14edea65ef7 100644
+index 2e8ecf3bbb9f9ceba6f896738fa1ab8e2bd0fed6..9cf061b41f9b2b6e55e1df46ad5b41aec295218f 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -1867,7 +1867,7 @@ public class ServerPlayer extends net.minecraft.world.entity.player.Player imple
@@ -365,7 +365,7 @@ index 5eccc896ef2dc8d84c2eb2c7f4280072ef63bfe8..43c8bfc72c541b965c30f04655027ff7
              values.add(synchedValue.value());
          }
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index c058240b13551b5338ac9328d5e7bcd1f08cf55e..8d4e97c77090be505e61e4128122d0e99a3caab6 100644
+index 020fe4db451e64d3391591b8ed6b17d59884cbc3..954c350cbe8a9dd77c4544c93901685a641c36d3 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -1343,6 +1343,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
@@ -376,7 +376,7 @@ index c058240b13551b5338ac9328d5e7bcd1f08cf55e..8d4e97c77090be505e61e4128122d0e9
          Iterator iterator = set.iterator();
  
          while (iterator.hasNext()) {
-@@ -2578,6 +2579,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
+@@ -2600,6 +2601,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
              this.swinging = true;
              this.swingingArm = hand;
              if (this.level() instanceof ServerLevel) {
@@ -385,7 +385,7 @@ index c058240b13551b5338ac9328d5e7bcd1f08cf55e..8d4e97c77090be505e61e4128122d0e9
                  ServerChunkCache chunkproviderserver = ((ServerLevel) this.level()).getChunkSource();
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index dfddcfb1fe1679adaecf75375757dca720e76ce1..281dbbce83d9cec3852b991ac8284525465074f1 100644
+index 806e56cb60235a99f468d36a059fdbd54c2d46e3..22c37df8b9f78de848ac196e5aa0057f1a31c8fe 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -383,6 +383,12 @@ public final class CraftServer implements Server {
