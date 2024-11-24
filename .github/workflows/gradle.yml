@@ -38,5 +38,5 @@ jobs:
         run: ./gradlew createReobfPaperclipJar
       - uses: actions/upload-artifact@v4
         with:
-          name: "paperclip"
+          name: "paperclip-reobf"
           path: "build/libs/Weeper-paperclip-*-reobf.jar"
