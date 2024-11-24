@@ -353,10 +353,10 @@ index 2e8ecf3bbb9f9ceba6f896738fa1ab8e2bd0fed6..9cf061b41f9b2b6e55e1df46ad5b41ae
      }
  
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 5eccc896ef2dc8d84c2eb2c7f4280072ef63bfe8..43c8bfc72c541b965c30f04655027ff7d58cf8c5 100644
+index 167168e81853b7520b79667539d1780183ed39e9..61601d7160058d3a56ef4ae1983b8cfa0b2b0c7d 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -781,6 +781,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -783,6 +783,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
  
          final List<SynchedEntityData.DataValue<?>> values = new java.util.ArrayList<>(keys.size());
          for (final EntityDataAccessor<?> key : keys) {
@@ -385,7 +385,7 @@ index 020fe4db451e64d3391591b8ed6b17d59884cbc3..954c350cbe8a9dd77c4544c93901685a
                  ServerChunkCache chunkproviderserver = ((ServerLevel) this.level()).getChunkSource();
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 806e56cb60235a99f468d36a059fdbd54c2d46e3..22c37df8b9f78de848ac196e5aa0057f1a31c8fe 100644
+index cac8592e3a2f438fe9ca167a4fdcd65152bbb2de..eeca8fb424c5551cd69d1b7a53749273bbda4178 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -383,6 +383,12 @@ public final class CraftServer implements Server {
