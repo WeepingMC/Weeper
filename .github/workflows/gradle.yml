@@ -4,6 +4,7 @@ on:
       - master
       - main
       - develop
+      - release/*
     tags:
       - '*.*.*'
 jobs:
