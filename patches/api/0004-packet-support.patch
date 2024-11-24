@@ -184,7 +184,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000..abf096481a41e2328f6bc6364c3d46824070921e
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/options/Animation.java
-@@ -0,0 +1,25 @@
+@@ -0,0 +1,27 @@
 +package com.github.weepingmc.packet.options;
 +
 +public enum Animation {
@@ -198,14 +198,16 @@ index 0000000000000000000000000000000000000000..abf096481a41e2328f6bc6364c3d4682
 +    /**
 +     * use {@link #CRITICAL_HIT}
 +     */
-+    @Deprecated
++    @Deprecated(forRemoval = true, since = "1.21.3")
++    @org.jetbrains.annotations.ApiStatus.ScheduledForRemoval(inVersion = "1.22.0")
 +    TAKE_DAMAGE,
 +    LEAVE_BED,
 +    SWING_OFFHAND,
 +    /**
 +     * use {@link #CRITICAL_HIT}
 +     */
-+    @Deprecated
++    @Deprecated(forRemoval = true, since = "1.21.3")
++    @org.jetbrains.annotations.ApiStatus.ScheduledForRemoval(inVersion = "1.22.0")
 +    CRITICAL_EFFECT,
 +    CRITICAL_HIT,
 +    MAGIC_CRITICAL_EFFECT
@@ -271,7 +273,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000..ae8aeda04ca7e02d2cf28eb07258ff7039248948
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/options/ProfileAction.java
-@@ -0,0 +1,17 @@
+@@ -0,0 +1,18 @@
 +package com.github.weepingmc.packet.options;
 +
 +import com.destroystokyo.paper.profile.PlayerProfile;
@@ -287,6 +289,7 @@ index 0000000000000000000000000000000000000000..ae8aeda04ca7e02d2cf28eb07258ff70
 +     * @deprecated there is a separate packet now use {@link com.github.weepingmc.packet.PacketStepBuilder#removePlayerProfile(PlayerProfile)}
 +     */
 +    @Deprecated(forRemoval = true, since = "1.19.3")
++    @org.jetbrains.annotations.ApiStatus.ScheduledForRemoval(inVersion = "1.22.0")
 +    REMOVE_PLAYER;
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/options/TeamMode.java b/src/main/java/com/github/weepingmc/packet/options/TeamMode.java

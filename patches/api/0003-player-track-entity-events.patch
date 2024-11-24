@@ -9,7 +9,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000..30f6b52fe921aac0319520158205224138c15110
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/event/packet/PlayerTrackEntityEvent.java
-@@ -0,0 +1,66 @@
+@@ -0,0 +1,67 @@
 +package com.github.weepingmc.event.packet;
 +
 +import io.papermc.paper.disguise.DisguiseData;
@@ -34,7 +34,8 @@ index 0000000000000000000000000000000000000000..30f6b52fe921aac03195201582052241
 + * @deprecated for entity disguising use {@link Entity#setDisguiseData(DisguiseData)}
 + * for cancellation {@link io.papermc.paper.event.player.PlayerTrackEntityEvent}
 + */
-+@Deprecated
++@Deprecated(forRemoval = true, since = "1.21.3")
++@org.jetbrains.annotations.ApiStatus.ScheduledForRemoval(inVersion = "1.24.0")
 +public class PlayerTrackEntityEvent extends PlayerEvent implements Cancellable {
 +
 +    private static final HandlerList handlers = new HandlerList();
@@ -81,7 +82,7 @@ new file mode 100644
 index 0000000000000000000000000000000000000000..a51e8daa03f1f4b453fd2f2793988fa966c58d97
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/event/packet/PlayerUntrackEntityEvent.java
-@@ -0,0 +1,57 @@
+@@ -0,0 +1,58 @@
 +package com.github.weepingmc.event.packet;
 +
 +import org.bukkit.entity.Entity;
@@ -97,7 +98,8 @@ index 0000000000000000000000000000000000000000..a51e8daa03f1f4b453fd2f2793988fa9
 + * Is called before a {@link Player} untracks an {@link Entity}.
 + * @deprecated use {@link io.papermc.paper.event.player.PlayerUntrackEntityEvent}
 + */
-+@Deprecated
++@Deprecated(forRemoval = true, since = "1.21.3")
++@org.jetbrains.annotations.ApiStatus.ScheduledForRemoval(inVersion = "1.24.0")
 +public class PlayerUntrackEntityEvent extends PlayerEvent {
 +
 +    private static final HandlerList handlers = new HandlerList();

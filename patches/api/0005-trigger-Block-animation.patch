@@ -5,10 +5,10 @@ Subject: [PATCH] trigger Block animation
 
 
 diff --git a/src/main/java/org/bukkit/World.java b/src/main/java/org/bukkit/World.java
-index 7a439c99fc4c5ee17d674460c8e58a9fe0c64e02..0170ee34a59ce0d0b75d74299e4dc9dbeb53c6bc 100644
+index 7a439c99fc4c5ee17d674460c8e58a9fe0c64e02..f84a9c9357c2b0b00248931d44288f3f5ec92508 100644
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
-@@ -4400,4 +4400,17 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
+@@ -4400,4 +4401,18 @@ public interface World extends RegionAccessor, WorldInfo, PluginMessageRecipient
              }
          }
      }
@@ -22,7 +22,8 @@ index 7a439c99fc4c5ee17d674460c8e58a9fe0c64e02..0170ee34a59ce0d0b75d74299e4dc9db
 +     * @param actionParameter the parameter of that action
 +     * @deprecated use the corresponding Blockentity methods
 +     */
-+    @Deprecated
++    @Deprecated(forRemoval = true, since = "1.21.1")
++    @org.jetbrains.annotations.ApiStatus.ScheduledForRemoval(inVersion = "1.22.0")
 +    void triggerBlockAnimation(@NotNull Location location, int action, int actionParameter);
 +    // Weeper end
  }
