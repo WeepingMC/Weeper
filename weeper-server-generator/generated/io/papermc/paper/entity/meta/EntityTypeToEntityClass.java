@@ -137,12 +137,14 @@ import net.minecraft.world.entity.vehicle.MinecartSpawner;
 import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.entity.vehicle.Raft;
 import org.bukkit.entity.EntityType;
+import org.jspecify.annotations.NullMarked;
 
 @SuppressWarnings({
-        "unused",
-        "SpellCheckingInspection"
+    "unused",
+    "SpellCheckingInspection"
 })
 @GeneratedFrom("1.21.3")
+@NullMarked
 public final class EntityTypeToEntityClass {
     private static final Map<EntityType, Class<? extends Entity>> ENTITY_TYPE_TO_CLASS = initialize();
 
