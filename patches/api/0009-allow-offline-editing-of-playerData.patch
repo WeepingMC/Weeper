@@ -36,10 +36,10 @@ index 0000000000000000000000000000000000000000..6acdda82e91fabf159b22c89f62e43fa
 +
 +}
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index c8be9dfc62917e710e65724db05ece6b4450cd63..511a59d2ef20df4c525ec63f8da9dee0237e227d 100644
+index 5f2e186822c26e3fb095fde9f48307dc0192bd76..e3e944e299caba7e049807ce5841f48c68ebc93b 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2601,5 +2601,15 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2620,5 +2620,15 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       * @return a new builder for skin parts
       */
      com.destroystokyo.paper.SkinParts.@NotNull Builder newSkinPartsBuilder();

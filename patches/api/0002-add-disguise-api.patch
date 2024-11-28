@@ -213,10 +213,10 @@ index 0000000000000000000000000000000000000000..0ef8abdf8c3364f3b6d7025513e8e034
 +    }
 +}
 diff --git a/src/main/java/org/bukkit/Server.java b/src/main/java/org/bukkit/Server.java
-index f55638eb8b315864052f9fe17ab4846e5e9d8dbb..ceea39c6c3827c601156a48487847128fcddf32c 100644
+index a92bd4da6788f1331a4838ab5760baec2dc6e8ec..228361bab456abe1cbfe4feee90946aa2868ba38 100644
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2588,4 +2588,11 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
+@@ -2607,4 +2607,11 @@ public interface Server extends PluginMessageRecipient, net.kyori.adventure.audi
       */
      void allowPausing(@NotNull org.bukkit.plugin.Plugin plugin, boolean value);
      // Paper end - API to check if the server is sleeping

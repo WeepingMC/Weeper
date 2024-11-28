@@ -326,7 +326,7 @@ index 90eb4927fa51ce3df86aa7b6c71f49150a03e337..dafc35b8e8cdee2852a73922f10cf2ef
  
              set.clear();
 diff --git a/src/main/java/net/minecraft/server/level/ServerPlayer.java b/src/main/java/net/minecraft/server/level/ServerPlayer.java
-index 2e8ecf3bbb9f9ceba6f896738fa1ab8e2bd0fed6..9cf061b41f9b2b6e55e1df46ad5b41aec295218f 100644
+index 5a8f396d47577f087abb415c972fd4f51e50faba..0cb2edffac3e4f4f70e29473eabb9d946bb02a00 100644
 --- a/src/main/java/net/minecraft/server/level/ServerPlayer.java
 +++ b/src/main/java/net/minecraft/server/level/ServerPlayer.java
 @@ -1867,7 +1867,7 @@ public class ServerPlayer extends net.minecraft.world.entity.player.Player imple
@@ -353,10 +353,10 @@ index 2e8ecf3bbb9f9ceba6f896738fa1ab8e2bd0fed6..9cf061b41f9b2b6e55e1df46ad5b41ae
      }
  
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 167168e81853b7520b79667539d1780183ed39e9..61601d7160058d3a56ef4ae1983b8cfa0b2b0c7d 100644
+index 28a8a77706bc33f6060827496af5ae8dad6d8b99..74316f6a0fd265507d120719de06beb7b3e5a08f 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -783,6 +783,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -739,6 +739,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
  
          final List<SynchedEntityData.DataValue<?>> values = new java.util.ArrayList<>(keys.size());
          for (final EntityDataAccessor<?> key : keys) {
@@ -385,11 +385,11 @@ index 020fe4db451e64d3391591b8ed6b17d59884cbc3..954c350cbe8a9dd77c4544c93901685a
                  ServerChunkCache chunkproviderserver = ((ServerLevel) this.level()).getChunkSource();
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index cac8592e3a2f438fe9ca167a4fdcd65152bbb2de..eeca8fb424c5551cd69d1b7a53749273bbda4178 100644
+index ac8af406180bc680d46e8edc3da0fc2e5211345a..0577029b7bd055fc6ff1b32b8085e9e806fefb16 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -383,6 +383,12 @@ public final class CraftServer implements Server {
-         return ca.spottedleaf.moonrise.common.util.TickThread.isTickThreadFor(((org.bukkit.craftbukkit.entity.CraftEntity) entity).getHandleRaw());
+@@ -395,6 +395,12 @@ public final class CraftServer implements Server {
+         return ca.spottedleaf.moonrise.common.util.TickThread.isTickThread();
      }
      // Paper end - Folia reagion threading API
 +    // Paper start - add disguise api
@@ -425,10 +425,10 @@ index ddabaed899c755925ad8618b78c33dacaf2126ac..fedd8f064a5c398da828be61e8d8c9a3
 +    // Paper end - disguise api
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index d0010dfd22463986bf3be9b3ee015ce92735753e..76d2b33cdb433772edbd785e9eeb91b74471e949 100644
+index 7aa3ba20f63be469ec82637e79f864262e41f3c6..90ba14923c050f1f0b67c9b3af1df2ac60fd3d53 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -2848,7 +2848,9 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -2850,7 +2850,9 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
          // SPIGOT-3813: Attributes before health
          if (this.getHandle().connection != null) {

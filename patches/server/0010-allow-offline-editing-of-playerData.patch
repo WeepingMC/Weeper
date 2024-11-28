@@ -103,10 +103,10 @@ index 30de3d1a7792c38ae946f19cb0e14637919b5001..8224e8f8ec2f1ffb3532ae60d24f1c2a
 +    // Weeper end - allow offline editing of playerData
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index 35f51e6afad343130d1db3feed9e452312559833..8925948cca76a5b840ca1a004e29b14cf46da6db 100644
+index d1d9690c3733c20b560ac7bf1af875931eb8607f..28e974246fb0c2fc371e0958cb80283ceb1360b2 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -390,6 +390,15 @@ public final class CraftServer implements Server {
+@@ -402,6 +402,15 @@ public final class CraftServer implements Server {
      }
      // Paper end - add disguise api
  

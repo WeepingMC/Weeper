@@ -6,10 +6,10 @@ Subject: [PATCH] access transformer changes
 todo move to at file when at works for forks
 
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index a0876d3f88620bb24ef69101fc67b0dcd5dca0d2..8805e8a255750645f492a2398774676ef48ebd0d 100644
+index a15546e433ebba6c0de01bdaaef201a3d99a87b5..28a8a77706bc33f6060827496af5ae8dad6d8b99 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -356,7 +356,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -312,7 +312,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
      public int invulnerableTime;
      protected boolean firstTick;
      protected final SynchedEntityData entityData;
@@ -18,7 +18,7 @@ index a0876d3f88620bb24ef69101fc67b0dcd5dca0d2..8805e8a255750645f492a2398774676e
      protected static final int FLAG_ONFIRE = 0;
      private static final int FLAG_SHIFT_KEY_DOWN = 1;
      private static final int FLAG_SPRINTING = 3;
-@@ -365,11 +365,11 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -321,11 +321,11 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
      protected static final int FLAG_GLOWING = 6;
      protected static final int FLAG_FALL_FLYING = 7;
      private static final EntityDataAccessor<Integer> DATA_AIR_SUPPLY_ID = SynchedEntityData.defineId(Entity.class, EntityDataSerializers.INT);
@@ -34,7 +34,7 @@ index a0876d3f88620bb24ef69101fc67b0dcd5dca0d2..8805e8a255750645f492a2398774676e
      private EntityInLevelCallback levelCallback;
      private final VecDeltaCodec packetPositionCodec;
 diff --git a/src/main/java/net/minecraft/world/entity/LivingEntity.java b/src/main/java/net/minecraft/world/entity/LivingEntity.java
-index e86314de8d908a0c3e9f17d3e163c11180cf3f59..c058240b13551b5338ac9328d5e7bcd1f08cf55e 100644
+index f36a075dbee2b96d01899e02460b1d8443e91749..020fe4db451e64d3391591b8ed6b17d59884cbc3 100644
 --- a/src/main/java/net/minecraft/world/entity/LivingEntity.java
 +++ b/src/main/java/net/minecraft/world/entity/LivingEntity.java
 @@ -193,7 +193,7 @@ public abstract class LivingEntity extends Entity implements Attackable {
