@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index ee5f662ed0e84be997807a9faf97191ef4fc0449..3389b8b8448e71ded790576704afb5adcfc48483 100644
+index 092a9ee1e862bde04c2025de6f7e25b6ec13760a..74a336ae9638a42c9e2d314a1bc2bd40b0a37fe7 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -25,7 +25,7 @@ abstract class MockitoAgentProvider : CommandLineArgumentProvider {
@@ -39,7 +39,7 @@ index ee5f662ed0e84be997807a9faf97191ef4fc0449..3389b8b8448e71ded790576704afb5ad
 +// Weeper end - api generator changes
 +
  paperweight {
-     craftBukkitPackageVersion.set("v1_21_R2") // also needs to be updated in MappingEnvironment
+     craftBukkitPackageVersion.set("v1_21_R3") // also needs to be updated in MappingEnvironment
  }
 @@ -99,14 +116,14 @@ tasks.jar {
          val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim() // Paper
