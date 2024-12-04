@@ -346,10 +346,10 @@ index 0000000000000000000000000000000000000000..897b64bf92e4ab16a04d9b832070195a
 +}
 diff --git a/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
 new file mode 100644
-index 0000000000000000000000000000000000000000..52d3e932285d5241aafc5e88cac1ac9fb51a2cb1
+index 0000000000000000000000000000000000000000..d3f6b3fbd11f711cebfdbb8ba8e75befa45f405b
 --- /dev/null
 +++ b/src/main/java/com/github/weepingmc/packet/CraftPacketStepBuilder.java
-@@ -0,0 +1,298 @@
+@@ -0,0 +1,297 @@
 +package com.github.weepingmc.packet;
 +
 +import com.destroystokyo.paper.profile.CraftPlayerProfile;
@@ -414,7 +414,6 @@ index 0000000000000000000000000000000000000000..52d3e932285d5241aafc5e88cac1ac9f
 +                    0,
 +                    GameType.DEFAULT_MODE,
 +                    null,
-+                    true,
 +                    0,
 +                    null
 +                );

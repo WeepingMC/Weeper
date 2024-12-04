@@ -5,10 +5,10 @@ Subject: [PATCH] build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index e1e434773a4c1e7cb3dd43b7bee5abe338a4eb0a..b26fb20354c46c81d8055d5fd057dcd964a6a7dd 100644
+index 62ceb696a547285a546f5de08636ae8060cc3ec7..925c6c0b4b36f27863e36426ce92430f06dfaa0e 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -14,8 +14,8 @@ extensions.configure(PaperweightSourceGeneratorExt::class) {
+@@ -13,8 +13,8 @@ extensions.configure(PaperweightSourceGeneratorExt::class) {
  
  dependencies {
      implementation("com.squareup:javapoet:1.13.0")
