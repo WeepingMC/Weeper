@@ -101,7 +101,6 @@ import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.monster.breeze.Breeze;
 import net.minecraft.world.entity.monster.creaking.Creaking;
-import net.minecraft.world.entity.monster.creaking.CreakingTransient;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
@@ -145,7 +144,7 @@ import org.jspecify.annotations.NullMarked;
     "unused",
     "SpellCheckingInspection"
 })
-@GeneratedFrom("1.21.3")
+@GeneratedFrom("1.21.4")
 @NullMarked
 public final class EntityMetaWatcher {
     private static final Map<Class<? extends Entity>, Map<Long, EntityDataSerializer<?>>> VALID_ENTITY_META_MAP = initialize();
@@ -652,29 +651,8 @@ public final class EntityMetaWatcher {
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(17L, EntityDataSerializers.BOOLEAN);
-        return Map.copyOf(result);
-    }
-
-    private static final Map<Long, EntityDataSerializer<?>> creakingTransient() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.PARTICLES);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(19L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         return Map.copyOf(result);
     }
 
@@ -2045,7 +2023,7 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.STRING);
+        result.put(17L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -2991,7 +2969,6 @@ public final class EntityMetaWatcher {
         result.put(Cod.class, cod());
         result.put(Cow.class, cow());
         result.put(Creaking.class, creaking());
-        result.put(CreakingTransient.class, creakingTransient());
         result.put(Creeper.class, creeper());
         result.put(Dolphin.class, dolphin());
         result.put(Donkey.class, donkey());
