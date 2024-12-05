@@ -5,7 +5,7 @@ Subject: [PATCH] Build changes
 
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index ee5f662ed0e84be997807a9faf97191ef4fc0449..3389b8b8448e71ded790576704afb5adcfc48483 100644
+index 2da91ed6363c0851e4c459188f5e8ef5475e0c97..04e305aeab7148f34356881b3771540fe55df271 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -25,7 +25,7 @@ abstract class MockitoAgentProvider : CommandLineArgumentProvider {
@@ -14,10 +14,10 @@ index ee5f662ed0e84be997807a9faf97191ef4fc0449..3389b8b8448e71ded790576704afb5ad
  dependencies {
 -    implementation(project(":paper-api"))
 +    implementation(project(":weeper-api")) // Weeper
+     implementation("ca.spottedleaf:concurrentutil:0.0.2") // Paper - Add ConcurrentUtil dependency
      // Paper start
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
-     implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -82,6 +82,23 @@ dependencies {
+@@ -83,6 +83,23 @@ dependencies {
      // Paper end - spark
  }
  
@@ -39,9 +39,9 @@ index ee5f662ed0e84be997807a9faf97191ef4fc0449..3389b8b8448e71ded790576704afb5ad
 +// Weeper end - api generator changes
 +
  paperweight {
-     craftBukkitPackageVersion.set("v1_21_R2") // also needs to be updated in MappingEnvironment
+     craftBukkitPackageVersion.set("v1_21_R3") // also needs to be updated in MappingEnvironment
  }
-@@ -99,14 +116,14 @@ tasks.jar {
+@@ -100,14 +117,14 @@ tasks.jar {
          val gitBranch = git("rev-parse", "--abbrev-ref", "HEAD").getText().trim() // Paper
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",

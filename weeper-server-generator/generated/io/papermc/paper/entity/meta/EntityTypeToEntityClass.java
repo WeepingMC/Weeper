@@ -97,7 +97,6 @@ import net.minecraft.world.entity.monster.ZombieVillager;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.monster.breeze.Breeze;
 import net.minecraft.world.entity.monster.creaking.Creaking;
-import net.minecraft.world.entity.monster.creaking.CreakingTransient;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
 import net.minecraft.world.entity.monster.piglin.PiglinBrute;
@@ -143,7 +142,7 @@ import org.jspecify.annotations.NullMarked;
     "unused",
     "SpellCheckingInspection"
 })
-@GeneratedFrom("1.21.3")
+@GeneratedFrom("1.21.4")
 @NullMarked
 public final class EntityTypeToEntityClass {
     private static final Map<EntityType, Class<? extends Entity>> ENTITY_TYPE_TO_CLASS = initialize();
@@ -180,7 +179,6 @@ public final class EntityTypeToEntityClass {
         result.put(EntityType.COMMAND_BLOCK_MINECART, MinecartCommandBlock.class);
         result.put(EntityType.COW, Cow.class);
         result.put(EntityType.CREAKING, Creaking.class);
-        result.put(EntityType.CREAKING_TRANSIENT, CreakingTransient.class);
         result.put(EntityType.CREEPER, Creeper.class);
         result.put(EntityType.DARK_OAK_BOAT, Boat.class);
         result.put(EntityType.DARK_OAK_CHEST_BOAT, ChestBoat.class);

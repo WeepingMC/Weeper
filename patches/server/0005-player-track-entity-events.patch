@@ -5,7 +5,7 @@ Subject: [PATCH] player track entity events
 
 
 diff --git a/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java b/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
-index 0e6a211cd3190b1f946afb0b34e8e95ca2eb62fe..bbcd61a923ba0e6a30fe3850069c5bb79d0769ff 100644
+index 1ed97a5e2b5b77d828113be9c0ea178de99eaab5..6de1ee8d28d08ff623f4ea1a1595398d569e39b0 100644
 --- a/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
 +++ b/src/main/java/io/papermc/paper/disguise/DisguiseUtil.java
 @@ -34,7 +34,7 @@ public final class DisguiseUtil {
@@ -17,7 +17,7 @@ index 0e6a211cd3190b1f946afb0b34e8e95ca2eb62fe..bbcd61a923ba0e6a30fe3850069c5bb7
              }
              return switch (entity.getBukkitEntity().getDisguiseData()) {
                  case DisguiseData.OriginalDisguise disguise -> false;
-@@ -96,6 +96,7 @@ public final class DisguiseUtil {
+@@ -97,6 +97,7 @@ public final class DisguiseUtil {
          );
      }
  
@@ -25,7 +25,7 @@ index 0e6a211cd3190b1f946afb0b34e8e95ca2eb62fe..bbcd61a923ba0e6a30fe3850069c5bb7
  
      /*
       * Is used to skip entity meta that doesn't fit the disguised type.
-@@ -108,6 +109,11 @@ public final class DisguiseUtil {
+@@ -109,6 +110,11 @@ public final class DisguiseUtil {
      }
  
      public static boolean shouldSkip(Entity entity, EntityDataSerializer<?> entityDataSerializer, int id) {
@@ -38,7 +38,7 @@ index 0e6a211cd3190b1f946afb0b34e8e95ca2eb62fe..bbcd61a923ba0e6a30fe3850069c5bb7
              case DisguiseData.OriginalDisguise original -> false;
              case EntityTypeDisguise entityTypeDisguise -> !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(
 diff --git a/src/main/java/net/minecraft/server/level/ServerEntity.java b/src/main/java/net/minecraft/server/level/ServerEntity.java
-index dafc35b8e8cdee2852a73922f10cf2efb834c91f..ead1132e33a2f664e94583856e7b2bbcb6d72ce3 100644
+index ea7527e1e5399172ac9bed70ee51306e1c47fd33..6404e32979e2206bfd97db51b1e408cc24eb3b5e 100644
 --- a/src/main/java/net/minecraft/server/level/ServerEntity.java
 +++ b/src/main/java/net/minecraft/server/level/ServerEntity.java
 @@ -336,6 +336,7 @@ public class ServerEntity {
