@@ -386,7 +386,7 @@ index d78a7c34d8a9bff8121c865d50db0924fe88239c..7f1a57bb9c7bdebf862d393d847679e6
                  ServerChunkCache chunkproviderserver = ((ServerLevel) this.level()).getChunkSource();
  
 diff --git a/src/main/java/org/bukkit/craftbukkit/CraftServer.java b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-index ac8af406180bc680d46e8edc3da0fc2e5211345a..0577029b7bd055fc6ff1b32b8085e9e806fefb16 100644
+index 97b5d6ba2b19a7c730730c74175a29157aed1840..3d356d1a019e3e8f075caac3b640f21fa92a6b02 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 @@ -395,6 +395,12 @@ public final class CraftServer implements Server {
@@ -426,10 +426,10 @@ index b25b10c24a379097233e61bcc10add841b6a7115..c047e7b9d00244b7d6bfd638c4658a7d
 +    // Paper end - disguise api
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 84c494ca81b8f58604b372ac7236147776817a4f..9df6be1ab2de2499d63d5462a32b2bb93190fc73 100644
+index 20f64850cb42d986358f01ffcdb42187e1684bca..e4634e4a1c5addd4f4e6c7e7dfdb81f9f8d66d92 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -2835,7 +2835,9 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -2836,7 +2836,9 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
          // SPIGOT-3813: Attributes before health
          if (this.getHandle().connection != null) {
