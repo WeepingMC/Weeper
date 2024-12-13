@@ -13,7 +13,7 @@ unwrap integer in unit test
 api generator changes
 
 diff --git a/build.gradle.kts b/build.gradle.kts
-index e29e5024fa693baae469d47fe77b57118f14627c..a61f62fbf1486debc85cd3995f141740d0d9d699 100644
+index 571534b42cd9c33d6a7bb6fe3bf3a28e33f8e5de..f72aaf63c87d8e1830f99fe4fcfbe299c7a425fb 100644
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
 @@ -13,7 +13,7 @@ val annotationsVersion = "24.1.0"
@@ -25,7 +25,7 @@ index e29e5024fa693baae469d47fe77b57118f14627c..a61f62fbf1486debc85cd3995f141740
  val apiAndDocs: Configuration by configurations.creating {
      attributes {
          attribute(Category.CATEGORY_ATTRIBUTE, objects.named(Category.DOCUMENTATION))
-@@ -93,7 +93,7 @@ dependencies {
+@@ -95,7 +95,7 @@ dependencies {
  }
  
  // Paper start
@@ -35,7 +35,7 @@ index e29e5024fa693baae469d47fe77b57118f14627c..a61f62fbf1486debc85cd3995f141740
      module {
          generatedSourceDirs.add(generatedApiPath.toFile())
 diff --git a/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java b/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
-index 27564727edbd9f093e3a021ce6f30e1146a8ddbb..842b00d5e19624fe1248402e4f09c82641457f71 100644
+index 5a56eeb4bdb340920306d03014e536cceb568147..61de531306e985188fb1935254e64200c9694bf5 100644
 --- a/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
 +++ b/src/main/java/org/bukkit/event/enchantment/PrepareItemEnchantEvent.java
 @@ -86,6 +86,7 @@ public class PrepareItemEnchantEvent extends InventoryEvent implements Cancellab
@@ -47,7 +47,7 @@ index 27564727edbd9f093e3a021ce6f30e1146a8ddbb..842b00d5e19624fe1248402e4f09c826
          return offers;
      }
 diff --git a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
-index eaefbb00e9993d54906cc8cf35cf753c0d6c7707..037b1d0f3b187e40a1d9d0a8de45f9f9deedf613 100644
+index b412aaf08901d169ac9fc89b36f9d6ccb95c53d3..18b2aa9584b89001f796c20af5ee2f9e12a2fa52 100644
 --- a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
 +++ b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
 @@ -279,6 +279,12 @@ public final class JavaPluginLoader implements PluginLoader {

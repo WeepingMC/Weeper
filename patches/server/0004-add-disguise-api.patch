@@ -354,7 +354,7 @@ index fc7f7a34babd095a51b5321f600aef65a2a9d123..dfb41d42ff811ac743fb9e6a9ea5d774
      }
  
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index 2ed86ecdce1c186976e7fb57e7f4214d7ee0bab8..3c8b94a5bfcc89abd290a44295d93d0b888e13a1 100644
+index b05c35c4a410f9b6879509fa4589e9380767ad68..d5be1367b9f44b4616aa8056a2f591394bb80c1c 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
 @@ -739,6 +739,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
@@ -426,10 +426,10 @@ index b25b10c24a379097233e61bcc10add841b6a7115..c047e7b9d00244b7d6bfd638c4658a7d
 +    // Paper end - disguise api
  }
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 20f64850cb42d986358f01ffcdb42187e1684bca..e4634e4a1c5addd4f4e6c7e7dfdb81f9f8d66d92 100644
+index 6a647cab8b2e476987931486e290703b8726f2c7..67a857da293f7b930a76ce428e97eb85798331e7 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -2836,7 +2836,9 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -2844,7 +2844,9 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
  
          // SPIGOT-3813: Attributes before health
          if (this.getHandle().connection != null) {
