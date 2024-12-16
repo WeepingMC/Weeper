@@ -354,10 +354,25 @@ index fc7f7a34babd095a51b5321f600aef65a2a9d123..dfb41d42ff811ac743fb9e6a9ea5d774
      }
  
 diff --git a/src/main/java/net/minecraft/world/entity/Entity.java b/src/main/java/net/minecraft/world/entity/Entity.java
-index b05c35c4a410f9b6879509fa4589e9380767ad68..d5be1367b9f44b4616aa8056a2f591394bb80c1c 100644
+index b05c35c4a410f9b6879509fa4589e9380767ad68..9a5eb8e8d1d141217a23894ded689d9abba15b40 100644
 --- a/src/main/java/net/minecraft/world/entity/Entity.java
 +++ b/src/main/java/net/minecraft/world/entity/Entity.java
-@@ -739,6 +739,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+@@ -548,6 +548,14 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
+         return steps;
+     }
+     // Paper end - optimise collisions
++    // Paper start - disguise api
++    public void clearPlayers() {
++        trackedEntity.moonrise$clearPlayers();
++    }
++    public void updatePlayers() {
++        trackedEntity.updatePlayers(((ServerLevel)level).players());
++    }
++    // Paper end - disguise api
+     // Paper start - optimise entity tracker
+     private net.minecraft.server.level.ChunkMap.TrackedEntity trackedEntity;
+ 
+@@ -739,6 +747,7 @@ public abstract class Entity implements SyncedDataHolder, Nameable, EntityAccess
  
          final List<SynchedEntityData.DataValue<?>> values = new java.util.ArrayList<>(keys.size());
          for (final EntityDataAccessor<?> key : keys) {
@@ -403,7 +418,7 @@ index 97b5d6ba2b19a7c730730c74175a29157aed1840..3d356d1a019e3e8f075caac3b640f21f
      static {
          ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
 diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-index b25b10c24a379097233e61bcc10add841b6a7115..c047e7b9d00244b7d6bfd638c4658a7dbc88b2ce 100644
+index b25b10c24a379097233e61bcc10add841b6a7115..949053b2421bbac6ed587779681547c8d333ed54 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 @@ -1306,4 +1306,18 @@ public abstract class CraftEntity implements org.bukkit.entity.Entity {
@@ -419,9 +434,9 @@ index b25b10c24a379097233e61bcc10add841b6a7115..c047e7b9d00244b7d6bfd638c4658a7d
 +
 +    @Override
 +    public void setDisguiseData(@org.jetbrains.annotations.NotNull io.papermc.paper.disguise.DisguiseData disguiseData) {
-+        getHandle().moonrise$getTrackedEntity().moonrise$clearPlayers();
++        getHandle().clearPlayers();
 +        this.disguiseData = disguiseData;
-+        this.getHandle().moonrise$getTrackedEntity().updatePlayers(((ServerLevel)getHandle().getCommandSenderWorld()).players());
++        getHandle().updatePlayers();
 +    }
 +    // Paper end - disguise api
  }
