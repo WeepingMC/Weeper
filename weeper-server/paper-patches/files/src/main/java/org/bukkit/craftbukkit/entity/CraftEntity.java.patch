@@ -1,0 +1,21 @@
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
+@@ -1306,4 +_,18 @@
+         }
+     }
+     // Paper end - broadcast hurt animation
++    // Weeper start - disguise api
++    private io.papermc.paper.disguise.DisguiseData disguiseData = io.papermc.paper.disguise.DisguiseData.original();
++    @Override
++    public @org.jetbrains.annotations.NotNull io.papermc.paper.disguise.DisguiseData getDisguiseData() {
++        return disguiseData;
++    }
++
++    @Override
++    public void setDisguiseData(@org.jetbrains.annotations.NotNull io.papermc.paper.disguise.DisguiseData disguiseData) {
++        getHandle().clearPlayers();
++        this.disguiseData = disguiseData;
++        getHandle().updatePlayers();
++    }
++    // Weeper end - disguise api
+ }

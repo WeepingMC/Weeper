@@ -1,0 +1,13 @@
+--- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
++++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
+@@ -432,5 +_,9 @@
+         return audiences;
+     }
+     // Paper end - make Team extend ForwardingAudience
+-
++    // Weeper start
++    public PlayerTeam getHandle(){
++        return team;
++    }
++    // Weeper end
+ }

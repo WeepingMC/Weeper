@@ -1,0 +1,26 @@
+--- a/net/minecraft/network/syncher/SynchedEntityData.java
++++ b/net/minecraft/network/syncher/SynchedEntityData.java
+@@ -89,6 +_,7 @@
+             for (SynchedEntityData.DataItem<?> dataItem : this.itemsById) {
+                 if (dataItem.isDirty()) {
+                     dataItem.setDirty(false);
++                    if (io.papermc.paper.disguise.DisguiseUtil.shouldSkip((net.minecraft.world.entity.Entity) entity, dataItem.getAccessor())) continue; // Weeper - disguise api
+                     list.add(dataItem.value());
+                 }
+             }
+@@ -117,6 +_,7 @@
+     public void assignValues(List<SynchedEntityData.DataValue<?>> entries) {
+         for (SynchedEntityData.DataValue<?> dataValue : entries) {
+             SynchedEntityData.DataItem<?> dataItem = this.itemsById[dataValue.id];
++            if (io.papermc.paper.disguise.DisguiseUtil.shouldSkip((net.minecraft.world.entity.Entity) entity, dataItem.getAccessor())) continue; // Weeper - disguise api
+             this.assignValue(dataItem, dataValue);
+             this.entity.onSyncedDataUpdated(dataItem.getAccessor());
+         }
+@@ -184,6 +_,7 @@
+     public List<SynchedEntityData.DataValue<?>> packAll() {
+         final List<SynchedEntityData.DataValue<?>> list = new ArrayList<>();
+         for (final DataItem<?> dataItem : this.itemsById) {
++            if (io.papermc.paper.disguise.DisguiseUtil.shouldSkip((net.minecraft.world.entity.Entity) entity, dataItem.getAccessor())) continue; // Weeper - disguise api
+             list.add(dataItem.value());
+         }
+ 

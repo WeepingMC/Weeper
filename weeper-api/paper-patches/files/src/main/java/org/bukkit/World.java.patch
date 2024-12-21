@@ -1,0 +1,30 @@
+--- a/src/main/java/org/bukkit/World.java
++++ b/src/main/java/org/bukkit/World.java
+@@ -1,8 +_,6 @@
+ package org.bukkit;
+ 
+ import java.io.File;
+-import org.bukkit.generator.ChunkGenerator;
+-
+ import java.util.ArrayList;
+ import java.util.Collection;
+ import java.util.HashMap;
+@@ -4400,4 +_,18 @@
+             }
+         }
+     }
++    // Weeper start - trigger block animation
++    /**
++     * Triggers a refresh of the BlockEntity.
++     * Updates the BlockEntity on the client side
++     *
++     * @param location        the block location
++     * @param action          the action performed
++     * @param actionParameter the parameter of that action
++     * @deprecated use the corresponding Blockentity methods
++     */
++    @Deprecated(forRemoval = true, since = "1.21.1")
++    @org.jetbrains.annotations.ApiStatus.ScheduledForRemoval(inVersion = "1.22.0")
++    void triggerBlockAnimation(@NotNull Location location, int action, int actionParameter);
++    // Weeper end - trigger block animation
+ }

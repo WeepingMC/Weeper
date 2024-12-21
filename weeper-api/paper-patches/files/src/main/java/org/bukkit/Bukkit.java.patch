@@ -1,0 +1,18 @@
+--- a/src/main/java/org/bukkit/Bukkit.java
++++ b/src/main/java/org/bukkit/Bukkit.java
+@@ -2968,4 +_,15 @@
+     public static Server.Spigot spigot() {
+         return server.spigot();
+     }
++    // Weeper start - packet support
++    /**
++     * Returns the {@link com.github.weepingmc.packet.PacketPipeline}
++     *
++     * @return the packet pipeline
++     */
++    @NotNull
++    public static com.github.weepingmc.packet.PacketPipeline getPacketPipeline() {
++        return server.getPacketPipeline();
++    }
++    // Weeper end - packet support
+ }

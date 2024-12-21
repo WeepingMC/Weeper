@@ -1,0 +1,16 @@
+--- a/net/minecraft/network/protocol/game/ClientboundAnimatePacket.java
++++ b/net/minecraft/network/protocol/game/ClientboundAnimatePacket.java
+@@ -28,6 +_,13 @@
+         this.action = buffer.readUnsignedByte();
+     }
+ 
++    // Weeper start - allow packet creation without real entity
++    public ClientboundAnimatePacket(int entityId, int animationId){
++        this.id = entityId;
++        this.action = animationId;
++    }
++    // Weeper end - allow packet creation without real entity
++
+     private void write(FriendlyByteBuf buffer) {
+         buffer.writeVarInt(this.id);
+         buffer.writeByte(this.action);

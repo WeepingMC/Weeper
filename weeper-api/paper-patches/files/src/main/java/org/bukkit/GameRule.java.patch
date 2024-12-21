@@ -1,0 +1,16 @@
+--- a/src/main/java/org/bukkit/GameRule.java
++++ b/src/main/java/org/bukkit/GameRule.java
+@@ -296,6 +_,13 @@
+      */
+     public static final GameRule<Integer> SPAWN_CHUNK_RADIUS = new GameRule<>("spawnChunkRadius", Integer.class);
+ 
++    // Weeper start - leader bonus game rule
++    /**
++     * Whether the a zombie gets a leader bonus or not
++     */
++    public static final GameRule<Boolean> RULE_LEADER_ZOMBIE_BONUS = new GameRule<>("leaderZombieBonus", Boolean.class);
++    // Weeper end - leader bonus game rule
++
+     // All GameRules instantiated above this for organizational purposes
+     private final String name;
+     private final Class<T> type;

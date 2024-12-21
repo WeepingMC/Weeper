@@ -1,0 +1,26 @@
+--- a/src/main/java/org/bukkit/plugin/Plugin.java
++++ b/src/main/java/org/bukkit/plugin/Plugin.java
+@@ -247,4 +_,23 @@
+      */
+     io.papermc.paper.plugin.lifecycle.event.@NotNull LifecycleEventManager<Plugin> getLifecycleManager();
+     // Paper end - lifecycle events
++    // Weeper start - executor for easy usage with CompletableFutures
++    /**
++     * Returns an executor of the mainthread
++     * @return executor
++     */
++    @NotNull
++    default java.util.concurrent.Executor mainThreadExecutor() {
++        return (runnable) -> getServer().getScheduler().runTask(this, runnable);
++    }
++
++    /**
++     * Returns an async executor
++     * @return executor
++     */
++    @NotNull
++    default java.util.concurrent.Executor asyncExecutor() {
++        return (runnable) -> getServer().getScheduler().runTaskAsynchronously(this, runnable);
++    }
++    // Weeper stop - executor for easy usage with CompletableFutures
+ }

@@ -1,0 +1,27 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Sun, 17 Mar 2024 00:43:55 +0100
+Subject: [PATCH] trigger Block animation
+
+
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index 92d9f0ea8f7810ae20d3996f49aefa539b4bcb69..74b6f8daa745bb65f4d5263fbc3680fd1b89f1c4 100644
+--- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
++++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+@@ -2374,6 +2374,16 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+         return (this.getHandle().getDragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().getDragonFight());
+     }
+ 
++
++    // Weeper start
++    @Override
++    public void triggerBlockAnimation(@NotNull Location location, int action, int actionParameter) {
++        BlockPos position = new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ());
++        net.minecraft.world.level.block.entity.BlockEntity blockEntity = world.getBlockEntity(position, true);
++        world.blockEvent(position, blockEntity.getBlockState().getBlock(), action, actionParameter);
++    }
++    // Weeper end
++
+     @Override
+     public Collection<GeneratedStructure> getStructures(int x, int z) {
+         return this.getStructures(x, z, struct -> true);

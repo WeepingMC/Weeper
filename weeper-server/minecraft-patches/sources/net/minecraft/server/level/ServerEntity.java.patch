@@ -1,0 +1,42 @@
+--- a/net/minecraft/server/level/ServerEntity.java
++++ b/net/minecraft/server/level/ServerEntity.java
+@@ -303,7 +_,9 @@
+ 
+     public void removePairing(ServerPlayer player) {
+         this.entity.stopSeenByPlayer(player);
++        io.papermc.paper.disguise.DisguiseUtil.tryDespawn(player, this.entity); // Weeper - disguise api
+         player.connection.send(new ClientboundRemoveEntitiesPacket(this.entity.getId()));
++        if(com.github.weepingmc.event.packet.PlayerUntrackEntityEvent.getHandlerList().getRegisteredListeners().length != 0) new com.github.weepingmc.event.packet.PlayerUntrackEntityEvent(player.getBukkitEntity(), this.entity.getId(), this.entity.getBukkitEntity()).callEvent(); // Weeper - player track entity events
+     }
+ 
+     public void addPairing(ServerPlayer player) {
+@@ -322,13 +_,17 @@
+         }
+ 
+         Packet<ClientGamePacketListener> addEntityPacket = this.entity.getAddEntityPacket(this);
++        // Weeper start - disguise api
++        if(!io.papermc.paper.disguise.DisguiseUtil.tryDisguise(player, entity, addEntityPacket)) {
+         consumer.accept(addEntityPacket);
++        }
++        // Weeper end - disguise api
+         if (this.trackedDataValues != null) {
+-            consumer.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
++            consumer.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), io.papermc.paper.disguise.DisguiseUtil.filter(this.entity, this.trackedDataValues))); // Weeper - disguise api
+         }
+ 
+         boolean flag = this.trackDelta;
+-        if (this.entity instanceof LivingEntity) {
++        if (this.entity instanceof LivingEntity && !io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this.entity)) { // Weeper - disguise api
+             Collection<AttributeInstance> syncableAttributes = ((LivingEntity)this.entity).getAttributes().getSyncableAttributes();
+ 
+             // CraftBukkit start - If sending own attributes send scaled health instead of current maximum health
+@@ -414,7 +_,9 @@
+                     serverPlayer.getBukkitEntity().injectScaledMaxHealth(attributesToSync, false);
+                 }
+                 // CraftBukkit end
++                if(!io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this.entity)) { // Weeper start - disguise api
+                 this.broadcastAndSend(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributesToSync));
++                } // Weeper end - disguise api
+             }
+ 
+             attributesToSync.clear();

@@ -1,0 +1,19 @@
+--- a/net/minecraft/world/entity/LivingEntity.java
++++ b/net/minecraft/world/entity/LivingEntity.java
+@@ -1273,7 +_,7 @@
+ 
+     private void refreshDirtyAttributes() {
+         Set<AttributeInstance> attributesToUpdate = this.getAttributes().getAttributesToUpdate();
+-
++        if (io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this)) return; // Weeper - disguise api
+         for (AttributeInstance attributeInstance : attributesToUpdate) {
+             this.onAttributeUpdated(attributeInstance.getAttribute());
+         }
+@@ -2477,6 +_,7 @@
+             this.swinging = true;
+             this.swingingArm = hand;
+             if (this.level() instanceof ServerLevel) {
++                if(!io.papermc.paper.disguise.DisguiseUtil.canSendAnimation(this)) return; // Weeper - disguise api
+                 ClientboundAnimatePacket clientboundAnimatePacket = new ClientboundAnimatePacket(this, hand == InteractionHand.MAIN_HAND ? 0 : 3);
+                 ServerChunkCache chunkSource = ((ServerLevel)this.level()).getChunkSource();
+                 if (updateSelf) {

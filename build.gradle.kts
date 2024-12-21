@@ -12,24 +12,24 @@ paperweight {
 
         patchFile {
             path = "paper-server/build.gradle.kts"
-            outputFile = file("fork-server/build.gradle.kts")
-            patchFile = file("fork-server/build.gradle.kts.patch")
+            outputFile = file("weeper-server/build.gradle.kts")
+            patchFile = file("weeper-server/build.gradle.kts.patch")
         }
         patchFile {
             path = "paper-api/build.gradle.kts"
-            outputFile = file("fork-api/build.gradle.kts")
-            patchFile = file("fork-api/build.gradle.kts.patch")
+            outputFile = file("weeper-api/build.gradle.kts")
+            patchFile = file("weeper-api/build.gradle.kts.patch")
         }
         patchDir("paperApi") {
             upstreamPath = "paper-api"
             excludes = setOf("build.gradle.kts")
-            patchesDir = file("fork-api/paper-patches")
+            patchesDir = file("weeper-api/paper-patches")
             outputDir = file("paper-api")
         }
         patchDir("paperApiGenerator") {
             upstreamPath = "paper-api-generator"
-            patchesDir = file("fork-api-generator/paper-patches")
-            outputDir = file("paper-api-generator")
+            patchesDir = file("weeper-api-generator/paper-patches")
+            outputDir = file("weeper-api-generator")
         }
     }
 }

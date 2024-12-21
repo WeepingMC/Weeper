@@ -6,11 +6,12 @@ build
 
 /run
 
-/fork-server/build.gradle.kts
-/fork-server/src/minecraft
+/weeper-server/build.gradle.kts
+/weeper-server/src/minecraft
 /paper-server
-/fork-api/build.gradle.kts
+/weeper-api/build.gradle.kts
 /paper-api
 /paper-api-generator
+/weeper-api-generator
 
 .idea/
