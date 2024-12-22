@@ -80,12 +80,10 @@ subprojects {
 
     extensions.configure<PublishingExtension> {
         repositories {
-            /*
-            maven("https://repo.papermc.io/repository/maven-snapshots/") {
-                name = "paperSnapshots"
+            maven("https://dev.craftstuebchen.de/repo/repository/snapshots/") {
+                name = "cs"
                 credentials(PasswordCredentials::class)
             }
-             */
         }
     }
 }
