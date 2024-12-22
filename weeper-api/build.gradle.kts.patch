@@ -1,15 +1,5 @@
 --- a/paper-api/build.gradle.kts
 +++ b/paper-api/build.gradle.kts
-@@ -96,7 +_,8 @@
- }
- 
- // Paper start
--val generatedApiPath: java.nio.file.Path = rootProject.projectDir.toPath().resolve("paper-api-generator/generated")
-+val generatedApiPath: java.nio.file.Path =
-+    rootProject.projectDir.toPath().resolve("weeper-api-generator/generated") // Weeper - api generator changes
- idea {
-     module {
-         generatedSourceDirs.add(generatedApiPath.toFile())
 @@ -106,6 +_,18 @@
      main {
          java {
