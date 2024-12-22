@@ -1,0 +1,55 @@
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+@@ -48,7 +_,6 @@
+ import org.bukkit.craftbukkit.inventory.CraftItemStack;
+ import org.bukkit.craftbukkit.inventory.CraftMerchantCustom;
+ import org.bukkit.craftbukkit.inventory.CraftRecipe;
+-import org.bukkit.craftbukkit.util.CraftChatMessage;
+ import org.bukkit.craftbukkit.util.CraftLocation;
+ import org.bukkit.entity.Firework;
+ import org.bukkit.entity.HumanEntity;
+@@ -318,8 +_,14 @@
+         return this.getHandle().containerMenu.getBukkitView();
+     }
+ 
++    // Weeper start - inventoryItemStackMoveStrategy
+     @Override
+     public InventoryView openInventory(Inventory inventory) {
++        return openInventory(inventory, (com.github.weepingmc.inventory.InventoryItemStackMoveStrategy) null);
++    }
++
++    @Override
++    public InventoryView openInventory(Inventory inventory, com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy) { // Weeper end - inventoryItemStackMoveStrategy
+         if (!(this.getHandle() instanceof ServerPlayer)) return null;
+         ServerPlayer player = (ServerPlayer) this.getHandle();
+         AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
+@@ -351,7 +_,7 @@
+             this.getHandle().openHorseInventory(horse.getHandle(), craft.getInventory());
+         } else {
+             MenuType<?> container = CraftContainer.getNotchInventoryType(inventory);
+-            CraftHumanEntity.openCustomInventory(inventory, player, container);
++            CraftHumanEntity.openCustomInventory(inventory, player, container, inventoryItemStackMoveStrategy); // Weeper - inventoryItemStackMoveStrategy
+         }
+ 
+         if (this.getHandle().containerMenu == formerContainer) {
+@@ -362,9 +_,20 @@
+     }
+ 
+     private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {
++        // Weeper start - InventoryItemStackMoveStrategy
++        openCustomInventory(inventory, player, windowType, null);
++    }
++
++    private static void openCustomInventory(org.bukkit.inventory.Inventory inventory, ServerPlayer player, MenuType<?> windowType, com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy) {
++        // Weeper end - InventoryItemStackMoveStrategy
+         if (player.connection == null) return;
+         Preconditions.checkArgument(windowType != null, "Unknown windowType");
+         AbstractContainerMenu container = new CraftContainer(inventory, player, player.nextContainerCounter());
++        // Weeper start - InventoryItemStackMoveStrategy
++        if(inventoryItemStackMoveStrategy != null){
++            container.setItemStackMoveStrategy(inventoryItemStackMoveStrategy);
++        }
++        // Weeper end - InventoryItemStackMoveStrategy
+ 
+         // Paper start - Add titleOverride to InventoryOpenEvent
+         final com.mojang.datafixers.util.Pair<net.kyori.adventure.text.Component, AbstractContainerMenu> result = CraftEventFactory.callInventoryOpenEventWithTitle(player, container);

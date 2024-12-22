@@ -1,0 +1,34 @@
+--- a/net/minecraft/world/inventory/Slot.java
++++ b/net/minecraft/world/inventory/Slot.java
+@@ -13,6 +_,13 @@
+     public int index;
+     public final int x;
+     public final int y;
++    private @Nullable com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy; // Weeper - inventoryItemStackMoveStrategy
++
++    // Weeper start - inventoryItemStackMoveStrategy
++    public void setInventoryItemstackMoveStrategy(@Nullable com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy){
++        this.inventoryItemStackMoveStrategy = inventoryItemStackMoveStrategy;
++    }
++    // Weeper end - inventoryItemStackMoveStrategy
+ 
+     public Slot(Container container, int slot, int x, int y) {
+         this.container = container;
+@@ -42,7 +_,7 @@
+     }
+ 
+     public boolean mayPlace(ItemStack stack) {
+-        return true;
++        return this.inventoryItemStackMoveStrategy == null || inventoryItemStackMoveStrategy.canPlace(new com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem(container.getOwner(), org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitCopy(stack), slot)); // Weeper - inventoryItemStackMoveStrategy
+     }
+ 
+     public ItemStack getItem() {
+@@ -88,7 +_,7 @@
+     }
+ 
+     public boolean mayPickup(Player player) {
+-        return true;
++        return this.inventoryItemStackMoveStrategy == null || inventoryItemStackMoveStrategy.canTake(new com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem(container.getOwner(), org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitCopy(this.getItem()), slot)); // Weeper - inventoryItemStackMoveStrategy
+     }
+ 
+     public boolean isActive() {

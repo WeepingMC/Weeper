@@ -1,0 +1,15 @@
+--- a/net/minecraft/world/inventory/AbstractContainerMenu.java
++++ b/net/minecraft/world/inventory/AbstractContainerMenu.java
+@@ -155,6 +_,12 @@
+         return slot;
+     }
+ 
++    // Weeper start - inventoryItemStackMoveStrategy
++    public void setItemStackMoveStrategy(com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy){
++        this.slots.forEach(slot -> slot.setInventoryItemstackMoveStrategy(inventoryItemStackMoveStrategy));
++    }
++    // Weeper end - inventoryItemStackMoveStrategy
++
+     protected DataSlot addDataSlot(DataSlot intValue) {
+         this.dataSlots.add(intValue);
+         this.remoteDataSlots.add(0);

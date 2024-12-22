@@ -8,7 +8,7 @@
  import org.yaml.snakeyaml.LoaderOptions;
  import org.yaml.snakeyaml.Yaml;
  import org.yaml.snakeyaml.constructor.SafeConstructor;
-@@ -395,6 +_,13 @@
+@@ -395,7 +_,21 @@
          return ca.spottedleaf.moonrise.common.util.TickThread.isTickThread();
      }
      // Paper end - Folia reagion threading API
@@ -20,8 +20,16 @@
 +    // Paper end - add disguise api
 +    private final com.github.weepingmc.packet.PacketPipeline packetPipeline; // Weeper - packet support
  
++    // Weeper start - allow offline editing of playerData
++    @Override
++    public void editOfflinePlayer(UUID playerUUID, java.util.function.Consumer<com.github.weepingmc.offline.EditPlayer> editPlayerConsumer) {
++        GameProfile gameProfile = ((CraftPlayerProfile) createPlayerProfile(playerUUID)).buildGameProfile();
++        playerList.editOfflinePlayer(gameProfile, editPlayerConsumer);
++    }
++    // Weeper end - allow offline editing of playerData
      static {
          ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
+         ConfigurationSerialization.registerClass(CraftPlayerProfile.class);
 @@ -491,6 +_,7 @@
          this.potionBrewer = new io.papermc.paper.potion.PaperPotionBrewer(console); // Paper - custom potion mixes
          datapackManager = new io.papermc.paper.datapack.PaperDatapackManager(console.getPackRepository()); // Paper
