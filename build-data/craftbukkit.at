@@ -1,0 +1,5 @@
+# non working atm only nms ats are working
+public org.bukkit.craftbukkit.scoreboard.CraftScoreboard
+public org.bukkit.craftbukkit.scoreboard.CraftTeam
+public org.bukkit.craftbukkit.scoreboard.CraftScoreboard <init>(Lnet/minecraft/world/scores/Scoreboard;)V
+public org.bukkit.craftbukkit.scoreboard.CraftTeam <init>(Lorg/bukkit/craftbukkit/scoreboard/CraftScoreboard;Lnet/minecraft/world/scores/PlayerTeam;)V

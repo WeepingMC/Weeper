@@ -42,7 +42,4 @@ public net.minecraft.world.entity.animal.Base$BeeGoal
 public net.minecraft.world.entity.animal.Cat$CatRelaxOnOwnerGoal
 public net.minecraft.world.entity.animal.Cat$CatAvoidEntityGoal
 public net.minecraft.world.entity.raid.Raider$RaiderMoveThroughVillageGoal
-public org.bukkit.craftbukkit.scoreboard.CraftScoreboard CraftScoreboard
-public org.bukkit.craftbukkit.scoreboard.CraftTeam
-
 

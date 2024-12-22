@@ -1,15 +1,16 @@
 --- a/paper-api/build.gradle.kts
 +++ b/paper-api/build.gradle.kts
-@@ -95,7 +_,7 @@
+@@ -96,7 +_,8 @@
  }
  
  // Paper start
 -val generatedApiPath: java.nio.file.Path = rootProject.projectDir.toPath().resolve("paper-api-generator/generated")
-+val generatedApiPath: java.nio.file.Path = rootProject.projectDir.toPath().resolve("weeper-api-generator/generated") // Weeper - api generator changes
++val generatedApiPath: java.nio.file.Path =
++    rootProject.projectDir.toPath().resolve("weeper-api-generator/generated") // Weeper - api generator changes
  idea {
      module {
          generatedSourceDirs.add(generatedApiPath.toFile())
-@@ -105,6 +_,18 @@
+@@ -106,6 +_,18 @@
      main {
          java {
              srcDir(generatedApiPath)
@@ -28,7 +29,7 @@
          }
      }
  }
-@@ -174,7 +_,7 @@
+@@ -175,7 +_,7 @@
  
  tasks.withType<Javadoc> {
      val options = options as StandardJavadocDocletOptions
@@ -37,7 +38,7 @@
      options.use()
      options.isDocFilesSubDirs = true
      options.links(
-@@ -212,11 +_,11 @@
+@@ -213,11 +_,11 @@
      }
  
      // workaround for https://github.com/gradle/gradle/issues/4046
@@ -51,3 +52,23 @@
                  include("**/doc-files/**")
              }
              into("build/docs/javadoc")
+@@ -251,12 +_,13 @@
+ }
+ // Paper end
+ // Paper start
+-val scanJarForOldGeneratedCode = tasks.register("scanJarForOldGeneratedCode", io.papermc.paperweight.tasks.ScanJarForOldGeneratedCode::class) {
+-    mcVersion.set(providers.gradleProperty("mcVersion"))
+-    annotation.set("Lio/papermc/paper/generated/GeneratedFrom;")
+-    jarToScan.set(tasks.jar.flatMap { it.archiveFile })
+-    classpath.from(configurations.compileClasspath)
+-}
++val scanJarForOldGeneratedCode =
++    tasks.register("scanJarForOldGeneratedCode", io.papermc.paperweight.tasks.ScanJarForOldGeneratedCode::class) {
++        mcVersion.set(providers.gradleProperty("mcVersion"))
++        annotation.set("Lio/papermc/paper/generated/GeneratedFrom;")
++        jarToScan.set(tasks.jar.flatMap { it.archiveFile })
++        classpath.from(configurations.compileClasspath)
++    }
+ tasks.check {
+     dependsOn(scanJarForOldGeneratedCode)
+ }
