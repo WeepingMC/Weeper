@@ -29,7 +29,7 @@ paperweight {
         patchDir("paperApiGenerator") {
             upstreamPath = "paper-api-generator"
             patchesDir = file("weeper-api-generator/paper-patches")
-            outputDir = file("weeper-api-generator")
+            outputDir = file("paper-api-generator")
         }
     }
 }

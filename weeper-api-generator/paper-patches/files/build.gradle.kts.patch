@@ -1,0 +1,17 @@
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -10,11 +_,11 @@
+ }
+ 
+ dependencies {
+-    minecraftJar(project(":paper-server", "mappedJarOutgoing"))
+-    implementation(project(":paper-server", "macheMinecraftLibraries"))
++    minecraftJar(project(":weeper-server", "mappedJarOutgoing"))
++    implementation(project(":weeper-server", "macheMinecraftLibraries"))
+ 
+     implementation("com.squareup:javapoet:1.13.0")
+-    implementation(project(":paper-api"))
++    implementation(project(":weeper-api"))
+     implementation("io.github.classgraph:classgraph:4.8.47")
+     implementation("org.jetbrains:annotations:24.1.0")
+     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
