@@ -1,4 +1,4 @@
-# Weeper - Relaxed like weed and stable like Paper, using paperweight [![.github/workflows/gradle.yml](https://github.com/WeepingMC/Weeper/actions/workflows/gradle.yml/badge.svg)](https://github.com/WeepingMC/Weeper/actions/workflows/gradle.yml)
+# Weeper - Relaxed like weed and stable like Paper, using paperweight [![.github/workflows/build.yml](https://github.com/WeepingMC/Weeper/actions/workflows/build.yml/badge.svg)](https://github.com/WeepingMC/Weeper/actions/workflows/build.yml)
 
 ## Contributing
 
