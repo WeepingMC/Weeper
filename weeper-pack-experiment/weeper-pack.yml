@@ -1,0 +1,5 @@
+id: "test"
+name: "<green>Test</green>"
+paths:
+  data-pack: "joshs-more-foods_5.3.0_data_pack.zip"
+  resource-pack: "joshs-more-foods_5.3.0_resource_pack.zip"
