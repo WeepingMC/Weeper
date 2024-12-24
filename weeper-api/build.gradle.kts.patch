@@ -19,46 +19,26 @@
          }
      }
  }
-@@ -175,7 +_,7 @@
+@@ -172,7 +_,7 @@
  
  tasks.withType<Javadoc> {
      val options = options as StandardJavadocDocletOptions
 -    options.overview = "src/main/javadoc/overview.html"
-+    options.overview = "../paper-api/src/main/javadoc/overview.html"
++    options.overview = "../paper-api/src/main/javadoc/overview.html" // Weeper - build changes
      options.use()
      options.isDocFilesSubDirs = true
      options.links(
-@@ -213,11 +_,11 @@
+@@ -205,11 +_,11 @@
      }
  
      // workaround for https://github.com/gradle/gradle/issues/4046
 -    inputs.dir("src/main/javadoc").withPropertyName("javadoc-sourceset")
-+    inputs.dir("../paper-api/src/main/javadoc").withPropertyName("javadoc-sourceset")
++    inputs.dir("../paper-api/src/main/javadoc").withPropertyName("javadoc-sourceset") // Weeper - build changes
      val fsOps = services.fileSystemOperations
      doLast {
          fsOps.copy {
 -            from("src/main/javadoc") {
-+            from("../paper-api/src/main/javadoc") {
++            from("../paper-api/src/main/javadoc") { // Weeper - build changes
                  include("**/doc-files/**")
              }
              into("build/docs/javadoc")
-@@ -251,12 +_,13 @@
- }
- // Paper end
- // Paper start
--val scanJarForOldGeneratedCode = tasks.register("scanJarForOldGeneratedCode", io.papermc.paperweight.tasks.ScanJarForOldGeneratedCode::class) {
--    mcVersion.set(providers.gradleProperty("mcVersion"))
--    annotation.set("Lio/papermc/paper/generated/GeneratedFrom;")
--    jarToScan.set(tasks.jar.flatMap { it.archiveFile })
--    classpath.from(configurations.compileClasspath)
--}
-+val scanJarForOldGeneratedCode =
-+    tasks.register("scanJarForOldGeneratedCode", io.papermc.paperweight.tasks.ScanJarForOldGeneratedCode::class) {
-+        mcVersion.set(providers.gradleProperty("mcVersion"))
-+        annotation.set("Lio/papermc/paper/generated/GeneratedFrom;")
-+        jarToScan.set(tasks.jar.flatMap { it.archiveFile })
-+        classpath.from(configurations.compileClasspath)
-+    }
- tasks.check {
-     dependsOn(scanJarForOldGeneratedCode)
- }
