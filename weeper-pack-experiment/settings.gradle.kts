@@ -10,10 +10,5 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
 }
 
-rootProject.name = "weeper"
+rootProject.name = "weeper-pack-experiment"
 
-include("weeper-api")
-include("weeper-server")
-// include("weeper-server-generator")
-//include("paper-api-generator")
-// include("test-plugin")
