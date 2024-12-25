@@ -2,6 +2,8 @@ version = "1.0.0-SNAPSHOT"
 
 dependencies {
     compileOnly(project(":weeper-api"))
+    implementation("com.github.alexdlaird:java-ngrok:2.3.4")
+
 }
 
 tasks.processResources {

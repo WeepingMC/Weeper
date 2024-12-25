@@ -1,86 +1,141 @@
 package io.papermc.testplugin;
 
-import com.destroystokyo.paper.MaterialTags;
-import io.papermc.paper.disguise.DisguiseData;
-import io.papermc.paper.disguise.EntityTypeDisguise;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Shulker;
+import com.github.alexdlaird.ngrok.NgrokClient;
+import com.github.alexdlaird.ngrok.protocol.Tunnel;
+import com.sun.net.httpserver.HttpServer;
+import com.sun.net.httpserver.SimpleFileServer;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.zip.ZipFile;
+import net.kyori.adventure.resource.ResourcePackInfo;
+import net.kyori.adventure.resource.ResourcePackRequest;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.Team;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
+import static java.util.function.Predicate.not;
 
 public final class TestPlugin extends JavaPlugin implements Listener {
+
+    private static final Logger log = LoggerFactory.getLogger(TestPlugin.class);
+
+    private final PackContainer resourcePackContainer = new PackContainer();
+    private final PackContainer dataPackContainer = new PackContainer();
+    private String ngrokUrl;
+
+    private HttpServer server;
 
     @Override
     public void onEnable() {
         this.getServer().getPluginManager().registerEvents(this, this);
-    }
+        try {
+            Files.createDirectories(this.getDataFolder().toPath());
+        } catch (IOException e) {
+            log.error("Failed to create data folder", e);
+        }
 
+        try (var files = Files.list(this.getDataFolder().toPath())) {
+            files
+                    .filter(not(Files::isDirectory))
+                    .filter(path -> path.getFileName().endsWith(".zip"))
+                    .forEach(path -> {
+                        try (ZipFile zipFile = new ZipFile(path.toFile());) {
+                            var yamlFile = zipFile.getEntry("weeper-pack.yml");
+                            if (yamlFile == null) {
+                                return;
+                            }
+                            InputStream is = zipFile.getInputStream(yamlFile);
+
+                            YamlConfiguration config = YamlConfiguration.loadConfiguration(new InputStreamReader(is));
+
+                            if (config.getString("name") == null || config.getString("id") == null) {
+                                getLogger().warning("Invalid pack file: " + path.getFileName());
+                                return;
+                            }
+
+                            log.info("Loading pack: {}, {}", config.getString("name"), config.getString("id"));
+
+                            String dataPackPath = config.getString("paths.data-pack");
+                            if (dataPackPath != null) {
+                                copyInnerZipsToDataFolder(zipFile, dataPackPath).ifPresent(this.dataPackContainer::addPack);
+                            }
+
+                            String resourcePackPath = config.getString("paths.resource-pack");
+                            if (resourcePackPath != null) {
+                                copyInnerZipsToDataFolder(zipFile, resourcePackPath).ifPresent(this.resourcePackContainer::addPack);
+                            }
+
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                        getLogger().info("Found file: " + path.getFileName());
+                    });
+        } catch (IOException e) {
+            log.error("Failed to list files", e);
+        }
+
+        InetSocketAddress address = new InetSocketAddress(80);
+        Path path = this.getDataFolder().toPath();
+        this.server = SimpleFileServer.createFileServer(address, path, SimpleFileServer.OutputLevel.VERBOSE);
+        asyncExecutor().execute(server::start);
+
+
+        final NgrokClient ngrokClient = new NgrokClient.Builder().build();
+        final Tunnel httpTunnel = ngrokClient.connect();
+        this.ngrokUrl = httpTunnel.getPublicUrl();
+    }
 
     @EventHandler
-    public void onSpawn(PlayerInteractEvent playerInteractEvent) {
-        if (playerInteractEvent.getAction().isLeftClick() || playerInteractEvent.getAction() == Action.RIGHT_CLICK_AIR) {
-            return;
-        }
-        if (!playerInteractEvent.hasItem()) {
-            return;
-        }
-        var stack = playerInteractEvent.getItem();
-        if (stack == null || !(MaterialTags.SPAWN_EGGS.isTagged(stack) || stack.getType() == Material.ARMOR_STAND)) {
-            return;
-        }
-        if (playerInteractEvent.getInteractionPoint() == null) {
-            return;
-        }
-        var player = playerInteractEvent.getPlayer();
+    void onPlayerJoin(PlayerJoinEvent event) {
+        List<ResourcePackInfo> packInfos = resourcePackContainer.getPacks().stream().map(this::getPublicResourcePackUrl).toList();
 
-        switch (stack.getType()) {
-            case ARMOR_STAND ->
-                    spawnOtherEntity(ArmorStand.class, DisguiseData.entity(EntityType.BEE).build(), playerInteractEvent.getInteractionPoint());
-            case SHULKER_SPAWN_EGG ->
-                    spawnPlayerLikeEntity(player, Shulker.class, playerInteractEvent.getInteractionPoint());
-        };
-        playerInteractEvent.setCancelled(true);
+        var request = ResourcePackRequest.resourcePackRequest().packs(packInfos).build();
+
+        event.getPlayer().sendResourcePacks(request);
     }
 
-    private void spawnOtherEntity(Class<? extends Entity> entityClass, EntityTypeDisguise entityTypeDisguise, Location location) {
-        location.getWorld().spawn(location, entityClass, entity -> {
-            entity.setDisguiseData(entityTypeDisguise);
-        });
+    private ResourcePackInfo getPublicResourcePackUrl(Path zipFileName) {
+        var fullUrl = URI.create(ngrokUrl + "/" + zipFileName.toString());
+        return ResourcePackInfo.resourcePackInfo().id(UUID.randomUUID()).uri(fullUrl).asResourcePackInfo();
     }
 
-    private void spawnPlayerLikeEntity(Player player, Class<? extends Entity> entityClass, Location location) {
-        player.getWorld().spawn(location, entityClass, entity -> {
-            entity.setDisguiseData(DisguiseData
-                    .player(player.getPlayerProfile()).listed(false)
-                    .skinParts(Bukkit.getServer().newSkinPartsBuilder().withJacket(true).withCape(true).withHat(true).build())
-                    .build());
 
+    @Override
+    public void onDisable() {
+        if (server != null) {
+            server.stop(30);
+        }
+    }
 
-            entity.customName(Component.text("Gollum"));
-            Scoreboard scoreboard = player.getScoreboard();
+    private Optional<Path> copyInnerZipsToDataFolder(ZipFile file, String fileName) throws IOException {
+        var entry = file.getEntry(fileName);
 
-            Team team = scoreboard.getTeam("test");
-            if (team == null) {
-                team = scoreboard.registerNewTeam("test");
-            }
-            team.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
-            team.addEntry(entity.getScoreboardEntryName());
-            team.prefix(Component.text("Happy Coding ", NamedTextColor.GOLD));
-            team.suffix(Component.text(" :D", NamedTextColor.RED));
-            team.addEntry(entity.getName());
-        });
+        if (entry == null) {
+            log.warn("Could not find entry: {}, it is configured but not present.", fileName);
+            return Optional.empty();
+        }
+
+        var destinationPath = this.getDataFolder().toPath().resolve(Path.of(fileName));
+        Files.copy(
+                file.getInputStream(entry),
+                destinationPath,
+                REPLACE_EXISTING
+        );
+        return Optional.of(destinationPath);
     }
 }
