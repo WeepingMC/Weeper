@@ -1,14 +1,5 @@
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -3,7 +_,7 @@
- import java.util.List;
- import java.util.Set;
- import java.util.UUID;
--import org.bukkit.Chunk; // Paper
-+import org.bukkit.Chunk;
- import org.bukkit.EntityEffect;
- import org.bukkit.Location;
- import org.bukkit.Nameable;
 @@ -1172,4 +_,33 @@
       */
      void broadcastHurtAnimation(@NotNull java.util.Collection<Player> players);
