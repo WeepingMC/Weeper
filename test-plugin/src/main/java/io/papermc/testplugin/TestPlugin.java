@@ -1,7 +1,5 @@
 package io.papermc.testplugin;
 
-import com.github.alexdlaird.ngrok.NgrokClient;
-import com.github.alexdlaird.ngrok.protocol.Tunnel;
 import com.sun.net.httpserver.HttpServer;
 import com.sun.net.httpserver.SimpleFileServer;
 import java.io.IOException;
@@ -11,10 +9,12 @@ import java.net.InetSocketAddress;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.zip.ZipFile;
 import net.kyori.adventure.resource.ResourcePackInfo;
 import net.kyori.adventure.resource.ResourcePackRequest;
@@ -35,50 +35,55 @@ public final class TestPlugin extends JavaPlugin implements Listener {
 
     private final PackContainer resourcePackContainer = new PackContainer();
     private final PackContainer dataPackContainer = new PackContainer();
-    private String ngrokUrl;
 
+    private ResourcePackRequest resourcePackRequest;
+
+    private String ngrokUrl;
     private HttpServer server;
 
     @Override
     public void onEnable() {
         this.getServer().getPluginManager().registerEvents(this, this);
         try {
-            Files.createDirectories(this.getDataFolder().toPath());
+            Files.createDirectories(this.getDataPath());
         } catch (IOException e) {
             log.error("Failed to create data folder", e);
         }
 
-        try (var files = Files.list(this.getDataFolder().toPath())) {
+        try (var files = Files.list(this.getDataPath())) {
             files
                     .filter(not(Files::isDirectory))
-                    .filter(path -> path.getFileName().endsWith(".zip"))
+                    .filter(path -> path.toString().endsWith(".jar"))
+                    .peek(path -> log.info("Found jar file: {}", path.getFileName()))
                     .forEach(path -> {
                         try (ZipFile zipFile = new ZipFile(path.toFile());) {
                             var yamlFile = zipFile.getEntry("weeper-pack.yml");
                             if (yamlFile == null) {
+                                log.error("Invalid pack file: {}", path.getFileName());
                                 return;
                             }
-                            InputStream is = zipFile.getInputStream(yamlFile);
+                            try (InputStream is = zipFile.getInputStream(yamlFile); var reader = new InputStreamReader(is)) {
+                                YamlConfiguration config = YamlConfiguration.loadConfiguration(reader);
 
-                            YamlConfiguration config = YamlConfiguration.loadConfiguration(new InputStreamReader(is));
+                                if (config.getString("name") == null || config.getString("id") == null) {
+                                    log.warn("Invalid pack file: {}", path.getFileName());
+                                    return;
+                                }
 
-                            if (config.getString("name") == null || config.getString("id") == null) {
-                                getLogger().warning("Invalid pack file: " + path.getFileName());
-                                return;
+                                log.info("Loading pack: {}, {}", config.getString("name"), config.getString("id"));
+
+                                String dataPackPath = config.getString("paths.data-pack");
+                                if (dataPackPath != null) {
+                                    log.info("Loading data pack: {}", dataPackPath);
+                                    copyInnerZipsToDataFolder(zipFile, dataPackPath).ifPresent(this.dataPackContainer::addPack);
+                                }
+
+                                String resourcePackPath = config.getString("paths.resource-pack");
+                                if (resourcePackPath != null) {
+                                    log.info("Loading resource pack: {}", resourcePackPath);
+                                    copyInnerZipsToDataFolder(zipFile, resourcePackPath).ifPresent(this.resourcePackContainer::addPack);
+                                }
                             }
-
-                            log.info("Loading pack: {}, {}", config.getString("name"), config.getString("id"));
-
-                            String dataPackPath = config.getString("paths.data-pack");
-                            if (dataPackPath != null) {
-                                copyInnerZipsToDataFolder(zipFile, dataPackPath).ifPresent(this.dataPackContainer::addPack);
-                            }
-
-                            String resourcePackPath = config.getString("paths.resource-pack");
-                            if (resourcePackPath != null) {
-                                copyInnerZipsToDataFolder(zipFile, resourcePackPath).ifPresent(this.resourcePackContainer::addPack);
-                            }
-
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -89,36 +94,55 @@ public final class TestPlugin extends JavaPlugin implements Listener {
             log.error("Failed to list files", e);
         }
 
+        startServer();
+
+        List<CompletableFuture<ResourcePackInfo>> packInfos = resourcePackContainer.getPacks().stream().map(this::getPublicResourcePackUrl).toList();
+
+        CompletableFuture.allOf(packInfos.toArray(CompletableFuture[]::new)).whenComplete((unused, throwable) -> {
+
+            List<ResourcePackInfo> list = new ArrayList<>();
+            for (CompletableFuture<ResourcePackInfo> packInfo : packInfos) {
+                ResourcePackInfo info;
+                try {
+                    info = packInfo.get();
+                    list.add(info);
+                } catch (InterruptedException | ExecutionException e) {
+                    log.error("Failed to get pack info", e);
+                }
+            }
+
+            resourcePackRequest = ResourcePackRequest.resourcePackRequest().packs(list).build();
+            log.info("FInished building resource pack request");
+        });
+
+    }
+
+    private void startServer() {
         InetSocketAddress address = new InetSocketAddress(80);
-        Path path = this.getDataFolder().toPath();
+        Path path = this.getDataFolder().toPath().toAbsolutePath();
         this.server = SimpleFileServer.createFileServer(address, path, SimpleFileServer.OutputLevel.VERBOSE);
         asyncExecutor().execute(server::start);
-
-
-        final NgrokClient ngrokClient = new NgrokClient.Builder().build();
-        final Tunnel httpTunnel = ngrokClient.connect();
-        this.ngrokUrl = httpTunnel.getPublicUrl();
+        ngrokUrl = "http://" + address.getHostString();
+        log.warn("Ngrok URL: {}", ngrokUrl);
     }
 
     @EventHandler
     void onPlayerJoin(PlayerJoinEvent event) {
-        List<ResourcePackInfo> packInfos = resourcePackContainer.getPacks().stream().map(this::getPublicResourcePackUrl).toList();
-
-        var request = ResourcePackRequest.resourcePackRequest().packs(packInfos).build();
-
-        event.getPlayer().sendResourcePacks(request);
+        event.getPlayer().sendResourcePacks(resourcePackRequest);
     }
 
-    private ResourcePackInfo getPublicResourcePackUrl(Path zipFileName) {
-        var fullUrl = URI.create(ngrokUrl + "/" + zipFileName.toString());
-        return ResourcePackInfo.resourcePackInfo().id(UUID.randomUUID()).uri(fullUrl).asResourcePackInfo();
+    private CompletableFuture<ResourcePackInfo> getPublicResourcePackUrl(Path zipFileName) {
+        var urlString = ngrokUrl + "/" + zipFileName.toString();
+        log.warn("URL: {}", urlString);
+        var fullUrl = URI.create(urlString);
+        return ResourcePackInfo.resourcePackInfo().id(UUID.randomUUID()).uri(fullUrl).computeHashAndBuild();
     }
 
 
     @Override
     public void onDisable() {
         if (server != null) {
-            server.stop(30);
+            server.stop(1);
         }
     }
 
@@ -136,6 +160,6 @@ public final class TestPlugin extends JavaPlugin implements Listener {
                 destinationPath,
                 REPLACE_EXISTING
         );
-        return Optional.of(destinationPath);
+        return Optional.of(Path.of(fileName));
     }
 }
