@@ -32,6 +32,8 @@ import static java.util.function.Predicate.not;
 public final class TestPlugin extends JavaPlugin implements Listener {
 
     private static final Logger log = LoggerFactory.getLogger(TestPlugin.class);
+    public static final String RESOURCE_PACKS = "resource-packs";
+    public static final String DATA_PACKS = "data-packs";
 
     private final PackContainer resourcePackContainer = new PackContainer();
     private final PackContainer dataPackContainer = new PackContainer();
@@ -46,6 +48,8 @@ public final class TestPlugin extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(this, this);
         try {
             Files.createDirectories(this.getDataPath());
+            Files.createDirectories(this.getDataPath().resolve(RESOURCE_PACKS)).toFile().deleteOnExit();
+            Files.createDirectories(this.getDataPath().resolve(DATA_PACKS)).toFile().deleteOnExit();
         } catch (IOException e) {
             log.error("Failed to create data folder", e);
         }
@@ -75,13 +79,13 @@ public final class TestPlugin extends JavaPlugin implements Listener {
                                 String dataPackPath = config.getString("paths.data-pack");
                                 if (dataPackPath != null) {
                                     log.info("Loading data pack: {}", dataPackPath);
-                                    copyInnerZipsToDataFolder(zipFile, dataPackPath).ifPresent(this.dataPackContainer::addPack);
+                                    copyInnerZipsToDataFolder(zipFile, dataPackPath, this.getDataPath().resolve(DATA_PACKS)).ifPresent(this.dataPackContainer::addPack);
                                 }
 
                                 String resourcePackPath = config.getString("paths.resource-pack");
                                 if (resourcePackPath != null) {
                                     log.info("Loading resource pack: {}", resourcePackPath);
-                                    copyInnerZipsToDataFolder(zipFile, resourcePackPath).ifPresent(this.resourcePackContainer::addPack);
+                                    copyInnerZipsToDataFolder(zipFile, resourcePackPath, this.getDataPath().resolve(RESOURCE_PACKS)).ifPresent(this.resourcePackContainer::addPack);
                                 }
                             }
                         } catch (IOException e) {
@@ -119,7 +123,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
 
     private void startServer() {
         InetSocketAddress address = new InetSocketAddress(80);
-        Path path = this.getDataFolder().toPath().toAbsolutePath();
+        Path path = this.getDataFolder().toPath().resolve(RESOURCE_PACKS).toAbsolutePath();
         this.server = SimpleFileServer.createFileServer(address, path, SimpleFileServer.OutputLevel.VERBOSE);
         asyncExecutor().execute(server::start);
         ngrokUrl = "http://" + address.getHostString();
@@ -146,7 +150,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
         }
     }
 
-    private Optional<Path> copyInnerZipsToDataFolder(ZipFile file, String fileName) throws IOException {
+    private Optional<Path> copyInnerZipsToDataFolder(ZipFile file, String fileName, Path destinationFolder) throws IOException {
         var entry = file.getEntry(fileName);
 
         if (entry == null) {
@@ -154,12 +158,13 @@ public final class TestPlugin extends JavaPlugin implements Listener {
             return Optional.empty();
         }
 
-        var destinationPath = this.getDataFolder().toPath().resolve(Path.of(fileName));
+        var destinationPath = destinationFolder.resolve(Path.of(fileName));
         Files.copy(
                 file.getInputStream(entry),
                 destinationPath,
                 REPLACE_EXISTING
         );
+        destinationPath.toFile().deleteOnExit();
         return Optional.of(Path.of(fileName));
     }
 }
