@@ -26,3 +26,9 @@ jobs:
         run: ./gradlew applyAllPatches --stacktrace
       - name: Build
         run: ./gradlew build
+      - name: Generate moj Paperclip jar
+        run: ./gradlew createMojmapPaperclipJar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: "paperclip"
+          path: "weeper-server/build/libs/weeper-paperclip-*-mojmap.jar"
