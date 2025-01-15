@@ -1,9 +1,37 @@
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -2346,6 +_,15 @@
-         return (this.getHandle().getDragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().getDragonFight());
+@@ -6,8 +_,6 @@
+ import com.google.common.collect.ImmutableMap;
+ import com.mojang.datafixers.util.Pair;
+ import io.papermc.paper.FeatureHooks;
+-import io.papermc.paper.registry.RegistryAccess;
+-import io.papermc.paper.registry.RegistryKey;
+ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+ import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+ import java.io.File;
+@@ -856,7 +_,7 @@
+             CraftPlayer cp = (CraftPlayer) p;
+             if (cp.getHandle().connection == null) continue;
+ 
+-            cp.getHandle().connection.send(new ClientboundSetTimePacket(cp.getHandle().level().getGameTime(), cp.getHandle().getPlayerTime(), cp.getHandle().relativeTime && cp.getHandle().serverLevel().getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)));
++            cp.getHandle().connection.send(new ClientboundSetTimePacket(cp.getHandle().level().getGameTime(), cp.getHandle().getPlayerTime(), cp.getHandle().serverLevel().getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)));
+         }
      }
  
+@@ -2244,7 +_,7 @@
+     @Override
+     public StructureSearchResult locateNearestStructure(Location origin, StructureType structureType, int radius, boolean findUnexplored) {
+         List<Structure> structures = new ArrayList<>();
+-        for (Structure structure : RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE)) {
++        for (Structure structure : Registry.STRUCTURE) {
+             if (structure.getStructureType() == structureType) {
+                 structures.add(structure);
+             }
+@@ -2348,6 +_,15 @@
+     public DragonBattle getEnderDragonBattle() {
+         return (this.getHandle().getDragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().getDragonFight());
+     }
++
 +    // Weeper start
 +    @Override
 +    public void triggerBlockAnimation(@NotNull Location location, int action, int actionParameter) {
@@ -12,7 +40,6 @@
 +        world.blockEvent(position, blockEntity.getBlockState().getBlock(), action, actionParameter);
 +    }
 +    // Weeper end
-+
+ 
      @Override
      public Collection<GeneratedStructure> getStructures(int x, int z) {
-         return this.getStructures(x, z, struct -> true);

@@ -9,7 +9,7 @@
          for (AttributeInstance attributeInstance : attributesToUpdate) {
              this.onAttributeUpdated(attributeInstance.getAttribute());
          }
-@@ -2477,6 +_,7 @@
+@@ -2479,6 +_,7 @@
              this.swinging = true;
              this.swingingArm = hand;
              if (this.level() instanceof ServerLevel) {

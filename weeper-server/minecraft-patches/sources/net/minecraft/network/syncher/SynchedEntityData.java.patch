@@ -16,9 +16,9 @@
              this.assignValue(dataItem, dataValue);
              this.entity.onSyncedDataUpdated(dataItem.getAccessor());
          }
-@@ -184,6 +_,7 @@
+@@ -183,6 +_,7 @@
      public List<SynchedEntityData.DataValue<?>> packAll() {
-         final List<SynchedEntityData.DataValue<?>> list = new ArrayList<>();
+         final List<SynchedEntityData.DataValue<?>> list = new ArrayList<>(this.itemsById.length);
          for (final DataItem<?> dataItem : this.itemsById) {
 +            if (io.papermc.paper.disguise.DisguiseUtil.shouldSkip((net.minecraft.world.entity.Entity) entity, dataItem.getAccessor())) continue; // Weeper - disguise api
              list.add(dataItem.value());

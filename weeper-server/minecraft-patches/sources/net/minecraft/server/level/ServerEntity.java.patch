@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerEntity.java
 +++ b/net/minecraft/server/level/ServerEntity.java
-@@ -303,7 +_,9 @@
+@@ -304,7 +_,9 @@
  
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
@@ -10,7 +10,7 @@
      }
  
      public void addPairing(ServerPlayer player) {
-@@ -322,13 +_,17 @@
+@@ -323,13 +_,17 @@
          }
  
          Packet<ClientGamePacketListener> addEntityPacket = this.entity.getAddEntityPacket(this);
@@ -30,7 +30,7 @@
              Collection<AttributeInstance> syncableAttributes = ((LivingEntity)this.entity).getAttributes().getSyncableAttributes();
  
              // CraftBukkit start - If sending own attributes send scaled health instead of current maximum health
-@@ -414,7 +_,9 @@
+@@ -415,7 +_,9 @@
                      serverPlayer.getBukkitEntity().injectScaledMaxHealth(attributesToSync, false);
                  }
                  // CraftBukkit end

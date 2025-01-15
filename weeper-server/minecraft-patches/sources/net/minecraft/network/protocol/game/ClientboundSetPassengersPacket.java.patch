@@ -1,8 +1,8 @@
 --- a/net/minecraft/network/protocol/game/ClientboundSetPassengersPacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundSetPassengersPacket.java
 @@ -14,6 +_,13 @@
-     private final int vehicle;
-     private final int[] passengers;
+     public final int vehicle;
+     public final int[] passengers;
  
 +    // Weeper - start
 +    public ClientboundSetPassengersPacket(int vehicle, int[] passengers) {

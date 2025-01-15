@@ -1,6 +1,34 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1306,4 +_,18 @@
+@@ -245,7 +_,7 @@
+         // Paper start - Teleport passenger API
+         Set<io.papermc.paper.entity.TeleportFlag> flagSet = Set.of(flags);
+         boolean dismount = !flagSet.contains(io.papermc.paper.entity.TeleportFlag.EntityState.RETAIN_VEHICLE);
+-        boolean retainPassengers = flagSet.contains(io.papermc.paper.entity.TeleportFlag.EntityState.RETAIN_PASSENGERS);
++        boolean ignorePassengers = flagSet.contains(io.papermc.paper.entity.TeleportFlag.EntityState.RETAIN_PASSENGERS);
+         // Don't allow teleporting between worlds while keeping passengers
+         if (flagSet.contains(io.papermc.paper.entity.TeleportFlag.EntityState.RETAIN_PASSENGERS) && this.entity.isVehicle() && location.getWorld() != this.getWorld()) {
+             return false;
+@@ -257,7 +_,7 @@
+         }
+         // Paper end
+ 
+-        if ((!retainPassengers && this.entity.isVehicle()) || this.entity.isRemoved()) { // Paper - Teleport passenger API
++        if ((!ignorePassengers && this.entity.isVehicle()) || this.entity.isRemoved()) { // Paper - Teleport passenger API
+             return false;
+         }
+ 
+@@ -288,9 +_,6 @@
+         // SPIGOT-619: Force sync head rotation also
+         this.entity.setYHeadRot(location.getYaw());
+ 
+-        // Ensure passengers of entity are teleported
+-        if (retainPassengers && this.entity.isVehicle()) this.entity.teleportPassengers();
+-
+         return true;
+     }
+ 
+@@ -1332,4 +_,18 @@
          }
      }
      // Paper end - broadcast hurt animation
