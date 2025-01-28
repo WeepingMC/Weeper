@@ -1,14 +1,5 @@
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -6,8 +_,6 @@
- import com.google.common.collect.ImmutableMap;
- import com.mojang.datafixers.util.Pair;
- import io.papermc.paper.FeatureHooks;
--import io.papermc.paper.registry.RegistryAccess;
--import io.papermc.paper.registry.RegistryKey;
- import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
- import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
- import java.io.File;
 @@ -856,7 +_,7 @@
              CraftPlayer cp = (CraftPlayer) p;
              if (cp.getHandle().connection == null) continue;

@@ -1,14 +1,5 @@
 --- a/src/main/java/org/bukkit/World.java
 +++ b/src/main/java/org/bukkit/World.java
-@@ -1,8 +_,6 @@
- package org.bukkit;
- 
- import java.io.File;
--import org.bukkit.generator.ChunkGenerator;
--
- import java.util.ArrayList;
- import java.util.Collection;
- import java.util.HashMap;
 @@ -4400,4 +_,18 @@
              }
          }
