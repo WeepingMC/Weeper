@@ -6,10 +6,10 @@
      // Paper end - optimise collisions
 +    // Weeper start - disguise api
 +    public void clearPlayers() {
-+        trackedEntity.moonrise$clearPlayers();
++        if (trackedEntity != null) trackedEntity.moonrise$clearPlayers();
 +    }
 +    public void updatePlayers() {
-+        trackedEntity.updatePlayers(((ServerLevel)level).players());
++        if (trackedEntity != null) trackedEntity.updatePlayers(((ServerLevel)level).players());
 +    }
 +    // Weeper end - disguise api
      // Paper start - optimise entity tracker
