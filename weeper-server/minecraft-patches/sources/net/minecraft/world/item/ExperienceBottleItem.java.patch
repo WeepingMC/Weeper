@@ -1,10 +1,10 @@
 --- a/net/minecraft/world/item/ExperienceBottleItem.java
 +++ b/net/minecraft/world/item/ExperienceBottleItem.java
-@@ -28,6 +_,7 @@
-             com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent event = new com.destroystokyo.paper.event.player.PlayerLaunchProjectileEvent((org.bukkit.entity.Player) player.getBukkitEntity(), org.bukkit.craftbukkit.inventory.CraftItemStack.asCraftMirror(itemInHand), (org.bukkit.entity.Projectile) thrownExperienceBottle.projectile().getBukkitEntity());
-             if (event.callEvent() && thrownExperienceBottle.attemptSpawn()) {
-                 if (event.shouldConsume()) {
-+                    player.awardStat(Stats.ITEM_USED.get(this));
-                     itemInHand.consume(1, player);
-                 } else {
-                     player.containerMenu.sendAllDataToRemote();
+@@ -43,6 +_,7 @@
+                     0.5F,
+                     0.4F / (level.getRandom().nextFloat() * 0.4F + 0.8F)
+                 );
++                player.awardStat(Stats.ITEM_USED.get(this));
+             } else {
+                 player.containerMenu.sendAllDataToRemote();
+                 return InteractionResult.FAIL;
