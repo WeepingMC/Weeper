@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -505,6 +_,14 @@
+@@ -501,6 +_,14 @@
          return steps;
      }
      // Paper end - optimise collisions
@@ -15,7 +15,7 @@
      // Paper start - optimise entity tracker
      private net.minecraft.server.level.ChunkMap.TrackedEntity trackedEntity;
  
-@@ -675,6 +_,7 @@
+@@ -671,6 +_,7 @@
  
          final List<SynchedEntityData.DataValue<?>> values = new java.util.ArrayList<>(keys.size());
          for (final EntityDataAccessor<?> key : keys) {
