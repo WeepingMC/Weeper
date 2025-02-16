@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -396,7 +_,21 @@
+@@ -397,7 +_,21 @@
          return ca.spottedleaf.moonrise.common.util.TickThread.isTickThread();
      }
      // Paper end - Folia reagion threading API
@@ -22,7 +22,7 @@
      static {
          ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
          ConfigurationSerialization.registerClass(CraftPlayerProfile.class);
-@@ -492,6 +_,7 @@
+@@ -493,6 +_,7 @@
          this.potionBrewer = new io.papermc.paper.potion.PaperPotionBrewer(console); // Paper - custom potion mixes
          datapackManager = new io.papermc.paper.datapack.PaperDatapackManager(console.getPackRepository()); // Paper
          this.spark = new io.papermc.paper.SparksFly(this); // Paper - spark
@@ -30,7 +30,7 @@
      }
  
      public boolean getCommandBlockOverride(String command) {
-@@ -3294,4 +_,16 @@
+@@ -3290,4 +_,16 @@
          this.console.addPluginAllowingSleep(plugin.getName(), value);
      }
      // Paper end - API to check if the server is sleeping

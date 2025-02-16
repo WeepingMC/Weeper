@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -856,7 +_,7 @@
+@@ -827,7 +_,7 @@
              CraftPlayer cp = (CraftPlayer) p;
              if (cp.getHandle().connection == null) continue;
  
@@ -9,16 +9,7 @@
          }
      }
  
-@@ -2244,7 +_,7 @@
-     @Override
-     public StructureSearchResult locateNearestStructure(Location origin, StructureType structureType, int radius, boolean findUnexplored) {
-         List<Structure> structures = new ArrayList<>();
--        for (Structure structure : RegistryAccess.registryAccess().getRegistry(RegistryKey.STRUCTURE)) {
-+        for (Structure structure : Registry.STRUCTURE) {
-             if (structure.getStructureType() == structureType) {
-                 structures.add(structure);
-             }
-@@ -2348,6 +_,15 @@
+@@ -2345,6 +_,15 @@
      public DragonBattle getEnderDragonBattle() {
          return (this.getHandle().getDragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().getDragonFight());
      }
