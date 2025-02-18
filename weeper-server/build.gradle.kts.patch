@@ -47,7 +47,7 @@
 -val log4jPlugins = sourceSets.create("log4jPlugins")
 +// Weeper start - api generator changes
 +val generatedServerPath: java.nio.file.Path =
-+    rootProject.projectDir.toPath().resolve("weeper-server-generator/generated")
++    layout.projectDirectory.dir("../weeper-server/src/generated/java").asFile.toPath()
 +idea {
 +    module {
 +        generatedSourceDirs.add(generatedServerPath.toFile())
