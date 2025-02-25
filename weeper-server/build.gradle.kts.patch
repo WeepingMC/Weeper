@@ -87,7 +87,7 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.3")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -188,14 +_,14 @@
+@@ -189,14 +_,14 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
@@ -107,20 +107,20 @@
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),
              "Git-Branch" to gitBranch,
-@@ -326,3 +_,16 @@
+@@ -327,3 +_,16 @@
      classpath(tasks.createReobfPaperclipJar.flatMap { it.outputZip })
      mainClass.set(null as String?)
  }
 +
 +// Weeper start - api generator changes
 +val scanJarForOldGeneratedCode =
-+    tasks.register("scanJarForOldGeneratedCode", io.papermc.paperweight.tasks.ScanJarForOldGeneratedCode::class) {
-+        mcVersion.set(providers.gradleProperty("mcVersion"))
-+        annotation.set("Lio/papermc/paper/generated/GeneratedFrom;")
-+        jarToScan.set(tasks.jar.flatMap { it.archiveFile })
-+        classpath.from(configurations.compileClasspath)
-+    }
++        tasks.register("scanJarForOldGeneratedCode", io.papermc.paperweight.tasks.ScanJarForOldGeneratedCode::class) {
++                mcVersion.set(providers.gradleProperty("mcVersion"))
++                annotation.set("Lio/papermc/paper/generated/GeneratedFrom;")
++                jarToScan.set(tasks.jar.flatMap { it.archiveFile })
++                classpath.from(configurations.compileClasspath)
++            }
 +tasks.check {
-+    dependsOn(scanJarForOldGeneratedCode)
-+}
++        dependsOn(scanJarForOldGeneratedCode)
++    }
 +// Weeper end - api generator changes
