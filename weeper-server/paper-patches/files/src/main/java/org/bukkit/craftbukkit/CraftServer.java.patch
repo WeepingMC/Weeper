@@ -30,7 +30,7 @@
      }
  
      public boolean getCommandBlockOverride(String command) {
-@@ -3290,4 +_,16 @@
+@@ -3296,4 +_,16 @@
          this.console.addPluginAllowingSleep(plugin.getName(), value);
      }
      // Paper end - API to check if the server is sleeping
