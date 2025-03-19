@@ -3,12 +3,12 @@ import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     java // TODO java launcher tasks
-    id("io.papermc.paperweight.patcher") version "2.0.0-beta.14"
+    id("io.papermc.paperweight.patcher") version "2.0.0-beta.16"
 }
 
 paperweight {
     upstreams.paper {
-        ref = "f0388e2f3840c6f9577b389ccd163e172ce563bd"
+        ref = "bb1beda67bfd94632815acc8ac5d68f5a8e3e410"
 
         patchFile {
             path = "paper-server/build.gradle.kts"
