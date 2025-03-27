@@ -1,82 +1,67 @@
 --- a/paper-server/build.gradle.kts
 +++ b/paper-server/build.gradle.kts
-@@ -1,11 +_,14 @@
- import io.papermc.paperweight.attribute.DevBundleOutput
--import io.papermc.paperweight.util.*
-+import io.papermc.paperweight.util.Git
-+import io.papermc.paperweight.util.path
-+import io.papermc.paperweight.util.upstreamsDirectory
- import java.time.Instant
- 
- plugins {
-     `java-library`
-     `maven-publish`
-     id("io.papermc.paperweight.core")
-+    idea // Weeper - server generator changes
- }
- 
- val paperMavenPublicUrl = "https://repo.papermc.io/repository/maven-public/"
-@@ -20,6 +_,21 @@
+@@ -24,6 +_,21 @@
      minecraftVersion = providers.gradleProperty("mcVersion")
      gitFilePatches = false
  
 +    val fork = forks.register("weeper") {
-+            upstream.patchDir("paperServer") {
-+                    upstreamPath = "paper-server"
-+                    excludes = setOf("src/minecraft", "patches", "build.gradle.kts")
-+                    patchesDir = rootDirectory.dir("weeper-server/paper-patches")
-+                    outputDir = rootDirectory.dir("paper-server")
-+                }
-+        }
++                upstream.patchDir("paperServer") {
++                            upstreamPath = "paper-server"
++                            excludes = setOf("src/minecraft", "patches", "build.gradle.kts")
++                            patchesDir = rootDirectory.dir("weeper-server/paper-patches")
++                            outputDir = rootDirectory.dir("paper-server")
++                        }
++            }
 +
 +    activeFork = fork
 +
 +    paper {
-+            paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
-+        }
++                paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
++            }
 +
      //updatingMinecraft {
      //    oldPaperCommit = "f4f275519f7c1fbe9db173b7144a4fe81440e365"
      //}
-@@ -104,7 +_,36 @@
+@@ -108,7 +_,37 @@
      }
  }
  
 -val log4jPlugins = sourceSets.create("log4jPlugins")
 +// Weeper start - api generator changes
 +val generatedServerPath: java.nio.file.Path =
-+        layout.projectDirectory.dir("../weeper-server/src/generated/java").asFile.toPath()
++            layout.projectDirectory.dir("../weeper-server/src/generated/java").asFile.toPath()
 +idea {
-+        module {
-+                generatedSourceDirs.add(generatedServerPath.toFile())
-+            }
-+    }
++            module {
++                        generatedSourceDirs.add(generatedServerPath.toFile())
++                    }
++        }
 +// Weeper end - api generator changes
 +
 +sourceSets {
-+        main {
-+                // Weeper start - api generator changes
-+                java {
-+                        srcDir("../paper-server/src/main/java")
-+                        srcDir(generatedServerPath)
++            main {
++                        // Weeper start - api generator changes
++                        java {
++                                    srcDir("../paper-server/src/main/java")
++                                    srcDir(generatedServerPath)
++                                }
++                        // Weeper end - api generator changes
++                        resources { srcDir("../paper-server/src/main/resources") }
 +                    }
-+                // Weeper end - api generator changes
-+                resources { srcDir("../paper-server/src/main/resources") }
-+            }
-+        test {
-+                java { srcDir("../paper-server/src/test/java") }
-+                resources { srcDir("../paper-server/src/test/resources") }
-+            }
-+    }
++            test {
++                        java { srcDir("../paper-server/src/test/java") }
++                        resources { srcDir("../paper-server/src/test/resources") }
++                    }
++        }
 +
 +val log4jPlugins = sourceSets.create("log4jPlugins") {
-+        java { srcDir("../paper-server/src/log4jPlugins/java") }
-+    }
++            java { srcDir("../paper-server/src/log4jPlugins/java") }
++        }
++
 +
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())
  }
-@@ -122,7 +_,7 @@
+@@ -130,7 +_,7 @@
  }
  
  dependencies {
@@ -85,12 +70,12 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.3")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -192,14 +_,14 @@
+@@ -201,14 +_,14 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
 -            "Implementation-Title" to "Paper",
-+            "Implementation-Title" to "Weeper", // Weeper - rebranding
++            "Implementation-Title"  to "Weeper", // Weeper - rebranding
              "Implementation-Version" to implementationVersion,
              "Implementation-Vendor" to date,
 -            "Specification-Title" to "Paper",
@@ -105,7 +90,7 @@
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),
              "Git-Branch" to gitBranch,
-@@ -330,3 +_,16 @@
+@@ -365,3 +_,16 @@
      classpath(tasks.createReobfPaperclipJar.flatMap { it.outputZip })
      mainClass.set(null as String?)
  }
