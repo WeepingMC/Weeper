@@ -8,7 +8,7 @@ plugins {
 
 paperweight {
     upstreams.paper {
-        ref = "5a6ab97be6bdc8231582e15112c7a847a8800549"
+        ref = "ce91a8ca123f4e853629d08705e4ece3a09a5a4d"
 
         patchFile {
             path = "paper-server/build.gradle.kts"
@@ -27,9 +27,9 @@ paperweight {
             outputDir = file("paper-api")
         }
         patchDir("paperApiGenerator") {
-            upstreamPath = "paper-api-generator"
+            upstreamPath = "paper-generator"
             patchesDir = file("weeper-api-generator/paper-patches")
-            outputDir = file("paper-api-generator")
+            outputDir = file("paper-generator")
         }
     }
 }

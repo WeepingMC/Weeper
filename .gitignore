@@ -12,6 +12,7 @@ build
 /weeper-api/build.gradle.kts
 /paper-api
 /paper-api-generator
+/paper-generator
 /weeper-server-generator/logs
 
 .idea/
