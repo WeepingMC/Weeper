@@ -1,6 +1,6 @@
 --- a/build.gradle.kts
 +++ b/build.gradle.kts
-@@ -10,11 +_,11 @@
+@@ -15,11 +_,11 @@
  }
  
  dependencies {
@@ -12,6 +12,6 @@
      implementation("com.squareup:javapoet:1.13.0")
 -    implementation(project(":paper-api"))
 +    implementation(project(":weeper-api")) // Weeper build changes
-     implementation("io.github.classgraph:classgraph:4.8.47")
-     implementation("org.jetbrains:annotations:26.0.1")
-     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+     implementation("io.papermc.typewriter:typewriter:1.0.1") {
+         isTransitive = false // paper-api already have everything
+     }
