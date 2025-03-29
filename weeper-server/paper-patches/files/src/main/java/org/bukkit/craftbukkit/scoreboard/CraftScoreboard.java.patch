@@ -1,8 +1,8 @@
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-@@ -22,7 +_,7 @@
-     final Scoreboard board;
-     boolean registeredGlobally = false; // Paper - Lazily track plugin scoreboards by default
+@@ -21,7 +_,7 @@
+     private final Scoreboard board;
+     public boolean registeredGlobally = false; // Paper - Lazily track plugin scoreboards by default
  
 -    CraftScoreboard(Scoreboard board) {
 +    public CraftScoreboard(Scoreboard board) { // Weeper - package private -> public

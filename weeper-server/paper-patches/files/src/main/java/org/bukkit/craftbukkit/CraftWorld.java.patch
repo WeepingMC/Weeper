@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -827,7 +_,7 @@
+@@ -828,7 +_,7 @@
              CraftPlayer cp = (CraftPlayer) p;
              if (cp.getHandle().connection == null) continue;
  
@@ -9,7 +9,7 @@
          }
      }
  
-@@ -2345,6 +_,15 @@
+@@ -2346,6 +_,15 @@
      public DragonBattle getEnderDragonBattle() {
          return (this.getHandle().getDragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().getDragonFight());
      }

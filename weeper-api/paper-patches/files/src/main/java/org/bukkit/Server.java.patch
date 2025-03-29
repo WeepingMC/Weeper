@@ -1,12 +1,9 @@
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2698,4 +_,33 @@
+@@ -2705,4 +_,30 @@
       */
      void allowPausing(@NotNull org.bukkit.plugin.Plugin plugin, boolean value);
      // Paper end - API to check if the server is sleeping
-+    // Weeper start - send message to all players
-+    void brotkasten(@NotNull String message);
-+    // Weeper end - send message to all players
 +    // Paper start - add disguise api
 +    /**
 +    * Creates a new skinparts builder used for overriding skin settings
