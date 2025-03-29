@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
 +++ b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
-@@ -279,6 +_,11 @@
+@@ -276,6 +_,11 @@
                      if (!warningState.printFor(warning)) {
                          break;
                      }

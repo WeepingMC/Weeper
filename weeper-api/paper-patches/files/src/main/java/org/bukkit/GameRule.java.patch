@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/GameRule.java
 +++ b/src/main/java/org/bukkit/GameRule.java
-@@ -296,6 +_,13 @@
+@@ -304,6 +_,13 @@
       */
      public static final GameRule<Integer> SPAWN_CHUNK_RADIUS = new GameRule<>("spawnChunkRadius", Integer.class);
  

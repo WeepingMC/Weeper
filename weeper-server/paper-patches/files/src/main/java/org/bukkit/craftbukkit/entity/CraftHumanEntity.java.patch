@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-@@ -326,8 +_,14 @@
+@@ -321,8 +_,14 @@
          return this.getHandle().containerMenu.getBukkitView();
      }
  
@@ -15,7 +15,7 @@
          if (!(this.getHandle() instanceof ServerPlayer)) return null;
          ServerPlayer player = (ServerPlayer) this.getHandle();
          AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
-@@ -359,7 +_,7 @@
+@@ -353,7 +_,7 @@
              this.getHandle().openHorseInventory(horse.getHandle(), craft.getInventory());
          } else {
              MenuType<?> container = CraftContainer.getNotchInventoryType(inventory);
@@ -24,7 +24,7 @@
          }
  
          if (this.getHandle().containerMenu == formerContainer) {
-@@ -370,9 +_,20 @@
+@@ -364,9 +_,20 @@
      }
  
      private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {

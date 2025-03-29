@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-@@ -12,10 +_,10 @@
+@@ -16,10 +_,10 @@
  import org.bukkit.scoreboard.NameTagVisibility;
  import org.bukkit.scoreboard.Team;
  
@@ -13,11 +13,11 @@
          super(scoreboard);
          this.team = team;
      }
-@@ -432,5 +_,9 @@
-         return audiences;
+@@ -410,4 +_,10 @@
+         final CraftTeam other = (CraftTeam) obj;
+         return Objects.equals(this.team, other.team);
      }
-     // Paper end - make Team extend ForwardingAudience
--
++
 +    // Weeper start
 +    public PlayerTeam getHandle(){
 +        return team;
