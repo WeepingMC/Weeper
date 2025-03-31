@@ -1,0 +1,19 @@
+--- a/src/main/java/io/papermc/generator/types/craftblockdata/CraftBlockDataBootstrapper.java
++++ b/src/main/java/io/papermc/generator/types/craftblockdata/CraftBlockDataBootstrapper.java
+@@ -1,6 +_,8 @@
+ package io.papermc.generator.types.craftblockdata;
+ 
+ import com.google.common.base.Preconditions;
++import io.papermc.generator.types.EntityMetaWatcherGenerator;
++import io.papermc.generator.types.EntityTypeToEntityClassGenerator;
+ import io.papermc.generator.types.SourceGenerator;
+ import io.papermc.generator.utils.BlockStateMapping;
+ import java.util.List;
+@@ -19,5 +_,7 @@
+ 
+             generators.add(new CraftBlockDataGenerator<>(entry.getKey(), entry.getValue(), api));
+         }
++        generators.add(new EntityMetaWatcherGenerator("EntityMetaWatcher", "io.papermc.paper.entity.meta"));
++        generators.add(new EntityTypeToEntityClassGenerator("EntityTypeToEntityClass", "io.papermc.paper.entity.meta"));
+     }
+ }
