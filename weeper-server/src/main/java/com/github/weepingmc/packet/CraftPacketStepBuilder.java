@@ -141,7 +141,7 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
     @Override
     @Nonnull
     public PacketStepBuilder teleportEntity(int entityId, @Nonnull Location location, boolean onGround) {
-        var transition = new TeleportTransition(((CraftWorld) location.getWorld()).getHandle(), CraftLocation.toVec3D(location), Vec3.ZERO, location.getPitch(), location.getYaw(), Set.of(), TeleportTransition.DO_NOTHING, PlayerTeleportEvent.TeleportCause.PLUGIN);
+        var transition = new TeleportTransition(((CraftWorld) location.getWorld()).getHandle(), CraftLocation.toVec3(location), Vec3.ZERO, location.getPitch(), location.getYaw(), Set.of(), TeleportTransition.DO_NOTHING, PlayerTeleportEvent.TeleportCause.PLUGIN);
         ClientboundTeleportEntityPacket teleportEntityPacket = ClientboundTeleportEntityPacket.teleport(entityId, PositionMoveRotation.of(transition), Set.of(), onGround);
         initial.setNext(of(teleportEntityPacket));
         return this;

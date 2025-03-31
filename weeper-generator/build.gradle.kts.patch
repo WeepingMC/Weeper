@@ -1,0 +1,66 @@
+--- a/paper-generator/build.gradle.kts
++++ b/paper-generator/build.gradle.kts
+@@ -3,10 +_,11 @@
+ plugins {
+     java
+     id("io.papermc.paperweight.source-generator")
++    idea
+ }
+ 
+ paperweight {
+-    atFile.set(layout.projectDirectory.file("wideners.at"))
++    atFile.set(layout.projectDirectory.file("../paper-generator/wideners.at"))
+ }
+ 
+ val serverRuntimeClasspath by configurations.registering { // resolvable?
+@@ -14,12 +_,29 @@
+     isCanBeResolved = true
+ }
+ 
++val generatedDir: java.nio.file.Path = layout.projectDirectory.dir("../paper-generator/src/main/java").asFile.toPath()
++idea {
++    module {
++        generatedSourceDirs.add(generatedDir.toFile())
++    }
++}
++sourceSets {
++    main {
++        java { srcDir("../paper-generator/src/main/java") }
++        resources { srcDir("../paper-generator/src/main/resources") }
++    }
++    test {
++        java { srcDir("../paper-generator/src/test/java") }
++        resources { srcDir("../paper-generator/src/test/resources") }
++    }
++}
++
+ dependencies {
+-    minecraftJar(project(":paper-server", "mappedJarOutgoing"))
+-    implementation(project(":paper-server", "macheMinecraftLibraries"))
++    minecraftJar(project(":weeper-server", "mappedJarOutgoing"))
++    implementation(project(":weeper-server", "macheMinecraftLibraries"))
+ 
+     implementation("com.squareup:javapoet:1.13.0")
+-    implementation(project(":paper-api"))
++    implementation(project(":weeper-api"))
+     implementation("io.papermc.typewriter:typewriter:1.0.1") {
+         isTransitive = false // paper-api already have everything
+     }
+@@ -29,7 +_,7 @@
+     testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+ 
+-    serverRuntimeClasspath(project(":paper-server", "runtimeConfiguration"))
++    serverRuntimeClasspath(project(":weeper-server", "runtimeConfiguration"))
+ }
+ 
+ val gameVersion = providers.gradleProperty("mcVersion")
+@@ -66,7 +_,7 @@
+ }
+ 
+ val generateImpl = tasks.registerGenerationTask("generateImpl", false, "impl", {
+-    sourceSet = rootProject.layout.projectDirectory.dir("paper-server")
++    sourceSet = rootProject.layout.projectDirectory.dir("weeper-server")
+ }) {
+     description = "Generate new implementation classes"
+     classpath(sourceSets.main.map { it.runtimeClasspath })
