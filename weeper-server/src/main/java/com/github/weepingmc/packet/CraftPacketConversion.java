@@ -15,10 +15,12 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Set;
+import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Abilities;
 import net.minecraft.world.item.ItemStack;
+import org.bukkit.craftbukkit.inventory.CraftItemStack;
 
 public final class CraftPacketConversion {
 
@@ -46,6 +48,7 @@ public final class CraftPacketConversion {
             case CHEST -> EquipmentSlot.CHEST;
             case HEAD -> EquipmentSlot.HEAD;
             case BODY -> EquipmentSlot.BODY;
+            case SADDLE -> EquipmentSlot.SADDLE;
         };
     }
 
@@ -53,7 +56,7 @@ public final class CraftPacketConversion {
         EnumMap<org.bukkit.inventory.EquipmentSlot, org.bukkit.inventory.ItemStack> equipment) {
         List<Pair<EquipmentSlot, ItemStack>> pairList = new ArrayList<>();
         equipment.forEach((equipmentSlot, itemStack) -> {
-            pairList.add(new Pair<>(from(equipmentSlot), org.bukkit.craftbukkit.inventory.CraftItemStack.asNMSCopy(itemStack)));
+            pairList.add(new Pair<>(from(equipmentSlot), CraftItemStack.asNMSCopy(itemStack)));
         });
         return pairList;
     }
@@ -78,11 +81,11 @@ public final class CraftPacketConversion {
 
     static int fromAnimation(Animation animation) {
         return switch (animation) {
-            case SWING_MAIN_ARM, SWING_MAIN_HAND -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.SWING_MAIN_HAND;
-            case LEAVE_BED -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.WAKE_UP;
-            case SWING_OFFHAND -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.SWING_OFF_HAND;
-            case CRITICAL_EFFECT, TAKE_DAMAGE, CRITICAL_HIT -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.CRITICAL_HIT;
-            case MAGIC_CRITICAL_EFFECT -> net.minecraft.network.protocol.game.ClientboundAnimatePacket.MAGIC_CRITICAL_HIT;
+            case SWING_MAIN_ARM, SWING_MAIN_HAND -> ClientboundAnimatePacket.SWING_MAIN_HAND;
+            case LEAVE_BED -> ClientboundAnimatePacket.WAKE_UP;
+            case SWING_OFFHAND -> ClientboundAnimatePacket.SWING_OFF_HAND;
+            case CRITICAL_EFFECT, TAKE_DAMAGE, CRITICAL_HIT -> ClientboundAnimatePacket.CRITICAL_HIT;
+            case MAGIC_CRITICAL_EFFECT -> ClientboundAnimatePacket.MAGIC_CRITICAL_HIT;
         };
     }
 
