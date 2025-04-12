@@ -145,8 +145,3 @@
  ): TaskProvider<JavaExec> = register<JavaExec>(name) {
      group = "runs"
      mainClass.set("org.bukkit.craftbukkit.Main")
-@@ -365,3 +_,4 @@
-     classpath(tasks.createReobfPaperclipJar.flatMap { it.outputZip })
-     mainClass.set(null as String?)
- }
-+
