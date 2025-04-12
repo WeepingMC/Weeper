@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/CraftServer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftServer.java
-@@ -397,7 +_,21 @@
+@@ -392,7 +_,21 @@
          return ca.spottedleaf.moonrise.common.util.TickThread.isTickThread();
      }
      // Paper end - Folia reagion threading API
@@ -22,7 +22,7 @@
      static {
          ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
          ConfigurationSerialization.registerClass(CraftPlayerProfile.class);
-@@ -493,6 +_,7 @@
+@@ -488,6 +_,7 @@
          this.potionBrewer = new io.papermc.paper.potion.PaperPotionBrewer(console); // Paper - custom potion mixes
          datapackManager = new io.papermc.paper.datapack.PaperDatapackManager(console.getPackRepository()); // Paper
          this.spark = new io.papermc.paper.SparksFly(this); // Paper - spark
@@ -30,20 +30,14 @@
      }
  
      public boolean getCommandBlockOverride(String command) {
-@@ -3296,4 +_,16 @@
+@@ -3181,4 +_,10 @@
+     public void allowPausing(final Plugin plugin, final boolean value) {
          this.console.addPluginAllowingSleep(plugin.getName(), value);
      }
-     // Paper end - API to check if the server is sleeping
 +    //  Weeper start - packet support
 +    @Override
-+    public @Nonnull com.github.weepingmc.packet.PacketPipeline getPacketPipeline() {
++    public com.github.weepingmc.packet.PacketPipeline getPacketPipeline() {
 +        return packetPipeline;
 +    }
 +    // Weeper end - packet support
-+    // Weeper start - send messages to all players
-+    @Override
-+    public void brotkasten(@NotNull String message) {
-+        logger.info(message);
-+    }
-+    // Weeper end - send messages to all players
  }
