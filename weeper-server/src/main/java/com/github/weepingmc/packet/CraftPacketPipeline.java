@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 import javax.annotation.Nonnull;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.scores.Scoreboard;
-import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.bukkit.craftbukkit.scoreboard.CraftScoreboard;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;
@@ -49,6 +49,6 @@ public class CraftPacketPipeline implements PacketPipeline {
     @Override
     @Nonnull
     public String generateRandomString(int count, boolean letters, boolean numbers) {
-        return RandomStringUtils.random(count, letters, numbers);
+        return RandomStringUtils.secure().next(count, letters, numbers);
     }
 }

@@ -88,35 +88,7 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.3")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -139,11 +_,11 @@
-     runtimeConfiguration(sourceSets.main.map { it.runtimeClasspath })
- 
-     /*
--      Required to add the missing Log4j2Plugins.dat file from log4j-core
--      which has been removed by Mojang. Without it, log4j has to classload
--      all its classes to check if they are plugins.
--      Scanning takes about 1-2 seconds so adding this speeds up the server start.
--     */
-+  Required to add the missing Log4j2Plugins.dat file from log4j-core
-+  which has been removed by Mojang. Without it, log4j has to classload
-+  all its classes to check if they are plugins.
-+  Scanning takes about 1-2 seconds so adding this speeds up the server start.
-+ */
-     implementation("org.apache.logging.log4j:log4j-core:2.19.0")
-     log4jPlugins.annotationProcessorConfigurationName("org.apache.logging.log4j:log4j-core:2.19.0") // Needed to generate meta for our Log4j plugins
-     runtimeOnly(log4jPlugins.output)
-@@ -171,7 +_,9 @@
-     testImplementation("org.junit.platform:junit-platform-suite-engine:1.10.0")
-     testImplementation("org.hamcrest:hamcrest:2.2")
-     testImplementation("org.mockito:mockito-core:5.14.1")
--    mockitoAgent("org.mockito:mockito-core:5.14.1") { isTransitive = false } // Configure mockito agent that is needed in newer java versions
-+    mockitoAgent("org.mockito:mockito-core:5.14.1") {
-+        isTransitive = false
-+    } // Configure mockito agent that is needed in newer java versions
-     testImplementation("org.ow2.asm:asm-tree:9.7.1")
-     testImplementation("org.junit-pioneer:junit-pioneer:2.2.0") // CartesianTest
- 
-@@ -201,14 +_,14 @@
+@@ -206,14 +_,14 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
@@ -136,12 +108,3 @@
              "Build-Number" to (build ?: ""),
              "Build-Time" to buildTime.toString(),
              "Git-Branch" to gitBranch,
-@@ -290,7 +_,7 @@
- 
- fun TaskContainer.registerRunTask(
-     name: String,
--    block: JavaExec.() -> Unit
-+    block: JavaExec.() -> Unit,
- ): TaskProvider<JavaExec> = register<JavaExec>(name) {
-     group = "runs"
-     mainClass.set("org.bukkit.craftbukkit.Main")
