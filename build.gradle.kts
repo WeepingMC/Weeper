@@ -8,7 +8,7 @@ plugins {
 
 paperweight {
     upstreams.paper {
-        ref = "2ba1675c7506cadd8a540ea452e5dafb79ae8947"
+        ref = "0c3879ac212c0d9a7ed5e5442c85244de5e6d05b"
 
         patchFile {
             path = "paper-server/build.gradle.kts"
@@ -69,6 +69,7 @@ subprojects {
         options.encoding = Charsets.UTF_8.name()
         options.release = 21
         options.isFork = true
+        options.compilerArgs.addAll(listOf("-Xlint:-deprecation", "-Xlint:-removal"))
     }
     tasks.withType<Javadoc> {
         options.encoding = Charsets.UTF_8.name()

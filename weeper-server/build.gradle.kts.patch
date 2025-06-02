@@ -1,22 +1,12 @@
 --- a/paper-server/build.gradle.kts
 +++ b/paper-server/build.gradle.kts
-@@ -1,9 +_,8 @@
- import io.papermc.paperweight.attribute.DevBundleOutput
--import io.papermc.paperweight.util.*
--import io.papermc.paperweight.util.data.FileEntry
--import paper.libs.com.google.gson.annotations.SerializedName
-+import io.papermc.paperweight.util.Git
-+import io.papermc.paperweight.util.path
-+import io.papermc.paperweight.util.upstreamsDirectory
- import java.time.Instant
--import kotlin.io.path.readText
- 
- plugins {
-     `java-library`
-@@ -24,6 +_,21 @@
+@@ -24,9 +_,24 @@
      minecraftVersion = providers.gradleProperty("mcVersion")
      gitFilePatches = false
  
+-    updatingMinecraft {
+-        oldPaperCommit = "a033e3b9ef78cfe85be807ac3fd1dd956274d4db"
+-    }
 +    val fork = forks.register("weeper") {
 +        upstream.patchDir("paperServer") {
 +            upstreamPath = "paper-server"
@@ -29,12 +19,15 @@
 +    activeFork = fork
 +
 +    paper {
-+        paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
++            paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
 +    }
-+
-     //updatingMinecraft {
-     //    oldPaperCommit = "f4f275519f7c1fbe9db173b7144a4fe81440e365"
-     //}
++    
++    // updatingMinecraft {
++    //    oldPaperCommit = "a033e3b9ef78cfe85be807ac3fd1dd956274d4db"
++    //}
+ 
+     spigot {
+         buildDataRef = "702e1a0a5072b2c4082371d5228cb30525687efc"
 @@ -60,6 +_,7 @@
      @get:Inject
      abstract val archiveOperations: ArchiveOperations
