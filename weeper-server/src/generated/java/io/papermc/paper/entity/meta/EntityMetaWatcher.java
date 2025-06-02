@@ -23,6 +23,7 @@ import net.minecraft.world.entity.animal.Cod;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.animal.Dolphin;
 import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.animal.HappyGhast;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.MushroomCow;
 import net.minecraft.world.entity.animal.Ocelot;
@@ -146,7 +147,7 @@ import org.jspecify.annotations.NullMarked;
         "SpellCheckingInspection"
 })
 @NullMarked
-@GeneratedFrom("1.21.5")
+@GeneratedFrom("1.21.6")
 public final class EntityMetaWatcher {
     private static final Map<Class<? extends Entity>, Map<Long, EntityDataSerializer<?>>> VALID_ENTITY_META_MAP = initialize();
 
@@ -1098,8 +1099,9 @@ public final class EntityMetaWatcher {
         result.put(5L, EntityDataSerializers.BOOLEAN);
         result.put(6L, EntityDataSerializers.POSE);
         result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.ITEM_STACK);
-        result.put(9L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.DIRECTION);
+        result.put(9L, EntityDataSerializers.ITEM_STACK);
+        result.put(10L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -1171,6 +1173,30 @@ public final class EntityMetaWatcher {
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(17L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> happyGhast() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -1360,8 +1386,9 @@ public final class EntityMetaWatcher {
         result.put(5L, EntityDataSerializers.BOOLEAN);
         result.put(6L, EntityDataSerializers.POSE);
         result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.ITEM_STACK);
-        result.put(9L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.DIRECTION);
+        result.put(9L, EntityDataSerializers.ITEM_STACK);
+        result.put(10L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -1702,7 +1729,8 @@ public final class EntityMetaWatcher {
         result.put(5L, EntityDataSerializers.BOOLEAN);
         result.put(6L, EntityDataSerializers.POSE);
         result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.PAINTING_VARIANT);
+        result.put(8L, EntityDataSerializers.DIRECTION);
+        result.put(9L, EntityDataSerializers.PAINTING_VARIANT);
         return Map.copyOf(result);
     }
 
@@ -3001,6 +3029,7 @@ public final class EntityMetaWatcher {
         result.put(GlowSquid.class, glowSquid());
         result.put(Goat.class, goat());
         result.put(Guardian.class, guardian());
+        result.put(HappyGhast.class, happyGhast());
         result.put(Hoglin.class, hoglin());
         result.put(Horse.class, horse());
         result.put(Husk.class, husk());

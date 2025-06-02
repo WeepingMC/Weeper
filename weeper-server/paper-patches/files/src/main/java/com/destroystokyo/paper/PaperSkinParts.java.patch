@@ -1,9 +1,10 @@
 --- a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
-@@ -71,4 +_,82 @@
+@@ -71,4 +_,83 @@
              .add("hats=" + hasHatsEnabled())
              .toString();
      }
++
 +    // Weeper start - disguise api
 +    public static SkinParts.Builder builder(){
 +        return new Builder();

@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/GameRules.java
 +++ b/net/minecraft/world/level/GameRules.java
-@@ -88,6 +_,7 @@
+@@ -94,6 +_,7 @@
      public static final GameRules.Key<GameRules.BooleanValue> RULE_SENDCOMMANDFEEDBACK = register(
          "sendCommandFeedback", GameRules.Category.CHAT, GameRules.BooleanValue.create(true)
      );

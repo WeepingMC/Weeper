@@ -1,0 +1,25 @@
+--- a/net/minecraft/world/entity/Entity.java
++++ b/net/minecraft/world/entity/Entity.java
+@@ -501,6 +_,14 @@
+         return steps;
+     }
+     // Paper end - optimise collisions
++    // Weeper start - disguise api
++    public void clearPlayers() {
++        if (trackedEntity != null) trackedEntity.moonrise$clearPlayers();
++    }
++    public void updatePlayers() {
++        if (trackedEntity != null) trackedEntity.updatePlayers(((ServerLevel)level).players());
++    }
++    // Weeper end - disguise api
+     // Paper start - optimise entity tracker
+     private net.minecraft.server.level.ChunkMap.TrackedEntity trackedEntity;
+ 
+@@ -671,6 +_,7 @@
+ 
+         final List<SynchedEntityData.DataValue<?>> values = new java.util.ArrayList<>(keys.size());
+         for (final EntityDataAccessor<?> key : keys) {
++            if (io.papermc.paper.disguise.DisguiseUtil.shouldSkip(this, key)) continue; // Weeper - disguise api
+             final SynchedEntityData.DataItem<?> synchedValue = this.entityData.getItem(key);
+             values.add(synchedValue.value());
+         }

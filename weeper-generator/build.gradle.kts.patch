@@ -55,7 +55,15 @@
  }
  
  val gameVersion = providers.gradleProperty("mcVersion")
-@@ -66,7 +_,7 @@
+@@ -59,14 +_,14 @@
+ 
+ val generateApi = tasks.registerGenerationTask("generateApi", false, "api", {
+     bootstrapTags = true
+-    sourceSet = rootProject.layout.projectDirectory.dir("paper-api")
++    sourceSet = rootProject.layout.projectDirectory.dir("weeper-api")
+ }) {
+     description = "Generate new API classes"
+     classpath(sourceSets.main.map { it.runtimeClasspath })
  }
  
  val generateImpl = tasks.registerGenerationTask("generateImpl", false, "impl", {

@@ -20,6 +20,7 @@ import net.minecraft.world.entity.animal.Cod;
 import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.animal.Dolphin;
 import net.minecraft.world.entity.animal.Fox;
+import net.minecraft.world.entity.animal.HappyGhast;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.MushroomCow;
 import net.minecraft.world.entity.animal.Ocelot;
@@ -144,7 +145,7 @@ import org.jspecify.annotations.NullMarked;
         "SpellCheckingInspection"
 })
 @NullMarked
-@GeneratedFrom("1.21.5")
+@GeneratedFrom("1.21.6")
 public final class EntityTypeToEntityClass {
     private static final Map<EntityType, Class<? extends Entity>> ENTITY_TYPE_TO_CLASS = initialize();
 
@@ -206,6 +207,7 @@ public final class EntityTypeToEntityClass {
         result.put(EntityType.FROG, Frog.class);
         result.put(EntityType.FURNACE_MINECART, MinecartFurnace.class);
         result.put(EntityType.GHAST, Ghast.class);
+        result.put(EntityType.HAPPY_GHAST, HappyGhast.class);
         result.put(EntityType.GIANT, Giant.class);
         result.put(EntityType.GLOW_ITEM_FRAME, GlowItemFrame.class);
         result.put(EntityType.GLOW_SQUID, GlowSquid.class);

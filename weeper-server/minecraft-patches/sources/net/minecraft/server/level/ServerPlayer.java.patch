@@ -1,25 +1,25 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
-@@ -1650,7 +_,7 @@
+@@ -1619,7 +_,7 @@
              return;
          }
          // CraftBukkit end
 -        if (this.isSleeping()) {
 +        if (this.isSleeping() && io.papermc.paper.disguise.DisguiseUtil.canSendAnimation(this) /* Weeper - disguise api */) {
-             this.serverLevel().getChunkSource().broadcastAndSend(this, new ClientboundAnimatePacket(this, 2));
+             this.level().getChunkSource().broadcastAndSend(this, new ClientboundAnimatePacket(this, 2));
          }
  
-@@ -2156,11 +_,13 @@
+@@ -2123,11 +_,13 @@
  
      @Override
      public void crit(Entity entityHit) {
 +        if(!io.papermc.paper.disguise.DisguiseUtil.canSendAnimation(this)) return; // Weeper - disguise api
-         this.serverLevel().getChunkSource().broadcastAndSend(this, new ClientboundAnimatePacket(entityHit, 4));
+         this.level().getChunkSource().broadcastAndSend(this, new ClientboundAnimatePacket(entityHit, 4));
      }
  
      @Override
      public void magicCrit(Entity entityHit) {
 +        if(!io.papermc.paper.disguise.DisguiseUtil.canSendAnimation(this)) return; // Weeper - disguise api
-         this.serverLevel().getChunkSource().broadcastAndSend(this, new ClientboundAnimatePacket(entityHit, 5));
+         this.level().getChunkSource().broadcastAndSend(this, new ClientboundAnimatePacket(entityHit, 5));
      }
  
