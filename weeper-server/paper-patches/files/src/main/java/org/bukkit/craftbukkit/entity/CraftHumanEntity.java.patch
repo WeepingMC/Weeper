@@ -15,7 +15,7 @@
          if (!(this.getHandle() instanceof ServerPlayer)) return null;
          ServerPlayer player = (ServerPlayer) this.getHandle();
          AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
-@@ -353,7 +_,7 @@
+@@ -363,7 +_,7 @@
              this.getHandle().openHorseInventory(horse.getHandle(), craft.getInventory());
          } else {
              MenuType<?> container = CraftContainer.getNotchInventoryType(inventory);
@@ -24,7 +24,7 @@
          }
  
          if (this.getHandle().containerMenu == formerContainer) {
-@@ -364,9 +_,20 @@
+@@ -374,9 +_,20 @@
      }
  
      private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {

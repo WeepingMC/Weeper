@@ -45,7 +45,7 @@
 +                    this.server,
 +                    this.server.getLevel(Level.OVERWORLD),
 +                    gameprofile,
-+                    ClientInformation.createDefault()
++                    net.minecraft.server.level.ClientInformation.createDefault()
 +            );
 +            var target = serverPlayer.getBukkitEntity();
 +            target.loadData();
