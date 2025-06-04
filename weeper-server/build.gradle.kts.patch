@@ -8,7 +8,7 @@
 -        oldPaperCommit = "a033e3b9ef78cfe85be807ac3fd1dd956274d4db"
 -    }
 +    val fork = forks.register("weeper") {
-+        upstream.patchDir("paperServer") {
++    upstream.patchDir("paperServer") {
 +            upstreamPath = "paper-server"
 +            excludes = setOf("src/minecraft", "patches", "build.gradle.kts", "src/generated")
 +            patchesDir = rootDirectory.dir("weeper-server/paper-patches")
@@ -19,29 +19,20 @@
 +    activeFork = fork
 +
 +    paper {
-+            paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
++        paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
 +    }
 +    
-+    // updatingMinecraft {
-+    //    oldPaperCommit = "a033e3b9ef78cfe85be807ac3fd1dd956274d4db"
-+    //}
++        // updatingMinecraft {
++        //    oldPaperCommit = "a033e3b9ef78cfe85be807ac3fd1dd956274d4db"
++        //}
  
      spigot {
-         buildDataRef = "702e1a0a5072b2c4082371d5228cb30525687efc"
-@@ -60,6 +_,7 @@
-     @get:Inject
-     abstract val archiveOperations: ArchiveOperations
+         enabled = false
+@@ -110,6 +_,22 @@
  }
+ 
+ val log4jPlugins = sourceSets.create("log4jPlugins")
 +
- val services = objects.newInstance<Services>()
- 
- if (project.providers.gradleProperty("publishDevBundle").isPresent) {
-@@ -108,7 +_,26 @@
-     }
- }
- 
--val log4jPlugins = sourceSets.create("log4jPlugins")
-+// Weeper start - api generator changes
 +sourceSets {
 +    main {
 +        java {
@@ -50,29 +41,17 @@
 +        }
 +    }
 +    test {
-+        java { srcDir("../paper-server/src/test/java") }
-+        resources { srcDir("../paper-server/src/test/resources") }
++        java {
++            srcDir("../paper-server/src/test/java")
++            resources { srcDir("../paper-server/src/test/resources") }
++        }
 +    }
 +}
-+
-+val log4jPlugins = sourceSets.create("log4jPlugins") {
-+    java { srcDir("../paper-server/src/log4jPlugins/java") }
-+}
-+
-+
 +
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())
  }
-@@ -120,6 +_,7 @@
- 
- // Configure mockito agent that is needed in newer java versions
- val mockitoAgent = configurations.register("mockitoAgent")
-+
- abstract class MockitoAgentProvider : CommandLineArgumentProvider {
-     @get:CompileClasspath
-     abstract val fileCollection: ConfigurableFileCollection
-@@ -130,7 +_,7 @@
+@@ -131,7 +_,7 @@
  }
  
  dependencies {
@@ -81,7 +60,7 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.3")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -206,14 +_,14 @@
+@@ -207,14 +_,14 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
