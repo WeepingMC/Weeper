@@ -1,34 +1,29 @@
 --- a/paper-server/build.gradle.kts
 +++ b/paper-server/build.gradle.kts
-@@ -24,9 +_,24 @@
+@@ -24,6 +_,22 @@
      minecraftVersion = providers.gradleProperty("mcVersion")
      gitFilePatches = false
  
--    updatingMinecraft {
--        oldPaperCommit = "a033e3b9ef78cfe85be807ac3fd1dd956274d4db"
--    }
 +    val fork = forks.register("weeper") {
-+    upstream.patchDir("paperServer") {
++        upstream.patchDir("paperServer") {
 +            upstreamPath = "paper-server"
 +            excludes = setOf("src/minecraft", "patches", "build.gradle.kts", "src/generated")
 +            patchesDir = rootDirectory.dir("weeper-server/paper-patches")
 +            outputDir = rootDirectory.dir("paper-server")
 +        }
 +    }
-+
++    
 +    activeFork = fork
-+
++    
 +    paper {
 +        paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
 +    }
 +    
-+        // updatingMinecraft {
-+        //    oldPaperCommit = "a033e3b9ef78cfe85be807ac3fd1dd956274d4db"
-+        //}
- 
++    
      spigot {
          enabled = false
-@@ -110,6 +_,22 @@
+         buildDataRef = "702e1a0a5072b2c4082371d5228cb30525687efc"
+@@ -106,6 +_,23 @@
  }
  
  val log4jPlugins = sourceSets.create("log4jPlugins")
@@ -48,10 +43,11 @@
 +    }
 +}
 +
++
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())
  }
-@@ -131,7 +_,7 @@
+@@ -127,7 +_,7 @@
  }
  
  dependencies {
@@ -60,7 +56,7 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.3")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -207,14 +_,14 @@
+@@ -203,14 +_,14 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",
