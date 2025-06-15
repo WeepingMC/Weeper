@@ -1,45 +1,40 @@
-diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-index 8fba3cbac..75e4b4282 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-@@ -331,8 +331,14 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -331,8 +_,13 @@
          return this.getHandle().containerMenu.getBukkitView();
      }
-
+ 
 +    // Weeper start - inventoryItemStackMoveStrategy
      @Override
      public InventoryView openInventory(Inventory inventory) {
 +        return openInventory(inventory, (com.github.weepingmc.inventory.InventoryItemStackMoveStrategy) null);
 +    }
-+
 +    @Override
 +    public InventoryView openInventory(Inventory inventory, com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy) { // Weeper end - inventoryItemStackMoveStrategy
          if (!(this.getHandle() instanceof ServerPlayer)) return null;
          ServerPlayer player = (ServerPlayer) this.getHandle();
          AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
-@@ -363,7 +369,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -363,7 +_,7 @@
              this.getHandle().openHorseInventory(horse.getHandle(), craft.getInventory());
          } else {
              MenuType<?> container = CraftContainer.getNotchInventoryType(inventory);
 -            CraftHumanEntity.openCustomInventory(inventory, player, container);
 +            CraftHumanEntity.openCustomInventory(inventory, player, container, inventoryItemStackMoveStrategy); // Weeper - inventoryItemStackMoveStrategy
          }
-
+ 
          if (this.getHandle().containerMenu == formerContainer) {
-@@ -374,10 +380,19 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
+@@ -374,10 +_,18 @@
      }
-
+ 
      private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {
 +        // Weeper start - InventoryItemStackMoveStrategy
 +        openCustomInventory(inventory, player, windowType, null);
 +    }
-+
-+    private static void openCustomInventory(org.bukkit.inventory.Inventory inventory, ServerPlayer player, MenuType<?> windowType, com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy) {
-+        // Weeper end - InventoryItemStackMoveStrategy
++    private static void openCustomInventory(org.bukkit.inventory.Inventory inventory, ServerPlayer player, MenuType<?> windowType, com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy) { // Weeper end - InventoryItemStackMoveStrategy
          if (player.connection == null) return;
          Preconditions.checkArgument(windowType != null, "Unknown windowType");
          AbstractContainerMenu container = new CraftContainer(inventory, player, player.nextContainerCounter());
--
+ 
 +        // Weeper start - InventoryItemStackMoveStrategy
 +        if (inventoryItemStackMoveStrategy != null) {
 +            container.setItemStackMoveStrategy(inventoryItemStackMoveStrategy);

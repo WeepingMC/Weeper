@@ -1,8 +1,6 @@
-diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-index 144623d4e..cdaba3aab 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftPlayer.java
-@@ -2797,7 +2797,9 @@ public class CraftPlayer extends CraftHumanEntity implements Player {
+@@ -2797,7 +_,9 @@
      public void updateScaledHealth(boolean sendHealth) {
          // SPIGOT-3813: Attributes before health
          if (this.getHandle().connection != null) {

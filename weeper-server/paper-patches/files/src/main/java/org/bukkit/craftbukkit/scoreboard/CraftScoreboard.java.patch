@@ -1,8 +1,6 @@
-diff --git a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-index f2878a49f..fc40cb2c6 100644
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftScoreboard.java
-@@ -21,7 +21,7 @@ public final class CraftScoreboard implements org.bukkit.scoreboard.Scoreboard {
+@@ -21,7 +_,7 @@
      private final Scoreboard board;
      public boolean registeredGlobally = false; // Paper - Lazily track plugin scoreboards by default
  

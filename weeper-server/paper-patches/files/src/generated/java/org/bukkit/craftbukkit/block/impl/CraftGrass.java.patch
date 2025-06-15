@@ -1,0 +1,30 @@
+--- /dev/null
++++ b/src/generated/java/org/bukkit/craftbukkit/block/impl/CraftGrass.java
+@@ -1,0 +_,27 @@
++package org.bukkit.craftbukkit.block.impl;
++
++import io.papermc.paper.generated.GeneratedFrom;
++import net.minecraft.world.level.block.GrassBlock;
++import net.minecraft.world.level.block.state.BlockState;
++import net.minecraft.world.level.block.state.properties.BooleanProperty;
++import org.bukkit.block.data.Snowable;
++import org.bukkit.craftbukkit.block.data.CraftBlockData;
++
++@GeneratedFrom("1.21.6-rc1")
++public class CraftGrass extends CraftBlockData implements Snowable {
++    private static final BooleanProperty SNOWY = GrassBlock.SNOWY;
++
++    public CraftGrass(BlockState state) {
++        super(state);
++    }
++
++    @Override
++    public boolean isSnowy() {
++        return this.get(SNOWY);
++    }
++
++    @Override
++    public void setSnowy(final boolean snowy) {
++        this.set(SNOWY, snowy);
++    }
++}

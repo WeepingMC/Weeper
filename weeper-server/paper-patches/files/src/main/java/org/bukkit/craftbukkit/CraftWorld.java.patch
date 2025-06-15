@@ -1,8 +1,6 @@
-diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-index 7990382df..66e661508 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -2491,4 +2491,12 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+@@ -2491,4 +_,12 @@
          return this.adventure$pointers;
      }
      // Paper end

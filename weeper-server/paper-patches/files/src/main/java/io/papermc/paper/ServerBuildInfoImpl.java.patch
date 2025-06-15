@@ -1,13 +1,11 @@
-diff --git a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
-index 74ffdc823..7d7bddc4d 100644
 --- a/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
 +++ b/src/main/java/io/papermc/paper/ServerBuildInfoImpl.java
-@@ -30,7 +30,7 @@ public record ServerBuildInfoImpl(
+@@ -30,7 +_,7 @@
      private static final String ATTRIBUTE_GIT_BRANCH = "Git-Branch";
      private static final String ATTRIBUTE_GIT_COMMIT = "Git-Commit";
-
+ 
 -    private static final String BRAND_PAPER_NAME = "Paper";
 +    private static final String BRAND_PAPER_NAME = "Weeper"; // Weeper - rebranding
-
+ 
      private static final String BUILD_DEV = "DEV";
-
+ 
