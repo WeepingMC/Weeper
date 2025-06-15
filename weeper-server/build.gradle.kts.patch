@@ -13,7 +13,7 @@
  
  plugins {
      `java-library`
-@@ -24,6 +_,21 @@
+@@ -24,6 +_,22 @@
      minecraftVersion = providers.gradleProperty("mcVersion")
      gitFilePatches = false
  
@@ -25,30 +25,22 @@
 +            outputDir = rootDirectory.dir("paper-server")
 +        }
 +    }
-+
++    
 +    activeFork = fork
-+
++    
 +    paper {
 +        paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
 +    }
-+
-     //updatingMinecraft {
-     //    oldPaperCommit = "f4f275519f7c1fbe9db173b7144a4fe81440e365"
-     //}
-@@ -60,6 +_,7 @@
-     @get:Inject
-     abstract val archiveOperations: ArchiveOperations
- }
-+
- val services = objects.newInstance<Services>()
- 
- if (project.providers.gradleProperty("publishDevBundle").isPresent) {
-@@ -108,7 +_,26 @@
++    
++    
+     spigot {
+         enabled = false
+         buildDataRef = "702e1a0a5072b2c4082371d5228cb30525687efc"
+@@ -105,7 +_,26 @@
      }
  }
  
 -val log4jPlugins = sourceSets.create("log4jPlugins")
-+// Weeper start - api generator changes
 +sourceSets {
 +    main {
 +        java {
@@ -57,8 +49,10 @@
 +        }
 +    }
 +    test {
-+        java { srcDir("../paper-server/src/test/java") }
-+        resources { srcDir("../paper-server/src/test/resources") }
++        java {
++            srcDir("../paper-server/src/test/java")
++            resources { srcDir("../paper-server/src/test/resources") }
++        }
 +    }
 +}
 +
@@ -67,19 +61,10 @@
 +}
 +
 +
-+
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())
  }
-@@ -120,6 +_,7 @@
- 
- // Configure mockito agent that is needed in newer java versions
- val mockitoAgent = configurations.register("mockitoAgent")
-+
- abstract class MockitoAgentProvider : CommandLineArgumentProvider {
-     @get:CompileClasspath
-     abstract val fileCollection: ConfigurableFileCollection
-@@ -130,7 +_,7 @@
+@@ -127,7 +_,7 @@
  }
  
  dependencies {
@@ -88,7 +73,7 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.3")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -206,14 +_,14 @@
+@@ -203,14 +_,14 @@
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
          attributes(
              "Main-Class" to "org.bukkit.craftbukkit.Main",

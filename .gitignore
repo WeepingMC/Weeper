@@ -9,6 +9,7 @@ build
 /weeper-server/build.gradle.kts
 /weeper-server/src/minecraft
 /paper-server
+!/paper-server/src/generated
 /weeper-api/build.gradle.kts
 /paper-api
 /paper-api-generator

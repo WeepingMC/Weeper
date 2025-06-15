@@ -1,27 +1,15 @@
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -828,7 +_,7 @@
-             CraftPlayer cp = (CraftPlayer) p;
-             if (cp.getHandle().connection == null) continue;
- 
--            cp.getHandle().connection.send(new ClientboundSetTimePacket(cp.getHandle().level().getGameTime(), cp.getHandle().getPlayerTime(), cp.getHandle().relativeTime && cp.getHandle().serverLevel().getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)));
-+            cp.getHandle().connection.send(new ClientboundSetTimePacket(cp.getHandle().level().getGameTime(), cp.getHandle().getPlayerTime(), cp.getHandle().serverLevel().getGameRules().getBoolean(GameRules.RULE_DAYLIGHT)));
-         }
+@@ -2491,4 +_,12 @@
+         return this.adventure$pointers;
      }
- 
-@@ -2346,6 +_,15 @@
-     public DragonBattle getEnderDragonBattle() {
-         return (this.getHandle().getDragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().getDragonFight());
-     }
-+
+     // Paper end
 +    // Weeper start
 +    @Override
 +    public void triggerBlockAnimation(@NotNull Location location, int action, int actionParameter) {
 +        BlockPos position = new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-+        net.minecraft.world.level.block.entity.BlockEntity blockEntity = world.getBlockEntity(position, true);
++        net.minecraft.world.level.block.entity.BlockEntity blockEntity = world.getBlockEntity(position);
 +        world.blockEvent(position, blockEntity.getBlockState().getBlock(), action, actionParameter);
 +    }
 +    // Weeper end
- 
-     @Override
-     public Collection<GeneratedStructure> getStructures(int x, int z) {
+ }

@@ -13,14 +13,12 @@
          super(scoreboard);
          this.team = team;
      }
-@@ -410,4 +_,10 @@
+@@ -410,4 +_,8 @@
          final CraftTeam other = (CraftTeam) obj;
          return Objects.equals(this.team, other.team);
      }
 +
-+    // Weeper start
-+    public PlayerTeam getHandle(){
++    public PlayerTeam getHandle(){ // Weeper start
 +        return team;
-+    }
-+    // Weeper end
++    } // Weeper end
  }
