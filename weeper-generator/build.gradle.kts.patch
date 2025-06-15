@@ -55,12 +55,3 @@
  }
  
  val gameVersion = providers.gradleProperty("mcVersion")
-@@ -66,7 +_,7 @@
- }
- 
- val generateImpl = tasks.registerGenerationTask("generateImpl", false, "impl", {
--    sourceSet = rootProject.layout.projectDirectory.dir("paper-server")
-+    sourceSet = rootProject.layout.projectDirectory.dir("weeper-server")
- }) {
-     description = "Generate new implementation classes"
-     classpath(sourceSets.main.map { it.runtimeClasspath })

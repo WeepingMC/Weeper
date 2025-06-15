@@ -1,9 +1,12 @@
+diff --git a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
+index b6f4400df..5d1fef8f1 100644
 --- a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
-@@ -71,4 +_,82 @@
+@@ -71,4 +71,83 @@ public class PaperSkinParts implements SkinParts {
              .add("hats=" + hasHatsEnabled())
              .toString();
      }
++
 +    // Weeper start - disguise api
 +    public static SkinParts.Builder builder(){
 +        return new Builder();

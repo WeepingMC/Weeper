@@ -1,18 +1,17 @@
+diff --git a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
+index 7990382df..66e661508 100644
 --- a/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
 +++ b/src/main/java/org/bukkit/craftbukkit/CraftWorld.java
-@@ -2351,6 +_,15 @@
-     public DragonBattle getEnderDragonBattle() {
-         return (this.getHandle().getDragonFight() == null) ? null : new CraftDragonBattle(this.getHandle().getDragonFight());
+@@ -2491,4 +2491,12 @@ public class CraftWorld extends CraftRegionAccessor implements World {
+         return this.adventure$pointers;
      }
-+
+     // Paper end
 +    // Weeper start
 +    @Override
 +    public void triggerBlockAnimation(@NotNull Location location, int action, int actionParameter) {
 +        BlockPos position = new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ());
-+        net.minecraft.world.level.block.entity.BlockEntity blockEntity = world.getBlockEntity(position, true);
++        net.minecraft.world.level.block.entity.BlockEntity blockEntity = world.getBlockEntity(position);
 +        world.blockEvent(position, blockEntity.getBlockState().getBlock(), action, actionParameter);
 +    }
 +    // Weeper end
- 
-     @Override
-     public Collection<GeneratedStructure> getStructures(int x, int z) {
+ }

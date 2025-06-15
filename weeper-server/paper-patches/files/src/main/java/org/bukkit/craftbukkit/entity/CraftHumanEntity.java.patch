@@ -1,9 +1,11 @@
+diff --git a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
+index 8fba3cbac..75e4b4282 100644
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftHumanEntity.java
-@@ -321,8 +_,14 @@
+@@ -331,8 +331,14 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
          return this.getHandle().containerMenu.getBukkitView();
      }
- 
+
 +    // Weeper start - inventoryItemStackMoveStrategy
      @Override
      public InventoryView openInventory(Inventory inventory) {
@@ -15,18 +17,18 @@
          if (!(this.getHandle() instanceof ServerPlayer)) return null;
          ServerPlayer player = (ServerPlayer) this.getHandle();
          AbstractContainerMenu formerContainer = this.getHandle().containerMenu;
-@@ -363,7 +_,7 @@
+@@ -363,7 +369,7 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
              this.getHandle().openHorseInventory(horse.getHandle(), craft.getInventory());
          } else {
              MenuType<?> container = CraftContainer.getNotchInventoryType(inventory);
 -            CraftHumanEntity.openCustomInventory(inventory, player, container);
 +            CraftHumanEntity.openCustomInventory(inventory, player, container, inventoryItemStackMoveStrategy); // Weeper - inventoryItemStackMoveStrategy
          }
- 
+
          if (this.getHandle().containerMenu == formerContainer) {
-@@ -374,9 +_,20 @@
+@@ -374,10 +380,19 @@ public class CraftHumanEntity extends CraftLivingEntity implements HumanEntity {
      }
- 
+
      private static void openCustomInventory(Inventory inventory, ServerPlayer player, MenuType<?> windowType) {
 +        // Weeper start - InventoryItemStackMoveStrategy
 +        openCustomInventory(inventory, player, windowType, null);
@@ -37,11 +39,11 @@
          if (player.connection == null) return;
          Preconditions.checkArgument(windowType != null, "Unknown windowType");
          AbstractContainerMenu container = new CraftContainer(inventory, player, player.nextContainerCounter());
+-
 +        // Weeper start - InventoryItemStackMoveStrategy
-+        if(inventoryItemStackMoveStrategy != null){
++        if (inventoryItemStackMoveStrategy != null) {
 +            container.setItemStackMoveStrategy(inventoryItemStackMoveStrategy);
-+        }
-+        // Weeper end - InventoryItemStackMoveStrategy
- 
++        } // Weeper end - InventoryItemStackMoveStrategy
          // Paper start - Add titleOverride to InventoryOpenEvent
          final com.mojang.datafixers.util.Pair<net.kyori.adventure.text.Component, AbstractContainerMenu> result = CraftEventFactory.callInventoryOpenEventWithTitle(player, container);
+         container = result.getSecond();
