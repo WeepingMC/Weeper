@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerEntity.java
 +++ b/net/minecraft/server/level/ServerEntity.java
-@@ -304,7 +_,9 @@
+@@ -321,7 +_,9 @@
  
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
@@ -10,27 +10,24 @@
      }
  
      public void addPairing(ServerPlayer player) {
-@@ -323,13 +_,17 @@
+@@ -340,12 +_,14 @@
          }
  
          Packet<ClientGamePacketListener> addEntityPacket = this.entity.getAddEntityPacket(this);
-+        // Weeper start - disguise api
-+        if(!io.papermc.paper.disguise.DisguiseUtil.tryDisguise(player, entity, addEntityPacket)) {
++        if(!io.papermc.paper.disguise.DisguiseUtil.tryDisguise(player, entity, addEntityPacket)) { // Weeper start - disguise api
          consumer.accept(addEntityPacket);
-+        }
-+        // Weeper end - disguise api
++        } // Weeper end - disguise api
          if (this.trackedDataValues != null) {
 -            consumer.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
 +            consumer.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), io.papermc.paper.disguise.DisguiseUtil.filter(this.entity, this.trackedDataValues))); // Weeper - disguise api
          }
  
-         boolean flag = this.trackDelta;
--        if (this.entity instanceof LivingEntity) {
-+        if (this.entity instanceof LivingEntity && !io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this.entity)) { // Weeper - disguise api
-             Collection<AttributeInstance> syncableAttributes = ((LivingEntity)this.entity).getAttributes().getSyncableAttributes();
- 
+-        if (this.entity instanceof LivingEntity livingEntity) {
++        if (this.entity instanceof LivingEntity livingEntity && !io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this.entity)) { // Weeper - disguise api
+             Collection<AttributeInstance> syncableAttributes = livingEntity.getAttributes().getSyncableAttributes();
              // CraftBukkit start - If sending own attributes send scaled health instead of current maximum health
-@@ -415,7 +_,9 @@
+             if (this.entity.getId() == player.getId()) {
+@@ -422,7 +_,9 @@
                      serverPlayer.getBukkitEntity().injectScaledMaxHealth(attributesToSync, false);
                  }
                  // CraftBukkit end
