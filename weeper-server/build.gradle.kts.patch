@@ -1,28 +1,25 @@
 --- a/paper-server/build.gradle.kts
 +++ b/paper-server/build.gradle.kts
-@@ -26,6 +_,22 @@
+@@ -26,6 +_,19 @@
      minecraftVersion = providers.gradleProperty("mcVersion")
      gitFilePatches = false
  
-+    val fork = forks.register("weeper") {
-+                upstream.patchDir("paperServer") {
-+                            upstreamPath = "paper-server"
-+                            excludes = setOf("src/minecraft", "patches", "build.gradle.kts", "src/generated")
-+                            patchesDir = rootDirectory.dir("weeper-server/paper-patches")
-+                            outputDir = rootDirectory.dir("paper-server")
-+                }
++    activeFork = forks.register("weeper") {
++        upstream.patchDir("paperServer") {
++            upstreamPath = "paper-server"
++            excludes = setOf("src/minecraft", "patches", "build.gradle.kts", "src/generated")
++            patchesDir = rootDirectory.dir("weeper-server/paper-patches")
++            outputDir = rootDirectory.dir("paper-server")
++        }
 +    }
-+
-+    activeFork = fork
 +
 +    paper {
-+                paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
++        paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
 +    }
 +    
-+
      spigot {
          enabled = true
-         buildDataRef = "281ac0de7a76d808753ede97d11b034bc801b63d"
+         buildDataRef = "436eac9815c211be1a2a6ca0702615f995e81c44"
 @@ -107,7 +_,22 @@
      }
  }

@@ -1,6 +1,15 @@
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -2716,4 +_,30 @@
+@@ -71,7 +_,7 @@
+ /**
+  * Represents a server implementation.
+  */
+-public interface Server extends PluginMessageRecipient, net.kyori.adventure.audience.ForwardingAudience { // Paper
++public interface Server extends PluginMessageRecipient, net.kyori.adventure.audience.ForwardingAudience, com.github.weepingmc.offline.OfflinePlayerEditor { // Paper // Weeper offline player editor
+ 
+     /**
+      * Returns the de facto plugins directory, generally used for storing plugin jars to be loaded,
+@@ -2723,4 +_,20 @@
       */
      void allowPausing(@NotNull org.bukkit.plugin.Plugin plugin, boolean value);
      // Paper end - API to check if the server is sleeping
@@ -20,14 +29,4 @@
 +    @NotNull
 +    com.github.weepingmc.packet.PacketPipeline getPacketPipeline();
 +    // Weeper end - packet support
-+    // Weeper start - allow offline editing of playerData
-+    /**
-+     * Edits the information of an offline player.
-+     *
-+     * @param playerUUID The UUID of the offline player to edit.
-+     * @param editPlayerConsumer A consumer function that takes an {@link com.github.weepingmc.offline.EditPlayer} object as input,
-+     *                          allowing the caller to perform edits on the player's information.
-+     */
-+    void editOfflinePlayer(@NotNull UUID playerUUID, @NotNull Consumer<com.github.weepingmc.offline.EditPlayer> editPlayerConsumer);
-+    // Weeper end - allow offline editing of playerData
  }

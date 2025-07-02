@@ -2,13 +2,13 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    java // TODO java launcher tasks
+    java
     id("io.papermc.paperweight.patcher") version "2.0.0-beta.17"
 }
 
 paperweight {
     upstreams.paper {
-        ref = "bd79e20c6627faadad184bd2e6dbea31b35d32d0"
+        ref = "2141ca5273113c71593d5f00a5c93dc9d2d841c5"
 
         patchFile {
             path = "paper-server/build.gradle.kts"
