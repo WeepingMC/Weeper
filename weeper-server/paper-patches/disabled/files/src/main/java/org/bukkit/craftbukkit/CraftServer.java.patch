@@ -1,7 +1,0 @@
-+    // Weeper start - allow offline editing of playerData
-+    @Override
-+    public void editOfflinePlayer(UUID playerUUID, java.util.function.Consumer<com.github.weepingmc.offline.EditPlayer> editPlayerConsumer) {
-+        GameProfile gameProfile = ((CraftPlayerProfile) createPlayerProfile(playerUUID)).buildGameProfile();
-+        playerList.editOfflinePlayer(gameProfile, editPlayerConsumer);
-+    }
-+    // Weeper end - allow offline editing of playerData
