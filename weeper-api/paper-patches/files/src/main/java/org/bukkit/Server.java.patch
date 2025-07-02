@@ -1,5 +1,14 @@
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
+@@ -71,7 +_,7 @@
+ /**
+  * Represents a server implementation.
+  */
+-public interface Server extends PluginMessageRecipient, net.kyori.adventure.audience.ForwardingAudience { // Paper
++public interface Server extends PluginMessageRecipient, net.kyori.adventure.audience.ForwardingAudience, com.github.weepingmc.offline.OfflinePlayerEditor { // Paper // Weeper offline player editor
+ 
+     /**
+      * Returns the de facto plugins directory, generally used for storing plugin jars to be loaded,
 @@ -2723,4 +_,20 @@
       */
      void allowPausing(@NotNull org.bukkit.plugin.Plugin plugin, boolean value);

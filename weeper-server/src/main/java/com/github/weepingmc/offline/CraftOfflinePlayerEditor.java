@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 
 import static org.bukkit.Bukkit.createProfile;
@@ -50,7 +51,7 @@ public class CraftOfflinePlayerEditor implements OfflinePlayerEditor {
 
     }
 
-    public ServerPlayer createOrGet(MinecraftServer server, GameProfile gameProfile, ClientInformation clientInformation) {
+    public ServerPlayer createOrGet(MinecraftServer server, ServerLevel serverLevel, GameProfile gameProfile, ClientInformation clientInformation) {
         ServerPlayer entity = offlineEditedPlayers.remove(gameProfile.getId());
         if (entity != null) {
             // saves data edited by offline player editing mechanic
@@ -58,7 +59,7 @@ public class CraftOfflinePlayerEditor implements OfflinePlayerEditor {
             entity.gameProfile = gameProfile; // set original game profile to so we do not end up with a lot of empty name player.
             entity.getBukkitEntity().saveData();
         } else {
-            entity = new ServerPlayer(server, server.overworld(), gameProfile, clientInformation);
+            entity = new ServerPlayer(server, serverLevel, gameProfile, clientInformation);
         }
         return entity;
     }
