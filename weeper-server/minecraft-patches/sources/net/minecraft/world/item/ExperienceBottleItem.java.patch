@@ -6,5 +6,5 @@
                  );
 +                player.awardStat(Stats.ITEM_USED.get(this));
              } else {
-                 player.containerMenu.sendAllDataToRemote();
+                 player.containerMenu.forceHeldSlot(hand);
                  return InteractionResult.FAIL;

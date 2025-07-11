@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
 +++ b/net/minecraft/server/network/ServerConfigurationPacketListenerImpl.java
-@@ -166,7 +_,7 @@
+@@ -178,7 +_,7 @@
                  // WE have to do this because the player isnt updated properly
                  serverPlayer.updateOptionsNoEvents(this.clientInformation);
              } else {
