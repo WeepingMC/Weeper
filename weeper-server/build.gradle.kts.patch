@@ -53,7 +53,7 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.3")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -203,21 +_,7 @@
+@@ -199,21 +_,7 @@
          val implementationVersion = "$mcVersion-${build ?: "DEV"}-$gitHash"
          val date = git.exec(providers, "show", "-s", "--format=%ci", gitHash).get().trim()
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
@@ -76,20 +76,20 @@
          for (tld in setOf("net", "com", "org")) {
              attributes("$tld/bukkit", "Sealed" to true)
          }
-@@ -390,4 +_,29 @@
+@@ -386,4 +_,29 @@
              }
          }
      }
 +}
 +
 +fun createAttributes(
-+    implementationVersion: String,
-+    date: String,
-+    build: String? = null,
-+    buildTime: Long = System.currentTimeMillis(),
-+    gitBranch: String = "unknown",
-+    gitHash: String = "unknown",
-+): Map<String, Any> {
++        implementationVersion: String,
++        date: String,
++        build: String? = null,
++        buildTime: Long = System.currentTimeMillis(),
++        gitBranch: String = "unknown",
++        gitHash: String = "unknown",
++    ): Map<String, Any> {
 +    return mapOf(
 +        "Main-Class" to "org.bukkit.craftbukkit.Main",
 +        "Implementation-Title" to "Weeper",
