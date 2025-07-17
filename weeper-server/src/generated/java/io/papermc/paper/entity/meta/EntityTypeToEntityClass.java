@@ -145,7 +145,7 @@ import org.jspecify.annotations.NullMarked;
         "SpellCheckingInspection"
 })
 @NullMarked
-@GeneratedFrom("1.21.7")
+@GeneratedFrom("1.21.8")
 public final class EntityTypeToEntityClass {
     private static final Map<EntityType, Class<? extends Entity>> ENTITY_TYPE_TO_CLASS = initialize();
 
