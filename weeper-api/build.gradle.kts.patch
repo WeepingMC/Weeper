@@ -1,5 +1,24 @@
 --- a/paper-api/build.gradle.kts
 +++ b/paper-api/build.gradle.kts
+@@ -65,7 +_,8 @@
+     apiAndDocs("net.kyori:adventure-text-serializer-plain")
+     apiAndDocs("net.kyori:adventure-text-logger-slf4j")
+ 
+-    api("org.apache.maven:maven-resolver-provider:3.9.6") // make API dependency for Paper Plugins
++    api("org.apache.maven:maven-resolver-provider:3.9.11") // make API dependency for Paper Plugins
++    implementation("org.apache.commons:commons-lang3:3.18.0")
+     implementation("org.apache.maven.resolver:maven-resolver-connector-basic:1.9.18")
+     implementation("org.apache.maven.resolver:maven-resolver-transport-http:1.9.18")
+ 
+@@ -81,7 +_,7 @@
+     api("org.jspecify:jspecify:1.0.0")
+ 
+     // Test dependencies
+-    testImplementation("org.apache.commons:commons-lang3:3.17.0")
++    testImplementation("org.apache.commons:commons-lang3:3.18.0")
+     testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
+     testImplementation("org.hamcrest:hamcrest:2.2")
+     testImplementation("org.mockito:mockito-core:5.14.1")
 @@ -100,6 +_,18 @@
      main {
          java {
