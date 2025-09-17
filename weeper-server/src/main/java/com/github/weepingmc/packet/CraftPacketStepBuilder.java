@@ -79,7 +79,7 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
         } else {
             ClientboundPlayerInfoUpdatePacket.Entry playerUpdate =
                 new ClientboundPlayerInfoUpdatePacket.Entry(
-                    gameProfile.getId(),
+                    gameProfile.id(),
                     gameProfile,
                     listed,
                     0,
