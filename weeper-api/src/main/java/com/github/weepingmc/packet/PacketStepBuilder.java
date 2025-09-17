@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -111,6 +112,19 @@ public interface PacketStepBuilder {
     @NotNull
     PacketStepBuilder withPlayerAbilities(@NotNull Set<com.github.weepingmc.packet.options.abilities.PlayerAbility> playerAbilities);
 
+    /**
+     * Shows a test marker on the client.
+     *
+     * @param location the location to show the marker at
+     * @param color the color of the marker
+     * @param text the text to show on the marker
+     * @param time the time to show the marker for in ticks
+     * @return builder
+     *
+     * @deprecated Packet is removed in Minecraft 1.21.9
+     */
+    @ApiStatus.ScheduledForRemoval(inVersion = "1.22.0")
+    @Deprecated(forRemoval = true, since = "1.21.9")
     @NotNull
     PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull Color color, @Nullable String text, int time);
 
