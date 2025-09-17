@@ -8,12 +8,12 @@
  }
  
  paperweight {
--    atFile.set(layout.projectDirectory.file("wideners.at"))
-+    atFile.set(layout.projectDirectory.file("../paper-generator/wideners.at"))
+-    atFile = layout.projectDirectory.file("wideners.at")
++    atFile = layout.projectDirectory.file("../paper-generator/wideners.at")
  }
  
  val serverRuntimeClasspath by configurations.registering { // resolvable?
-@@ -14,12 +_,29 @@
+@@ -14,22 +_,39 @@
      isCanBeResolved = true
  }
  
@@ -46,7 +46,10 @@
      implementation("io.papermc.typewriter:typewriter:1.0.1") {
          isTransitive = false // paper-api already have everything
      }
-@@ -29,7 +_,7 @@
+     implementation("info.picocli:picocli:4.7.6")
+-    implementation("io.github.classgraph:classgraph:4.8.47")
++    implementation("io.github.classgraph:classgraph:4.8.181")
+     implementation("org.jetbrains:annotations:26.0.1")
      testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
      testRuntimeOnly("org.junit.platform:junit-platform-launcher")
  

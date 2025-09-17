@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerEntity.java
 +++ b/net/minecraft/server/level/ServerEntity.java
-@@ -321,7 +_,9 @@
+@@ -302,7 +_,9 @@
  
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
@@ -10,7 +10,7 @@
      }
  
      public void addPairing(ServerPlayer player) {
-@@ -340,12 +_,14 @@
+@@ -321,19 +_,21 @@
          }
  
          Packet<ClientGamePacketListener> addEntityPacket = this.entity.getAddEntityPacket(this);
@@ -27,12 +27,20 @@
              Collection<AttributeInstance> syncableAttributes = livingEntity.getAttributes().getSyncableAttributes();
              // CraftBukkit start - If sending own attributes send scaled health instead of current maximum health
              if (this.entity.getId() == player.getId()) {
-@@ -422,7 +_,9 @@
+                 ((ServerPlayer) this.entity).getBukkitEntity().injectScaledMaxHealth(syncableAttributes, false);
+             }
+             // CraftBukkit end
+-            if (!syncableAttributes.isEmpty()) {
++            if (!syncableAttributes.isEmpty() && !io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this.entity)) { // Weeper - disguise api
+                 consumer.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), syncableAttributes));
+             }
+         }
+@@ -403,7 +_,9 @@
                      serverPlayer.getBukkitEntity().injectScaledMaxHealth(attributesToSync, false);
                  }
                  // CraftBukkit end
 +                if(!io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this.entity)) { // Weeper start - disguise api
-                 this.broadcastAndSend(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributesToSync));
+                 this.synchronizer.sendToTrackingPlayersAndSelf(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributesToSync));
 +                } // Weeper end - disguise api
              }
  

@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/plugin/Plugin.java
 +++ b/src/main/java/org/bukkit/plugin/Plugin.java
-@@ -247,4 +_,23 @@
+@@ -248,4 +_,23 @@
       */
      io.papermc.paper.plugin.lifecycle.event.@NotNull LifecycleEventManager<Plugin> getLifecycleManager();
      // Paper end - lifecycle events
