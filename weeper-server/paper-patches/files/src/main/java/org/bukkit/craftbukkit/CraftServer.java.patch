@@ -8,7 +8,7 @@
  import com.google.common.base.Function;
  import com.google.common.base.Joiner;
  import com.google.common.base.Preconditions;
-@@ -397,6 +_,7 @@
+@@ -387,6 +_,7 @@
          return ca.spottedleaf.moonrise.common.util.TickThread.isTickThread();
      }
      // Paper end - Folia reagion threading API
@@ -16,7 +16,7 @@
  
      static {
          ConfigurationSerialization.registerClass(CraftOfflinePlayer.class);
-@@ -496,6 +_,7 @@
+@@ -485,6 +_,7 @@
          this.potionBrewer = new io.papermc.paper.potion.PaperPotionBrewer(console); // Paper - custom potion mixes
          datapackManager = new io.papermc.paper.datapack.PaperDatapackManager(console.getPackRepository()); // Paper
          this.spark = new io.papermc.paper.SparksFly(this); // Paper - spark
@@ -24,7 +24,7 @@
      }
  
      public boolean getCommandBlockOverride(String command) {
-@@ -3183,4 +_,25 @@
+@@ -3066,4 +_,25 @@
      public void allowPausing(final Plugin plugin, final boolean value) {
          this.console.addPluginAllowingSleep(plugin.getName(), value);
      }
