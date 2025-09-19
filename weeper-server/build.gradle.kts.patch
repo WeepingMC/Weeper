@@ -20,36 +20,36 @@
      spigot {
          enabled = false
          buildDataRef = "436eac9815c211be1a2a6ca0702615f995e81c44"
-@@ -107,7 +_,18 @@
+@@ -111,7 +_,18 @@
      }
  }
  
 -val log4jPlugins = sourceSets.create("log4jPlugins")
 +sourceSets {
-+        main {
-+                java { srcDir("../paper-server/src/main/java") }
-+                resources { srcDir("../paper-server/src/main/resources") }
-+        }
-+        test {
-+                java { srcDir("../paper-server/src/test/java") }
-+                resources { srcDir("../paper-server/src/test/resources") }
-+        }
++    main {
++        java { srcDir("../paper-server/src/main/java") }
++        resources { srcDir("../paper-server/src/main/resources") }
++    }
++    test {
++        java { srcDir("../paper-server/src/test/java") }
++        resources { srcDir("../paper-server/src/test/resources") }
++    }
 +}
 +
 +val log4jPlugins = sourceSets.create("log4jPlugins") {java { srcDir("../paper-server/src/log4jPlugins/java") } }
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())
  }
-@@ -129,7 +_,7 @@
+@@ -133,7 +_,7 @@
  }
  
  dependencies {
 -    implementation(project(":paper-api"))
 +    implementation(project(":weeper-api")) // Weeper - api changes
-     implementation("ca.spottedleaf:concurrentutil:0.0.4-SNAPSHOT")
+     implementation("ca.spottedleaf:concurrentutil:0.0.4")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -199,21 +_,7 @@
+@@ -203,21 +_,7 @@
          val implementationVersion = "$mcVersion-${build ?: "DEV"}-$gitHash"
          val date = git.exec(providers, "show", "-s", "--format=%ci", gitHash).get().trim()
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
@@ -72,7 +72,7 @@
          for (tld in setOf("net", "com", "org")) {
              attributes("$tld/bukkit", "Sealed" to true)
          }
-@@ -386,4 +_,29 @@
+@@ -378,4 +_,29 @@
              }
          }
      }
