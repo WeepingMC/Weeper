@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -1309,7 +_,7 @@
+@@ -1316,7 +_,7 @@
  
      private void refreshDirtyAttributes() {
          Set<AttributeInstance> attributesToUpdate = this.getAttributes().getAttributesToUpdate();
@@ -9,7 +9,7 @@
          for (AttributeInstance attributeInstance : attributesToUpdate) {
              this.onAttributeUpdated(attributeInstance.getAttribute());
          }
-@@ -2568,6 +_,7 @@
+@@ -2600,6 +_,7 @@
              this.swinging = true;
              this.swingingArm = hand;
              if (this.level() instanceof ServerLevel) {

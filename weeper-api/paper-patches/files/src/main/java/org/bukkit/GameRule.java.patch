@@ -1,16 +1,16 @@
 --- a/src/main/java/org/bukkit/GameRule.java
 +++ b/src/main/java/org/bukkit/GameRule.java
-@@ -310,6 +_,13 @@
+@@ -330,6 +_,13 @@
       */
-     public static final GameRule<Boolean> LOCATOR_BAR = new GameRule<>("locatorBar", Boolean.class);
+     public static final GameRule<Boolean> SPAWNER_BLOCKS_ENABLED = new GameRule<>("spawnerBlocksEnabled", Boolean.class);
  
 +    // Weeper start - leader bonus game rule
 +    /**
-+    * Whether a zombie gets a leader bonus or not
-+    */
++     * Whether a zombie gets a leader bonus or not
++     */
 +    public static final GameRule<Boolean> RULE_LEADER_ZOMBIE_BONUS = new GameRule<>("leaderZombieBonus", Boolean.class);
 +    // Weeper end - leader bonus game rule
-+    
++
      // All GameRules instantiated above this for organizational purposes
      private final String name;
      private final Class<T> type;

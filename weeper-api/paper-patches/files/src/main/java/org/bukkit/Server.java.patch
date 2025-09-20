@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/Server.java
 +++ b/src/main/java/org/bukkit/Server.java
-@@ -71,7 +_,7 @@
+@@ -70,7 +_,7 @@
  /**
   * Represents a server implementation.
   */
@@ -9,7 +9,7 @@
  
      /**
       * Returns the de facto plugins directory, generally used for storing plugin jars to be loaded,
-@@ -2723,4 +_,20 @@
+@@ -2726,4 +_,20 @@
       */
      void allowPausing(@NotNull org.bukkit.plugin.Plugin plugin, boolean value);
      // Paper end - API to check if the server is sleeping

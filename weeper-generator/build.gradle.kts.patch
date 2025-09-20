@@ -8,8 +8,8 @@
  }
  
  paperweight {
--    atFile.set(layout.projectDirectory.file("wideners.at"))
-+    atFile.set(layout.projectDirectory.file("../paper-generator/wideners.at"))
+-    atFile = layout.projectDirectory.file("wideners.at")
++    atFile = layout.projectDirectory.file("../paper-generator/wideners.at")
  }
  
  val serverRuntimeClasspath by configurations.registering { // resolvable?

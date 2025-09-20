@@ -1,11 +1,16 @@
 --- a/src/main/java/com/destroystokyo/paper/SkinParts.java
 +++ b/src/main/java/com/destroystokyo/paper/SkinParts.java
-@@ -17,4 +_,24 @@
-     boolean hasHatsEnabled();
+@@ -56,4 +_,29 @@
  
-     int getRaw();
-+
+         SkinParts immutableCopy();
+     }
 +    // Weeper start - add disguise api
++
++    /**
++     * Builder for {@link SkinParts}.
++     * @deprecated Use {@link SkinParts.Mutable} instead.
++     */
++    @Deprecated
 +    interface Builder {
 +        @org.jetbrains.annotations.NotNull Builder withCape(boolean cape);
 +

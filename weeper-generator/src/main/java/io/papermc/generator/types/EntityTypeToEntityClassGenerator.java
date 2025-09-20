@@ -44,7 +44,7 @@ public class EntityTypeToEntityClassGenerator extends SimpleGenerator {
 
         TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(this.className)
             .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-            .addAnnotations(Annotations.CLASS_HEADER);
+            .addAnnotations(Annotations.CONSTANTS_HEADER);
 
         generateEntityTypeToEntityClassMap(typeBuilder, typeToClasses);
         generateGetClassByEntityType(typeBuilder);
