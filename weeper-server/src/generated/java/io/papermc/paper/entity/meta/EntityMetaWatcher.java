@@ -1,6 +1,6 @@
 package io.papermc.paper.entity.meta;
 
-import io.papermc.paper.generated.GeneratedFrom;
+import io.papermc.paper.annotation.GeneratedClass;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.network.syncher.EntityDataSerializer;
@@ -150,7 +150,7 @@ import org.jspecify.annotations.NullMarked;
         "SpellCheckingInspection"
 })
 @NullMarked
-@GeneratedFrom("1.21.9-pre1")
+@GeneratedClass
 public final class EntityMetaWatcher {
     private static final Map<Class<? extends Entity>, Map<Long, EntityDataSerializer<?>>> VALID_ENTITY_META_MAP = initialize();
 

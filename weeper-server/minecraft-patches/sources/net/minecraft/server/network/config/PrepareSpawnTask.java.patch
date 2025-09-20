@@ -17,5 +17,5 @@
 -                serverPlayer = new ServerPlayer(PrepareSpawnTask.this.server, this.spawnLevel, cookie.gameProfile(), cookie.clientInformation());
 +                serverPlayer = server.server.getOfflinePlayerEditor().createOrGet(PrepareSpawnTask.this.server, this.spawnLevel, cookie.gameProfile(), cookie.clientInformation()); // Weeper - Offline Player Editing
              }
-             // Paper end
+             // Paper end - configuration api - possibly use legacy saved server player instance
  

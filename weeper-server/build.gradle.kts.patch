@@ -20,7 +20,7 @@
      spigot {
          enabled = false
          buildDataRef = "436eac9815c211be1a2a6ca0702615f995e81c44"
-@@ -111,7 +_,18 @@
+@@ -107,7 +_,18 @@
      }
  }
  
@@ -40,16 +40,16 @@
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())
  }
-@@ -133,7 +_,7 @@
+@@ -129,7 +_,7 @@
  }
  
  dependencies {
 -    implementation(project(":paper-api"))
 +    implementation(project(":weeper-api")) // Weeper - api changes
-     implementation("ca.spottedleaf:concurrentutil:0.0.4")
+     implementation("ca.spottedleaf:concurrentutil:0.0.5")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -203,21 +_,7 @@
+@@ -199,21 +_,7 @@
          val implementationVersion = "$mcVersion-${build ?: "DEV"}-$gitHash"
          val date = git.exec(providers, "show", "-s", "--format=%ci", gitHash).get().trim()
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
@@ -72,7 +72,7 @@
          for (tld in setOf("net", "com", "org")) {
              attributes("$tld/bukkit", "Sealed" to true)
          }
-@@ -378,4 +_,29 @@
+@@ -374,4 +_,29 @@
              }
          }
      }

@@ -1,6 +1,6 @@
 package io.papermc.paper.entity.meta;
 
-import io.papermc.paper.generated.GeneratedFrom;
+import io.papermc.paper.annotation.GeneratedClass;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.world.entity.AreaEffectCloud;
@@ -147,7 +147,7 @@ import org.jspecify.annotations.NullMarked;
         "SpellCheckingInspection"
 })
 @NullMarked
-@GeneratedFrom("1.21.9-pre1")
+@GeneratedClass
 public final class EntityTypeToEntityClass {
     private static final Map<EntityType, Class<? extends Entity>> ENTITY_TYPE_TO_CLASS = initialize();
 
