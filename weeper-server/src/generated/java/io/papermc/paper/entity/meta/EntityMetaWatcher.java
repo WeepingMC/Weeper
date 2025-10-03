@@ -1,12 +1,13 @@
 package io.papermc.paper.entity.meta;
 
-import io.papermc.paper.generated.GeneratedFrom;
+import io.papermc.paper.annotation.GeneratedClass;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.AreaEffectCloud;
+import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -42,6 +43,7 @@ import net.minecraft.world.entity.animal.allay.Allay;
 import net.minecraft.world.entity.animal.armadillo.Armadillo;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.animal.camel.Camel;
+import net.minecraft.world.entity.animal.coppergolem.CopperGolem;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.frog.Tadpole;
 import net.minecraft.world.entity.animal.goat.Goat;
@@ -63,6 +65,7 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.decoration.GlowItemFrame;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
+import net.minecraft.world.entity.decoration.Mannequin;
 import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -147,7 +150,7 @@ import org.jspecify.annotations.NullMarked;
         "SpellCheckingInspection"
 })
 @NullMarked
-@GeneratedFrom("1.21.8")
+@GeneratedClass
 public final class EntityMetaWatcher {
     private static final Map<Class<? extends Entity>, Map<Long, EntityDataSerializer<?>>> VALID_ENTITY_META_MAP = initialize();
 
@@ -254,6 +257,28 @@ public final class EntityMetaWatcher {
         result.put(9L, EntityDataSerializers.BYTE);
         result.put(10L, EntityDataSerializers.BOOLEAN);
         result.put(11L, EntityDataSerializers.INT);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> avatar() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BYTE);
         return Map.copyOf(result);
     }
 
@@ -609,6 +634,29 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> copperGolem() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.WEATHERING_COPPER_STATE);
+        result.put(17L, EntityDataSerializers.COPPER_GOLEM_STATE);
         return Map.copyOf(result);
     }
 
@@ -1493,6 +1541,31 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
+    private static final Map<Long, EntityDataSerializer<?>> mannequin() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BYTE);
+        result.put(17L, EntityDataSerializers.RESOLVABLE_PROFILE);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(19L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        return Map.copyOf(result);
+    }
+
     private static final Map<Long, EntityDataSerializer<?>> marker() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
@@ -2068,12 +2141,12 @@ public final class EntityMetaWatcher {
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.FLOAT);
-        result.put(16L, EntityDataSerializers.INT);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.BYTE);
-        result.put(19L, EntityDataSerializers.COMPOUND_TAG);
-        result.put(20L, EntityDataSerializers.COMPOUND_TAG);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BYTE);
+        result.put(17L, EntityDataSerializers.FLOAT);
+        result.put(18L, EntityDataSerializers.INT);
+        result.put(19L, EntityDataSerializers.OPTIONAL_UNSIGNED_INT);
+        result.put(20L, EntityDataSerializers.OPTIONAL_UNSIGNED_INT);
         return Map.copyOf(result);
     }
 
@@ -2985,6 +3058,7 @@ public final class EntityMetaWatcher {
         result.put(Armadillo.class, armadillo());
         result.put(ArmorStand.class, armorStand());
         result.put(Arrow.class, arrow());
+        result.put(Avatar.class, avatar());
         result.put(Axolotl.class, axolotl());
         result.put(Bat.class, bat());
         result.put(Bee.class, bee());
@@ -3001,6 +3075,7 @@ public final class EntityMetaWatcher {
         result.put(ChestRaft.class, chestRaft());
         result.put(Chicken.class, chicken());
         result.put(Cod.class, cod());
+        result.put(CopperGolem.class, copperGolem());
         result.put(Cow.class, cow());
         result.put(Creaking.class, creaking());
         result.put(Creeper.class, creeper());
@@ -3045,6 +3120,7 @@ public final class EntityMetaWatcher {
         result.put(Llama.class, llama());
         result.put(LlamaSpit.class, llamaSpit());
         result.put(MagmaCube.class, magmaCube());
+        result.put(Mannequin.class, mannequin());
         result.put(Marker.class, marker());
         result.put(Minecart.class, minecart());
         result.put(MinecartChest.class, minecartChest());

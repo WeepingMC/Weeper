@@ -1,0 +1,21 @@
+--- a/net/minecraft/server/network/config/PrepareSpawnTask.java
++++ b/net/minecraft/server/network/config/PrepareSpawnTask.java
+@@ -191,8 +_,7 @@
+                         if (PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents != null) {
+                             serverPlayer = PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents;
+                         } else {
+-                            serverPlayer = new ServerPlayer(
+-                                PrepareSpawnTask.this.server, PrepareSpawnTask.this.server.overworld(), PrepareSpawnTask.this.profile, net.minecraft.server.level.ClientInformation.createDefault());
++                            serverPlayer = server.server.getOfflinePlayerEditor().createOrGet(PrepareSpawnTask.this.server, PrepareSpawnTask.this.server.overworld(), PrepareSpawnTask.this.profile, net.minecraft.server.level.ClientInformation.createDefault()); // Weeper - Offline Player Editing
+                             PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents = serverPlayer;
+                         }
+                         org.spigotmc.event.player.PlayerSpawnLocationEvent ev = new org.spigotmc.event.player.PlayerSpawnLocationEvent(
+@@ -274,7 +_,7 @@
+                 serverPlayer.updateOptionsNoEvents(cookie.clientInformation());
+                 serverPlayer.setServerLevel(this.spawnLevel);
+             } else {
+-                serverPlayer = new ServerPlayer(PrepareSpawnTask.this.server, this.spawnLevel, cookie.gameProfile(), cookie.clientInformation());
++                serverPlayer = server.server.getOfflinePlayerEditor().createOrGet(PrepareSpawnTask.this.server, this.spawnLevel, cookie.gameProfile(), cookie.clientInformation()); // Weeper - Offline Player Editing
+             }
+             // Paper end - configuration api - possibly use legacy saved server player instance
+ 

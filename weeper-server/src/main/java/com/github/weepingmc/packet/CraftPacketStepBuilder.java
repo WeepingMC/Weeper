@@ -79,7 +79,7 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
         } else {
             ClientboundPlayerInfoUpdatePacket.Entry playerUpdate =
                 new ClientboundPlayerInfoUpdatePacket.Entry(
-                    gameProfile.getId(),
+                    gameProfile.id(),
                     gameProfile,
                     listed,
                     0,
@@ -307,13 +307,14 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
 
     @Override
     public @NotNull PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull java.awt.Color color, @org.jetbrains.annotations.Nullable String text, int time) {
-        var payload = new net.minecraft.network.protocol.common.custom.GameTestAddMarkerDebugPayload(
+        /*var payload = new net.minecraft.network.protocol.common.custom.GameTestAddMarkerDebugPayload(
             new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()),
             org.bukkit.Color.fromARGB(color.getAlpha(), color.getRed(), color.getGreen(), color.getBlue()).asARGB(),
             text==null?"": text,
             time
         );
-        initial.setNext(of(new net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket(payload)));
+        initial.setNext(of(new net.minecraft.network.protocol.common.ClientboundCustomPayloadPacket(payload)));*/
+        // todo: fixme
         return this;
     }
 

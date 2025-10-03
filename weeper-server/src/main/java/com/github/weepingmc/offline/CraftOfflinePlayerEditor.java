@@ -9,6 +9,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import org.jspecify.annotations.NonNull;
 
 import static org.bukkit.Bukkit.createProfile;
 
@@ -22,7 +23,7 @@ public class CraftOfflinePlayerEditor implements OfflinePlayerEditor {
     }
 
     @Override
-    public void editOfflinePlayer(UUID playerUUID, Consumer<EditPlayer> editPlayerConsumer) {
+    public void editOfflinePlayer(@NonNull UUID playerUUID, @NonNull Consumer<EditPlayer> editPlayerConsumer) {
         GameProfile playerProfile = ((CraftPlayerProfile) createProfile(playerUUID)).buildGameProfile();
         ServerPlayer serverPlayer = server.getPlayerList().getPlayer(playerUUID);
 
@@ -39,20 +40,20 @@ public class CraftOfflinePlayerEditor implements OfflinePlayerEditor {
             );
             var target = serverPlayer.getBukkitEntity();
             target.loadData();
-            offlineEditedPlayers.put(playerProfile.getId(), serverPlayer);
+            offlineEditedPlayers.put(playerProfile.id(), serverPlayer);
         }
         // ensure cleanup if user fucks something up
         try {
             editPlayerConsumer.accept(new com.github.weepingmc.offline.CraftEditPlayer(serverPlayer));
         } finally {
             serverPlayer.getBukkitEntity().saveData();
-            offlineEditedPlayers.remove(playerProfile.getId());
+            offlineEditedPlayers.remove(playerProfile.id());
         }
 
     }
 
     public ServerPlayer createOrGet(MinecraftServer server, ServerLevel serverLevel, GameProfile gameProfile, ClientInformation clientInformation) {
-        ServerPlayer entity = offlineEditedPlayers.remove(gameProfile.getId());
+        ServerPlayer entity = offlineEditedPlayers.remove(gameProfile.id());
         if (entity != null) {
             // saves data edited by offline player editing mechanic
             // server itself should load the playerdata some time later

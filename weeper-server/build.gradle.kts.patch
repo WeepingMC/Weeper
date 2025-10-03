@@ -16,9 +16,9 @@
 +    paper {
 +        paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
 +    }
-+    
++
      spigot {
-         enabled = true
+         enabled = false
          buildDataRef = "436eac9815c211be1a2a6ca0702615f995e81c44"
 @@ -107,7 +_,18 @@
      }
@@ -26,27 +26,27 @@
  
 -val log4jPlugins = sourceSets.create("log4jPlugins")
 +sourceSets {
-+        main {
-+                java { srcDir("../paper-server/src/main/java") }
-+                resources { srcDir("../paper-server/src/main/resources") }
-+        }
-+        test {
-+                java { srcDir("../paper-server/src/test/java") }
-+                resources { srcDir("../paper-server/src/test/resources") }
-+        }
++    main {
++        java { srcDir("../paper-server/src/main/java") }
++        resources { srcDir("../paper-server/src/main/resources") }
++    }
++    test {
++        java { srcDir("../paper-server/src/test/java") }
++        resources { srcDir("../paper-server/src/test/resources") }
++    }
 +}
 +
 +val log4jPlugins = sourceSets.create("log4jPlugins") {java { srcDir("../paper-server/src/log4jPlugins/java") } }
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())
  }
-@@ -129,7 +_,7 @@
+@@ -130,7 +_,7 @@
  }
  
  dependencies {
 -    implementation(project(":paper-api"))
 +    implementation(project(":weeper-api")) // Weeper - api changes
-     implementation("ca.spottedleaf:concurrentutil:0.0.3")
+     implementation("ca.spottedleaf:concurrentutil:0.0.5")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
 @@ -198,21 +_,7 @@
@@ -72,33 +72,33 @@
          for (tld in setOf("net", "com", "org")) {
              attributes("$tld/bukkit", "Sealed" to true)
          }
-@@ -385,4 +_,29 @@
+@@ -373,4 +_,29 @@
              }
          }
      }
 +}
 +
 +fun createAttributes(
-+                implementationVersion: String,
-+                date: String,
-+                build: String? = null,
-+                buildTime: Long = System.currentTimeMillis(),
-+                gitBranch: String = "unknown",
-+                gitHash: String = "unknown",
-+            ): Map<String, Any> {
-+            return mapOf(
-+                        "Main-Class" to "org.bukkit.craftbukkit.Main",
-+                        "Implementation-Title" to "Weeper",
-+                        "Implementation-Version" to implementationVersion,
-+                        "Implementation-Vendor" to date,
-+                        "Specification-Title" to "Weeper",
-+                        "Specification-Version" to project.version,
-+                        "Specification-Vendor" to "WeeperMC Team",
-+                        "Brand-Id" to "weepingmc:weeper",
-+                        "Brand-Name" to "Weeper",
-+                        "Build-Number" to (build ?: ""),
-+                        "Build-Time" to buildTime.toString(),
-+                        "Git-Branch" to gitBranch,
-+                        "Git-Commit" to gitHash,
-+                    )
++    implementationVersion: String,
++    date: String,
++    build: String? = null,
++    buildTime: Long = System.currentTimeMillis(),
++    gitBranch: String = "unknown",
++    gitHash: String = "unknown",
++): Map<String, Any> {
++    return mapOf(
++        "Main-Class" to "org.bukkit.craftbukkit.Main",
++        "Implementation-Title" to "Weeper",
++        "Implementation-Version" to implementationVersion,
++        "Implementation-Vendor" to date,
++        "Specification-Title" to "Weeper",
++        "Specification-Version" to project.version,
++        "Specification-Vendor" to "WeeperMC Team",
++        "Brand-Id" to "weepingmc:weeper",
++        "Brand-Name" to "Weeper",
++        "Build-Number" to (build ?: ""),
++        "Build-Time" to buildTime.toString(),
++        "Git-Branch" to gitBranch,
++        "Git-Commit" to gitHash,
++    )
  }

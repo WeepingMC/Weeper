@@ -1,8 +1,8 @@
 --- a/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
 +++ b/src/main/java/com/destroystokyo/paper/PaperSkinParts.java
-@@ -71,4 +_,83 @@
-             .add("hats=" + hasHatsEnabled())
-             .toString();
+@@ -214,4 +_,61 @@
+             return PaperSkinParts.toString(this, "PaperSkinParts.Mutable");
+         }
      }
 +
 +    // Weeper start - disguise api
@@ -12,74 +12,52 @@
 +
 +    public static class Builder implements SkinParts.Builder {
 +
-+        private boolean cape;
-+        private boolean jacket;
-+        private boolean leftSleeve;
-+        private boolean rightSleeve;
-+        private boolean leftPants;
-+        private boolean rightPants;
-+        private boolean hats;
-+
-+        private static final int CAPE = 0x01;
-+        private static final int JACKET = 0x02;
-+        private static final int LEFT_SLEEVE = 0x04;
-+        private static final int RIGHT_SLEEVE = 0x08;
-+        private static final int LEFT_PANTS = 0x10;
-+        private static final int RIGHT_PANTS = 0x20;
-+        private static final int HAT = 0x40;
++        private Mutable mutable = new Mutable(0);
 +
 +        @Override
-+        public @org.jetbrains.annotations.NotNull Builder withCape(boolean cape) {
-+            this.cape = cape;
++        public Builder withCape(boolean cape) {
++            this.mutable.setCapeEnabled(cape);
 +            return this;
 +        }
 +
 +        @Override
-+        public @org.jetbrains.annotations.NotNull Builder withJacket(boolean jacket) {
-+            this.jacket = jacket;
++        public Builder withJacket(boolean jacket) {
++            this.mutable.setJacketEnabled(jacket);
 +            return this;
 +        }
 +
 +        @Override
-+        public @org.jetbrains.annotations.NotNull Builder withLeftSleeve(boolean leftSleeve) {
-+            this.leftSleeve = leftSleeve;
++        public Builder withLeftSleeve(boolean leftSleeve) {
++            this.mutable.setLeftSleeveEnabled(leftSleeve);
 +            return this;
 +        }
 +
 +        @Override
-+        public @org.jetbrains.annotations.NotNull Builder withRightSleeve(boolean rightSleeve) {
-+            this.rightSleeve = rightSleeve;
++        public Builder withRightSleeve(boolean rightSleeve) {
++            this.mutable.setRightSleeveEnabled(rightSleeve);
 +            return this;
 +        }
 +
 +        @Override
-+        public @org.jetbrains.annotations.NotNull Builder withLeftPants(boolean leftPants) {
-+            this.leftPants = leftPants;
++        public Builder withLeftPants(boolean leftPants) {
++            this.mutable.setLeftPantsEnabled(leftPants);
 +            return this;
 +        }
 +
 +        @Override
-+        public @org.jetbrains.annotations.NotNull Builder withRightPants(boolean rightPants) {
-+            this.rightPants = rightPants;
++        public Builder withRightPants(boolean rightPants) {
++            this.mutable.setRightPantsEnabled(rightPants);
 +            return this;
 +        }
 +
 +        @Override
-+        public @org.jetbrains.annotations.NotNull Builder withHat(boolean hat) {
-+            this.hats = hat;
++        public Builder withHat(boolean hat) {
++            this.mutable.setHatsEnabled(hat);
 +            return this;
 +        }
 +
-+        public @org.jetbrains.annotations.NotNull SkinParts build() {
-+            int raw = 0;
-+            if (cape) raw |= CAPE;
-+            if (jacket) raw |= JACKET;
-+            if (leftSleeve) raw |= LEFT_SLEEVE;
-+            if (rightSleeve) raw |= RIGHT_SLEEVE;
-+            if (leftPants) raw |= LEFT_PANTS;
-+            if (rightPants) raw |= RIGHT_PANTS;
-+            if (hats) raw |= HAT;
-+            return new PaperSkinParts(raw);
++        public SkinParts build() {
++            return this.mutable.immutableCopy();
 +        }
 +    }
 +    // Weeper end - disguise api

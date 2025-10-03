@@ -1,6 +1,6 @@
 package io.papermc.paper.entity.meta;
 
-import io.papermc.paper.generated.GeneratedFrom;
+import io.papermc.paper.annotation.GeneratedClass;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraft.world.entity.AreaEffectCloud;
@@ -39,6 +39,7 @@ import net.minecraft.world.entity.animal.allay.Allay;
 import net.minecraft.world.entity.animal.armadillo.Armadillo;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.animal.camel.Camel;
+import net.minecraft.world.entity.animal.coppergolem.CopperGolem;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.frog.Tadpole;
 import net.minecraft.world.entity.animal.goat.Goat;
@@ -59,6 +60,7 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.decoration.GlowItemFrame;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
+import net.minecraft.world.entity.decoration.Mannequin;
 import net.minecraft.world.entity.decoration.Painting;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -145,7 +147,7 @@ import org.jspecify.annotations.NullMarked;
         "SpellCheckingInspection"
 })
 @NullMarked
-@GeneratedFrom("1.21.8")
+@GeneratedClass
 public final class EntityTypeToEntityClass {
     private static final Map<EntityType, Class<? extends Entity>> ENTITY_TYPE_TO_CLASS = initialize();
 
@@ -178,6 +180,7 @@ public final class EntityTypeToEntityClass {
         result.put(EntityType.CHEST_MINECART, MinecartChest.class);
         result.put(EntityType.CHICKEN, Chicken.class);
         result.put(EntityType.COD, Cod.class);
+        result.put(EntityType.COPPER_GOLEM, CopperGolem.class);
         result.put(EntityType.COMMAND_BLOCK_MINECART, MinecartCommandBlock.class);
         result.put(EntityType.COW, Cow.class);
         result.put(EntityType.CREAKING, Creaking.class);
@@ -232,6 +235,7 @@ public final class EntityTypeToEntityClass {
         result.put(EntityType.MAGMA_CUBE, MagmaCube.class);
         result.put(EntityType.MANGROVE_BOAT, Boat.class);
         result.put(EntityType.MANGROVE_CHEST_BOAT, ChestBoat.class);
+        result.put(EntityType.MANNEQUIN, Mannequin.class);
         result.put(EntityType.MARKER, Marker.class);
         result.put(EntityType.MINECART, Minecart.class);
         result.put(EntityType.MOOSHROOM, MushroomCow.class);

@@ -75,7 +75,7 @@ public class EntityMetaWatcherGenerator extends SimpleGenerator {
 
         TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(this.className)
             .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-            .addAnnotations(Annotations.CLASS_HEADER);
+            .addAnnotations(Annotations.CONSTANTS_HEADER);
 
         generateIdAccessorMethods(vanillaNames, dataAccessorStringMap, typeBuilder);
         generateClassToTypeMap(typeBuilder, vanillaNames.keySet());
