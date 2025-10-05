@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Is called before a {@link Player} tracks an {@link Entity}.
@@ -24,23 +24,22 @@ import org.jetbrains.annotations.NotNull;
  */
 @Deprecated(forRemoval = true, since = "1.21.3")
 @org.jetbrains.annotations.ApiStatus.ScheduledForRemoval(inVersion = "1.24.0")
+@NullMarked
 public class PlayerTrackEntityEvent extends PlayerEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private final Entity entity;
     private boolean cancelled;
 
-    public PlayerTrackEntityEvent(@NotNull Player player, @NotNull Entity entity) {
+    public PlayerTrackEntityEvent(Player player, Entity entity) {
         super(player);
         this.entity = entity;
     }
 
-    @NotNull
     public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    @NotNull
     @Override
     public HandlerList getHandlers() {
         return handlers;
@@ -50,7 +49,6 @@ public class PlayerTrackEntityEvent extends PlayerEvent implements Cancellable {
      * Gets the entity that will be tracked
      * @return the entity tracked
      */
-    @NotNull
     public Entity getEntity() {
         return entity;
     }

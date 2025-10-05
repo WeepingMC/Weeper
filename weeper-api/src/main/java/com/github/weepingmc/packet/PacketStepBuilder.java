@@ -22,86 +22,67 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public interface PacketStepBuilder {
 
-    @NotNull
-    default PacketStepBuilder sendPlayerProfile(@NotNull PlayerProfile playerProfile, @NotNull ProfileAction profileAction){
+    default PacketStepBuilder sendPlayerProfile(PlayerProfile playerProfile, ProfileAction profileAction){
         return sendPlayerProfile(playerProfile, profileAction, true);
     }
 
-    @NotNull
-    PacketStepBuilder sendPlayerProfile(@NotNull PlayerProfile playerProfile, @NotNull ProfileAction profileAction, boolean listed);
+    PacketStepBuilder sendPlayerProfile(PlayerProfile playerProfile, ProfileAction profileAction, boolean listed);
 
-    @NotNull
-    PacketStepBuilder removePlayerProfile(@NotNull PlayerProfile playerProfile);
+    PacketStepBuilder removePlayerProfile(PlayerProfile playerProfile);
 
-    @NotNull
-    PacketStepBuilder spawnPlayer(int entityId, @NotNull UUID uuid, @NotNull Location location);
+    PacketStepBuilder spawnPlayer(int entityId, UUID uuid, Location location);
 
-    @NotNull
-    PacketStepBuilder setPlayerTeam(@NotNull Team team, @NotNull TeamMode teamMode);
+    PacketStepBuilder setPlayerTeam(Team team, TeamMode teamMode);
 
-    @NotNull
-    PacketStepBuilder teleportEntity(int entityId, @NotNull Location location, boolean onGround);
+    PacketStepBuilder teleportEntity(int entityId, Location location, boolean onGround);
 
-    @NotNull
-    PacketStepBuilder mountEntity(int entityId, int @NotNull ... passenger);
+    PacketStepBuilder mountEntity(int entityId, int... passenger);
 
-    @NotNull
-    PacketStepBuilder sendBlockChange(@NotNull Location location, @NotNull BlockData blockData);
+    PacketStepBuilder sendBlockChange(Location location, BlockData blockData);
 
-    @NotNull
-    PacketStepBuilder sleepAt(int entityId, @NotNull Location location);
+    PacketStepBuilder sleepAt(int entityId, Location location);
 
-    @NotNull
     PacketStepBuilder rotateHead(int entityId, float yaw);
 
-    @NotNull
     PacketStepBuilder rotateFullHead(int entityId, float yaw, float pitch, boolean onGround);
 
-    @NotNull
-    PacketStepBuilder movePositionAndRotateFullHead(int entityId, @NotNull Vector direction, byte yaw, byte pitch, boolean onGround);
+    PacketStepBuilder movePositionAndRotateFullHead(int entityId, Vector direction, byte yaw, byte pitch, boolean onGround);
 
-    @NotNull
     PacketStepBuilder destroyEntity(int entityId);
 
-    @NotNull
-    PacketStepBuilder animateBlockBreak(int entityID, @NotNull Location location, byte destroyStage);
+    PacketStepBuilder animateBlockBreak(int entityID, Location location, byte destroyStage);
 
-    @NotNull
-    PacketStepBuilder setEquipmentItem(int entityId, @NotNull EquipmentSlot equipmentSlot, @NotNull ItemStack itemStack);
+    PacketStepBuilder setEquipmentItem(int entityId, EquipmentSlot equipmentSlot, ItemStack itemStack);
 
-    @NotNull
-    PacketStepBuilder delay(@NotNull JavaPlugin javaPlugin, long time, @NotNull TimeUnit timeUnit);
+    PacketStepBuilder delay(JavaPlugin javaPlugin, long time, TimeUnit timeUnit);
 
-    @NotNull
-    PacketStepBuilder custom(@NotNull PacketStep packetStep);
+    PacketStepBuilder custom(PacketStep packetStep);
 
-    @NotNull
     PacketStepBuilder removeEntity(int entityId);
 
-    @NotNull
-    PacketStepBuilder animateEntity(int entityId, @NotNull Animation animation);
+    PacketStepBuilder animateEntity(int entityId, Animation animation);
 
-    @NotNull
-    PacketStepBuilder spawnEntity(int entityId, @NotNull UUID uuid, @NotNull Location location, @NotNull EntityType entityType, @NotNull Vector movementDirection);
+    PacketStepBuilder spawnEntity(int entityId, UUID uuid, Location location, EntityType entityType, Vector movementDirection);
 
-    @NotNull
-    PacketStepBuilder withMeta(int entityId, @NotNull EntityMetaBuilder metaBuilder);
+    PacketStepBuilder withMeta(int entityId, EntityMetaBuilder metaBuilder);
 
     /**
      * sets the player abilities
      *
+     * @deprecated Use {@link #withPlayerAbilities(Set)}
      * @param playerAbilities [Invulnerable, Flying, Allow Flying, Creative Mode (Instant Break)]
      * @param flySpeed 0.05 by default.
      * @param fieldOfViewModifier Modifies the field of view, like a speed potion. A Notchian server will use the same value as the movement speed sent in the Entity Properties packet, which defaults to 0.1 for players.
      * @return builder
      */
-    @NotNull
-    PacketStepBuilder playerAbilities(@NotNull Set<PlayerAbility> playerAbilities, float flySpeed, float fieldOfViewModifier);
+    @Deprecated
+    PacketStepBuilder playerAbilities(Set<PlayerAbility> playerAbilities, float flySpeed, float fieldOfViewModifier);
 
     /**
      * sets the player abilities
@@ -109,8 +90,7 @@ public interface PacketStepBuilder {
      * @param playerAbilities the abilities to modify
      * @return builder
      */
-    @NotNull
-    PacketStepBuilder withPlayerAbilities(@NotNull Set<com.github.weepingmc.packet.options.abilities.PlayerAbility> playerAbilities);
+    PacketStepBuilder withPlayerAbilities(Set<com.github.weepingmc.packet.options.abilities.PlayerAbility> playerAbilities);
 
     /**
      * Shows a test marker on the client.
@@ -125,12 +105,11 @@ public interface PacketStepBuilder {
      */
     @ApiStatus.ScheduledForRemoval(inVersion = "1.22.0")
     @Deprecated(forRemoval = true, since = "1.21.9")
-    @NotNull
-    PacketStepBuilder showTestMarker(@NotNull Location location, @NotNull Color color, @Nullable String text, int time);
+    PacketStepBuilder showTestMarker(Location location, Color color, @Nullable String text, int time);
 
     default void send(){
         send(Bukkit.getOnlinePlayers());
     }
 
-    void send(@NotNull Collection<? extends Player> players);
+    void send(Collection<? extends Player> players);
 }

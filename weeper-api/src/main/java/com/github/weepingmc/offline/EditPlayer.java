@@ -2,8 +2,9 @@ package com.github.weepingmc.offline;
 
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataContainer;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public interface EditPlayer {
 
     /**
@@ -11,7 +12,6 @@ public interface EditPlayer {
      *
      * @return The player's inventory.
      */
-    @NotNull
     PlayerInventory getInventory();
 
     /**
@@ -19,7 +19,6 @@ public interface EditPlayer {
      *
      * @return The player's PersistentDataContainer.
      */
-    @NotNull
     PersistentDataContainer getPersistentDataContainer();
 
 }

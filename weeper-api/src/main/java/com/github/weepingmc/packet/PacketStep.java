@@ -1,9 +1,10 @@
 package com.github.weepingmc.packet;
 
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 @FunctionalInterface
+@NullMarked
 public interface PacketStep {
-    void execute(@NotNull Player player);
+    void execute(Player player);
 }
