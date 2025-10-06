@@ -1,6 +1,6 @@
 --- a/paper-server/build.gradle.kts
 +++ b/paper-server/build.gradle.kts
-@@ -26,6 +_,19 @@
+@@ -26,6 +_,20 @@
      minecraftVersion = providers.gradleProperty("mcVersion")
      gitFilePatches = false
  
@@ -17,9 +17,10 @@
 +        paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
 +    }
 +
++
      spigot {
-         enabled = false
-         buildDataRef = "436eac9815c211be1a2a6ca0702615f995e81c44"
+         enabled = true
+         buildDataRef = "42d18d4c4653ffc549778dbe223f6994a031d69e"
 @@ -107,7 +_,18 @@
      }
  }
