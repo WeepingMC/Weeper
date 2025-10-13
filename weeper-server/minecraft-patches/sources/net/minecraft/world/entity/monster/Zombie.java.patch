@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/Zombie.java
 +++ b/net/minecraft/world/entity/monster/Zombie.java
-@@ -595,10 +_,12 @@
+@@ -594,10 +_,12 @@
                  .addOrReplacePermanentModifier(
                      new AttributeModifier(LEADER_ZOMBIE_BONUS_ID, this.random.nextDouble() * 0.25 + 0.5, AttributeModifier.Operation.ADD_VALUE)
                  );

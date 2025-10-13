@@ -1,6 +1,6 @@
 --- a/paper-server/build.gradle.kts
 +++ b/paper-server/build.gradle.kts
-@@ -26,6 +_,20 @@
+@@ -23,6 +_,19 @@
      minecraftVersion = providers.gradleProperty("mcVersion")
      gitFilePatches = false
  
@@ -17,11 +17,10 @@
 +        paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
 +    }
 +
-+
      spigot {
          enabled = true
          buildDataRef = "42d18d4c4653ffc549778dbe223f6994a031d69e"
-@@ -107,7 +_,18 @@
+@@ -104,7 +_,18 @@
      }
  }
  
@@ -41,7 +40,7 @@
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())
  }
-@@ -130,7 +_,7 @@
+@@ -127,7 +_,7 @@
  }
  
  dependencies {
@@ -50,7 +49,7 @@
      implementation("ca.spottedleaf:concurrentutil:0.0.5")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -198,21 +_,7 @@
+@@ -195,21 +_,7 @@
          val implementationVersion = "$mcVersion-${build ?: "DEV"}-$gitHash"
          val date = git.exec(providers, "show", "-s", "--format=%ci", gitHash).get().trim()
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
@@ -73,11 +72,12 @@
          for (tld in setOf("net", "com", "org")) {
              attributes("$tld/bukkit", "Sealed" to true)
          }
-@@ -373,4 +_,29 @@
+@@ -370,4 +_,30 @@
              }
          }
      }
 +}
++
 +
 +fun createAttributes(
 +    implementationVersion: String,

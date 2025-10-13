@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/network/config/PrepareSpawnTask.java
 +++ b/net/minecraft/server/network/config/PrepareSpawnTask.java
-@@ -191,8 +_,7 @@
+@@ -193,8 +_,7 @@
                          if (PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents != null) {
                              serverPlayer = PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents;
                          } else {
@@ -10,7 +10,7 @@
                              PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents = serverPlayer;
                          }
                          org.spigotmc.event.player.PlayerSpawnLocationEvent ev = new org.spigotmc.event.player.PlayerSpawnLocationEvent(
-@@ -274,7 +_,7 @@
+@@ -277,7 +_,7 @@
                  serverPlayer.updateOptionsNoEvents(cookie.clientInformation());
                  serverPlayer.setServerLevel(this.spawnLevel);
              } else {

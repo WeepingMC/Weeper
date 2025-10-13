@@ -12,14 +12,14 @@
 @@ -2249,11 +_,13 @@
  
      @Override
-     public void crit(Entity entityHit) {
+     public void crit(Entity target) {
 +        if(!io.papermc.paper.disguise.DisguiseUtil.canSendAnimation(this)) return; // Weeper - disguise api
-         this.level().getChunkSource().sendToTrackingPlayersAndSelf(this, new ClientboundAnimatePacket(entityHit, 4));
+         this.level().getChunkSource().sendToTrackingPlayersAndSelf(this, new ClientboundAnimatePacket(target, 4));
      }
  
      @Override
-     public void magicCrit(Entity entityHit) {
+     public void magicCrit(Entity target) {
 +        if(!io.papermc.paper.disguise.DisguiseUtil.canSendAnimation(this)) return; // Weeper - disguise api
-         this.level().getChunkSource().sendToTrackingPlayersAndSelf(this, new ClientboundAnimatePacket(entityHit, 5));
+         this.level().getChunkSource().sendToTrackingPlayersAndSelf(this, new ClientboundAnimatePacket(target, 5));
      }
  

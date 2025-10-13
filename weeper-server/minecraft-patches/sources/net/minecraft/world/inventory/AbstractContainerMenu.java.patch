@@ -10,6 +10,6 @@
 +    }
 +    // Weeper end - inventoryItemStackMoveStrategy
 +
-     protected DataSlot addDataSlot(DataSlot intValue) {
-         this.dataSlots.add(intValue);
+     protected DataSlot addDataSlot(DataSlot slot) {
+         this.dataSlots.add(slot);
          this.remoteDataSlots.add(0);
