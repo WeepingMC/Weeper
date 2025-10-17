@@ -7,8 +7,11 @@ public enum Animation {
 
     /**
      * Deprecated. Use {@link #SWING_MAIN_HAND} instead.
+     * @deprecated Scheduled for removal in version 1.22.0.
+     * @since 1.21.3
      */
-    @Deprecated
+    @Deprecated(forRemoval = true, since = "1.21.3")
+    @org.jetbrains.annotations.ApiStatus.ScheduledForRemoval(inVersion = "1.22.0")
     SWING_MAIN_ARM,
 
     /**
