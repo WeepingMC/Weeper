@@ -14,21 +14,12 @@
  
      public Slot(Container container, int slot, int x, int y) {
          this.container = container;
-@@ -42,7 +_,7 @@
+@@ -148,7 +_,7 @@
      }
  
-     public boolean mayPlace(ItemStack stack) {
--        return true;
-+        return this.inventoryItemStackMoveStrategy == null || inventoryItemStackMoveStrategy.canPlace(new com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem(container.getOwner(), org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitCopy(stack), slot)); // Weeper - inventoryItemStackMoveStrategy
+     public boolean allowModification(Player player) {
+-        return this.mayPickup(player) && this.mayPlace(this.getItem());
++        return (this.inventoryItemStackMoveStrategy == null || inventoryItemStackMoveStrategy.canTake(new com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem(container.getOwner(), org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitCopy(this.getItem()), slot, player.getBukkitEntity()))) && this.mayPickup(player) && this.mayPlace(this.getItem()); // Weeper - inventoryItemStackMoveStrategy
      }
  
-     public ItemStack getItem() {
-@@ -88,7 +_,7 @@
-     }
- 
-     public boolean mayPickup(Player player) {
--        return true;
-+        return this.inventoryItemStackMoveStrategy == null || inventoryItemStackMoveStrategy.canTake(new com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem(container.getOwner(), org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitCopy(this.getItem()), slot)); // Weeper - inventoryItemStackMoveStrategy
-     }
- 
-     public boolean isActive() {
+     public int getContainerSlot() {
