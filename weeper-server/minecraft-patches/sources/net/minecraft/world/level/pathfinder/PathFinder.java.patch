@@ -1,0 +1,36 @@
+--- a/net/minecraft/world/level/pathfinder/PathFinder.java
++++ b/net/minecraft/world/level/pathfinder/PathFinder.java
+@@ -72,7 +_,7 @@
+         this.openSet.clear();
+         this.openSet.insert(node);
+         boolean asBoolean = this.captureDebug.getAsBoolean();
+-        // Set<Node> set1 = asBoolean ? new HashSet<>() : Set.of(); // Paper - unused debug
++        Set<Node> set1 = asBoolean ? new HashSet<>() : Set.of();
+         int i = 0;
+         List<Map.Entry<Target, BlockPos>> entryList = Lists.newArrayListWithExpectedSize(positions.size()); // Paper - optimize collection
+         int i1 = (int)(this.maxVisitedNodes * maxVisitedNodesMultiplier);
+@@ -100,6 +_,10 @@
+                 break;
+             }
+ 
++            if(asBoolean) {
++                set1.add(node1);
++            }
++
+ 
+             if (!(node1.distanceTo(node) >= maxRange)) {
+                 int neighbors = this.nodeEvaluator.getNeighbors(this.neighbors, node1);
+@@ -137,6 +_,13 @@
+             }
+         }
+         profilerFiller.pop();
++        if(asBoolean && best != null) {
++            Set<Target> set = Sets.newHashSet();
++            for(Map.Entry<Target, BlockPos> entry : positions) {
++                set.add(entry.getKey());
++            }
++            best.setDebug(this.openSet.getHeap(), set1.toArray(Node[]::new), set);
++        }
+         return best;
+         // Paper end - Perf: remove streams and optimize collection
+     }
