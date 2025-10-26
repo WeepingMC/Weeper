@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerEntity.java
 +++ b/net/minecraft/server/level/ServerEntity.java
-@@ -302,7 +_,9 @@
+@@ -289,7 +_,9 @@
  
      public void removePairing(ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
@@ -10,7 +10,7 @@
      }
  
      public void addPairing(ServerPlayer player) {
-@@ -321,19 +_,21 @@
+@@ -309,19 +_,21 @@
          }
  
          Packet<ClientGamePacketListener> addEntityPacket = this.entity.getAddEntityPacket(this);
@@ -35,7 +35,7 @@
                  consumer.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), syncableAttributes));
              }
          }
-@@ -403,7 +_,9 @@
+@@ -391,7 +_,9 @@
                      serverPlayer.getBukkitEntity().injectScaledMaxHealth(attributesToSync, false);
                  }
                  // CraftBukkit end
