@@ -8,7 +8,7 @@ plugins {
 
 paperweight {
     upstreams.paper {
-        ref = "e75678b6d790c34fb73ed65471fdfe05b827c949"
+        ref = "2a1871bba6d4406c61c872a2977f62e3d8863efc"
 
         patchFile {
             path = "paper-server/build.gradle.kts"
