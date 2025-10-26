@@ -1,16 +1,24 @@
 --- a/src/main/java/org/bukkit/GameRule.java
 +++ b/src/main/java/org/bukkit/GameRule.java
-@@ -330,6 +_,13 @@
-      */
-     public static final GameRule<Boolean> SPAWNER_BLOCKS_ENABLED = new GameRule<>("spawnerBlocksEnabled", Boolean.class);
+@@ -466,6 +_,21 @@
+     @Deprecated(forRemoval = true, since = "1.21.11")
+     public static final GameRule<Integer> MINECART_MAX_SPEED = GameRules.MAX_MINECART_SPEED;
  
-+    // Weeper start - leader bonus game rule
++    // Weeper start - custom gamerules
 +    /**
-+     * Whether a zombie gets a leader bonus or not
++     * Represents the game rule that manages the bonus mechanics related to leader zombies.
++     * This rule determines if leader zombies grant additional functionality or mechanics
++     * when certain conditions are met.
++     *
++     * @deprecated {@link GameRules#LEADER_ZOMBIE_BONUS}
 +     */
-+    public static final GameRule<Boolean> RULE_LEADER_ZOMBIE_BONUS = new GameRule<>("leaderZombieBonus", Boolean.class);
-+    // Weeper end - leader bonus game rule
++    @MinecraftExperimental(MinecraftExperimental.Requires.MINECART_IMPROVEMENTS)
++    @ApiStatus.Experimental
++    @Deprecated(forRemoval = true, since = "1.21.11")
++    public static final GameRule<Boolean> RULE_LEADER_ZOMBIE_BONUS = GameRules.LEADER_ZOMBIE_BONUS;
++    // Weeper end - custom gamerules
 +
-     // All GameRules instantiated above this for organizational purposes
-     private final String name;
-     private final Class<T> type;
++
+     private static UnaryOperator<Boolean> inverseBool() {
+         return operand -> !operand;
+     }

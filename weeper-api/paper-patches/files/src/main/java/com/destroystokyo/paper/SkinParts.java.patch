@@ -1,6 +1,6 @@
 --- a/src/main/java/com/destroystokyo/paper/SkinParts.java
 +++ b/src/main/java/com/destroystokyo/paper/SkinParts.java
-@@ -56,4 +_,29 @@
+@@ -56,4 +_,30 @@
  
          SkinParts immutableCopy();
      }

@@ -1,0 +1,11 @@
+--- a/src/main/java/org/bukkit/GameRules.java
++++ b/src/main/java/org/bukkit/GameRules.java
+@@ -132,6 +_,8 @@
+     public static final GameRule<Boolean> WATER_SOURCE_CONVERSION = getRule("water_source_conversion");
+     // End generate - GameRules
+ 
++    public static final GameRule<Boolean> LEADER_ZOMBIE_BONUS = getRule("leader_zombie_bonus");
++
+     private static <T> GameRule<T> getRule(@KeyPattern.Value String key) {
+         return (GameRule<T>) Registry.GAME_RULE.getOrThrow(NamespacedKey.minecraft(key));
+     }
