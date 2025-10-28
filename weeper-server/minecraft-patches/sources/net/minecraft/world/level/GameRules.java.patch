@@ -1,10 +1,10 @@
 --- a/net/minecraft/world/level/GameRules.java
 +++ b/net/minecraft/world/level/GameRules.java
-@@ -94,6 +_,7 @@
-     public static final GameRules.Key<GameRules.BooleanValue> RULE_SENDCOMMANDFEEDBACK = register(
-         "sendCommandFeedback", GameRules.Category.CHAT, GameRules.BooleanValue.create(true)
+@@ -252,6 +_,7 @@
+     public static final GameRules.Key<GameRules.BooleanValue> RULE_SPAWNER_BLOCKS_ENABLED = register(
+         "spawnerBlocksEnabled", GameRules.Category.MISC, GameRules.BooleanValue.create(true)
      );
 +    public static final GameRules.Key<GameRules.BooleanValue> RULE_LEADER_ZOMBIE_BONUS = GameRules.register("leaderZombieBonus", Category.SPAWNING, GameRules.BooleanValue.create(true)); // Weeper - add game rule to disable leader zombie bonus
-     public static final GameRules.Key<GameRules.BooleanValue> RULE_REDUCEDDEBUGINFO = register(
-         "reducedDebugInfo", GameRules.Category.MISC, GameRules.BooleanValue.create(false, (level, value) -> { // Paper - rename param to match changes
-             byte b = (byte)(value.get() ? 22 : 23);
+     private final Map<GameRules.Key<?>, GameRules.Value<?>> rules;
+     private final FeatureFlagSet enabledFeatures;
+     private final GameRules.Value<?>[] gameruleArray; // Paper - Perf: Use array for gamerule storage
