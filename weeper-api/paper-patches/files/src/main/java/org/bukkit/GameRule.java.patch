@@ -1,0 +1,13 @@
+--- a/src/main/java/org/bukkit/GameRule.java
++++ b/src/main/java/org/bukkit/GameRule.java
+@@ -148,6 +_,10 @@
+     public static final GameRule<Boolean> WATER_SOURCE_CONVERSION = getByName("water_source_conversion");
+     // End generate - GameRule
+ 
++    // Weeper start - custom gamerules
++    public static final GameRule<Boolean> LEADER_ZOMBIE_BONUS = getByName("leader_zombie_bonus");
++    public static final GameRule<Boolean> RULE_LEADER_ZOMBIE_BONUS = LEADER_ZOMBIE_BONUS;
++    // Weeper end - custom gamerules
+     // Boolean rules
+     /**
+      * Toggles the announcing of advancements.

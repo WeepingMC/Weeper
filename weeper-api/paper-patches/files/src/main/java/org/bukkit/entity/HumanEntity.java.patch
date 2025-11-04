@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
-@@ -1011,5 +_,34 @@
+@@ -1020,5 +_,34 @@
       */
      @Nullable
      public Firework fireworkBoost(ItemStack fireworkItemStack);

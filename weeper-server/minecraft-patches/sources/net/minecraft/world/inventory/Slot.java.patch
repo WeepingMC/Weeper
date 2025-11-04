@@ -4,17 +4,17 @@
      public int index;
      public final int x;
      public final int y;
-+    private @Nullable com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy; // Weeper - inventoryItemStackMoveStrategy
++    private com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy; // Weeper - inventoryItemStackMoveStrategy
 +
 +    // Weeper start - inventoryItemStackMoveStrategy
-+    public void setInventoryItemstackMoveStrategy(@Nullable com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy){
++    public void setInventoryItemstackMoveStrategy(com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy){
 +        this.inventoryItemStackMoveStrategy = inventoryItemStackMoveStrategy;
 +    }
 +    // Weeper end - inventoryItemStackMoveStrategy
  
      public Slot(Container container, int slot, int x, int y) {
          this.container = container;
-@@ -148,7 +_,7 @@
+@@ -147,7 +_,7 @@
      }
  
      public boolean allowModification(Player player) {

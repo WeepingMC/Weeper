@@ -43,6 +43,7 @@ import net.minecraft.world.entity.animal.allay.Allay;
 import net.minecraft.world.entity.animal.armadillo.Armadillo;
 import net.minecraft.world.entity.animal.axolotl.Axolotl;
 import net.minecraft.world.entity.animal.camel.Camel;
+import net.minecraft.world.entity.animal.camel.CamelHusk;
 import net.minecraft.world.entity.animal.coppergolem.CopperGolem;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.frog.Tadpole;
@@ -54,6 +55,8 @@ import net.minecraft.world.entity.animal.horse.Mule;
 import net.minecraft.world.entity.animal.horse.SkeletonHorse;
 import net.minecraft.world.entity.animal.horse.TraderLlama;
 import net.minecraft.world.entity.animal.horse.ZombieHorse;
+import net.minecraft.world.entity.animal.nautilus.Nautilus;
+import net.minecraft.world.entity.animal.nautilus.ZombieNautilus;
 import net.minecraft.world.entity.animal.sheep.Sheep;
 import net.minecraft.world.entity.animal.sniffer.Sniffer;
 import net.minecraft.world.entity.animal.wolf.Wolf;
@@ -85,6 +88,7 @@ import net.minecraft.world.entity.monster.Guardian;
 import net.minecraft.world.entity.monster.Husk;
 import net.minecraft.world.entity.monster.Illusioner;
 import net.minecraft.world.entity.monster.MagmaCube;
+import net.minecraft.world.entity.monster.Parched;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.Pillager;
 import net.minecraft.world.entity.monster.Ravager;
@@ -349,7 +353,7 @@ public final class EntityMetaWatcher {
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.INT);
+        result.put(18L, EntityDataSerializers.LONG);
         return Map.copyOf(result);
     }
 
@@ -480,6 +484,31 @@ public final class EntityMetaWatcher {
     }
 
     private static final Map<Long, EntityDataSerializer<?>> camel() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(19L, EntityDataSerializers.LONG);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> camelHusk() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -1755,6 +1784,31 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
+    private static final Map<Long, EntityDataSerializer<?>> nautilus() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(18L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
     private static final Map<Long, EntityDataSerializer<?>> ocelot() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
@@ -1832,6 +1886,27 @@ public final class EntityMetaWatcher {
         result.put(20L, EntityDataSerializers.BYTE);
         result.put(21L, EntityDataSerializers.BYTE);
         result.put(22L, EntityDataSerializers.BYTE);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> parched() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
         return Map.copyOf(result);
     }
 
@@ -2925,7 +3000,7 @@ public final class EntityMetaWatcher {
         result.put(18L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
         result.put(19L, EntityDataSerializers.BOOLEAN);
         result.put(20L, EntityDataSerializers.INT);
-        result.put(21L, EntityDataSerializers.INT);
+        result.put(21L, EntityDataSerializers.LONG);
         result.put(22L, EntityDataSerializers.WOLF_VARIANT);
         result.put(23L, EntityDataSerializers.WOLF_SOUND_VARIANT);
         return Map.copyOf(result);
@@ -3000,6 +3075,31 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
+    private static final Map<Long, EntityDataSerializer<?>> zombieNautilus() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(18L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
     private static final Map<Long, EntityDataSerializer<?>> zombieVillager() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
@@ -3069,6 +3169,7 @@ public final class EntityMetaWatcher {
         result.put(Breeze.class, breeze());
         result.put(BreezeWindCharge.class, breezeWindCharge());
         result.put(Camel.class, camel());
+        result.put(CamelHusk.class, camelHusk());
         result.put(Cat.class, cat());
         result.put(CaveSpider.class, caveSpider());
         result.put(ChestBoat.class, chestBoat());
@@ -3131,10 +3232,12 @@ public final class EntityMetaWatcher {
         result.put(MinecartTNT.class, minecartTNT());
         result.put(Mule.class, mule());
         result.put(MushroomCow.class, mushroomCow());
+        result.put(Nautilus.class, nautilus());
         result.put(Ocelot.class, ocelot());
         result.put(OminousItemSpawner.class, ominousItemSpawner());
         result.put(Painting.class, painting());
         result.put(Panda.class, panda());
+        result.put(Parched.class, parched());
         result.put(Parrot.class, parrot());
         result.put(Phantom.class, phantom());
         result.put(Pig.class, pig());
@@ -3190,6 +3293,7 @@ public final class EntityMetaWatcher {
         result.put(Zoglin.class, zoglin());
         result.put(Zombie.class, zombie());
         result.put(ZombieHorse.class, zombieHorse());
+        result.put(ZombieNautilus.class, zombieNautilus());
         result.put(ZombieVillager.class, zombieVillager());
         result.put(ZombifiedPiglin.class, zombifiedPiglin());
         return Map.copyOf(result);
