@@ -281,7 +281,7 @@ public final class EntityMetaWatcher {
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(15L, EntityDataSerializers.HUMANOID_ARM);
         result.put(16L, EntityDataSerializers.BYTE);
         return Map.copyOf(result);
     }
@@ -1587,7 +1587,7 @@ public final class EntityMetaWatcher {
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(15L, EntityDataSerializers.HUMANOID_ARM);
         result.put(16L, EntityDataSerializers.BYTE);
         result.put(17L, EntityDataSerializers.RESOLVABLE_PROFILE);
         result.put(18L, EntityDataSerializers.BOOLEAN);
@@ -2216,7 +2216,7 @@ public final class EntityMetaWatcher {
         result.put(12L, EntityDataSerializers.INT);
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(15L, EntityDataSerializers.HUMANOID_ARM);
         result.put(16L, EntityDataSerializers.BYTE);
         result.put(17L, EntityDataSerializers.FLOAT);
         result.put(18L, EntityDataSerializers.INT);
@@ -3097,6 +3097,7 @@ public final class EntityMetaWatcher {
         result.put(17L, EntityDataSerializers.BYTE);
         result.put(18L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
         result.put(19L, EntityDataSerializers.BOOLEAN);
+        result.put(20L, EntityDataSerializers.ZOMBIE_NAUTILUS_VARIANT);
         return Map.copyOf(result);
     }
 
