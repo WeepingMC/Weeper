@@ -1,6 +1,6 @@
 --- a/paper-server/build.gradle.kts
 +++ b/paper-server/build.gradle.kts
-@@ -23,6 +_,19 @@
+@@ -22,6 +_,19 @@
      minecraftVersion = providers.gradleProperty("mcVersion")
      gitFilePatches = false
  
@@ -18,7 +18,7 @@
 +    }
 +
      spigot {
-         enabled = true
+         enabled = false
          buildDataRef = "42d18d4c4653ffc549778dbe223f6994a031d69e"
 @@ -104,7 +_,18 @@
      }
@@ -45,11 +45,11 @@
  
  dependencies {
 -    implementation(project(":paper-api"))
-+    implementation(project(":weeper-api")) // Weeper - api changes
++    implementation(project(":weeper-api")) // Weeper api
      implementation("ca.spottedleaf:concurrentutil:0.0.7")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -195,21 +_,7 @@
+@@ -196,21 +_,7 @@
          val implementationVersion = "$mcVersion-${build ?: "DEV"}-$gitHash"
          val date = git.exec(providers, "show", "-s", "--format=%ci", gitHash).get().trim()
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
@@ -68,22 +68,30 @@
 -            "Git-Branch" to gitBranch,
 -            "Git-Commit" to gitHash,
 -        )
-+        attributes(createAttributes(implementationVersion, date, build, buildTime.toEpochMilli(), gitBranch, gitHash))
++        attributes(createAttributes(implementationVersion, date, build, buildTime, gitBranch, gitHash))
          for (tld in setOf("net", "com", "org")) {
              attributes("$tld/bukkit", "Sealed" to true)
          }
-@@ -370,4 +_,30 @@
+@@ -357,7 +_,7 @@
+ }
+ 
+ fill {
+-    project("paper")
++    project("weeper")
+     versionFamily(paperweight.minecraftVersion.map { it.split(".", "-").takeWhile { part -> part.toIntOrNull() != null }.take(2).joinToString(".") })
+     version(paperweight.minecraftVersion)
+ 
+@@ -371,4 +_,29 @@
              }
          }
      }
 +}
 +
-+
 +fun createAttributes(
 +    implementationVersion: String,
 +    date: String,
 +    build: String? = null,
-+    buildTime: Long = System.currentTimeMillis(),
++    buildTime: Instant = Instant.EPOCH,
 +    gitBranch: String = "unknown",
 +    gitHash: String = "unknown",
 +): Map<String, Any> {

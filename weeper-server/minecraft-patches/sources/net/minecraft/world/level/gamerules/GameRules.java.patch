@@ -1,0 +1,10 @@
+--- a/net/minecraft/world/level/gamerules/GameRules.java
++++ b/net/minecraft/world/level/gamerules/GameRules.java
+@@ -94,6 +_,7 @@
+     public static final GameRule<Boolean> TNT_EXPLOSION_DROP_DECAY = registerBoolean("tnt_explosion_drop_decay", GameRuleCategory.DROPS, false);
+     public static final GameRule<Boolean> UNIVERSAL_ANGER = registerBoolean("universal_anger", GameRuleCategory.MOBS, false);
+     public static final GameRule<Boolean> WATER_SOURCE_CONVERSION = registerBoolean("water_source_conversion", GameRuleCategory.UPDATES, true);
++    public static final GameRule<Boolean> RULE_LEADER_ZOMBIE_BONUS = registerBoolean("leader_zombie_bonus", GameRuleCategory.SPAWNING, true); // Weeper - add game rule to disable leader zombie bonus
+     public final GameRuleMap rules;
+ 
+     public static Codec<GameRules> codec(FeatureFlagSet enabledFeatures) {

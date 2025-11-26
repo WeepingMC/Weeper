@@ -10,7 +10,7 @@
      }
  
      public void addPairing(ServerPlayer player) {
-@@ -321,19 +_,21 @@
+@@ -322,19 +_,21 @@
          }
  
          Packet<ClientGamePacketListener> addEntityPacket = this.entity.getAddEntityPacket(this);
@@ -35,7 +35,7 @@
                  consumer.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), syncableAttributes));
              }
          }
-@@ -403,7 +_,9 @@
+@@ -404,7 +_,9 @@
                      serverPlayer.getBukkitEntity().injectScaledMaxHealth(attributesToSync, false);
                  }
                  // CraftBukkit end

@@ -1,6 +1,6 @@
 --- a/net/minecraft/network/syncher/SynchedEntityData.java
 +++ b/net/minecraft/network/syncher/SynchedEntityData.java
-@@ -89,6 +_,7 @@
+@@ -88,6 +_,7 @@
              for (SynchedEntityData.DataItem<?> dataItem : this.itemsById) {
                  if (dataItem.isDirty()) {
                      dataItem.setDirty(false);
@@ -8,7 +8,7 @@
                      list.add(dataItem.value());
                  }
              }
-@@ -117,6 +_,7 @@
+@@ -115,6 +_,7 @@
      public void assignValues(List<SynchedEntityData.DataValue<?>> entries) {
          for (SynchedEntityData.DataValue<?> dataValue : entries) {
              SynchedEntityData.DataItem<?> dataItem = this.itemsById[dataValue.id];
@@ -16,7 +16,7 @@
              this.assignValue(dataItem, dataValue);
              this.entity.onSyncedDataUpdated(dataItem.getAccessor());
          }
-@@ -183,6 +_,7 @@
+@@ -181,6 +_,7 @@
      public List<SynchedEntityData.DataValue<?>> packAll() {
          final List<SynchedEntityData.DataValue<?>> list = new ArrayList<>(this.itemsById.length);
          for (final DataItem<?> dataItem : this.itemsById) {
