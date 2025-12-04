@@ -68,7 +68,7 @@
 -            "Git-Branch" to gitBranch,
 -            "Git-Commit" to gitHash,
 -        )
-+        attributes(createAttributes(implementationVersion, date, build, buildTime.toEpochMilli(), gitBranch, gitHash))
++        attributes(createAttributes(implementationVersion, date, build, buildTime, gitBranch, gitHash))
          for (tld in setOf("net", "com", "org")) {
              attributes("$tld/bukkit", "Sealed" to true)
          }
@@ -83,7 +83,7 @@
 +    implementationVersion: String,
 +    date: String,
 +    build: String? = null,
-+    buildTime: Long = System.currentTimeMillis(),
++    buildTime: Instant = Instant.EPOCH,
 +    gitBranch: String = "unknown",
 +    gitHash: String = "unknown",
 +): Map<String, Any> {
@@ -98,7 +98,7 @@
 +        "Brand-Id" to "weepingmc:weeper",
 +        "Brand-Name" to "Weeper",
 +        "Build-Number" to (build ?: ""),
-+        "Build-Time" to buildTime.toString(),
++        "Build-Time" to buildTime,
 +        "Git-Branch" to gitBranch,
 +        "Git-Commit" to gitHash,
 +    )
