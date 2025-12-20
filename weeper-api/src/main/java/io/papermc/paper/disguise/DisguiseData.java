@@ -1,6 +1,7 @@
 package io.papermc.paper.disguise;
 
 import com.destroystokyo.paper.profile.PlayerProfile;
+import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
@@ -34,7 +35,16 @@ public sealed interface DisguiseData permits DisguiseData.OriginalDisguise, Enti
      * @return a builder to configure certain attributes
      */
     static PlayerDisguise.Builder player(PlayerProfile playerProfile) {
-        return new PlayerDisguise.Builder(playerProfile);
+        return new PlayerDisguise.Builder(ResolvableProfile.resolvableProfile(playerProfile));
+    }
+
+    /**
+     * Creates a {@link PlayerDisguise.Builder} where you can configure certain properties of the fake player appearance.
+     * @param resolvableProfile a resolvable profile that will be the fake players skin
+     * @return a builder to configure certain attributes
+     */
+    static PlayerDisguise.Builder player(ResolvableProfile resolvableProfile) {
+        return new PlayerDisguise.Builder(resolvableProfile);
     }
 
     /**

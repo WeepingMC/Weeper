@@ -1,15 +1,15 @@
 package io.papermc.paper.disguise;
 
-import com.destroystokyo.paper.profile.CraftPlayerProfile;
-import com.destroystokyo.paper.profile.PlayerProfile;
+import io.papermc.paper.adventure.PaperAdventure;
+import io.papermc.paper.datacomponent.item.PaperResolvableProfile;
 import io.papermc.paper.entity.meta.EntityTypeToEntityClass;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
+import java.util.Optional;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -17,57 +17,61 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.decoration.Mannequin;
 import net.minecraft.world.phys.Vec3;
-import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.entity.CraftEntityType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket.Action;
-import static net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket.Entry;
-
 public final class DisguiseUtil {
     private static final Logger LOG = LoggerFactory.getLogger(DisguiseUtil.class);
 
-    private DisguiseUtil(){}
+    private DisguiseUtil() {
+    }
 
     public static boolean tryDisguise(ServerPlayer player, Entity entity, Packet<?> packet) {
-            if(!(packet instanceof ClientboundAddEntityPacket clientboundAddEntityPacket)) {
-                return !(com.github.weepingmc.event.packet.PlayerTrackEntityEvent.getHandlerList().getRegisteredListeners().length == 0 || new com.github.weepingmc.event.packet.PlayerTrackEntityEvent(player.getBukkitEntity(), entity.getBukkitEntity()).callEvent()); // Weeper - player track entity events
+        if (!(packet instanceof ClientboundAddEntityPacket clientboundAddEntityPacket)) {
+            return !(com.github.weepingmc.event.packet.PlayerTrackEntityEvent.getHandlerList().getRegisteredListeners().length == 0 || new com.github.weepingmc.event.packet.PlayerTrackEntityEvent(player.getBukkitEntity(), entity.getBukkitEntity()).callEvent()); // Weeper - player track entity events
+        }
+        return switch (entity.getBukkitEntity().getDisguiseData()) {
+            case DisguiseData.OriginalDisguise disguise -> false;
+            case EntityTypeDisguise(var type) -> {
+                player.connection.send(create(clientboundAddEntityPacket, CraftEntityType.bukkitToMinecraft(type)));
+                yield true;
             }
-            return switch (entity.getBukkitEntity().getDisguiseData()) {
-                case DisguiseData.OriginalDisguise disguise -> false;
-                case EntityTypeDisguise(var type) -> {
-                    player.connection.send(create(clientboundAddEntityPacket, CraftEntityType.bukkitToMinecraft(type)));
-                    yield  true;
+            case PlayerDisguise(var playerProfile, var listed, var showHead, var skinParts, var description) -> {
+                PaperResolvableProfile profile = (PaperResolvableProfile) playerProfile;
+
+                player.connection.send(create(clientboundAddEntityPacket, EntityType.MANNEQUIN));
+
+                var data = new ArrayList<SynchedEntityData.DataValue<?>>();
+                data.add(new SynchedEntityData.DataItem<>(Mannequin.DATA_PROFILE, profile.getHandle()).value());
+
+                if(entity.hasCustomName()) {
+                    Component name = entity.getCustomName();
+                    data.add(new SynchedEntityData.DataItem<>(Entity.DATA_CUSTOM_NAME, Optional.of(name)).value());
                 }
-                case PlayerDisguise(var playerProfile, var listed, var showHead, var skinParts) -> {
-                    PlayerProfile adapted = Bukkit.createProfile(entity.getUUID(), playerProfile.getName());
-                    adapted.setProperties(playerProfile.getProperties());
-                    Entry playerUpdate = new Entry(
-                            entity.getUUID(),
-                            CraftPlayerProfile.asAuthlibCopy(adapted),
-                            listed,
-                            0,
-                            net.minecraft.world.level.GameType.DEFAULT_MODE,
-                            entity.getCustomName(),
-                            showHead,
-                            0,
-                            null
-                        );
-                    player.connection.send(new ClientboundPlayerInfoUpdatePacket(EnumSet.of(Action.ADD_PLAYER), playerUpdate));
-                    player.connection.send(new ClientboundPlayerInfoUpdatePacket(EnumSet.of(Action.UPDATE_LISTED), playerUpdate));
-                    player.connection.send(create(clientboundAddEntityPacket, EntityType.PLAYER));
-                    if(skinParts != null) {
-                        player.connection.send(new net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket(
-                            clientboundAddEntityPacket.getId(),
-                            List.of(new SynchedEntityData.DataItem<>(Player.DATA_PLAYER_MODE_CUSTOMISATION, (byte) skinParts.getRaw()).value())
-                        ));
-                    }
-                    yield  true;
+                if(entity.isCustomNameVisible()) {
+                    data.add(new SynchedEntityData.DataItem<>(Entity.DATA_CUSTOM_NAME_VISIBLE, true).value());
                 }
-            };
+
+                if (skinParts != null) {
+                    data.add(new SynchedEntityData.DataItem<>(Mannequin.DATA_PLAYER_MODE_CUSTOMISATION, (byte) skinParts.getRaw()).value());
+                }
+                if (description != null) {
+                    var vanillaDescription = PaperAdventure.asVanilla(description);
+                    data.add(new SynchedEntityData.DataItem<>(Mannequin.DATA_DESCRIPTION, Optional.of(vanillaDescription)).value());
+                }
+
+                player.connection.send(new net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket(
+                                clientboundAddEntityPacket.getId(),
+                                data
+                        )
+                );
+
+                yield true;
+            }
+        };
     }
 
     /*
@@ -76,24 +80,24 @@ public final class DisguiseUtil {
      * This would result in player being kicked cause the entities type mismatches the previously disguised one.
      */
     public static void tryDespawn(ServerPlayer player, Entity entity) {
-        if(entity.getBukkitEntity().getDisguiseData() instanceof PlayerDisguise) {
+        if (entity.getBukkitEntity().getDisguiseData() instanceof PlayerDisguise) {
             player.connection.send(new ClientboundPlayerInfoRemovePacket(List.of(entity.getUUID())));
         }
     }
 
     private static ClientboundAddEntityPacket create(ClientboundAddEntityPacket packet, EntityType<?> entityType) {
         return new ClientboundAddEntityPacket(
-            packet.getId(),
-            packet.getUUID(),
-            packet.getX(),
-            packet.getY(),
-            packet.getZ(),
-            packet.getXRot(),
-            packet.getYRot(),
-            entityType,
-            0,
-            Vec3.ZERO.add(packet.getX(), packet.getY(), packet.getZ()).scale(1/8000.0D),
-            packet.getYHeadRot()
+                packet.getId(),
+                packet.getUUID(),
+                packet.getX(),
+                packet.getY(),
+                packet.getZ(),
+                packet.getXRot(),
+                packet.getYRot(),
+                entityType,
+                0,
+                Vec3.ZERO.add(packet.getX(), packet.getY(), packet.getZ()).scale(1 / 8000.0D),
+                packet.getYHeadRot()
         );
     }
 
@@ -117,13 +121,14 @@ public final class DisguiseUtil {
         // Weeper end - track entity events
         return switch (entity.getBukkitEntity().getDisguiseData()) {
             case DisguiseData.OriginalDisguise original -> false;
-            case EntityTypeDisguise entityTypeDisguise -> !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(
-                EntityTypeToEntityClass.getClassByEntityType(entityTypeDisguise.entityType()),
-                entityDataSerializer, id
-            );
+            case EntityTypeDisguise entityTypeDisguise ->
+                    !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(
+                            EntityTypeToEntityClass.getClassByEntityType(entityTypeDisguise.entityType()),
+                            entityDataSerializer, id
+                    );
             case PlayerDisguise playerDisguise -> !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(
-                ServerPlayer.class,
-                entityDataSerializer, id
+                    ServerPlayer.class,
+                    entityDataSerializer, id
             );
         };
     }
@@ -149,7 +154,8 @@ public final class DisguiseUtil {
     public static boolean canSendAnimation(Entity entity) {
         return switch (entity.getBukkitEntity().getDisguiseData()) {
             case DisguiseData.OriginalDisguise original -> true;
-            case EntityTypeDisguise entityTypeDisguise -> LivingEntity.class.isAssignableFrom(EntityTypeToEntityClass.getClassByEntityType(entityTypeDisguise.entityType()));
+            case EntityTypeDisguise entityTypeDisguise ->
+                    LivingEntity.class.isAssignableFrom(EntityTypeToEntityClass.getClassByEntityType(entityTypeDisguise.entityType()));
             case PlayerDisguise playerDisguise -> true;
         };
     }

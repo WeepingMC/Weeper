@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
  * @deprecated use {@link io.papermc.paper.event.player.PlayerUntrackEntityEvent}
  */
 @Deprecated(forRemoval = true, since = "1.21.3")
-@org.jetbrains.annotations.ApiStatus.ScheduledForRemoval(inVersion = "1.24.0")
+@org.jetbrains.annotations.ApiStatus.ScheduledForRemoval(inVersion = "26.1.0")
 @NullMarked
 public class PlayerUntrackEntityEvent extends PlayerEvent {
 

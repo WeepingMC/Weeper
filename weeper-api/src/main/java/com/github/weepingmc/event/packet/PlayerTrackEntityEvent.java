@@ -23,7 +23,7 @@ import org.jspecify.annotations.NullMarked;
  * for cancellation {@link io.papermc.paper.event.player.PlayerTrackEntityEvent}
  */
 @Deprecated(forRemoval = true, since = "1.21.3")
-@org.jetbrains.annotations.ApiStatus.ScheduledForRemoval(inVersion = "1.24.0")
+@org.jetbrains.annotations.ApiStatus.ScheduledForRemoval(inVersion = "26.1.0")
 @NullMarked
 public class PlayerTrackEntityEvent extends PlayerEvent implements Cancellable {
 

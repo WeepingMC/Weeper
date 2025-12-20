@@ -27,6 +27,9 @@ public net.minecraft.world.entity.Entity DATA_CUSTOM_NAME_VISIBLE
 public net.minecraft.world.entity.Entity DATA_POSE
 public net.minecraft.world.entity.Entity DATA_SHARED_FLAGS_ID
 public net.minecraft.world.entity.LivingEntity SLEEPING_POS_ID
+public net.minecraft.world.entity.decoration.Mannequin DATA_PROFILE
+public net.minecraft.world.entity.decoration.Mannequin DATA_IMMOVABLE
+public net.minecraft.world.entity.decoration.Mannequin DATA_DESCRIPTION
 public net.minecraft.world.entity.animal.Base$BeeGoal
 public net.minecraft.world.entity.animal.Bee$BecomeAngryTargetGoal
 public net.minecraft.world.entity.animal.Bee$BeeLookControl
