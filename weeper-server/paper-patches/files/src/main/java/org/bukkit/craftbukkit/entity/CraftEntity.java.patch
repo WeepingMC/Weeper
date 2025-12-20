@@ -1,6 +1,22 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1330,5 +_,17 @@
+@@ -7,6 +_,7 @@
+ import com.google.common.collect.Lists;
+ import com.mojang.logging.LogUtils;
+ import io.papermc.paper.datacomponent.DataComponentType;
++import io.papermc.paper.disguise.PlayerDisguise;
+ import io.papermc.paper.entity.LookAnchor;
+ import io.papermc.paper.entity.TeleportFlag;
+ import java.util.EnumSet;
+@@ -33,6 +_,7 @@
+ import net.minecraft.world.entity.EntitySpawnReason;
+ import net.minecraft.world.entity.boss.enderdragon.EnderDragonPart;
+ import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
++import net.minecraft.world.entity.decoration.Mannequin;
+ import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
+ import net.minecraft.world.level.portal.TeleportTransition;
+ import net.minecraft.world.level.storage.TagValueOutput;
+@@ -1330,5 +_,27 @@
      public boolean hasData(final @NotNull DataComponentType type) {
          return this.entity.get(io.papermc.paper.datacomponent.PaperDataComponentType.bukkitToMinecraft(type)) != null;
      }
@@ -13,6 +29,16 @@
 +    }
 +    @Override
 +    public void setDisguiseData(@org.jetbrains.annotations.NotNull io.papermc.paper.disguise.DisguiseData disguiseData) {
++        if (disguiseData instanceof PlayerDisguise disguise) {
++            var pose = disguise.pose();
++            net.minecraft.world.entity.Pose internalPose = net.minecraft.world.entity.Pose.values()[pose.ordinal()];
++            if (!Mannequin.VALID_POSES.contains(internalPose)) {
++                throw new IllegalArgumentException("Invalid pose '%s', expected one of: %s".formatted(
++                        pose.name(),
++                        Mannequin.VALID_POSES.stream().map(p -> Pose.values()[p.ordinal()]).toList() // name doesn't match
++                ));
++            }
++        }
 +        getHandle().clearPlayers();
 +        this.disguiseData = disguiseData;
 +        getHandle().updatePlayers();

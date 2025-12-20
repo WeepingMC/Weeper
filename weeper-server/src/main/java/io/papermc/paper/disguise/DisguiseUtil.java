@@ -60,12 +60,6 @@ public final class DisguiseUtil {
                     data.add(new SynchedEntityData.DataItem<>(Mannequin.DATA_PLAYER_MODE_CUSTOMISATION, (byte) skinParts.getRaw()).value());
                 }
                 net.minecraft.world.entity.Pose internalPose = net.minecraft.world.entity.Pose.values()[pose.ordinal()];
-                if (!Mannequin.VALID_POSES.contains(internalPose)) {
-                    throw new IllegalArgumentException("Invalid pose '%s', expected one of: %s".formatted(
-                            pose.name(),
-                            Mannequin.VALID_POSES.stream().map(p -> Pose.values()[p.ordinal()]).toList() // name doesn't match
-                    ));
-                }
                 data.add(new SynchedEntityData.DataItem<>(Mannequin.DATA_POSE, internalPose).value());
                 if (description != null) {
                     var vanillaDescription = PaperAdventure.asVanilla(description);

@@ -10,6 +10,7 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Pose;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,6 +30,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
                             player.getWorld().spawn(player.getLocation(), Zombie.class, (zombie) -> {
                                 zombie.setDisguiseData(DisguiseData.player(ResolvableProfile.resolvableProfile(player.getPlayerProfile()))
                                         .description(Component.text("Zombie Meme", NamedTextColor.RED))
+                                        .pose(Pose.FALL_FLYING)
                                         .skinParts(SkinParts.allParts())
                                         .build()
                                 );
