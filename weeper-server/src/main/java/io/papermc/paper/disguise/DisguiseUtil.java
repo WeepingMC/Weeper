@@ -20,6 +20,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.Mannequin;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.craftbukkit.entity.CraftEntityType;
+import org.bukkit.entity.Pose;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,7 @@ public final class DisguiseUtil {
                 player.connection.send(create(clientboundAddEntityPacket, CraftEntityType.bukkitToMinecraft(type)));
                 yield true;
             }
-            case PlayerDisguise(var playerProfile, var listed, var showHead, var skinParts, var description) -> {
+            case PlayerDisguise(var playerProfile, var skinParts, var description, var pose) -> {
                 PaperResolvableProfile profile = (PaperResolvableProfile) playerProfile;
 
                 player.connection.send(create(clientboundAddEntityPacket, EntityType.MANNEQUIN));
@@ -58,6 +59,14 @@ public final class DisguiseUtil {
                 if (skinParts != null) {
                     data.add(new SynchedEntityData.DataItem<>(Mannequin.DATA_PLAYER_MODE_CUSTOMISATION, (byte) skinParts.getRaw()).value());
                 }
+                net.minecraft.world.entity.Pose internalPose = net.minecraft.world.entity.Pose.values()[pose.ordinal()];
+                if (!Mannequin.VALID_POSES.contains(internalPose)) {
+                    throw new IllegalArgumentException("Invalid pose '%s', expected one of: %s".formatted(
+                            pose.name(),
+                            Mannequin.VALID_POSES.stream().map(p -> Pose.values()[p.ordinal()]).toList() // name doesn't match
+                    ));
+                }
+                data.add(new SynchedEntityData.DataItem<>(Mannequin.DATA_POSE, internalPose).value());
                 if (description != null) {
                     var vanillaDescription = PaperAdventure.asVanilla(description);
                     data.add(new SynchedEntityData.DataItem<>(Mannequin.DATA_DESCRIPTION, Optional.of(vanillaDescription)).value());
