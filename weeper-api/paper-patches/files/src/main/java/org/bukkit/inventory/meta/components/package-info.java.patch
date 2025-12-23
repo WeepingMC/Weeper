@@ -1,0 +1,13 @@
+--- a/src/main/java/org/bukkit/inventory/meta/components/package-info.java
++++ b/src/main/java/org/bukkit/inventory/meta/components/package-info.java
+@@ -1,5 +_,10 @@
+ /**
+  * Isolated components which may form part of item meta.
++ * @deprecated Use {@link io.papermc.paper.datacomponent.item}
+  */
+ @org.jetbrains.annotations.ApiStatus.Experimental
++@Deprecated
++@ApiStatus.ScheduledForRemoval(inVersion = "28.1")
+ package org.bukkit.inventory.meta.components;
++
++import org.jetbrains.annotations.ApiStatus;
