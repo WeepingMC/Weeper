@@ -18,3 +18,11 @@ see [Contributing](contributing.md)
     ./gradlew publishMavenPublicationToCsRepository
 ```
 
+
+### Create artefact
+
+```bash
+   ./gradlew createMojmapPaperclipJar
+```
+
+Find the jar in `weeper-server/build/libs/weeper-paperclip-<version>-R0.1-SNAPSHOT-mojmap.jar`
