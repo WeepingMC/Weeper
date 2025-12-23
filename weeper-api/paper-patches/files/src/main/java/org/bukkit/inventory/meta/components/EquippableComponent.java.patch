@@ -1,0 +1,32 @@
+--- a/src/main/java/org/bukkit/inventory/meta/components/EquippableComponent.java
++++ b/src/main/java/org/bukkit/inventory/meta/components/EquippableComponent.java
+@@ -164,4 +_,29 @@
+      * @param equip whether the item equips on interact
+      */
+     void setEquipOnInteract(boolean equip);
++
++    /**
++     *  Gets if the item can be sheared.
++     *
++     * @return whether the item can be sheared
++     */
++    boolean isCanBeSheared();
++
++    /**
++     * Sets if the item can be sheared.
++     * @param canBeSheared sets whether the item can be sheared
++     */
++    void setCanBeSheared(boolean canBeSheared);
++
++    /**
++     * Gets the sound to play when the item is sheared.
++     * @return the sound to play when sheared
++     */
++    Sound getShearingSound();
++
++    /**
++     * Sets the sound to play when the item is sheared.
++     * @param sound the sound to play when sheared
++     */
++    void setShearingSound(@Nullable Sound sound);
+ }

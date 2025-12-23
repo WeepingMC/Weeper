@@ -9,7 +9,7 @@
  
      /**
       * Returns the de facto plugins directory, generally used for storing plugin jars to be loaded,
-@@ -2760,4 +_,20 @@
+@@ -2761,4 +_,20 @@
       */
      void allowPausing(@NotNull org.bukkit.plugin.Plugin plugin, boolean value);
      // Paper end - API to check if the server is sleeping
