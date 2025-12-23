@@ -8,15 +8,7 @@
  import io.papermc.paper.entity.LookAnchor;
  import io.papermc.paper.entity.TeleportFlag;
  import java.util.EnumSet;
-@@ -33,6 +_,7 @@
- import net.minecraft.world.entity.EntitySpawnReason;
- import net.minecraft.world.entity.boss.enderdragon.EnderDragonPart;
- import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
-+import net.minecraft.world.entity.decoration.Mannequin;
- import net.minecraft.world.entity.projectile.arrow.AbstractArrow;
- import net.minecraft.world.level.portal.TeleportTransition;
- import net.minecraft.world.level.storage.TagValueOutput;
-@@ -1330,5 +_,27 @@
+@@ -1330,5 +_,26 @@
      public boolean hasData(final @NotNull DataComponentType type) {
          return this.entity.get(io.papermc.paper.datacomponent.PaperDataComponentType.bukkitToMinecraft(type)) != null;
      }
@@ -31,11 +23,10 @@
 +    public void setDisguiseData(@org.jetbrains.annotations.NotNull io.papermc.paper.disguise.DisguiseData disguiseData) {
 +        if (disguiseData instanceof PlayerDisguise disguise) {
 +            var pose = disguise.pose();
-+            net.minecraft.world.entity.Pose internalPose = net.minecraft.world.entity.Pose.values()[pose.ordinal()];
-+            if (!Mannequin.VALID_POSES.contains(internalPose)) {
++            if (!org.bukkit.entity.Mannequin.validPoses().contains(pose)) {
 +                throw new IllegalArgumentException("Invalid pose '%s', expected one of: %s".formatted(
 +                        pose.name(),
-+                        Mannequin.VALID_POSES.stream().map(p -> Pose.values()[p.ordinal()]).toList() // name doesn't match
++                        org.bukkit.entity.Mannequin.validPoses() // name doesn't match
 +                ));
 +            }
 +        }
