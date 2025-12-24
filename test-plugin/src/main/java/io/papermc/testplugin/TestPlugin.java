@@ -91,7 +91,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
         @Override
         public <S> CompletableFuture<Suggestions> listSuggestions(CommandContext<S> context, SuggestionsBuilder builder) {
             for (Pose pose : Mannequin.validPoses()) {
-                String name = pose.toString();
+                String name = pose.toString().toLowerCase(Locale.ROOT);
 
                 if (name.startsWith(builder.getRemainingLowerCase())) {
                     builder.suggest(pose.toString());

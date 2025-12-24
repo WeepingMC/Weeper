@@ -12,8 +12,6 @@
 +     *
 +     * @deprecated {@link GameRules#LEADER_ZOMBIE_BONUS}
 +     */
-+    @MinecraftExperimental(MinecraftExperimental.Requires.MINECART_IMPROVEMENTS)
-+    @ApiStatus.Experimental
 +    @Deprecated(forRemoval = true, since = "1.21.11")
 +    public static final GameRule<Boolean> RULE_LEADER_ZOMBIE_BONUS = GameRules.LEADER_ZOMBIE_BONUS;
 +    // Weeper end - custom gamerules
