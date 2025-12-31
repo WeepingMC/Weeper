@@ -1,0 +1,42 @@
+--- a/src/main/java/org/bukkit/craftbukkit/persistence/CraftPersistentDataContainer.java
++++ b/src/main/java/org/bukkit/craftbukkit/persistence/CraftPersistentDataContainer.java
+@@ -8,6 +_,7 @@
+ import java.util.Map.Entry;
+ import java.util.Objects;
+ import java.util.Set;
++import net.kyori.adventure.key.Key;
+ import net.minecraft.nbt.CompoundTag;
+ import net.minecraft.nbt.Tag;
+ import org.bukkit.NamespacedKey;
+@@ -36,7 +_,7 @@
+     }
+ 
+     @Override
+-    public <T, Z> void set(@NotNull NamespacedKey key, @NotNull PersistentDataType<T, Z> type, @NotNull Z value) {
++    public <T, Z> void set(@NotNull Key key, @NotNull PersistentDataType<T, Z> type, @NotNull Z value) {
+         Preconditions.checkArgument(key != null, "The NamespacedKey key cannot be null");
+         Preconditions.checkArgument(type != null, "The provided type cannot be null");
+         Preconditions.checkArgument(value != null, "The provided value cannot be null");
+@@ -60,7 +_,21 @@
+     }
+ 
+     @Override
+-    public void remove(@NotNull NamespacedKey key) {
++    public Set<Key> keys() {
++        Set<Key> keys = new HashSet<>();
++
++        this.customDataTags.keySet().forEach(key -> {
++            String[] keyData = key.split(":", 2);
++            if (keyData.length == 2) {
++                keys.add(new NamespacedKey(keyData[0], keyData[1]));
++            }
++        });
++
++        return keys;
++    }
++
++    @Override
++    public void remove(@NotNull Key key) {
+         Preconditions.checkArgument(key != null, "The NamespacedKey key cannot be null");
+ 
+         this.customDataTags.remove(key.toString());

@@ -1,0 +1,70 @@
+--- a/src/main/java/io/papermc/paper/persistence/PersistentDataContainerView.java
++++ b/src/main/java/io/papermc/paper/persistence/PersistentDataContainerView.java
+@@ -1,6 +_,7 @@
+ package io.papermc.paper.persistence;
+ 
+ import java.util.Set;
++import net.kyori.adventure.key.Key;
+ import org.bukkit.NamespacedKey;
+ import org.bukkit.persistence.PersistentDataAdapterContext;
+ import org.bukkit.persistence.PersistentDataContainer;
+@@ -47,7 +_,7 @@
+      * @throws IllegalArgumentException if the type to cast the found object to is
+      * null
+      */
+-    <P, C> boolean has(NamespacedKey key, PersistentDataType<P, C> type);
++    <P, C> boolean has(Key key, PersistentDataType<P, C> type);
+ 
+     /**
+      * Returns if the persistent metadata provider has metadata registered matching
+@@ -64,7 +_,7 @@
+      * @return if a value with the provided key exists
+      * @throws IllegalArgumentException if the key to look up is null
+      */
+-    boolean has(NamespacedKey key);
++    boolean has(Key key);
+ 
+     /**
+      * Returns the metadata value that is stored on the
+@@ -85,7 +_,7 @@
+      * the {@link
+      * PersistentDataType#getPrimitiveType()}
+      */
+-    <P, C> @Nullable C get(NamespacedKey key, PersistentDataType<P, C> type);
++    <P, C> @Nullable C get(Key key, PersistentDataType<P, C> type);
+ 
+     /**
+      * Returns the metadata value that is stored on the
+@@ -108,7 +_,7 @@
+      * @throws IllegalArgumentException if no suitable adapter was found for
+      * the {@link PersistentDataType#getPrimitiveType()}
+      */
+-    <P, C> C getOrDefault(NamespacedKey key, PersistentDataType<P, C> type, C defaultValue);
++    <P, C> C getOrDefault(Key key, PersistentDataType<P, C> type, C defaultValue);
+ 
+     /**
+      * Get the set of keys present on this {@link PersistentDataContainer}
+@@ -117,9 +_,23 @@
+      * Any changes made to the returned set will not be reflected on the
+      * instance.
+      *
++     * @deprecated Use {@link #keys()} instead.
++     *
+      * @return the key set
+      */
++    @Deprecated(forRemoval = true, since = "26.3.0")
+     Set<NamespacedKey> getKeys();
++
++    /**
++     * Get the set of keys present on this {@link PersistentDataContainer}
++     * instance.
++     * <p>
++     * Any changes made to the returned set will not be reflected on the
++     * instance.
++     *
++     * @return the key set
++     */
++    Set<Key> keys();
+ 
+     /**
+      * Returns if the container instance is empty, therefore has no entries

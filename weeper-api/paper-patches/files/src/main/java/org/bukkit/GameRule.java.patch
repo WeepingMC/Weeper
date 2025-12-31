@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/GameRule.java
 +++ b/src/main/java/org/bukkit/GameRule.java
-@@ -466,6 +_,21 @@
+@@ -466,6 +_,19 @@
      @Deprecated(forRemoval = true, since = "1.21.11")
      public static final GameRule<Integer> MINECART_MAX_SPEED = GameRules.MAX_MINECART_SPEED;
  
