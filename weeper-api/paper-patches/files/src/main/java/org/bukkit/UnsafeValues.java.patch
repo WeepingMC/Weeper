@@ -1,25 +1,9 @@
 --- a/src/main/java/org/bukkit/UnsafeValues.java
 +++ b/src/main/java/org/bukkit/UnsafeValues.java
-@@ -3,6 +_,7 @@
- import com.google.common.collect.Multimap;
- import io.papermc.paper.entity.EntitySerializationFlag;
- import io.papermc.paper.registry.RegistryKey;
-+import java.util.Set;
- import org.bukkit.advancement.Advancement;
- import org.bukkit.attribute.Attribute;
- import org.bukkit.attribute.AttributeModifier;
-@@ -12,6 +_,7 @@
- import org.bukkit.damage.DamageType;
- import org.bukkit.entity.Entity;
- import org.bukkit.entity.EntityType;
-+import org.bukkit.entity.Pose;
- import org.bukkit.event.entity.CreatureSpawnEvent;
- import org.bukkit.inventory.CreativeCategory;
- import org.bukkit.inventory.EquipmentSlot;
-@@ -384,4 +_,6 @@
-     @NotNull Map<String, Object> serializeStack(ItemStack itemStack);
- 
-     @NotNull ItemStack deserializeStack(@NotNull Map<String, Object> args);
+@@ -393,4 +_,6 @@
+      * @return the deserialized {@code ItemStack}
+      */
+     @NotNull ItemStack deserializeItemHover(HoverEvent.@NotNull ShowItem itemHover);
 +
-+    @NotNull Set<Pose> validMannequinPoses();
++    @NotNull java.util.Set<org.bukkit.entity.Pose> validMannequinPoses();
  }

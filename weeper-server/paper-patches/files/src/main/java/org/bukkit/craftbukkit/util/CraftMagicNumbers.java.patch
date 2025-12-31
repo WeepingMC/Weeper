@@ -1,14 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/CraftMagicNumbers.java
-@@ -24,6 +_,7 @@
- import java.util.Map;
- import java.util.Set;
- import java.util.logging.Level;
-+import java.util.stream.Collectors;
- import java.util.stream.Stream;
- import io.papermc.paper.entity.EntitySerializationFlag;
- import net.minecraft.SharedConstants;
-@@ -44,6 +_,7 @@
+@@ -49,6 +_,7 @@
  import net.minecraft.util.ProblemReporter;
  import net.minecraft.util.datafix.DataFixers;
  import net.minecraft.util.datafix.fixes.References;
@@ -16,7 +8,7 @@
  import net.minecraft.world.entity.player.Player;
  import net.minecraft.world.item.Item;
  import net.minecraft.world.item.alchemy.Potion;
-@@ -77,6 +_,7 @@
+@@ -83,6 +_,7 @@
  import org.bukkit.damage.DamageType;
  import org.bukkit.enchantments.Enchantment;
  import org.bukkit.entity.EntityType;
@@ -24,17 +16,17 @@
  import org.bukkit.inventory.CreativeCategory;
  import org.bukkit.inventory.EquipmentSlot;
  import org.bukkit.inventory.ItemStack;
-@@ -96,6 +_,9 @@
+@@ -102,6 +_,9 @@
  
      private final Commodore commodore = new Commodore();
  
 +    private final Set<Pose> VALID_MANNEQUIN_POSES = Mannequin.VALID_POSES.stream()
-+            .map(pose -> Pose.values()[pose.ordinal()]).collect(Collectors.toSet());
++            .map(pose -> Pose.values()[pose.ordinal()]).collect(java.util.stream.Collectors.toSet());
 +
      private CraftMagicNumbers() {}
  
      @Override
-@@ -611,6 +_,11 @@
+@@ -617,6 +_,11 @@
          });
  
          return deserializeItem(tag);
