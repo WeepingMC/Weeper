@@ -1,9 +1,8 @@
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -1,5 +_,7 @@
+@@ -1,5 +_,6 @@
  package net.minecraft.world.entity;
  
-+import com.destroystokyo.paper.entity.ai.MobGoalHelper;
 +import com.destroystokyo.paper.entity.ai.PaperCustomGoal;
  import com.google.common.annotations.VisibleForTesting;
  import com.google.common.collect.Maps;
