@@ -12,7 +12,7 @@
                  availableGoals.forEach(
                      wrappedGoal -> list.add(
 -                        new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), wrappedGoal.getGoal().getClass().getSimpleName())
-+                        new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), MobGoalHelper.getKey(wrappedGoal.getGoal().getClass()).toString())
++                        new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), wrappedGoal.getGoal().asPaperGoal().getKey().toString())
                      )
                  );
                  return new DebugGoalInfo(list);
