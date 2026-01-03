@@ -8,7 +8,7 @@
  import com.google.common.annotations.VisibleForTesting;
  import com.google.common.collect.Maps;
  import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
-@@ -1656,17 +_,21 @@
+@@ -1656,11 +_,12 @@
              () -> {
                  Set<WrappedGoal> availableGoals = this.goalSelector.getAvailableGoals();
                  List<DebugGoalInfo.DebugGoal> list = new ArrayList<>(availableGoals.size());
@@ -17,21 +17,12 @@
 -                        new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), wrappedGoal.getGoal().getClass().getSimpleName())
 -                    )
 -                );
-+                availableGoals.forEach(wrappedGoal -> list.add(of(wrappedGoal)));
++                availableGoals.forEach(wrappedGoal ->{
++                    list.add(switch (wrappedGoal.getGoal()) {
++                        case PaperCustomGoal<?> customGoal -> new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), customGoal.getHandle().getClass().getSimpleName()+"*");
++                        default -> new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), wrappedGoal.getGoal().getClass().getSimpleName());
++                    });
++                });
                  return new DebugGoalInfo(list);
              }
          );
-         if (!this.brain.isBrainDead()) {
-             registrar.register(DebugSubscriptions.BRAINS, () -> DebugBrainDump.takeBrainDump(level, this));
-         }
-+    }
-+
-+    private DebugGoalInfo.DebugGoal of(WrappedGoal wrappedGoal) {
-+        var goal = wrappedGoal.getGoal();
-+        if(goal instanceof PaperCustomGoal<?> customGoal) {
-+            return new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), customGoal.getHandle().getClass().getSimpleName()+"*");
-+        }
-+        return new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), wrappedGoal.getGoal().getClass().getSimpleName());
-     }
- 
-     public float chargeSpeedModifier() {
