@@ -1,18 +1,37 @@
 --- a/net/minecraft/world/entity/Mob.java
 +++ b/net/minecraft/world/entity/Mob.java
-@@ -1,5 +_,6 @@
+@@ -1,5 +_,7 @@
  package net.minecraft.world.entity;
  
 +import com.destroystokyo.paper.entity.ai.MobGoalHelper;
++import com.destroystokyo.paper.entity.ai.PaperCustomGoal;
  import com.google.common.annotations.VisibleForTesting;
  import com.google.common.collect.Maps;
  import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
-@@ -1658,7 +_,7 @@
+@@ -1656,17 +_,21 @@
+             () -> {
+                 Set<WrappedGoal> availableGoals = this.goalSelector.getAvailableGoals();
                  List<DebugGoalInfo.DebugGoal> list = new ArrayList<>(availableGoals.size());
-                 availableGoals.forEach(
-                     wrappedGoal -> list.add(
+-                availableGoals.forEach(
+-                    wrappedGoal -> list.add(
 -                        new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), wrappedGoal.getGoal().getClass().getSimpleName())
-+                        new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), wrappedGoal.getGoal().asPaperGoal().getKey().toString())
-                     )
-                 );
+-                    )
+-                );
++                availableGoals.forEach(wrappedGoal -> list.add(of(wrappedGoal)));
                  return new DebugGoalInfo(list);
+             }
+         );
+         if (!this.brain.isBrainDead()) {
+             registrar.register(DebugSubscriptions.BRAINS, () -> DebugBrainDump.takeBrainDump(level, this));
+         }
++    }
++
++    private DebugGoalInfo.DebugGoal of(WrappedGoal wrappedGoal) {
++        var goal = wrappedGoal.getGoal();
++        if(goal instanceof PaperCustomGoal<?> customGoal) {
++            return new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), customGoal.getHandle().getClass().getSimpleName()+"*");
++        }
++        return new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), wrappedGoal.getGoal().getClass().getSimpleName());
+     }
+ 
+     public float chargeSpeedModifier() {
