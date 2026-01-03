@@ -1,0 +1,18 @@
+--- a/net/minecraft/world/entity/Mob.java
++++ b/net/minecraft/world/entity/Mob.java
+@@ -1,5 +_,6 @@
+ package net.minecraft.world.entity;
+ 
++import com.destroystokyo.paper.entity.ai.MobGoalHelper;
+ import com.google.common.annotations.VisibleForTesting;
+ import com.google.common.collect.Maps;
+ import it.unimi.dsi.fastutil.objects.Object2IntMap.Entry;
+@@ -1658,7 +_,7 @@
+                 List<DebugGoalInfo.DebugGoal> list = new ArrayList<>(availableGoals.size());
+                 availableGoals.forEach(
+                     wrappedGoal -> list.add(
+-                        new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), wrappedGoal.getGoal().getClass().getSimpleName())
++                        new DebugGoalInfo.DebugGoal(wrappedGoal.getPriority(), wrappedGoal.isRunning(), MobGoalHelper.getKey(wrappedGoal.getGoal().getClass()).toString())
+                     )
+                 );
+                 return new DebugGoalInfo(list);
