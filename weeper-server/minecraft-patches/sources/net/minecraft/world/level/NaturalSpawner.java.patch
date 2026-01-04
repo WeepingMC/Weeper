@@ -15,16 +15,27 @@
  import org.jspecify.annotations.Nullable;
  import org.slf4j.Logger;
  
-@@ -300,6 +_,12 @@
+@@ -300,9 +_,20 @@
  
                                  mobForSpawn.snapTo(d, y, d1, level.random.nextFloat() * 360.0F, 0.0F);
                                  if (isValidPositionForMob(level, mobForSpawn, d2)) {
+-                                    spawnGroupData = mobForSpawn.finalizeSpawn(
+-                                        level, level.getCurrentDifficultyAt(mobForSpawn.blockPosition()), EntitySpawnReason.NATURAL, spawnGroupData
+-                                    );
 +                                    // Weeper start - add entity create event
 +                                    var event = new WorldCreateEntityEvent(level.getWorld(), (org.bukkit.entity.Mob) mobForSpawn.getBukkitEntity());
 +                                    event.callEvent();
-+                                    mobForSpawn =  ((CraftMob)event.getEntity()).getHandle();
-+                                    // Weeper stop - add entity create event
-+
-                                     spawnGroupData = mobForSpawn.finalizeSpawn(
-                                         level, level.getCurrentDifficultyAt(mobForSpawn.blockPosition()), EntitySpawnReason.NATURAL, spawnGroupData
-                                     );
++                                    if(event.getEntity() == null) {
++                                        return;
++                                    }
++                                    var newMobForSpawn = ((CraftMob)event.getEntity()).getHandle();
++                                    boolean sameType = mobForSpawn.getType() == newMobForSpawn.getType();
++                                    mobForSpawn =  newMobForSpawn;
++                                    if(sameType) {
++                                        spawnGroupData = mobForSpawn.finalizeSpawn(
++                                                level, level.getCurrentDifficultyAt(mobForSpawn.blockPosition()), EntitySpawnReason.NATURAL, spawnGroupData
++                                        );
++                                    } // Weeper stop - add entity create event
+                                     // CraftBukkit start
+                                     // SPIGOT-7045: Give ocelot babies back their special spawn reason. Note: This is the only modification required as ocelots count as monsters which means they only spawn during normal chunk ticking and do not spawn during chunk generation as starter mobs.
+                                     level.addFreshEntityWithPassengers(mobForSpawn, (mobForSpawn instanceof net.minecraft.world.entity.animal.feline.Ocelot && !((org.bukkit.entity.Ageable) mobForSpawn.getBukkitEntity()).isAdult()) ? org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.OCELOT_BABY : org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason.NATURAL);

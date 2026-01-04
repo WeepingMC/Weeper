@@ -1,11 +1,11 @@
 package com.github.weepingmc.event.world;
 
-import java.util.Objects;
 import org.bukkit.World;
 import org.bukkit.entity.Mob;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  *  Called when an entity is created. Not spawned.
@@ -15,6 +15,7 @@ public class WorldCreateEntityEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final World world;
+    @Nullable
     private Mob mob;
 
     public static HandlerList getHandlerList() {
@@ -26,12 +27,11 @@ public class WorldCreateEntityEvent extends Event {
         this.mob = mob;
     }
 
-    public Mob getEntity() {
+    public @Nullable Mob getEntity() {
         return mob;
     }
 
-    public void setEntity(Mob mob) {
-        Objects.requireNonNull(mob, "Mob cannot be null");
+    public void setEntity(@Nullable Mob mob) {
         this.mob = mob;
     }
 
