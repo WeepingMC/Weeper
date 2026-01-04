@@ -5,7 +5,7 @@ import com.destroystokyo.paper.SkinParts;
 import com.destroystokyo.paper.entity.ai.Goal;
 import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.entity.ai.GoalType;
-import com.destroystokyo.paper.entity.ai.MobGoals;
+import com.github.weepingmc.event.world.WorldCreateEntityEvent;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -23,6 +23,7 @@ import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import java.util.EnumSet;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -31,6 +32,7 @@ import org.bukkit.entity.Mannequin;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Pose;
 import org.bukkit.entity.Zombie;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -39,7 +41,6 @@ public final class TestPlugin extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         this.getServer().getPluginManager().registerEvents(this, this);
-
 
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
             event.registrar().register(Commands.literal("test")
@@ -72,6 +73,29 @@ public final class TestPlugin extends JavaPlugin implements Listener {
 
 
     }
+
+    @EventHandler
+    public void onMobCreate(WorldCreateEntityEvent event) {
+        if(!(event.getEntity() instanceof Zombie))
+            return;
+
+        Zombie zombie = event.getWorld().createEntity(event.getEntity().getLocation(), Zombie.class);
+        zombie.setDisguiseData(DisguiseData.player(ResolvableProfile.resolvableProfile()
+                                .skinPatch(ResolvableProfile.SkinPatch.skinPatch()
+                                        .body(Key.key("minecraft", "entity/player/slim/kai"))
+                                        .build())
+                        .build())
+                .description(Component.text("Zombie Meme", NamedTextColor.RED))
+                .pose(Pose.STANDING)
+                .skinParts(SkinParts.allParts())
+                .build()
+        );
+        zombie.setCustomNameVisible(true);
+        zombie.customName(Component.text("ysl", NamedTextColor.RED));
+
+        event.setEntity(zombie);
+    }
+
 
     private static class PoseArgument implements CustomArgumentType.Converted<Pose, String> {
 
@@ -128,7 +152,7 @@ public final class TestPlugin extends JavaPlugin implements Listener {
         @Override
         public void tick() {
             zombie.getNearbyEntities(10, 10, 10).stream().filter(Player.class::isInstance)
-                .forEach(player -> player.sendMessage(Component.text("Hello, I am a zombie!", NamedTextColor.RED)));
+                    .forEach(player -> player.sendMessage(Component.text("Hello, I am a zombie!", NamedTextColor.RED)));
         }
 
         @Override

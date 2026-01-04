@@ -1,0 +1,30 @@
+--- a/net/minecraft/world/level/NaturalSpawner.java
++++ b/net/minecraft/world/level/NaturalSpawner.java
+@@ -1,5 +_,6 @@
+ package net.minecraft.world.level;
+ 
++import com.github.weepingmc.event.world.WorldCreateEntityEvent;
+ import com.mojang.logging.LogUtils;
+ import it.unimi.dsi.fastutil.objects.Object2IntMap;
+ import it.unimi.dsi.fastutil.objects.Object2IntMaps;
+@@ -49,6 +_,7 @@
+ import net.minecraft.world.level.material.FluidState;
+ import net.minecraft.world.level.storage.LevelData;
+ import net.minecraft.world.phys.Vec3;
++import org.bukkit.craftbukkit.entity.CraftMob;
+ import org.jspecify.annotations.Nullable;
+ import org.slf4j.Logger;
+ 
+@@ -300,6 +_,12 @@
+ 
+                                 mobForSpawn.snapTo(d, y, d1, level.random.nextFloat() * 360.0F, 0.0F);
+                                 if (isValidPositionForMob(level, mobForSpawn, d2)) {
++                                    // Weeper start - add entity create event
++                                    var event = new WorldCreateEntityEvent(level.getWorld(), (org.bukkit.entity.Mob) mobForSpawn.getBukkitEntity());
++                                    event.callEvent();
++                                    mobForSpawn =  ((CraftMob)event.getEntity()).getHandle();
++                                    // Weeper stop - add entity create event
++
+                                     spawnGroupData = mobForSpawn.finalizeSpawn(
+                                         level, level.getCurrentDifficultyAt(mobForSpawn.blockPosition()), EntitySpawnReason.NATURAL, spawnGroupData
+                                     );
