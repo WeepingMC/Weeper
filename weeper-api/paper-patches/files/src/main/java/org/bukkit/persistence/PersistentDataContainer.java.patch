@@ -1,13 +1,14 @@
 --- a/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
 +++ b/src/main/java/org/bukkit/persistence/PersistentDataContainer.java
-@@ -1,5 +_,6 @@
+@@ -1,6 +_,6 @@
  package org.bukkit.persistence;
  
+-import org.bukkit.NamespacedKey;
 +import net.kyori.adventure.key.Key;
- import org.bukkit.NamespacedKey;
  import org.jetbrains.annotations.NotNull;
  
-@@ -26,11 +_,14 @@
+ /**
+@@ -26,11 +_,11 @@
       * @throws IllegalArgumentException if the key is null
       * @throws IllegalArgumentException if the type is null
       * @throws IllegalArgumentException if the value is null. Removing a tag should
@@ -18,21 +19,15 @@
       */
 -    <P, C> void set(@NotNull NamespacedKey key, @NotNull PersistentDataType<P, C> type, @NotNull C value);
 +    <P, C> void set(@NotNull Key key, @NotNull PersistentDataType<P, C> type, @NotNull C value);
-+    default <P, C> void set(@NotNull NamespacedKey key, @NotNull PersistentDataType<P, C> type, @NotNull C value){
-+        set((Key)key, type, value);
-+    }
      // Paper - move to PersistentDataContainerView
  
      /**
-@@ -40,7 +_,10 @@
+@@ -40,7 +_,7 @@
       *
       * @throws IllegalArgumentException if the provided key is null
       */
 -    void remove(@NotNull NamespacedKey key);
 +    void remove(@NotNull Key key);
-+    default void remove(@NotNull NamespacedKey key){
-+        remove((Key)key);
-+    }
      // Paper - move to PersistentDataContainerView
  
      // Paper start - byte array serialization

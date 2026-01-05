@@ -13,7 +13,7 @@
          super(scoreboard);
          this.team = team;
      }
-@@ -411,4 +_,8 @@
+@@ -414,4 +_,8 @@
          final CraftTeam other = (CraftTeam) obj;
          return Objects.equals(this.team, other.team);
      }
