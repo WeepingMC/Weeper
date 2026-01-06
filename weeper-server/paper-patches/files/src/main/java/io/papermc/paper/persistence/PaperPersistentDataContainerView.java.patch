@@ -1,6 +1,6 @@
 --- a/src/main/java/io/papermc/paper/persistence/PaperPersistentDataContainerView.java
 +++ b/src/main/java/io/papermc/paper/persistence/PaperPersistentDataContainerView.java
-@@ -7,6 +_,7 @@
+@@ -7,10 +_,10 @@
  import java.util.Collections;
  import java.util.HashSet;
  import java.util.Set;
@@ -8,6 +8,10 @@
  import net.minecraft.nbt.CompoundTag;
  import net.minecraft.nbt.NbtIo;
  import net.minecraft.nbt.Tag;
+-import org.bukkit.NamespacedKey;
+ import org.bukkit.craftbukkit.persistence.CraftPersistentDataAdapterContext;
+ import org.bukkit.craftbukkit.persistence.CraftPersistentDataContainer;
+ import org.bukkit.craftbukkit.persistence.CraftPersistentDataTypeRegistry;
 @@ -36,7 +_,7 @@
      public abstract CompoundTag toTagCompound();
  
@@ -33,7 +37,7 @@
          Preconditions.checkArgument(key != null, "The NamespacedKey key cannot be null");
          Preconditions.checkArgument(type != null, "The provided type cannot be null");
  
-@@ -68,7 +_,7 @@
+@@ -68,19 +_,19 @@
      }
  
      @Override
@@ -42,23 +46,18 @@
          final C c = this.get(key, type);
          return c != null ? c : defaultValue;
      }
-@@ -77,6 +_,19 @@
-     public Set<NamespacedKey> getKeys() {
-         final Set<String> names = this.toTagCompound().keySet();
-         final Set<NamespacedKey> keys = new HashSet<>(names.size());
-+        names.forEach(key -> {
-+            final String[] keyPart = key.split(":", 2);
-+            if (keyPart.length == 2) {
-+                keys.add(new NamespacedKey(keyPart[0], keyPart[1]));
-+            }
-+        });
-+        return Collections.unmodifiableSet(keys);
-+    }
-+
-+    @Override
+ 
+     @Override
+-    public Set<NamespacedKey> getKeys() {
 +    public Set<Key> keys() {
-+        final Set<String> names = this.toTagCompound().keySet();
+         final Set<String> names = this.toTagCompound().keySet();
+-        final Set<NamespacedKey> keys = new HashSet<>(names.size());
 +        final Set<Key> keys = new HashSet<>(names.size());
          names.forEach(key -> {
              final String[] keyPart = key.split(":", 2);
              if (keyPart.length == 2) {
+-                keys.add(new NamespacedKey(keyPart[0], keyPart[1]));
++                keys.add(Key.key(keyPart[0], keyPart[1]));
+             }
+         });
+         return Collections.unmodifiableSet(keys);
