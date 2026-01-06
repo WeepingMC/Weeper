@@ -27,7 +27,7 @@ public class PersistentDataContainerReroute {
             }
         }
 
-        if (owner.equals("io/papermc/paper/persistence/PersistentDataContainerView")) {
+        if (owner.equals("io/papermc/paper/persistence/PersistentDataContainerView") || owner.equals("org/bukkit/persistence/PersistentDataContainer")) {
             if(name.equals("has") && desc.equals("(Lorg/bukkit/NamespacedKey;Lorg/bukkit/persistence/PersistentDataType;)Z")) {
                 parent.visitMethodInsn(opcode, owner, name, "(Lnet/kyori/adventure/key/Key;Lorg/bukkit/persistence/PersistentDataType;)Z", itf);
                 return true;
