@@ -8,6 +8,6 @@
 -    private static final String REPOSITORY = "PaperMC/Paper";
 +    private static final String DOWNLOAD_PAGE = "https://github.com/WeepingMC/Weeper/actions/"; // Weeper - rebranding
 +    private static final String REPOSITORY = "WeepingMC/Weeper"; // Weeper - rebranding
-     private static final ServerBuildInfo BUILD_INFO;
-     private static final String USER_AGENT;
+     private static final ServerBuildInfo BUILD_INFO = ServerBuildInfo.buildInfo();
+     private static final String USER_AGENT = BUILD_INFO.brandName() + "/" + BUILD_INFO.asString(VERSION_SIMPLE) + " (https://papermc.io)";
      private static final Gson GSON = new Gson();
