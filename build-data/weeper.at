@@ -39,11 +39,10 @@ public net.minecraft.world.entity.animal.Cat$CatRelaxOnOwnerGoal
 public net.minecraft.world.entity.decoration.Mannequin DATA_DESCRIPTION
 public net.minecraft.world.entity.decoration.Mannequin DATA_IMMOVABLE
 public net.minecraft.world.entity.decoration.Mannequin DATA_PROFILE
-public net.minecraft.world.entity.raid.Raider$RaiderMoveThroughVillageGoal
 public net.minecraft.world.entity.monster.zombie.Drowned$DrownedAttackGoal
 public net.minecraft.world.entity.monster.zombie.Drowned$DrownedGoToBeachGoal
 public net.minecraft.world.entity.monster.zombie.Drowned$DrownedGoToWaterGoal
 public net.minecraft.world.entity.monster.zombie.Drowned$DrownedMoveControl
 public net.minecraft.world.entity.monster.zombie.Drowned$DrownedSwimUpGoal
 public net.minecraft.world.entity.monster.zombie.Drowned$DrownedTridentAttackGoal
-
+public net.minecraft.world.entity.raid.Raider$RaiderMoveThroughVillageGoal
