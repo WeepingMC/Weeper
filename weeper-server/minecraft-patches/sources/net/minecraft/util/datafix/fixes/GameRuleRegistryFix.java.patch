@@ -1,0 +1,12 @@
+--- a/net/minecraft/util/datafix/fixes/GameRuleRegistryFix.java
++++ b/net/minecraft/util/datafix/fixes/GameRuleRegistryFix.java
+@@ -106,7 +_,8 @@
+                             .renameAndFixField("tntExplodes", "minecraft:tnt_explodes", GameRuleRegistryFix::convertBoolean)
+                             .renameAndFixField("tntExplosionDropDecay", "minecraft:tnt_explosion_drop_decay", GameRuleRegistryFix::convertBoolean)
+                             .renameAndFixField("universalAnger", "minecraft:universal_anger", GameRuleRegistryFix::convertBoolean)
+-                            .renameAndFixField("waterSourceConversion", "minecraft:water_source_conversion", GameRuleRegistryFix::convertBoolean);
++                            .renameAndFixField("waterSourceConversion", "minecraft:water_source_conversion", GameRuleRegistryFix::convertBoolean)
++                            .renameAndFixField("leaderZombieBonus", "minecraft:leader_zombie_bonus", GameRuleRegistryFix::convertBoolean);
+                     }
+                 )
+             )
