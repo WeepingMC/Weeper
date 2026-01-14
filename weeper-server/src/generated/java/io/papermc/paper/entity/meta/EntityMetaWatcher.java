@@ -3301,7 +3301,7 @@ public final class EntityMetaWatcher {
     }
 
     public static final boolean isValidForClass(Class<? extends Entity> clazz,
-            EntityDataSerializer<?> entityDataSerializer, int id) {
+            EntityDataSerializer<?> entityDataSerializer, long id) {
         Map<Long, EntityDataSerializer<?>> serializerMap = VALID_ENTITY_META_MAP.get(clazz);
         if(serializerMap == null) {
             return false;

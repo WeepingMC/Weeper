@@ -90,7 +90,7 @@ public class EntityMetaWatcherGenerator extends SimpleGenerator {
             .returns(boolean.class)
             .addParameter(ParameterizedTypeName.get(ClassName.get(Class.class), WildcardTypeName.subtypeOf(Entity.class)), "clazz")
             .addParameter(ParameterizedTypeName.get(ClassName.get(EntityDataSerializer.class), WildcardTypeName.subtypeOf(Object.class)), "entityDataSerializer")
-            .addParameter(int.class, "id")
+            .addParameter(long.class, "id")
             .addStatement("Map<Long, EntityDataSerializer<?>> serializerMap = VALID_ENTITY_META_MAP.get(clazz)")
             .beginControlFlow("if(serializerMap == null)")
             .addStatement("return false")
