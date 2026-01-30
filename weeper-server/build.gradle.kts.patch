@@ -1,25 +1,37 @@
 --- a/paper-server/build.gradle.kts
 +++ b/paper-server/build.gradle.kts
-@@ -22,6 +_,19 @@
-     minecraftVersion = providers.gradleProperty("mcVersion")
-     gitFilePatches = false
+@@ -19,13 +_,26 @@
+ }
  
-+    activeFork = forks.register("weeper") {
+ paperweight {
+-    minecraftVersion = providers.gradleProperty("mcVersion")
+-    gitFilePatches = false
++    minecraftVersion.set(providers.gradleProperty("mcVersion"))
++    gitFilePatches.set(false)
++
++    activeFork.set(forks.register("weeper") {
 +        upstream.patchDir("paperServer") {
-+            upstreamPath = "paper-server"
-+            excludes = setOf("src/minecraft", "patches", "build.gradle.kts", "src/generated")
-+            patchesDir = rootDirectory.dir("weeper-server/paper-patches")
-+            outputDir = rootDirectory.dir("paper-server")
++            upstreamPath.set("paper-server")
++            excludes.set(setOf("src/minecraft", "patches", "build.gradle.kts", "src/generated"))
++            patchesDir.set(rootDirectory.dir("weeper-server/paper-patches"))
++            outputDir.set(rootDirectory.dir("paper-server"))
 +        }
-+    }
++    })
 +
 +    paper {
-+        paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
++        paperServerDir.set(upstreamsDirectory().map { it.dir("paper/paper-server") })
 +    }
-+
+ 
      spigot {
-         enabled = true
-         buildDataRef = "17f77cee7117ab9d6175f088ae8962bfd04e61a9"
+-        enabled = true
+-        buildDataRef = "17f77cee7117ab9d6175f088ae8962bfd04e61a9"
+-        packageVersion = "v1_21_R7" // also needs to be updated in MappingEnvironment
++        enabled.set(true)
++        buildDataRef.set("17f77cee7117ab9d6175f088ae8962bfd04e61a9")
++        packageVersion.set("v1_21_R7") // also needs to be updated in MappingEnvironment
+     }
+ 
+     reobfPackagesToFix.addAll(
 @@ -104,7 +_,18 @@
      }
  }
@@ -72,7 +84,7 @@
          for (tld in setOf("net", "com", "org")) {
              attributes("$tld/bukkit", "Sealed" to true)
          }
-@@ -357,7 +_,7 @@
+@@ -357,18 +_,43 @@
  }
  
  fill {
@@ -81,7 +93,15 @@
      versionFamily(paperweight.minecraftVersion.map { it.split(".", "-").takeWhile { part -> part.toIntOrNull() != null }.take(2).joinToString(".") })
      version(paperweight.minecraftVersion)
  
-@@ -371,4 +_,29 @@
+     build {
+-        channel = BuildChannel.STABLE
++        channel.set(BuildChannel.STABLE)
+ 
+         downloads {
+             register("server:default") {
+-                file = tasks.createMojmapPaperclipJar.flatMap { it.outputZip }
++                file.set(tasks.createMojmapPaperclipJar.flatMap { it.outputZip })
+                 nameResolver.set { project, _, version, build -> "$project-$version-$build.jar" }
              }
          }
      }
