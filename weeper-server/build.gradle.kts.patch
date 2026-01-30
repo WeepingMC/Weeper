@@ -76,7 +76,7 @@
      runtimeOnly(log4jPlugins.output)
      alsoShade(log4jPlugins.output)
  
-@@ -150,7 +_,7 @@
+@@ -150,13 +_,13 @@
      }
      implementation("io.netty:netty-codec-haproxy:4.2.7.Final") // Add support for proxy protocol
      implementation("org.apache.logging.log4j:log4j-iostreams:2.24.1")
@@ -85,6 +85,13 @@
      implementation("org.spongepowered:configurate-yaml:4.2.0")
  
      // Deps that were previously in the API but have now been moved here for backwards compat, eventually to be removed
+     runtimeOnly("commons-lang:commons-lang:2.6")
+     runtimeOnly("org.xerial:sqlite-jdbc:3.49.1.0")
+-    runtimeOnly("com.mysql:mysql-connector-j:9.2.0")
++    runtimeOnly("com.mysql:mysql-connector-j:9.6.0")
+     runtimeOnly("com.lmax:disruptor:3.4.4")
+     implementation("com.googlecode.json-simple:json-simple:1.1.1") { // change to runtimeOnly once Timings is removed
+         isTransitive = false // includes junit
 @@ -167,9 +_,9 @@
      testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
      testImplementation("org.junit.platform:junit-platform-suite-engine:1.12.2")
