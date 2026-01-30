@@ -2,6 +2,7 @@ version = "1.0.0-SNAPSHOT"
 
 dependencies {
     compileOnly(project(":weeper-api"))
+    testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
 }
 
 tasks.processResources {
