@@ -8,34 +8,34 @@ plugins {
 
 paperweight {
     upstreams.paper {
-        ref = providers.gradleProperty("paperRef")
+        ref.set(providers.gradleProperty("paperRef"))
 
         patchFile {
-            path = "paper-server/build.gradle.kts"
-            outputFile = file("weeper-server/build.gradle.kts")
-            patchFile = file("weeper-server/build.gradle.kts.patch")
+            path.set("paper-server/build.gradle.kts")
+            outputFile.set(file("weeper-server/build.gradle.kts"))
+            patchFile.set(file("weeper-server/build.gradle.kts.patch"))
         }
         patchFile {
-            path = "paper-api/build.gradle.kts"
-            outputFile = file("weeper-api/build.gradle.kts")
-            patchFile = file("weeper-api/build.gradle.kts.patch")
+            path.set("paper-api/build.gradle.kts")
+            outputFile.set(file("weeper-api/build.gradle.kts"))
+            patchFile.set(file("weeper-api/build.gradle.kts.patch"))
         }
         patchFile {
-            path = "paper-generator/build.gradle.kts"
-            outputFile = file("weeper-generator/build.gradle.kts")
-            patchFile = file("weeper-generator/build.gradle.kts.patch")
+            path.set("paper-generator/build.gradle.kts")
+            outputFile.set(file("weeper-generator/build.gradle.kts"))
+            patchFile.set(file("weeper-generator/build.gradle.kts.patch"))
         }
         patchDir("paperApi") {
-            upstreamPath = "paper-api"
-            excludes = setOf("build.gradle.kts")
-            patchesDir = file("weeper-api/paper-patches")
-            outputDir = file("paper-api")
+            upstreamPath.set("paper-api")
+            excludes.set(setOf("build.gradle.kts"))
+            patchesDir.set(file("weeper-api/paper-patches"))
+            outputDir.set(file("paper-api"))
         }
         patchDir("paperGenerator") {
-            upstreamPath = "paper-generator"
-            excludes = setOf("build.gradle.kts")
-            patchesDir = file("weeper-generator/paper-patches")
-            outputDir = file("paper-generator")
+            upstreamPath.set("paper-generator")
+            excludes.set(setOf("build.gradle.kts"))
+            patchesDir.set(file("weeper-generator/paper-patches"))
+            outputDir.set(file("paper-generator"))
         }
     }
 }
@@ -48,7 +48,7 @@ subprojects {
 
     extensions.configure<JavaPluginExtension> {
         toolchain {
-            languageVersion = JavaLanguageVersion.of(21)
+            languageVersion.set(JavaLanguageVersion.of(25))
         }
     }
 
@@ -67,7 +67,7 @@ subprojects {
     }
     tasks.withType<JavaCompile> {
         options.encoding = Charsets.UTF_8.name()
-        options.release = 21
+        options.release.set(25)
         options.isFork = true
         options.compilerArgs.addAll(listOf("-Xlint:-deprecation", "-Xlint:-removal"))
     }
