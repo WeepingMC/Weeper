@@ -1,0 +1,18 @@
+--- a/src/main/java/org/bukkit/craftbukkit/legacy/reroute/RerouteMethodData.java
++++ b/src/main/java/org/bukkit/craftbukkit/legacy/reroute/RerouteMethodData.java
+@@ -1,11 +_,12 @@
+ package org.bukkit.craftbukkit.legacy.reroute;
+ 
++import java.lang.constant.ClassDesc;
++import java.lang.constant.MethodTypeDesc;
+ import java.util.List;
+ import org.jetbrains.annotations.Nullable;
+-import org.objectweb.asm.Type;
+ 
+-public record RerouteMethodData(String methodKey, Type sourceDesc, Type sourceOwner, String sourceName,
+-                                boolean staticReroute, Type targetType, String targetOwner, String targetName,
++public record RerouteMethodData(String methodKey, MethodTypeDesc sourceDesc, ClassDesc sourceOwner, String sourceName,
++                                boolean staticReroute, MethodTypeDesc targetType, String targetOwner, String targetName,
+                                 List<RerouteArgument> arguments, RerouteReturn rerouteReturn, boolean isInBukkit,
+                                 @Nullable RequirePluginVersionData requiredPluginVersion) {
+ }

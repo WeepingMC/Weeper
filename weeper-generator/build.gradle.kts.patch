@@ -9,11 +9,11 @@
  
  paperweight {
 -    atFile = layout.projectDirectory.file("wideners.at")
-+    atFile = layout.projectDirectory.file("../paper-generator/wideners.at")
++    atFile.set(layout.projectDirectory.file("../paper-generator/wideners.at"))
  }
  
  val serverRuntimeClasspath by configurations.registering { // resolvable?
-@@ -14,22 +_,39 @@
+@@ -14,36 +_,53 @@
      isCanBeResolved = true
  }
  
@@ -58,12 +58,31 @@
  }
  
  val gameVersion = providers.gradleProperty("mcVersion")
-@@ -59,14 +_,14 @@
+ 
+ val rewriteApi = tasks.registerGenerationTask("rewriteApi", true, "api", {
+-    bootstrapTags = true
+-    sourceSet = rootProject.layout.projectDirectory.dir("paper-api")
++    bootstrapTags.set(true)
++    sourceSet.set(rootProject.layout.projectDirectory.dir("paper-api"))
+ }) {
+     description = "Rewrite existing API classes"
+     classpath(sourceSets.main.map { it.runtimeClasspath })
+ }
+ 
+ val rewriteImpl = tasks.registerGenerationTask("rewriteImpl", true, "impl", {
+-    sourceSet = rootProject.layout.projectDirectory.dir("paper-server")
++    sourceSet.set(rootProject.layout.projectDirectory.dir("paper-server"))
+     serverClassPath.from(serverRuntimeClasspath)
+ }) {
+     description = "Rewrite existing implementation classes"
+@@ -58,15 +_,15 @@
+ 
  
  val generateApi = tasks.registerGenerationTask("generateApi", false, "api", {
-     bootstrapTags = true
+-    bootstrapTags = true
 -    sourceSet = rootProject.layout.projectDirectory.dir("paper-api")
-+    sourceSet = rootProject.layout.projectDirectory.dir("weeper-api")
++    bootstrapTags.set(true)
++    sourceSet.set(rootProject.layout.projectDirectory.dir("weeper-api"))
  }) {
      description = "Generate new API classes"
      classpath(sourceSets.main.map { it.runtimeClasspath })
@@ -71,7 +90,28 @@
  
  val generateImpl = tasks.registerGenerationTask("generateImpl", false, "impl", {
 -    sourceSet = rootProject.layout.projectDirectory.dir("paper-server")
-+    sourceSet = rootProject.layout.projectDirectory.dir("weeper-server")
++    sourceSet.set(rootProject.layout.projectDirectory.dir("weeper-server"))
  }) {
      description = "Generate new implementation classes"
      classpath(sourceSets.main.map { it.runtimeClasspath })
+@@ -87,16 +_,16 @@
+ ): TaskProvider<JavaExec> = register<JavaExec>(name) {
+     group = "generation"
+     dependsOn(project.tasks.test)
+-    javaLauncher = project.javaToolchains.defaultJavaLauncher(project)
++    javaLauncher.set(project.javaToolchains.defaultJavaLauncher(project))
+     maxHeapSize = "2G"
+     inputs.property("gameVersion", gameVersion)
+     inputs.dir(layout.projectDirectory.dir("src/main/java")).withPathSensitivity(PathSensitivity.RELATIVE)
+-    mainClass = "io.papermc.generator.Main"
++    mainClass.set("io.papermc.generator.Main")
+     systemProperty("paper.updatingMinecraft", providers.gradleProperty("updatingMinecraft").getOrElse("false").toBoolean())
+ 
+     val provider = objects.newInstance<GenerationArgumentProvider>()
+-    provider.side = side
+-    provider.rewrite = rewrite
++    provider.side.set(side)
++    provider.rewrite.set(rewrite)
+     if (args != null) {
+         args(provider)
+     }

@@ -1,0 +1,97 @@
+--- a/src/main/java/org/bukkit/craftbukkit/legacy/reroute/RerouteBuilder.java
++++ b/src/main/java/org/bukkit/craftbukkit/legacy/reroute/RerouteBuilder.java
+@@ -1,6 +_,9 @@
+ package org.bukkit.craftbukkit.legacy.reroute;
+ 
+ import com.google.common.base.Preconditions;
++import java.lang.constant.ClassDesc;
++import java.lang.constant.MethodTypeDesc;
++import java.lang.invoke.MethodType;
+ import java.lang.reflect.AnnotatedElement;
+ import java.lang.reflect.Method;
+ import java.lang.reflect.Modifier;
+@@ -11,7 +_,6 @@
+ import java.util.Map;
+ import java.util.function.Predicate;
+ import org.bukkit.craftbukkit.util.ApiVersion;
+-import org.objectweb.asm.Type;
+ 
+ public class RerouteBuilder {
+ 
+@@ -64,12 +_,12 @@
+     }
+ 
+     private static RerouteMethodData buildFromMethod(Method method) {
+-        RerouteReturn rerouteReturn = new RerouteReturn(Type.getReturnType(method));
++        RerouteReturn rerouteReturn = new RerouteReturn(method.getReturnType().describeConstable().orElseThrow());
+         List<RerouteArgument> arguments = new ArrayList<>();
+         List<RerouteArgument> sourceArguments = new ArrayList<>();
+ 
+         for (Parameter parameter : method.getParameters()) {
+-            Type type = Type.getType(parameter.getType());
++            ClassDesc type = parameter.getType().describeConstable().orElseThrow();
+             int count = 0;
+             boolean injectPluginName = false;
+             boolean injectPluginVersion = false;
+@@ -110,9 +_,9 @@
+                 throw new RuntimeException("Wtf?");
+             }
+ 
+-            Type sourceType;
++            ClassDesc sourceType;
+             if (rerouteArgumentType != null) {
+-                sourceType = Type.getObjectType(rerouteArgumentType.value());
++                sourceType = ClassDesc.ofInternalName(rerouteArgumentType.value());
+             } else {
+                 sourceType = type;
+             }
+@@ -125,9 +_,9 @@
+         }
+ 
+         RerouteStatic rerouteStatic = method.getAnnotation(RerouteStatic.class);
+-        Type sourceOwner;
++        ClassDesc sourceOwner;
+         if (rerouteStatic != null) {
+-            sourceOwner = Type.getObjectType(rerouteStatic.value());
++            sourceOwner = ClassDesc.ofInternalName(rerouteStatic.value());
+         } else {
+             if (sourceArguments.isEmpty()) {
+                 throw new RuntimeException("Source argument list is empty, no owner class found");
+@@ -138,13 +_,13 @@
+         }
+ 
+         RerouteReturnType rerouteReturnType = method.getAnnotation(RerouteReturnType.class);
+-        Type returnType;
++        ClassDesc returnType;
+         if (rerouteReturnType != null) {
+-            returnType = Type.getObjectType(rerouteReturnType.value());
++            returnType = ClassDesc.ofInternalName(rerouteReturnType.value());
+         } else {
+             returnType = rerouteReturn.type();
+         }
+-        Type sourceDesc = Type.getMethodType(returnType, sourceArguments.stream().map(RerouteArgument::sourceType).toArray(Type[]::new));
++        MethodTypeDesc sourceDesc = MethodTypeDesc.of(returnType, sourceArguments.stream().map(RerouteArgument::sourceType).toArray(ClassDesc[]::new));
+ 
+         RerouteMethodName rerouteMethodName = method.getAnnotation(RerouteMethodName.class);
+         String methodName;
+@@ -154,9 +_,9 @@
+             methodName = method.getName();
+         }
+ 
+-        String methodKey = sourceDesc.getDescriptor() + methodName;
++        String methodKey = sourceDesc.descriptorString() + methodName;
+ 
+-        Type targetType = Type.getType(method);
++        MethodTypeDesc targetType = MethodType.methodType(method.getReturnType(), method.getParameterTypes()).describeConstable().orElseThrow();
+ 
+         boolean inBukkit = !method.isAnnotationPresent(NotInBukkit.class) && !method.getDeclaringClass().isAnnotationPresent(NotInBukkit.class);
+ 
+@@ -167,7 +_,7 @@
+             requiredPluginVersion = RequirePluginVersionData.create(method.getDeclaringClass().getAnnotation(RequirePluginVersion.class));
+         }
+ 
+-        return new RerouteMethodData(methodKey, sourceDesc, sourceOwner, methodName, rerouteStatic != null, targetType, Type.getInternalName(method.getDeclaringClass()), method.getName(), arguments, rerouteReturn, inBukkit, requiredPluginVersion);
++        return new RerouteMethodData(methodKey, sourceDesc, sourceOwner, methodName, rerouteStatic != null, targetType, method.getDeclaringClass().getName().replace('.', '/'), method.getName(), arguments, rerouteReturn, inBukkit, requiredPluginVersion);
+     }
+ 
+     private static boolean isMethodValid(Method method) {

@@ -1,0 +1,219 @@
+--- a/src/test/java/org/bukkit/DeprecatedTest.java
++++ b/src/test/java/org/bukkit/DeprecatedTest.java
+@@ -2,72 +_,44 @@
+ 
+ import static org.junit.jupiter.api.Assertions.*;
+ import com.google.common.base.Joiner;
++import java.lang.classfile.*;
++import java.lang.classfile.attribute.*;
+ import java.util.ArrayList;
+ import java.util.List;
+-import org.bukkit.support.test.ClassNodeTest;
++import java.util.Optional;
++import org.bukkit.support.test.ClassModelTest;
+ import org.junit.jupiter.api.Disabled;
+-import org.objectweb.asm.Type;
+-import org.objectweb.asm.tree.AnnotationNode;
+-import org.objectweb.asm.tree.ClassNode;
+-import org.objectweb.asm.tree.FieldNode;
+-import org.objectweb.asm.tree.MethodNode;
+-import org.objectweb.asm.tree.RecordComponentNode;
+ 
+ @Disabled
+ public class DeprecatedTest {
+ 
+-    private static final String DEPRECATED_DESC = Type.getDescriptor(Deprecated.class);
++    private static final String DEPRECATED_DESC = "Ljava/lang/Deprecated;";
+ 
+-    @ClassNodeTest
+-    public void testIfSinceIsPresent(ClassNode classNode) {
++    @ClassModelTest
++    public void testIfSinceIsPresent(ClassModel classModel) {
+         List<String> missingReason = new ArrayList<>();
+ 
+         // Check class annotation
+-        checkAnnotation(missingReason, classNode.invisibleAnnotations, "Class");
+-        checkAnnotation(missingReason, classNode.visibleAnnotations, "Class");
+-        checkAnnotation(missingReason, classNode.invisibleTypeAnnotations, "Class");
+-        checkAnnotation(missingReason, classNode.visibleTypeAnnotations, "Class");
+-
+-        if (classNode.recordComponents != null) {
+-            for (RecordComponentNode recordComponentNode : classNode.recordComponents) {
+-                checkAnnotation(missingReason, recordComponentNode.invisibleAnnotations, "RecordComponent '%s'".formatted(recordComponentNode.name));
+-                checkAnnotation(missingReason, recordComponentNode.visibleAnnotations, "RecordComponent '%s'".formatted(recordComponentNode.name));
+-                checkAnnotation(missingReason, recordComponentNode.invisibleTypeAnnotations, "RecordComponent '%s'".formatted(recordComponentNode.name));
+-                checkAnnotation(missingReason, recordComponentNode.visibleTypeAnnotations, "RecordComponent '%s'".formatted(recordComponentNode.name));
+-            }
+-        }
+-
+-        if (classNode.fields != null) {
+-            for (FieldNode fieldNode : classNode.fields) {
+-                checkAnnotation(missingReason, fieldNode.invisibleAnnotations, "Field '%s'".formatted(fieldNode.name));
+-                checkAnnotation(missingReason, fieldNode.visibleAnnotations, "Field '%s'".formatted(fieldNode.name));
+-                checkAnnotation(missingReason, fieldNode.invisibleTypeAnnotations, "Field '%s'".formatted(fieldNode.name));
+-                checkAnnotation(missingReason, fieldNode.visibleTypeAnnotations, "Field '%s'".formatted(fieldNode.name));
+-            }
+-        }
+-
+-        if (classNode.methods != null) {
+-            for (MethodNode methodNode : classNode.methods) {
+-                checkAnnotation(missingReason, methodNode.invisibleAnnotations, "Method '%s'".formatted(methodNode.name));
+-                checkAnnotation(missingReason, methodNode.visibleAnnotations, "Method '%s'".formatted(methodNode.name));
+-                checkAnnotation(missingReason, methodNode.invisibleTypeAnnotations, "Method '%s'".formatted(methodNode.name));
+-                checkAnnotation(missingReason, methodNode.visibleTypeAnnotations, "Method '%s'".formatted(methodNode.name));
+-
+-                if (methodNode.visibleParameterAnnotations != null) {
+-                    for (int i = 0; i < methodNode.visibleParameterAnnotations.length; i++) {
+-                        checkAnnotation(missingReason, methodNode.visibleParameterAnnotations[i], "Method Parameter '%d' for Method '%s'".formatted(i, methodNode.name));
+-                    }
+-                }
+-
+-                if (methodNode.invisibleParameterAnnotations != null) {
+-                    for (int i = 0; i < methodNode.invisibleParameterAnnotations.length; i++) {
+-                        checkAnnotation(missingReason, methodNode.invisibleParameterAnnotations[i], "Method Parameter '%d' for Method '%s'".formatted(i, methodNode.name));
+-                    }
+-                }
+-
+-                checkAnnotation(missingReason, methodNode.visibleLocalVariableAnnotations, "Local variable in Method '%s'".formatted(methodNode.name));
+-                checkAnnotation(missingReason, methodNode.invisibleLocalVariableAnnotations, "Local variable in Method '%s'".formatted(methodNode.name));
+-            }
++        checkAnnotations(missingReason, classModel, "Class");
++
++        for (FieldModel field : classModel.fields()) {
++            checkAnnotations(missingReason, field, "Field '%s'".formatted(field.fieldName().stringValue()));
++        }
++
++        for (MethodModel method : classModel.methods()) {
++            checkAnnotations(missingReason, method, "Method '%s'".formatted(method.methodName().stringValue()));
++            
++            // Parameter annotations
++            method.findAttribute(Attributes.runtimeVisibleParameterAnnotations()).ifPresent(a -> {
++                for (int i = 0; i < a.parameterAnnotations().size(); i++) {
++                    checkAnnotationList(missingReason, a.parameterAnnotations().get(i), "Method Parameter '%d' for Method '%s'".formatted(i, method.methodName().stringValue()));
++                }
++            });
++            method.findAttribute(Attributes.runtimeInvisibleParameterAnnotations()).ifPresent(a -> {
++                for (int i = 0; i < a.parameterAnnotations().size(); i++) {
++                    checkAnnotationList(missingReason, a.parameterAnnotations().get(i), "Method Parameter '%d' for Method '%s'".formatted(i, method.methodName().stringValue()));
++                }
++            });
+         }
+ 
+         assertTrue(missingReason.isEmpty(), """
+@@ -75,75 +_,60 @@
+                 In Class '%s'.
+ 
+                 Following places where found:
+-                %s""".formatted(classNode.name, Joiner.on('\n').join(missingReason)));
+-    }
+-
+-    private void checkAnnotation(List<String> missingReason, List<? extends AnnotationNode> annotationNodes, String where) {
+-        if (annotationNodes == null || annotationNodes.isEmpty()) {
+-            return;
+-        }
+-
+-        for (AnnotationNode annotationNode : annotationNodes) {
+-            if (!annotationNode.desc.equals(DEPRECATED_DESC)) {
+-                continue;
+-            }
+-
+-            if (!hasSince(annotationNode)) {
+-                missingReason.add(where);
+-            }
+-        }
+-    }
+-
+-    private boolean hasSince(AnnotationNode annotationNode) {
+-        if (annotationNode.values == null || annotationNode.values.isEmpty()) {
+-            return false;
+-        }
+-
+-        for (int i = 0; i < annotationNode.values.size(); i = i + 2) {
+-            if ("since".equals(annotationNode.values.get(i))) {
+-                String other = (String) annotationNode.values.get(i + 1);
+-
+-                if (other == null || other.isEmpty()) {
+-                    return false;
+-                }
+-
+-                if (!isValidVersion(other)) {
+-                    return false;
+-                }
+-
+-                return true;
+-            }
+-        }
+-
++                %s""".formatted(classModel.thisClass().asInternalName(), Joiner.on('\n').join(missingReason)));
++    }
++
++    private void checkAnnotations(List<String> missingReason, AttributedElement element, String where) {
++        element.findAttribute(Attributes.runtimeVisibleAnnotations()).ifPresent(a -> checkAnnotationList(missingReason, a.annotations(), where));
++        element.findAttribute(Attributes.runtimeInvisibleAnnotations()).ifPresent(a -> checkAnnotationList(missingReason, a.annotations(), where));
++        element.findAttribute(Attributes.runtimeVisibleTypeAnnotations()).ifPresent(a -> {
++            List<Annotation> annotations = new ArrayList<>();
++            for (TypeAnnotation ta : a.annotations()) annotations.add(ta.annotation());
++            checkAnnotationList(missingReason, annotations, where);
++        });
++        element.findAttribute(Attributes.runtimeInvisibleTypeAnnotations()).ifPresent(a -> {
++            List<Annotation> annotations = new ArrayList<>();
++            for (TypeAnnotation ta : a.annotations()) annotations.add(ta.annotation());
++            checkAnnotationList(missingReason, annotations, where);
++        });
++    }
++
++    private void checkAnnotationList(List<String> missingReason, List<Annotation> annotations, String where) {
++        if (annotations == null) return;
++        for (Annotation annotation : annotations) {
++            if (annotation.className().stringValue().equals(DEPRECATED_DESC)) {
++                if (!hasSince(annotation)) {
++                    missingReason.add(where);
++                }
++            }
++        }
++    }
++
++    private boolean hasSince(Annotation annotation) {
++        for (AnnotationElement element : annotation.elements()) {
++            if (element.name().stringValue().equals("since")) {
++                if (element.value() instanceof AnnotationValue.OfString s) {
++                    String value = s.stringValue();
++                    return value != null && !value.isEmpty() && isValidVersion(value);
++                }
++            }
++        }
+         return false;
+     }
+ 
+     private boolean isValidVersion(String version) {
+         String[] versionParts = version.split("\\.");
+-
+-        if (versionParts.length != 2 && versionParts.length != 3) {
+-            return false;
+-        }
+-
+-        if (!isNumber(versionParts[0])) {
+-            return false;
+-        }
+-        if (!isNumber(versionParts[1])) {
+-            return false;
+-        }
+-        if (versionParts.length == 3 && !isNumber(versionParts[2])) {
+-            return false;
+-        }
+-
++        if (versionParts.length != 2 && versionParts.length != 3) return false;
++        for (String part : versionParts) if (!isNumber(part)) return false;
+         return true;
+     }
+ 
+     private boolean isNumber(String number) {
+         try {
+             Integer.parseInt(number);
++            return true;
+         } catch (NumberFormatException e) {
+             return false;
+         }
+-        return true;
+     }
+ }

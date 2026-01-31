@@ -1,0 +1,30 @@
+--- a/src/main/java/org/bukkit/craftbukkit/legacy/reroute/RerouteArgument.java
++++ b/src/main/java/org/bukkit/craftbukkit/legacy/reroute/RerouteArgument.java
+@@ -1,10 +_,9 @@
+ package org.bukkit.craftbukkit.legacy.reroute;
+ 
++import java.lang.constant.ClassDesc;
+ import org.jetbrains.annotations.Nullable;
+-import org.objectweb.asm.Opcodes;
+-import org.objectweb.asm.Type;
+ 
+-public record RerouteArgument(Type type, Type sourceType, boolean injectPluginName, boolean injectPluginVersion, @Nullable String injectCompatibility) {
++public record RerouteArgument(ClassDesc type, ClassDesc sourceType, boolean injectPluginName, boolean injectPluginVersion, @Nullable String injectCompatibility) {
+ 
+     /**
+      * Converts the type string to the correct load opcode.
+@@ -30,11 +_,11 @@
+      *
+      * @return the opcode of the type
+      */
+-    public int instruction() {
++    public java.lang.classfile.TypeKind typeKind() {
+         if (this.injectPluginName() || this.injectPluginVersion() || this.injectCompatibility() != null) {
+-            throw new IllegalStateException(String.format("Cannot get instruction for plugin name / version argument / compatibility: %s", this));
++            throw new IllegalStateException(String.format("Cannot get type kind for plugin name / version argument / compatibility: %s", this));
+         }
+ 
+-        return this.type.getOpcode(Opcodes.ILOAD);
++        return java.lang.classfile.TypeKind.from(this.type);
+     }
+ }

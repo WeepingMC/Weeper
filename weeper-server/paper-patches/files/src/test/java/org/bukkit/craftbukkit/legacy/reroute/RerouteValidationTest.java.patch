@@ -1,0 +1,91 @@
+--- a/src/test/java/org/bukkit/craftbukkit/legacy/reroute/RerouteValidationTest.java
++++ b/src/test/java/org/bukkit/craftbukkit/legacy/reroute/RerouteValidationTest.java
+@@ -3,9 +_,12 @@
+ import static org.junit.jupiter.api.Assertions.*;
+ import com.google.common.base.Joiner;
+ import com.google.common.base.Predicates;
++import java.lang.constant.ClassDesc;
++import java.lang.constant.MethodTypeDesc;
+ import java.lang.reflect.Method;
+ import java.lang.reflect.Modifier;
+ import java.util.HashMap;
++import java.util.List;
+ import java.util.Map;
+ import java.util.stream.Stream;
+ import org.bukkit.craftbukkit.util.Commodore;
+@@ -13,7 +_,6 @@
+ import org.junit.jupiter.params.ParameterizedTest;
+ import org.junit.jupiter.params.provider.Arguments;
+ import org.junit.jupiter.params.provider.MethodSource;
+-import org.objectweb.asm.Type;
+ 
+ @Normal
+ public class RerouteValidationTest {
+@@ -48,7 +_,7 @@
+                 There are validation errors for method reroutes in Class: %s
+                 This means there is no methods in bukkit matching the reroute.
+                 If the method is no longer present in bukkit because it got removed, than mark the reroute method with @NotInBukkit
+-
++                
+                 Following Errors where found:
+                 %s
+                 """, owner, Joiner.on('\n').withKeyValueSeparator(": ").join(wrongReroutes)));
+@@ -57,12 +_,12 @@
+     private String isValid(String key, RerouteMethodData rerouteMethodData) {
+         try {
+             Class<?> clazz = this.toClass(rerouteMethodData.sourceOwner());
+-            Class<?> returnClazz = this.toClass(rerouteMethodData.sourceDesc().getReturnType());
+-            Class<?>[] paras = new Class[rerouteMethodData.sourceDesc().getArgumentCount()];
+-            Type[] paraTypes = rerouteMethodData.sourceDesc().getArgumentTypes();
++            Class<?> returnClazz = this.toClass(rerouteMethodData.sourceDesc().returnType());
++            List<ClassDesc> paraTypes = rerouteMethodData.sourceDesc().parameterList();
++            Class<?>[] paras = new Class[paraTypes.size()];
+ 
+-            for (int i = 0; i < paraTypes.length; i++) {
+-                paras[i] = this.toClass(paraTypes[i]);
++            for (int i = 0; i < paraTypes.size(); i++) {
++                paras[i] = this.toClass(paraTypes.get(i));
+             }
+ 
+             Method method = clazz.getDeclaredMethod(rerouteMethodData.sourceName(), paras);
+@@ -91,24 +_,24 @@
+         return null;
+     }
+ 
+-    private Class<?> toClass(Type type) throws ClassNotFoundException {
+-        if (type.getSort() == Type.OBJECT) {
+-            return Class.forName(type.getClassName(), false, this.getClass().getClassLoader());
+-        } else if (type.getSort() == Type.ARRAY) {
+-            return Class.forName(type.getDescriptor().replace('/', '.'), false, this.getClass().getClassLoader());
+-        } else {
+-            return switch (type.getSort()) {
+-                case Type.VOID -> void.class;
+-                case Type.BOOLEAN -> boolean.class;
+-                case Type.CHAR -> char.class;
+-                case Type.BYTE -> byte.class;
+-                case Type.SHORT -> short.class;
+-                case Type.INT -> int.class;
+-                case Type.FLOAT -> float.class;
+-                case Type.LONG -> long.class;
+-                case Type.DOUBLE -> double.class;
++    private Class<?> toClass(ClassDesc type) throws ClassNotFoundException {
++        if (type.isPrimitive()) {
++            return switch (type.descriptorString()) {
++                case "V" -> void.class;
++                case "Z" -> boolean.class;
++                case "C" -> char.class;
++                case "B" -> byte.class;
++                case "S" -> short.class;
++                case "I" -> int.class;
++                case "F" -> float.class;
++                case "J" -> long.class;
++                case "D" -> double.class;
+                 default -> throw new UnsupportedOperationException("Type not supported: " + type);
+             };
++        } else if (type.isArray()) {
++            return Class.forName(type.descriptorString().replace('/', '.'), false, this.getClass().getClassLoader());
++        } else {
++            return Class.forName(type.displayName(), false, this.getClass().getClassLoader());
+         }
+     }
+ }
