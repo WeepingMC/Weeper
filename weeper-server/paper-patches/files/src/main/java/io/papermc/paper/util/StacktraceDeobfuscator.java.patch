@@ -1,0 +1,73 @@
+--- a/src/main/java/io/papermc/paper/util/StacktraceDeobfuscator.java
++++ b/src/main/java/io/papermc/paper/util/StacktraceDeobfuscator.java
+@@ -3,6 +_,10 @@
+ import io.papermc.paper.configuration.GlobalConfiguration;
+ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
++import java.lang.classfile.ClassFile;
++import java.lang.classfile.ClassFileElement;
++import java.lang.classfile.MethodModel;
++import java.lang.classfile.instruction.LineNumber;
+ import java.io.IOException;
+ import java.io.InputStream;
+ import java.util.Collections;
+@@ -11,11 +_,6 @@
+ import org.checkerframework.checker.nullness.qual.NonNull;
+ import org.checkerframework.checker.nullness.qual.Nullable;
+ import org.checkerframework.framework.qual.DefaultQualifier;
+-import org.objectweb.asm.ClassReader;
+-import org.objectweb.asm.ClassVisitor;
+-import org.objectweb.asm.Label;
+-import org.objectweb.asm.MethodVisitor;
+-import org.objectweb.asm.Opcodes;
+ 
+ @DefaultQualifier(NonNull.class)
+ public enum StacktraceDeobfuscator {
+@@ -109,27 +_,6 @@
+     private static Int2ObjectMap<String> buildLineMap(final Class<?> key) {
+         final StringPool pool = new StringPool();
+         final Int2ObjectMap<String> lineMap = new Int2ObjectOpenHashMap<>();
+-        final class LineCollectingMethodVisitor extends MethodVisitor {
+-            private final String name;
+-            private final String descriptor;
+-
+-            LineCollectingMethodVisitor(final String name, final String descriptor) {
+-                super(Opcodes.ASM9);
+-                this.name = name;
+-                this.descriptor = descriptor;
+-            }
+-
+-            @Override
+-            public void visitLineNumber(final int line, final Label start) {
+-                lineMap.put(line, pool.string(ObfHelper.methodKey(this.name, this.descriptor)));
+-            }
+-        }
+-        final ClassVisitor classVisitor = new ClassVisitor(Opcodes.ASM9) {
+-            @Override
+-            public MethodVisitor visitMethod(final int access, final String name, final String descriptor, final String signature, final String[] exceptions) {
+-                return new LineCollectingMethodVisitor(name, descriptor);
+-            }
+-        };
+         try {
+             final @Nullable InputStream inputStream = StacktraceDeobfuscator.class.getClassLoader()
+                 .getResourceAsStream(key.getName().replace('.', '/') + ".class");
+@@ -140,8 +_,17 @@
+             try (inputStream) {
+                 classData = inputStream.readAllBytes();
+             }
+-            final ClassReader reader = new ClassReader(classData);
+-            reader.accept(classVisitor, 0);
++
++            for (final MethodModel method : ClassFile.of().parse(classData).methods()) {
++                final String methodKey = pool.string(ObfHelper.methodKey(method.methodName().stringValue(), method.methodType().stringValue()));
++                method.code().ifPresent(code -> {
++                    for (final ClassFileElement element : code) {
++                        if (element instanceof LineNumber lineNumber) {
++                            lineMap.put(lineNumber.line(), methodKey);
++                        }
++                    }
++                });
++            }
+         } catch (final IOException ex) {
+             throw new RuntimeException(ex);
+         }

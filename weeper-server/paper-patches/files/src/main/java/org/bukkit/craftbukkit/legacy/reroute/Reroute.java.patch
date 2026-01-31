@@ -1,0 +1,67 @@
+--- a/src/main/java/org/bukkit/craftbukkit/legacy/reroute/Reroute.java
++++ b/src/main/java/org/bukkit/craftbukkit/legacy/reroute/Reroute.java
+@@ -1,12 +_,12 @@
+ package org.bukkit.craftbukkit.legacy.reroute;
+ 
++import java.lang.constant.ClassDesc;
+ import java.util.HashMap;
+ import java.util.Map;
+ import java.util.function.Consumer;
+ import org.bukkit.craftbukkit.util.ApiVersion;
+ import org.bukkit.craftbukkit.util.ClassTraverser;
+ import org.jetbrains.annotations.VisibleForTesting;
+-import org.objectweb.asm.Type;
+ 
+ public class Reroute {
+ 
+@@ -50,7 +_,7 @@
+             return false;
+         }
+ 
+-        Type ownerType = Type.getObjectType(owner);
++        ClassDesc ownerType = ClassDesc.ofInternalName(owner);
+         RerouteMethodData data = rerouteData.get(ownerType);
+ 
+         if (staticCall && data == null) {
+@@ -68,7 +_,7 @@
+ 
+         Class<?> ownerClass;
+         try {
+-            ownerClass = Class.forName(ownerType.getClassName(), false, Reroute.class.getClassLoader());
++            ownerClass = Class.forName(ownerType.displayName(), false, Reroute.class.getClassLoader());
+         } catch (ClassNotFoundException e) {
+             return false;
+         }
+@@ -77,7 +_,7 @@
+         while (it.hasNext()) {
+             Class<?> clazz = it.next();
+ 
+-            data = rerouteData.get(Type.getType(clazz));
++            data = rerouteData.get(clazz.describeConstable().orElseThrow());
+ 
+             if (data == null) {
+                 continue;
+@@ -100,11 +_,11 @@
+         final Map<String, RerouteMethodData> rerouteMethodDataMap = new HashMap<>();
+ 
+         public RerouteMethodData get(Class<?> clazz) {
+-            return this.rerouteMethodDataMap.get(Type.getInternalName(clazz));
++            return this.rerouteMethodDataMap.get(clazz.getName().replace('.', '/'));
+         }
+ 
+-        private RerouteMethodData get(Type owner) {
+-            return this.rerouteMethodDataMap.get(owner.getInternalName());
++        private RerouteMethodData get(ClassDesc owner) {
++            return this.rerouteMethodDataMap.get(owner.descriptorString().substring(1, owner.descriptorString().length() - 1));
+         }
+ 
+         void add(RerouteMethodData value) {
+@@ -114,7 +_,7 @@
+                 throw new IllegalStateException("Reroute method data already exists: " + rerouteMethodData);
+             }
+ 
+-            this.rerouteMethodDataMap.put(value.sourceOwner().getInternalName(), value);
++            this.rerouteMethodDataMap.put(value.sourceOwner().descriptorString().substring(1, value.sourceOwner().descriptorString().length() - 1), value);
+         }
+     }
+ }

@@ -1,0 +1,81 @@
+--- a/src/main/java/org/bukkit/craftbukkit/util/LimitedClassRemapper.java
++++ b/src/main/java/org/bukkit/craftbukkit/util/LimitedClassRemapper.java
+@@ -1,43 +_,40 @@
+ package org.bukkit.craftbukkit.util;
+ 
+-import org.objectweb.asm.ClassVisitor;
+-import org.objectweb.asm.MethodVisitor;
+-import org.objectweb.asm.commons.ClassRemapper;
+-import org.objectweb.asm.commons.MethodRemapper;
+-import org.objectweb.asm.commons.Remapper;
+-
+-public class LimitedClassRemapper extends ClassRemapper {
+-
+-    public LimitedClassRemapper(ClassVisitor classVisitor, Remapper remapper) {
+-        super(classVisitor, remapper);
+-    }
+-
+-    @Override
+-    public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+-        this.className = name;
+-        // We do not want to remap superName and interfaces for the enums
+-        this.cv.visit(version, access, this.remapper.mapType(name), this.remapper.mapSignature(signature, false), superName, interfaces);
+-    }
+-
+-    @Override
+-    protected MethodVisitor createMethodRemapper(MethodVisitor methodVisitor) {
+-        return new LimitedMethodRemapper(this.api, methodVisitor, this.remapper);
+-    }
+-
+-    private class LimitedMethodRemapper extends MethodRemapper {
+-
+-        protected LimitedMethodRemapper(int api, MethodVisitor methodVisitor, Remapper remapper) {
+-            super(api, methodVisitor, remapper);
+-        }
+-
+-        @Override
+-        public void visitMethodInsn(int opcodeAndSource, String owner, String name, String descriptor, boolean isInterface) {
+-            if (owner != null && owner.equals("java/lang/Enum") && name != null && name.equals("<init>")) {
+-                // We also do not want to remap the init method for enums
+-                this.mv.visitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
+-                return;
+-            }
+-            super.visitMethodInsn(opcodeAndSource, owner, name, descriptor, isInterface);
++import java.lang.classfile.ClassBuilder;
++import java.lang.classfile.ClassElement;
++import java.lang.classfile.ClassTransform;
++import java.lang.classfile.CodeModel;
++import java.lang.classfile.MethodModel;
++import java.lang.classfile.instruction.InvokeInstruction;
++import java.lang.constant.ClassDesc;
++import java.util.function.Function;
++
++public class LimitedClassRemapper implements ClassTransform {
++
++    private final Function<String, String> remapper;
++
++    public LimitedClassRemapper(Function<String, String> remapper) {
++        this.remapper = remapper;
++    }
++
++    @Override
++    public void accept(ClassBuilder builder, ClassElement element) {
++        if (element instanceof MethodModel method) {
++            builder.withMethod(method.methodName(), method.methodType(), method.flags().flagsMask(), methodBuilder -> {
++                method.code().ifPresent(code -> methodBuilder.transformCode(code, (codeBuilder, codeElement) -> {
++                    if (codeElement instanceof InvokeInstruction ii) {
++                        String owner = ii.owner().asSymbol().descriptorString();
++                        String name = ii.name().stringValue();
++                        if (owner.equals("Ljava/lang/Enum;") && name.equals("<init>")) {
++                            codeBuilder.with(codeElement);
++                            return;
++                        }
++                    }
++                    codeBuilder.with(codeElement);
++                }));
++            });
++        } else {
++            builder.with(element);
+         }
+     }
+ }

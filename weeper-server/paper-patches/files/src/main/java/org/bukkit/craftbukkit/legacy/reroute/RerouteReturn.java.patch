@@ -1,0 +1,27 @@
+--- a/src/main/java/org/bukkit/craftbukkit/legacy/reroute/RerouteReturn.java
++++ b/src/main/java/org/bukkit/craftbukkit/legacy/reroute/RerouteReturn.java
+@@ -1,9 +_,8 @@
+ package org.bukkit.craftbukkit.legacy.reroute;
+ 
+-import org.objectweb.asm.Opcodes;
+-import org.objectweb.asm.Type;
++import java.lang.constant.ClassDesc;
+ 
+-public record RerouteReturn(Type type) {
++public record RerouteReturn(ClassDesc type) {
+ 
+     /**
+      * Converts the type string to the correct return opcode.
+@@ -24,9 +_,9 @@
+      * <br>
+      * <a href="https://docs.oracle.com/javase/specs/jvms/se21/html/jvms-6.html#jvms-6.5.areturn">areturn Opcode</a>
+      *
+-     * @return the opcode of the type
++     * @return the type kind of the return type
+      */
+-    public int instruction() {
+-        return this.type.getOpcode(Opcodes.IRETURN);
++    public java.lang.classfile.TypeKind typeKind() {
++        return java.lang.classfile.TypeKind.from(this.type);
+     }
+ }
