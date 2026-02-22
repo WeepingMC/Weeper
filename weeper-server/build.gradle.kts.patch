@@ -1,25 +1,37 @@
 --- a/paper-server/build.gradle.kts
 +++ b/paper-server/build.gradle.kts
-@@ -22,6 +_,19 @@
-     minecraftVersion = providers.gradleProperty("mcVersion")
-     gitFilePatches = false
+@@ -19,13 +_,26 @@
+ }
  
-+    activeFork = forks.register("weeper") {
+ paperweight {
+-    minecraftVersion = providers.gradleProperty("mcVersion")
+-    gitFilePatches = false
++    minecraftVersion.set(providers.gradleProperty("mcVersion"))
++    gitFilePatches.set(false)
++
++    activeFork.set(forks.register("weeper") {
 +        upstream.patchDir("paperServer") {
-+            upstreamPath = "paper-server"
-+            excludes = setOf("src/minecraft", "patches", "build.gradle.kts", "src/generated")
-+            patchesDir = rootDirectory.dir("weeper-server/paper-patches")
-+            outputDir = rootDirectory.dir("paper-server")
++            upstreamPath.set("paper-server")
++            excludes.set(setOf("src/minecraft", "patches", "build.gradle.kts", "src/generated"))
++            patchesDir.set(rootDirectory.dir("weeper-server/paper-patches"))
++            outputDir.set(rootDirectory.dir("paper-server"))
 +        }
-+    }
++    })
 +
 +    paper {
-+        paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
++        paperServerDir.set(upstreamsDirectory().map { it.dir("paper/paper-server") })
 +    }
-+
+ 
      spigot {
-         enabled = true
-         buildDataRef = "17f77cee7117ab9d6175f088ae8962bfd04e61a9"
+-        enabled = true
+-        buildDataRef = "17f77cee7117ab9d6175f088ae8962bfd04e61a9"
+-        packageVersion = "v1_21_R7" // also needs to be updated in MappingEnvironment
++        enabled.set(true)
++        buildDataRef.set("17f77cee7117ab9d6175f088ae8962bfd04e61a9")
++        packageVersion.set("v1_21_R7") // also needs to be updated in MappingEnvironment
+     }
+ 
+     reobfPackagesToFix.addAll(
 @@ -104,7 +_,18 @@
      }
  }
@@ -40,15 +52,59 @@
  configurations.named(log4jPlugins.compileClasspathConfigurationName) {
      extendsFrom(configurations.compileClasspath.get())
  }
-@@ -127,7 +_,7 @@
+@@ -127,10 +_,9 @@
  }
  
  dependencies {
 -    implementation(project(":paper-api"))
 +    implementation(project(":weeper-api")) // Weeper api
      implementation("ca.spottedleaf:concurrentutil:0.0.8")
-     implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
-     implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
+-    implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
+-    implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
++    implementation("org.jline:jline-terminal-ffm:3.30.6") // use ffm on java 22+
+     implementation("net.minecrell:terminalconsoleappender:1.3.0")
+     implementation("net.kyori:adventure-text-serializer-ansi")
+ 
+@@ -140,8 +_,8 @@
+       all its classes to check if they are plugins.
+       Scanning takes about 1-2 seconds so adding this speeds up the server start.
+      */
+-    implementation("org.apache.logging.log4j:log4j-core:2.24.1")
+-    log4jPlugins.annotationProcessorConfigurationName("org.apache.logging.log4j:log4j-core:2.24.1") // Needed to generate meta for our Log4j plugins
++    implementation("org.apache.logging.log4j:log4j-core:2.25.3")
++    log4jPlugins.annotationProcessorConfigurationName("org.apache.logging.log4j:log4j-core:2.25.3") // Needed to generate meta for our Log4j plugins
+     runtimeOnly(log4jPlugins.output)
+     alsoShade(log4jPlugins.output)
+ 
+@@ -150,13 +_,13 @@
+     }
+     implementation("io.netty:netty-codec-haproxy:4.2.7.Final") // Add support for proxy protocol
+     implementation("org.apache.logging.log4j:log4j-iostreams:2.24.1")
+-    implementation("org.ow2.asm:asm-commons:9.8")
++    implementation("org.ow2.asm:asm-commons:9.9.1")
+     implementation("org.spongepowered:configurate-yaml:4.2.0")
+ 
+     // Deps that were previously in the API but have now been moved here for backwards compat, eventually to be removed
+     runtimeOnly("commons-lang:commons-lang:2.6")
+     runtimeOnly("org.xerial:sqlite-jdbc:3.49.1.0")
+-    runtimeOnly("com.mysql:mysql-connector-j:9.2.0")
++    runtimeOnly("com.mysql:mysql-connector-j:9.6.0")
+     runtimeOnly("com.lmax:disruptor:3.4.4")
+     implementation("com.googlecode.json-simple:json-simple:1.1.1") { // change to runtimeOnly once Timings is removed
+         isTransitive = false // includes junit
+@@ -167,9 +_,9 @@
+     testImplementation("org.junit.jupiter:junit-jupiter:5.12.2")
+     testImplementation("org.junit.platform:junit-platform-suite-engine:1.12.2")
+     testImplementation("org.hamcrest:hamcrest:2.2")
+-    testImplementation("org.mockito:mockito-core:5.14.1")
+-    mockitoAgent("org.mockito:mockito-core:5.14.1") { isTransitive = false } // Configure mockito agent that is needed in newer java versions
+-    testImplementation("org.ow2.asm:asm-tree:9.8")
++    testImplementation("org.mockito:mockito-core:5.21.0")
++    mockitoAgent("org.mockito:mockito-core:5.21.0") { isTransitive = false } // Configure mockito agent that is needed in newer java versions
++    testImplementation("org.ow2.asm:asm-tree:9.9.1")
+     testImplementation("org.junit-pioneer:junit-pioneer:2.2.0") // CartesianTest
+ 
+     implementation("net.neoforged:srgutils:1.0.9") // Mappings handling
 @@ -196,21 +_,7 @@
          val implementationVersion = "$mcVersion-${build ?: "DEV"}-$gitHash"
          val date = git.exec(providers, "show", "-s", "--format=%ci", gitHash).get().trim()
@@ -72,7 +128,7 @@
          for (tld in setOf("net", "com", "org")) {
              attributes("$tld/bukkit", "Sealed" to true)
          }
-@@ -357,7 +_,7 @@
+@@ -357,18 +_,43 @@
  }
  
  fill {
@@ -81,7 +137,15 @@
      versionFamily(paperweight.minecraftVersion.map { it.split(".", "-").takeWhile { part -> part.toIntOrNull() != null }.take(2).joinToString(".") })
      version(paperweight.minecraftVersion)
  
-@@ -371,4 +_,29 @@
+     build {
+-        channel = BuildChannel.STABLE
++        channel.set(BuildChannel.STABLE)
+ 
+         downloads {
+             register("server:default") {
+-                file = tasks.createMojmapPaperclipJar.flatMap { it.outputZip }
++                file.set(tasks.createMojmapPaperclipJar.flatMap { it.outputZip })
+                 nameResolver.set { project, _, version, build -> "$project-$version-$build.jar" }
              }
          }
      }
