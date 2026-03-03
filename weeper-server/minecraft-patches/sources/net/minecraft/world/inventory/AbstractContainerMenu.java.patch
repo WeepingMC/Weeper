@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/net/minecraft/world/inventory/AbstractContainerMenu.java
-@@ -157,6 +_,12 @@
+@@ -158,6 +_,12 @@
          return slot;
      }
  
@@ -10,6 +10,6 @@
 +    }
 +    // Weeper end - inventoryItemStackMoveStrategy
 +
-     protected DataSlot addDataSlot(DataSlot slot) {
-         this.dataSlots.add(slot);
+     protected DataSlot addDataSlot(final DataSlot dataSlot) {
+         this.dataSlots.add(dataSlot);
          this.remoteDataSlots.add(0);
