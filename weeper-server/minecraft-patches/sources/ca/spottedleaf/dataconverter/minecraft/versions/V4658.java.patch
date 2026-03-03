@@ -1,10 +1,10 @@
 --- a/ca/spottedleaf/dataconverter/minecraft/versions/V4658.java
 +++ b/ca/spottedleaf/dataconverter/minecraft/versions/V4658.java
-@@ -156,6 +_,8 @@
+@@ -157,6 +_,8 @@
                  convertBool(gameRules, "universalAnger", "minecraft:universal_anger");
                  convertBool(gameRules, "waterSourceConversion", "minecraft:water_source_conversion");
  
-+                convertBool(gameRules, "leaderZombieBonus", "minecraft:leader_zombie_bonus");
++                convertBool(gameRules, "leaderZombieBonus", "minecraft:leader_zombie_bonus"); // Weeper - migrate leader zombie bonus
 +
                  return null;
              }

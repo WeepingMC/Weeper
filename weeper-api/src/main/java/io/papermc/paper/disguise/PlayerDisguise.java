@@ -40,32 +40,6 @@ public record PlayerDisguise(ResolvableProfile resolvableProfile, @Nullable Skin
         }
 
         /**
-         * Defines if the fake player is shown in the player list.
-         *
-         * @param listed true, if the player should be listed else false
-         * @return the builder instance
-         * @deprecated will never appear in the player list in future versions.
-         */
-        @Deprecated(forRemoval = true, since = "1.21.11")
-        @ApiStatus.ScheduledForRemoval(inVersion = "26.1.0")
-        public Builder listed(boolean listed) {
-            return this;
-        }
-
-        /**
-         * Defines if the fake players head should be shown in the player list.
-         *
-         * @param showHead true, if the player's head should be shown else false
-         * @return the builder instance
-         * @deprecated will never appear in the player list in future versions.
-         */
-        @Deprecated(forRemoval = true, since = "1.21.11")
-        @ApiStatus.ScheduledForRemoval(inVersion = "26.1.0")
-        public Builder showHead(boolean showHead) {
-            return this;
-        }
-
-        /**
          * Defines which skin parts should be enabled for the fake player.
          * <p>
          * Use {@link Server#newSkinPartsBuilder()} to get a fresh builder instance for configuration.

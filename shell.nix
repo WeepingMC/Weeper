@@ -1,5 +1,5 @@
 { pkgs ? import <nixpkgs> {} }:
 pkgs.mkShell {
-	nativeBuildInputs = with pkgs.buildPackages; [ jdk21 ];
+	nativeBuildInputs = with pkgs.buildPackages; [ jdk25 ];
 
 }
