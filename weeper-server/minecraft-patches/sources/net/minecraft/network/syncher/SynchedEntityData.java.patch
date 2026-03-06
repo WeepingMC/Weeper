@@ -5,15 +5,15 @@
                  if (dataItem.isDirty()) {
                      dataItem.setDirty(false);
 +                    if (io.papermc.paper.disguise.DisguiseUtil.shouldSkip((net.minecraft.world.entity.Entity) entity, dataItem.getAccessor())) continue; // Weeper - disguise api
-                     list.add(dataItem.value());
+                     result.add(dataItem.value());
                  }
              }
 @@ -115,6 +_,7 @@
-     public void assignValues(List<SynchedEntityData.DataValue<?>> entries) {
-         for (SynchedEntityData.DataValue<?> dataValue : entries) {
-             SynchedEntityData.DataItem<?> dataItem = this.itemsById[dataValue.id];
+     public void assignValues(final List<SynchedEntityData.DataValue<?>> items) {
+         for (SynchedEntityData.DataValue<?> item : items) {
+             SynchedEntityData.DataItem<?> dataItem = this.itemsById[item.id];
 +            if (io.papermc.paper.disguise.DisguiseUtil.shouldSkip((net.minecraft.world.entity.Entity) entity, dataItem.getAccessor())) continue; // Weeper - disguise api
-             this.assignValue(dataItem, dataValue);
+             this.assignValue(dataItem, item);
              this.entity.onSyncedDataUpdated(dataItem.getAccessor());
          }
 @@ -181,6 +_,7 @@

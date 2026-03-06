@@ -1,0 +1,11 @@
+--- a/src/main/java/io/papermc/paper/datacomponent/DataComponentTypes.java
++++ b/src/main/java/io/papermc/paper/datacomponent/DataComponentTypes.java
+@@ -240,7 +_,7 @@
+      */
+     public static final DataComponentType.Valued<ItemEnchantments> STORED_ENCHANTMENTS = valued("stored_enchantments");
+     /**
+-     * Represents a color applied to a dyeable item (in the {@link io.papermc.paper.registry.keys.tags.ItemTypeTagKeys#DYEABLE} item tag).
++     * Represents a color applied to a dyeable item (in the {@link io.papermc.paper.registry.keys.tags.ItemTypeTagKeys#DYES} item tag).
+      */
+     public static final DataComponentType.Valued<DyedItemColor> DYED_COLOR = valued("dyed_color");
+     /**
