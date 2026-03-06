@@ -1,16 +1,17 @@
 --- a/net/minecraft/world/entity/monster/zombie/Zombie.java
 +++ b/net/minecraft/world/entity/monster/zombie/Zombie.java
-@@ -564,11 +_,13 @@
+@@ -580,6 +_,7 @@
+         }
+ 
+         if (this.random.nextFloat() < difficultyModifier * 0.05F) {
++            if(((net.minecraft.server.level.ServerLevel)this.level()).getGameRules().get(net.minecraft.world.level.gamerules.GameRules.RULE_LEADER_ZOMBIE_BONUS)){ // Weeper start - add game rule to disable leader zombie bonus
+             this.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE)
                  .addOrReplacePermanentModifier(
                      new AttributeModifier(LEADER_ZOMBIE_BONUS_ID, this.random.nextDouble() * 0.25 + 0.5, AttributeModifier.Operation.ADD_VALUE)
-                 );
-+            if(((net.minecraft.server.level.ServerLevel)this.level()).getGameRules().get(net.minecraft.world.level.gamerules.GameRules.RULE_LEADER_ZOMBIE_BONUS)){ // Weeper start - add game rule to disable leader zombie bonus
-             this.getAttribute(Attributes.MAX_HEALTH)
-                 .addOrReplacePermanentModifier(
-                     new AttributeModifier(LEADER_ZOMBIE_BONUS_ID, this.random.nextDouble() * 3.0 + 1.0, AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL)
-                 );
--            this.setCanBreakDoors(true);
-+                this.setCanBreakDoors(true);
+@@ -593,6 +_,7 @@
+             }
+ 
+             this.setCanBreakDoors(true);
 +            } // Weeper end - add game rule to disable leader zombie bonus
          }
      }
