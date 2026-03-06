@@ -1,6 +1,6 @@
 --- a/paper-server/build.gradle.kts
 +++ b/paper-server/build.gradle.kts
-@@ -22,6 +_,19 @@
+@@ -22,8 +_,21 @@
      minecraftVersion = providers.gradleProperty("mcVersion")
      gitFilePatches = false
  
@@ -18,8 +18,11 @@
 +    }
 +
      updatingMinecraft {
-         oldPaperCommit = "7e80cef5198561d0db53406127e5b8bc7af51577"
+-        oldPaperCommit = "7e80cef5198561d0db53406127e5b8bc7af51577"
++       //  oldPaperCommit = "7e80cef5198561d0db53406127e5b8bc7af51577"
      }
+ }
+ 
 @@ -86,7 +_,18 @@
      }
  }
