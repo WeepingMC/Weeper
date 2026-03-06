@@ -13,12 +13,12 @@
      }
      // Paper end - Expose entity id counter
 +    
-+    // Weeper start - disguise api
++    // Weeper start - disguise api todo update when leaf updated leaf stuff
 +    public void clearPlayers() {
-+        if (trackedEntity != null) trackedEntity.moonrise$clearPlayers();
++        // if (trackedEntity != null) trackedEntity.moonrise$clearPlayers();
 +    }
 +    public void updatePlayers() {
-+        if (trackedEntity != null) trackedEntity.updatePlayers(((ServerLevel)level).players());
++        // if (trackedEntity != null) trackedEntity.updatePlayers(((ServerLevel)level).players());
 +    }
 +    // Weeper end - disguise api
  }

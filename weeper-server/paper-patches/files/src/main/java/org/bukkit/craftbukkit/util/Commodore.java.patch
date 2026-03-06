@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/util/Commodore.java
 +++ b/src/main/java/org/bukkit/craftbukkit/util/Commodore.java
-@@ -581,6 +_,10 @@
+@@ -566,6 +_,10 @@
  
                      @Override
                      public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
