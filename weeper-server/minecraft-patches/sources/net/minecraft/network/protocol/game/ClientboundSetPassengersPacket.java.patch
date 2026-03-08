@@ -1,8 +1,8 @@
 --- a/net/minecraft/network/protocol/game/ClientboundSetPassengersPacket.java
 +++ b/net/minecraft/network/protocol/game/ClientboundSetPassengersPacket.java
-@@ -14,6 +_,13 @@
-     public final int vehicle;
-     public final int[] passengers;
+@@ -29,6 +_,13 @@
+         this.passengers = input.readVarIntArray();
+     }
  
 +    // Weeper - start
 +    public ClientboundSetPassengersPacket(int vehicle, int[] passengers) {
@@ -11,6 +11,6 @@
 +    }
 +    // Weeper - end
 +
-     public ClientboundSetPassengersPacket(Entity vehicle) {
-         this.vehicle = vehicle.getId();
-         List<Entity> passengers = vehicle.getPassengers();
+     private void write(final FriendlyByteBuf output) {
+         output.writeVarInt(this.vehicle);
+         output.writeVarIntArray(this.passengers);

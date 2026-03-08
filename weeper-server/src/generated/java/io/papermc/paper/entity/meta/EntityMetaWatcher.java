@@ -7,7 +7,6 @@ import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.AreaEffectCloud;
-import net.minecraft.world.entity.Avatar;
 import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ExperienceOrb;
@@ -216,7 +215,8 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.ARMADILLO_STATE);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.ARMADILLO_STATE);
         return Map.copyOf(result);
     }
 
@@ -264,28 +264,6 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> avatar() {
-        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
-        result.put(0L, EntityDataSerializers.BYTE);
-        result.put(1L, EntityDataSerializers.INT);
-        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
-        result.put(3L, EntityDataSerializers.BOOLEAN);
-        result.put(4L, EntityDataSerializers.BOOLEAN);
-        result.put(5L, EntityDataSerializers.BOOLEAN);
-        result.put(6L, EntityDataSerializers.POSE);
-        result.put(7L, EntityDataSerializers.INT);
-        result.put(8L, EntityDataSerializers.BYTE);
-        result.put(9L, EntityDataSerializers.FLOAT);
-        result.put(10L, EntityDataSerializers.PARTICLES);
-        result.put(11L, EntityDataSerializers.BOOLEAN);
-        result.put(12L, EntityDataSerializers.INT);
-        result.put(13L, EntityDataSerializers.INT);
-        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-        result.put(15L, EntityDataSerializers.HUMANOID_ARM);
-        result.put(16L, EntityDataSerializers.BYTE);
-        return Map.copyOf(result);
-    }
-
     private static final Map<Long, EntityDataSerializer<?>> axolotl() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
@@ -305,9 +283,10 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
         result.put(19L, EntityDataSerializers.BOOLEAN);
+        result.put(20L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -352,8 +331,9 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.LONG);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.LONG);
         return Map.copyOf(result);
     }
 
@@ -502,9 +482,10 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        result.put(19L, EntityDataSerializers.LONG);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
+        result.put(20L, EntityDataSerializers.LONG);
         return Map.copyOf(result);
     }
 
@@ -527,9 +508,10 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        result.put(19L, EntityDataSerializers.LONG);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
+        result.put(20L, EntityDataSerializers.LONG);
         return Map.copyOf(result);
     }
 
@@ -552,12 +534,14 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
-        result.put(19L, EntityDataSerializers.CAT_VARIANT);
-        result.put(20L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
+        result.put(20L, EntityDataSerializers.CAT_VARIANT);
         result.put(21L, EntityDataSerializers.BOOLEAN);
-        result.put(22L, EntityDataSerializers.INT);
+        result.put(22L, EntityDataSerializers.BOOLEAN);
+        result.put(23L, EntityDataSerializers.INT);
+        result.put(24L, EntityDataSerializers.CAT_SOUND_VARIANT);
         return Map.copyOf(result);
     }
 
@@ -640,7 +624,9 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.CHICKEN_VARIANT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.CHICKEN_VARIANT);
+        result.put(19L, EntityDataSerializers.CHICKEN_SOUND_VARIANT);
         return Map.copyOf(result);
     }
 
@@ -708,7 +694,9 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.COW_VARIANT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.COW_VARIANT);
+        result.put(19L, EntityDataSerializers.COW_SOUND_VARIANT);
         return Map.copyOf(result);
     }
 
@@ -781,7 +769,8 @@ public final class EntityMetaWatcher {
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(17L, EntityDataSerializers.BOOLEAN);
-        result.put(18L, EntityDataSerializers.INT);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(19L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -804,8 +793,9 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -1092,10 +1082,11 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(18L, EntityDataSerializers.BYTE);
-        result.put(19L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
+        result.put(19L, EntityDataSerializers.BYTE);
         result.put(20L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
+        result.put(21L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
         return Map.copyOf(result);
     }
 
@@ -1118,8 +1109,9 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.FROG_VARIANT);
-        result.put(18L, EntityDataSerializers.OPTIONAL_UNSIGNED_INT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.FROG_VARIANT);
+        result.put(19L, EntityDataSerializers.OPTIONAL_UNSIGNED_INT);
         return Map.copyOf(result);
     }
 
@@ -1201,7 +1193,8 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -1227,6 +1220,7 @@ public final class EntityMetaWatcher {
         result.put(17L, EntityDataSerializers.BOOLEAN);
         result.put(18L, EntityDataSerializers.BOOLEAN);
         result.put(19L, EntityDataSerializers.BOOLEAN);
+        result.put(20L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -1274,6 +1268,7 @@ public final class EntityMetaWatcher {
         result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(17L, EntityDataSerializers.BOOLEAN);
         result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -1297,6 +1292,7 @@ public final class EntityMetaWatcher {
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -1319,8 +1315,9 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.INT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -1528,10 +1525,11 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        result.put(19L, EntityDataSerializers.INT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
         result.put(20L, EntityDataSerializers.INT);
+        result.put(21L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -1756,8 +1754,9 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -1780,7 +1779,8 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -1803,9 +1803,10 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
-        result.put(19L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
+        result.put(20L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -1829,6 +1830,7 @@ public final class EntityMetaWatcher {
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -1880,12 +1882,13 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
         result.put(18L, EntityDataSerializers.INT);
         result.put(19L, EntityDataSerializers.INT);
-        result.put(20L, EntityDataSerializers.BYTE);
+        result.put(20L, EntityDataSerializers.INT);
         result.put(21L, EntityDataSerializers.BYTE);
         result.put(22L, EntityDataSerializers.BYTE);
+        result.put(23L, EntityDataSerializers.BYTE);
         return Map.copyOf(result);
     }
 
@@ -1929,9 +1932,10 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
-        result.put(19L, EntityDataSerializers.INT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
+        result.put(20L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -1976,8 +1980,10 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(18L, EntityDataSerializers.PIG_VARIANT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
+        result.put(19L, EntityDataSerializers.PIG_VARIANT);
+        result.put(20L, EntityDataSerializers.PIG_SOUND_VARIANT);
         return Map.copyOf(result);
     }
 
@@ -2071,6 +2077,7 @@ public final class EntityMetaWatcher {
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -2131,7 +2138,8 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -2244,7 +2252,8 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
         return Map.copyOf(result);
     }
 
@@ -2347,7 +2356,8 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
         return Map.copyOf(result);
     }
 
@@ -2406,8 +2416,9 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.SNIFFER_STATE);
-        result.put(18L, EntityDataSerializers.INT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.SNIFFER_STATE);
+        result.put(19L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -2504,6 +2515,7 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -2547,8 +2559,9 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -2571,6 +2584,7 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -2714,10 +2728,11 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.BOOLEAN);
-        result.put(19L, EntityDataSerializers.INT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
         result.put(20L, EntityDataSerializers.INT);
+        result.put(21L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -2765,6 +2780,7 @@ public final class EntityMetaWatcher {
         result.put(16L, EntityDataSerializers.BOOLEAN);
         result.put(17L, EntityDataSerializers.BOOLEAN);
         result.put(18L, EntityDataSerializers.BOOLEAN);
+        result.put(19L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -2809,8 +2825,10 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
-        result.put(18L, EntityDataSerializers.VILLAGER_DATA);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
+        result.put(19L, EntityDataSerializers.VILLAGER_DATA);
+        result.put(20L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -2855,7 +2873,8 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.INT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -2996,13 +3015,14 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
-        result.put(19L, EntityDataSerializers.BOOLEAN);
-        result.put(20L, EntityDataSerializers.INT);
-        result.put(21L, EntityDataSerializers.LONG);
-        result.put(22L, EntityDataSerializers.WOLF_VARIANT);
-        result.put(23L, EntityDataSerializers.WOLF_SOUND_VARIANT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
+        result.put(20L, EntityDataSerializers.BOOLEAN);
+        result.put(21L, EntityDataSerializers.INT);
+        result.put(22L, EntityDataSerializers.LONG);
+        result.put(23L, EntityDataSerializers.WOLF_VARIANT);
+        result.put(24L, EntityDataSerializers.WOLF_SOUND_VARIANT);
         return Map.copyOf(result);
     }
 
@@ -3071,7 +3091,8 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
         return Map.copyOf(result);
     }
 
@@ -3094,10 +3115,11 @@ public final class EntityMetaWatcher {
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
         result.put(16L, EntityDataSerializers.BOOLEAN);
-        result.put(17L, EntityDataSerializers.BYTE);
-        result.put(18L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
-        result.put(19L, EntityDataSerializers.BOOLEAN);
-        result.put(20L, EntityDataSerializers.ZOMBIE_NAUTILUS_VARIANT);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.BYTE);
+        result.put(19L, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
+        result.put(20L, EntityDataSerializers.BOOLEAN);
+        result.put(21L, EntityDataSerializers.ZOMBIE_NAUTILUS_VARIANT);
         return Map.copyOf(result);
     }
 
@@ -3124,6 +3146,7 @@ public final class EntityMetaWatcher {
         result.put(18L, EntityDataSerializers.BOOLEAN);
         result.put(19L, EntityDataSerializers.BOOLEAN);
         result.put(20L, EntityDataSerializers.VILLAGER_DATA);
+        result.put(21L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -3159,7 +3182,6 @@ public final class EntityMetaWatcher {
         result.put(Armadillo.class, armadillo());
         result.put(ArmorStand.class, armorStand());
         result.put(Arrow.class, arrow());
-        result.put(Avatar.class, avatar());
         result.put(Axolotl.class, axolotl());
         result.put(Bat.class, bat());
         result.put(Bee.class, bee());
