@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/LivingEntity.java
 +++ b/net/minecraft/world/entity/LivingEntity.java
-@@ -1324,6 +_,7 @@
+@@ -1325,6 +_,7 @@
      private void refreshDirtyAttributes() {
          Set<AttributeInstance> attributesToUpdate = this.getAttributes().getAttributesToUpdate();
  

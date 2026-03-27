@@ -28,12 +28,12 @@ public net.minecraft.world.entity.Entity DATA_POSE
 public net.minecraft.world.entity.Entity DATA_SHARED_FLAGS_ID
 public net.minecraft.world.entity.LivingEntity SLEEPING_POS_ID
 public net.minecraft.world.entity.animal.bee.Bee$BaseBeeGoal
-public net.minecraft.world.entity.animal.bee.Bee$BeeBecomeAngryTargetGoal
 public net.minecraft.world.entity.animal.bee.Bee$BeeAttackGoal
-public net.minecraft.world.entity.animal.bee.Bee$BeeLookControl
+public net.minecraft.world.entity.animal.bee.Bee$BeeBecomeAngryTargetGoal
 public net.minecraft.world.entity.animal.bee.Bee$BeeGrowCropGoal
 public net.minecraft.world.entity.animal.bee.Bee$BeeHurtByOtherGoal
 public net.minecraft.world.entity.animal.bee.Bee$BeeLocateHiveGoal
+public net.minecraft.world.entity.animal.bee.Bee$BeeLookControl
 public net.minecraft.world.entity.animal.bee.Bee$BeeWanderGoal
 public net.minecraft.world.entity.animal.feline.Cat$CatAvoidEntityGoal
 public net.minecraft.world.entity.animal.feline.Cat$CatRelaxOnOwnerGoal

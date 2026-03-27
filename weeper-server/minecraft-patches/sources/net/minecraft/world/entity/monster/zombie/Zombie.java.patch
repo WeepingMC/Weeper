@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/monster/zombie/Zombie.java
 +++ b/net/minecraft/world/entity/monster/zombie/Zombie.java
-@@ -580,6 +_,7 @@
+@@ -589,6 +_,7 @@
          }
  
          if (this.random.nextFloat() < difficultyModifier * 0.05F) {
@@ -8,7 +8,7 @@
              this.getAttribute(Attributes.SPAWN_REINFORCEMENTS_CHANCE)
                  .addOrReplacePermanentModifier(
                      new AttributeModifier(LEADER_ZOMBIE_BONUS_ID, this.random.nextDouble() * 0.25 + 0.5, AttributeModifier.Operation.ADD_VALUE)
-@@ -593,6 +_,7 @@
+@@ -602,6 +_,7 @@
              }
  
              this.setCanBreakDoors(true);

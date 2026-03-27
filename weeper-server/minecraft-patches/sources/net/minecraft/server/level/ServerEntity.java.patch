@@ -1,16 +1,14 @@
 --- a/net/minecraft/server/level/ServerEntity.java
 +++ b/net/minecraft/server/level/ServerEntity.java
-@@ -290,7 +_,9 @@
+@@ -298,6 +_,7 @@
  
      public void removePairing(final ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
 +        io.papermc.paper.disguise.DisguiseUtil.tryDespawn(player, this.entity); // Weeper - disguise api
          player.connection.send(new ClientboundRemoveEntitiesPacket(this.entity.getId()));
-+        if(com.github.weepingmc.event.packet.PlayerUntrackEntityEvent.getHandlerList().getRegisteredListeners().length != 0) new com.github.weepingmc.event.packet.PlayerUntrackEntityEvent(player.getBukkitEntity(), this.entity.getId(), this.entity.getBukkitEntity()).callEvent(); // Weeper - player track entity events
      }
  
-     public void addPairing(final ServerPlayer player) {
-@@ -310,19 +_,21 @@
+@@ -318,19 +_,21 @@
          }
  
          Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket(this);
@@ -35,7 +33,7 @@
                  broadcast.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributes));
              }
          }
-@@ -392,7 +_,9 @@
+@@ -400,7 +_,9 @@
                      serverPlayer.getBukkitEntity().injectScaledMaxHealth(attributes, false);
                  }
                  // CraftBukkit end
