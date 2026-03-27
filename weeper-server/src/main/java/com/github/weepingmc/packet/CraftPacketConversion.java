@@ -2,7 +2,6 @@ package com.github.weepingmc.packet;
 
 import com.github.weepingmc.packet.options.Animation;
 import com.github.weepingmc.packet.options.EntityStatus;
-import com.github.weepingmc.packet.options.PlayerAbility;
 import com.github.weepingmc.packet.options.ProfileAction;
 import com.github.weepingmc.packet.options.abilities.AllowFlying;
 import com.github.weepingmc.packet.options.abilities.CreativeModeInstantBreak;
@@ -81,26 +80,12 @@ public final class CraftPacketConversion {
 
     static int fromAnimation(Animation animation) {
         return switch (animation) {
-            case SWING_MAIN_ARM, SWING_MAIN_HAND -> ClientboundAnimatePacket.SWING_MAIN_HAND;
+            case SWING_MAIN_HAND -> ClientboundAnimatePacket.SWING_MAIN_HAND;
             case LEAVE_BED -> ClientboundAnimatePacket.WAKE_UP;
             case SWING_OFFHAND -> ClientboundAnimatePacket.SWING_OFF_HAND;
-            case CRITICAL_EFFECT, TAKE_DAMAGE, CRITICAL_HIT -> ClientboundAnimatePacket.CRITICAL_HIT;
+            case CRITICAL_HIT -> ClientboundAnimatePacket.CRITICAL_HIT;
             case MAGIC_CRITICAL_EFFECT -> ClientboundAnimatePacket.MAGIC_CRITICAL_HIT;
         };
-    }
-
-    static Abilities mapPlayerAbilitiesOld(Set<PlayerAbility> playerAbilities) {
-        Abilities playerAbilitiesNMS = new Abilities();
-
-        for (PlayerAbility playerAbilitiy : playerAbilities) {
-            switch (playerAbilitiy) {
-                case INVULNERABLE -> playerAbilitiesNMS.invulnerable = true;
-                case FLYING -> playerAbilitiesNMS.flying = true;
-                case ALLOW_FLYING -> playerAbilitiesNMS.mayfly = true;
-                case CREATIVE_MODE_INSTANT_BREAK -> playerAbilitiesNMS.instabuild = true;
-            }
-        }
-        return playerAbilitiesNMS;
     }
 
     static Abilities mapPlayerAbilities(Set<com.github.weepingmc.packet.options.abilities.PlayerAbility> playerAbilities) {

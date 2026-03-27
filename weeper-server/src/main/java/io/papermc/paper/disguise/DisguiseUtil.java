@@ -32,10 +32,10 @@ public final class DisguiseUtil {
 
     public static boolean tryDisguise(ServerPlayer player, Entity entity, Packet<?> packet) {
         if (!(packet instanceof ClientboundAddEntityPacket clientboundAddEntityPacket)) {
-            return !(com.github.weepingmc.event.packet.PlayerTrackEntityEvent.getHandlerList().getRegisteredListeners().length == 0 || new com.github.weepingmc.event.packet.PlayerTrackEntityEvent(player.getBukkitEntity(), entity.getBukkitEntity()).callEvent()); // Weeper - player track entity events
+            return false;
         }
         return switch (entity.getBukkitEntity().getDisguiseData()) {
-            case DisguiseData.OriginalDisguise disguise -> false;
+            case DisguiseData.OriginalDisguise _ -> false;
             case EntityTypeDisguise(var type) -> {
                 player.connection.send(create(clientboundAddEntityPacket, CraftEntityType.bukkitToMinecraft(type)));
                 yield true;
