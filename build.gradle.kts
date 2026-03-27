@@ -73,6 +73,11 @@ subprojects {
     }
     tasks.withType<Javadoc> {
         options.encoding = Charsets.UTF_8.name()
+        javadocTool.set(
+            javaToolchains.javadocToolFor {
+                languageVersion.set(JavaLanguageVersion.of(25))
+            }
+        )
     }
     tasks.withType<ProcessResources> {
         filteringCharset = Charsets.UTF_8.name()
