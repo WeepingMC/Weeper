@@ -1,6 +1,14 @@
 --- a/src/main/java/com/destroystokyo/paper/SkinParts.java
 +++ b/src/main/java/com/destroystokyo/paper/SkinParts.java
-@@ -56,4 +_,30 @@
+@@ -1,6 +_,7 @@
+ package com.destroystokyo.paper;
+ 
+ import io.papermc.paper.InternalAPIBridge;
++import org.jetbrains.annotations.ApiStatus;
+ import org.jetbrains.annotations.Contract;
+ import org.jspecify.annotations.NullMarked;
+ 
+@@ -56,4 +_,31 @@
  
          SkinParts immutableCopy();
      }
@@ -11,6 +19,7 @@
 +     * @deprecated Use {@link SkinParts.Mutable} instead.
 +     */
 +    @Deprecated
++    @ApiStatus.ScheduledForRemoval(inVersion = "26.2")
 +    @org.jspecify.annotations.NullMarked
 +    interface Builder {
 +        Builder withCape(boolean cape);

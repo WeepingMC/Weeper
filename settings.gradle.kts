@@ -1,7 +1,6 @@
 pluginManagement {
     repositories {
         gradlePluginPortal()
-        mavenLocal()
         maven("https://repo.papermc.io/repository/maven-public/")
     }
 }
@@ -14,5 +13,5 @@ rootProject.name = "weeper"
 
 include("weeper-api")
 include("weeper-server")
-// include("weeper-generator")
+include("weeper-generator")
 // include("test-plugin")

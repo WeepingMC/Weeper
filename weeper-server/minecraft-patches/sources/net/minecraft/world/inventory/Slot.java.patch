@@ -12,12 +12,12 @@
 +    }
 +    // Weeper end - inventoryItemStackMoveStrategy
  
-     public Slot(Container container, int slot, int x, int y) {
+     public Slot(final Container container, final int slot, final int x, final int y) {
          this.container = container;
 @@ -147,7 +_,7 @@
      }
  
-     public boolean allowModification(Player player) {
+     public boolean allowModification(final Player player) {
 -        return this.mayPickup(player) && this.mayPlace(this.getItem());
 +        return (this.inventoryItemStackMoveStrategy == null || inventoryItemStackMoveStrategy.canTake(new com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem(container.getOwner(), org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitCopy(this.getItem()), slot, player.getBukkitEntity()))) && this.mayPickup(player) && this.mayPlace(this.getItem()); // Weeper - inventoryItemStackMoveStrategy
      }

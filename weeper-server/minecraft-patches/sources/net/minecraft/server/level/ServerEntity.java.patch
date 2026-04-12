@@ -1,47 +1,45 @@
 --- a/net/minecraft/server/level/ServerEntity.java
 +++ b/net/minecraft/server/level/ServerEntity.java
-@@ -302,7 +_,9 @@
+@@ -302,6 +_,7 @@
  
-     public void removePairing(ServerPlayer player) {
+     public void removePairing(final ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
 +        io.papermc.paper.disguise.DisguiseUtil.tryDespawn(player, this.entity); // Weeper - disguise api
          player.connection.send(new ClientboundRemoveEntitiesPacket(this.entity.getId()));
-+        if(com.github.weepingmc.event.packet.PlayerUntrackEntityEvent.getHandlerList().getRegisteredListeners().length != 0) new com.github.weepingmc.event.packet.PlayerUntrackEntityEvent(player.getBukkitEntity(), this.entity.getId(), this.entity.getBukkitEntity()).callEvent(); // Weeper - player track entity events
      }
  
-     public void addPairing(ServerPlayer player) {
 @@ -322,19 +_,21 @@
          }
  
-         Packet<ClientGamePacketListener> addEntityPacket = this.entity.getAddEntityPacket(this);
-+        if(!io.papermc.paper.disguise.DisguiseUtil.tryDisguise(player, entity, addEntityPacket)) { // Weeper start - disguise api
-         consumer.accept(addEntityPacket);
+         Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket(this);
++        if(!io.papermc.paper.disguise.DisguiseUtil.tryDisguise(player, entity, packet)) { // Weeper start - disguise api
+         broadcast.accept(packet);
 +        } // Weeper end - disguise api
          if (this.trackedDataValues != null) {
--            consumer.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
-+            consumer.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), io.papermc.paper.disguise.DisguiseUtil.filter(this.entity, this.trackedDataValues))); // Weeper - disguise api
+-            broadcast.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), this.trackedDataValues));
++            broadcast.accept(new ClientboundSetEntityDataPacket(this.entity.getId(), io.papermc.paper.disguise.DisguiseUtil.filter(this.entity, this.trackedDataValues))); // Weeper - disguise api
          }
  
 -        if (this.entity instanceof LivingEntity livingEntity) {
 +        if (this.entity instanceof LivingEntity livingEntity && !io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this.entity)) { // Weeper - disguise api
-             Collection<AttributeInstance> syncableAttributes = livingEntity.getAttributes().getSyncableAttributes();
+             Collection<AttributeInstance> attributes = livingEntity.getAttributes().getSyncableAttributes();
              // CraftBukkit start - If sending own attributes send scaled health instead of current maximum health
              if (this.entity.getId() == player.getId()) {
-                 ((ServerPlayer) this.entity).getBukkitEntity().injectScaledMaxHealth(syncableAttributes, false);
+                 ((ServerPlayer) this.entity).getBukkitEntity().injectScaledMaxHealth(attributes, false);
              }
              // CraftBukkit end
--            if (!syncableAttributes.isEmpty()) {
-+            if (!syncableAttributes.isEmpty() && !io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this.entity)) { // Weeper - disguise api
-                 consumer.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), syncableAttributes));
+-            if (!attributes.isEmpty()) {
++            if (!attributes.isEmpty() && !io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this.entity)) { // Weeper - disguise api
+                 broadcast.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributes));
              }
          }
 @@ -404,7 +_,9 @@
-                     serverPlayer.getBukkitEntity().injectScaledMaxHealth(attributesToSync, false);
+                     serverPlayer.getBukkitEntity().injectScaledMaxHealth(attributes, false);
                  }
                  // CraftBukkit end
 +                if(!io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this.entity)) { // Weeper start - disguise api
-                 this.synchronizer.sendToTrackingPlayersAndSelf(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributesToSync));
+                 this.synchronizer.sendToTrackingPlayersAndSelf(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributes));
 +                } // Weeper end - disguise api
              }
  
-             attributesToSync.clear();
+             attributes.clear();
