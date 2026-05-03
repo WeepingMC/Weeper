@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/level/gamerules/GameRules.java
 +++ b/net/minecraft/world/level/gamerules/GameRules.java
-@@ -97,6 +_,7 @@
+@@ -90,6 +_,7 @@
      public static final GameRule<Boolean> TNT_EXPLOSION_DROP_DECAY = registerBoolean("tnt_explosion_drop_decay", GameRuleCategory.DROPS, false);
      public static final GameRule<Boolean> UNIVERSAL_ANGER = registerBoolean("universal_anger", GameRuleCategory.MOBS, false);
      public static final GameRule<Boolean> WATER_SOURCE_CONVERSION = registerBoolean("water_source_conversion", GameRuleCategory.UPDATES, true);
