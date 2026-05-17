@@ -1,9 +1,9 @@
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
-@@ -1020,5 +_,34 @@
-      */
-     @Nullable
-     public Firework fireworkBoost(ItemStack fireworkItemStack);
+@@ -1040,5 +_,34 @@
+     default Firework fireworkBoost() {
+         return this.fireworkBoost(ItemStack.empty());
+     }
 +    // Weeper start - inventoryItemStackMoveStrategy
 +    /**
 +     * Opens an inventory window with the specified inventory on the top and
