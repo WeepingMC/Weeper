@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/inventory/AbstractContainerMenu.java
 +++ b/net/minecraft/world/inventory/AbstractContainerMenu.java
-@@ -159,6 +_,12 @@
+@@ -158,6 +_,12 @@
          return slot;
      }
  

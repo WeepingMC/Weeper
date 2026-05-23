@@ -14,7 +14,7 @@
  
      public Slot(final Container container, final int slot, final int x, final int y) {
          this.container = container;
-@@ -147,7 +_,7 @@
+@@ -149,7 +_,7 @@
      }
  
      public boolean allowModification(final Player player) {

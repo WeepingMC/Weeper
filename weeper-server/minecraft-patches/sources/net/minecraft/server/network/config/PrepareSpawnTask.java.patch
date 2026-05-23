@@ -1,20 +1,20 @@
 --- a/net/minecraft/server/network/config/PrepareSpawnTask.java
 +++ b/net/minecraft/server/network/config/PrepareSpawnTask.java
-@@ -193,12 +_,7 @@
-                         if (PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents != null) {
-                             player = PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents;
-                         } else {
--                            player = new ServerPlayer(
--                                PrepareSpawnTask.this.server,
--                                PrepareSpawnTask.this.server.overworld(),
--                                PrepareSpawnTask.this.profile,
--                                net.minecraft.server.level.ClientInformation.createDefault()
--                            );
-+                            player = server.server.getOfflinePlayerEditor().createOrGet(PrepareSpawnTask.this.server, PrepareSpawnTask.this.server.overworld(), PrepareSpawnTask.this.profile, net.minecraft.server.level.ClientInformation.createDefault()); // Weeper - Offline Player Editing
-                             PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents = player;
-                         }
-                         org.spigotmc.event.player.PlayerSpawnLocationEvent ev = new org.spigotmc.event.player.PlayerSpawnLocationEvent(
-@@ -283,7 +_,7 @@
+@@ -190,12 +_,7 @@
+                     if (PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents != null) {
+                         player = PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents;
+                     } else {
+-                        player = new ServerPlayer(
+-                            PrepareSpawnTask.this.server,
+-                            PrepareSpawnTask.this.server.overworld(),
+-                            PrepareSpawnTask.this.profile,
+-                            net.minecraft.server.level.ClientInformation.createDefault()
+-                        );
++                        player = player = server.server.getOfflinePlayerEditor().createOrGet(PrepareSpawnTask.this.server, PrepareSpawnTask.this.server.overworld(), PrepareSpawnTask.this.profile, net.minecraft.server.level.ClientInformation.createDefault()); // Weeper - Offline Player Editing
+                         PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents = player;
+                     }
+                     org.spigotmc.event.player.PlayerSpawnLocationEvent ev = new org.spigotmc.event.player.PlayerSpawnLocationEvent(
+@@ -277,7 +_,7 @@
                  player.updateOptionsNoEvents(cookie.clientInformation());
                  player.setServerLevel(this.spawnLevel);
              } else {
