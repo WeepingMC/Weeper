@@ -8,6 +8,7 @@ import com.github.weepingmc.packet.options.Animation;
 import com.github.weepingmc.packet.options.EntityMetaBuilder;
 import com.github.weepingmc.packet.options.ProfileAction;
 import com.github.weepingmc.packet.options.TeamMode;
+import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
 import java.util.ArrayList;
@@ -93,6 +94,8 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
 
     @Override
     public @NotNull PacketStepBuilder removePlayerProfile(@NotNull PlayerProfile playerProfile) {
+        Preconditions.checkArgument(playerProfile != null, "playerProfile cannot be null");
+        Preconditions.checkArgument(playerProfile.getId() != null, "playerProfile id cannot be null");
         ClientboundPlayerInfoRemovePacket clientboundPlayerInfoRemovePacket = new ClientboundPlayerInfoRemovePacket(List.of(playerProfile.getId()));
         initial.setNext(of(clientboundPlayerInfoRemovePacket));
         return this;

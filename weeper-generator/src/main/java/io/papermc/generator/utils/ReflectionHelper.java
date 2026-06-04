@@ -1,6 +1,5 @@
 package io.papermc.generator.utils;
 
-import io.papermc.generator.types.EntityMetaWatcherGenerator;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;

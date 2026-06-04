@@ -34,7 +34,6 @@ public final class CraftPacketConversion {
             case UPDATE_GAME_MODE -> ClientboundPlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE;
             case UPDATE_DISPLAY_NAME -> ClientboundPlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME;
             case UPDATE_LISTED -> ClientboundPlayerInfoUpdatePacket.Action.UPDATE_LISTED;
-            default -> throw new UnsupportedOperationException("Invalid case!");
         };
     }
 
@@ -92,11 +91,11 @@ public final class CraftPacketConversion {
         Abilities playerAbilitiesNMS = new Abilities();
         for (com.github.weepingmc.packet.options.abilities.PlayerAbility playerAbilitiy : playerAbilities) {
             switch (playerAbilitiy) {
-                case AllowFlying flying -> playerAbilitiesNMS.mayfly = true;
-                case CreativeModeInstantBreak creativeModeInstantBreak -> playerAbilitiesNMS.instabuild = true;
+                case AllowFlying _ -> playerAbilitiesNMS.mayfly = true;
+                case CreativeModeInstantBreak _ -> playerAbilitiesNMS.instabuild = true;
                 case FlySpeedAbility(var speed) -> playerAbilitiesNMS.flyingSpeed = speed;
-                case Flying flying -> playerAbilitiesNMS.flying = true;
-                case Invulnerable invulnerable -> playerAbilitiesNMS.invulnerable = true;
+                case Flying _ -> playerAbilitiesNMS.flying = true;
+                case Invulnerable _ -> playerAbilitiesNMS.invulnerable = true;
                 case WalkSpeedAbility(var speed) -> playerAbilitiesNMS.walkingSpeed = speed;
             }
         }
