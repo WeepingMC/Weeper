@@ -112,7 +112,7 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
                 location.z(),
                 location.getPitch(),
                 location.getYaw(),
-                net.minecraft.world.entity.EntityType.PLAYER,
+                net.minecraft.world.entity.EntityTypes.PLAYER,
                 0,
                 Vec3.ZERO,
                 location.getYaw()
@@ -269,7 +269,7 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
                 location.getZ(),
                 location.getYaw(),
                 location.getPitch(),
-                BuiltInRegistries.ENTITY_TYPE.getOptional(org.bukkit.craftbukkit.util.CraftNamespacedKey.toMinecraft(entityType.getKey())).orElse(net.minecraft.world.entity.EntityType.ARMOR_STAND),
+                BuiltInRegistries.ENTITY_TYPE.getOptional(org.bukkit.craftbukkit.util.CraftNamespacedKey.toMinecraft(entityType.getKey())).orElse(net.minecraft.world.entity.EntityTypes.ARMOR_STAND),
                 1,
                 new Vec3(movementDirection.getX(), movementDirection.getY(), movementDirection.getZ()),
                 0
