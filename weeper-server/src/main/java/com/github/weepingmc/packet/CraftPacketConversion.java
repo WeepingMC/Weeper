@@ -93,10 +93,10 @@ public final class CraftPacketConversion {
             switch (playerAbilitiy) {
                 case AllowFlying _ -> playerAbilitiesNMS.mayfly = true;
                 case CreativeModeInstantBreak _ -> playerAbilitiesNMS.instabuild = true;
-                case FlySpeedAbility(var speed) -> playerAbilitiesNMS.flyingSpeed = speed;
+                case FlySpeedAbility(var speed) -> playerAbilitiesNMS.setFlyingSpeed(speed);
                 case Flying _ -> playerAbilitiesNMS.flying = true;
                 case Invulnerable _ -> playerAbilitiesNMS.invulnerable = true;
-                case WalkSpeedAbility(var speed) -> playerAbilitiesNMS.walkingSpeed = speed;
+                case WalkSpeedAbility(var speed) -> playerAbilitiesNMS.setWalkingSpeed(speed);
             }
         }
         return playerAbilitiesNMS;

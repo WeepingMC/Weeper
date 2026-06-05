@@ -35,7 +35,7 @@ public class EntityTypeToEntityClassGenerator extends SimpleGenerator {
     @Override
     protected TypeSpec getTypeSpec() {
 
-        final List<TypeToClass> typeToClasses = ReflectionHelper.forClass(net.minecraft.world.entity.EntityType.class, field ->
+        final List<TypeToClass> typeToClasses = ReflectionHelper.forClass(net.minecraft.world.entity.EntityTypes.class, field ->
             java.lang.reflect.Modifier.isStatic(field.getModifiers()) &&
                 java.lang.reflect.Modifier.isPublic(field.getModifiers()) &&
                 java.lang.reflect.Modifier.isFinal(field.getModifiers()) &&
