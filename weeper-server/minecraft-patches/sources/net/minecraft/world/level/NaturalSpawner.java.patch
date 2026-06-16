@@ -15,7 +15,7 @@
  import org.jspecify.annotations.Nullable;
  import org.slf4j.Logger;
  
-@@ -244,9 +_,20 @@
+@@ -322,9 +_,20 @@
  
                                  mob.snapTo(xx, yStart, zz, level.random.nextFloat() * 360.0F, 0.0F);
                                  if (isValidPositionForMob(level, mob, nearestPlayerDistanceSqr)) {

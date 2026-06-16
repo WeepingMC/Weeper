@@ -14,7 +14,7 @@
                          PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents = player;
                      }
                      org.spigotmc.event.player.PlayerSpawnLocationEvent ev = new org.spigotmc.event.player.PlayerSpawnLocationEvent(
-@@ -281,7 +_,7 @@
+@@ -277,7 +_,7 @@
                  player.updateOptionsNoEvents(cookie.clientInformation());
                  player.setServerLevel(this.spawnLevel);
              } else {

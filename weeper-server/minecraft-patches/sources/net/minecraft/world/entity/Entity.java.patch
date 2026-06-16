@@ -1,6 +1,6 @@
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -613,6 +_,7 @@
+@@ -719,6 +_,7 @@
  
          final List<SynchedEntityData.DataValue<?>> values = new ArrayList<>(accessors.size());
          for (final EntityDataAccessor<?> accessor : accessors) {
@@ -8,7 +8,7 @@
              final SynchedEntityData.DataItem<?> item = this.entityData.getItem(accessor);
              values.add(item.value());
          }
-@@ -5198,4 +_,12 @@
+@@ -5456,4 +_,12 @@
          return ((ServerLevel) this.level()).isPositionEntityTicking(this.blockPosition());
      }
      // Paper end
