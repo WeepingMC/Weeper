@@ -80,18 +80,19 @@ import net.minecraft.world.entity.monster.Endermite;
 import net.minecraft.world.entity.monster.Ghast;
 import net.minecraft.world.entity.monster.Giant;
 import net.minecraft.world.entity.monster.Guardian;
-import net.minecraft.world.entity.monster.MagmaCube;
 import net.minecraft.world.entity.monster.Phantom;
 import net.minecraft.world.entity.monster.Ravager;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.entity.monster.Silverfish;
-import net.minecraft.world.entity.monster.Slime;
 import net.minecraft.world.entity.monster.Strider;
 import net.minecraft.world.entity.monster.Vex;
 import net.minecraft.world.entity.monster.Witch;
 import net.minecraft.world.entity.monster.Zoglin;
 import net.minecraft.world.entity.monster.breeze.Breeze;
 import net.minecraft.world.entity.monster.creaking.Creaking;
+import net.minecraft.world.entity.monster.cubemob.MagmaCube;
+import net.minecraft.world.entity.monster.cubemob.Slime;
+import net.minecraft.world.entity.monster.cubemob.SulfurCube;
 import net.minecraft.world.entity.monster.hoglin.Hoglin;
 import net.minecraft.world.entity.monster.illager.Evoker;
 import net.minecraft.world.entity.monster.illager.Illusioner;
@@ -1564,7 +1565,9 @@ public final class EntityMetaWatcher {
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.INT);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -2379,7 +2382,9 @@ public final class EntityMetaWatcher {
         result.put(13L, EntityDataSerializers.INT);
         result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
         result.put(15L, EntityDataSerializers.BYTE);
-        result.put(16L, EntityDataSerializers.INT);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
         return Map.copyOf(result);
     }
 
@@ -2562,6 +2567,32 @@ public final class EntityMetaWatcher {
         result.put(17L, EntityDataSerializers.BOOLEAN);
         result.put(18L, EntityDataSerializers.INT);
         result.put(19L, EntityDataSerializers.BOOLEAN);
+        return Map.copyOf(result);
+    }
+
+    private static final Map<Long, EntityDataSerializer<?>> sulfurCube() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.BYTE);
+        result.put(9L, EntityDataSerializers.FLOAT);
+        result.put(10L, EntityDataSerializers.PARTICLES);
+        result.put(11L, EntityDataSerializers.BOOLEAN);
+        result.put(12L, EntityDataSerializers.INT);
+        result.put(13L, EntityDataSerializers.INT);
+        result.put(14L, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+        result.put(15L, EntityDataSerializers.BYTE);
+        result.put(16L, EntityDataSerializers.BOOLEAN);
+        result.put(17L, EntityDataSerializers.BOOLEAN);
+        result.put(18L, EntityDataSerializers.INT);
+        result.put(19L, EntityDataSerializers.INT);
+        result.put(20L, EntityDataSerializers.BOOLEAN);
         return Map.copyOf(result);
     }
 
@@ -3291,6 +3322,7 @@ public final class EntityMetaWatcher {
         result.put(Squid.class, squid());
         result.put(Stray.class, stray());
         result.put(Strider.class, strider());
+        result.put(SulfurCube.class, sulfurCube());
         result.put(Tadpole.class, tadpole());
         result.put(Display.TextDisplay.class, textDisplay());
         result.put(ThrownEgg.class, thrownEgg());

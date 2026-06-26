@@ -16,11 +16,11 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.Mannequin;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.craftbukkit.entity.CraftEntityType;
-import org.bukkit.entity.Pose;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ public final class DisguiseUtil {
             case PlayerDisguise(var playerProfile, var skinParts, var description, var pose) -> {
                 PaperResolvableProfile profile = (PaperResolvableProfile) playerProfile;
 
-                player.connection.send(create(clientboundAddEntityPacket, EntityType.MANNEQUIN));
+                player.connection.send(create(clientboundAddEntityPacket, EntityTypes.MANNEQUIN));
 
                 var data = new ArrayList<SynchedEntityData.DataValue<?>>();
                 data.add(new SynchedEntityData.DataItem<>(Mannequin.DATA_PROFILE, profile.getHandle()).value());
