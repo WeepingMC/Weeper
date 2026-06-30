@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerEntity.java
 +++ b/net/minecraft/server/level/ServerEntity.java
-@@ -302,6 +_,7 @@
+@@ -307,6 +_,7 @@
  
      public void removePairing(final ServerPlayer player) {
          this.entity.stopSeenByPlayer(player);
@@ -8,7 +8,7 @@
          player.connection.send(new ClientboundRemoveEntitiesPacket(this.entity.getId()));
      }
  
-@@ -322,19 +_,21 @@
+@@ -327,12 +_,14 @@
          }
  
          Packet<ClientGamePacketListener> packet = this.entity.getAddEntityPacket(this);
@@ -23,17 +23,19 @@
 -        if (this.entity instanceof LivingEntity livingEntity) {
 +        if (this.entity instanceof LivingEntity livingEntity && !io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this.entity)) { // Weeper - disguise api
              Collection<AttributeInstance> attributes = livingEntity.getAttributes().getSyncableAttributes();
-             // CraftBukkit start - If sending own attributes send scaled health instead of current maximum health
-             if (this.entity.getId() == player.getId()) {
-                 ((ServerPlayer) this.entity).getBukkitEntity().injectScaledMaxHealth(attributes, false);
-             }
-             // CraftBukkit end
--            if (!attributes.isEmpty()) {
-+            if (!attributes.isEmpty() && !io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this.entity)) { // Weeper - disguise api
+             if (!attributes.isEmpty()) {
+                 // CraftBukkit start - If sending own attributes send scaled health instead of current maximum health
+@@ -340,7 +_,9 @@
+                     ((ServerPlayer) this.entity).getBukkitEntity().injectScaledMaxHealth(attributes, false);
+                 }
+                 // CraftBukkit end
++                if(!io.papermc.paper.disguise.DisguiseUtil.shouldSkipAttributeSending(this.entity)) { // Weeper start - disguise api
                  broadcast.accept(new ClientboundUpdateAttributesPacket(this.entity.getId(), attributes));
++                } // Weeper end - disguise api
              }
          }
-@@ -404,7 +_,9 @@
+ 
+@@ -409,7 +_,9 @@
                      serverPlayer.getBukkitEntity().injectScaledMaxHealth(attributes, false);
                  }
                  // CraftBukkit end

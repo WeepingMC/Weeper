@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannicklamprecht@live.de>
+Date: Tue, 16 Jun 2026 18:16:13 +0200
+Subject: [PATCH] enable moonrise hook
+
+
+diff --git a/net/minecraft/world/entity/Entity.java b/net/minecraft/world/entity/Entity.java
+index 440159b8947552a57b663e8243755edce1c7248b..442b0cf30085019db6f54491df782b44f1b32494 100644
+--- a/net/minecraft/world/entity/Entity.java
++++ b/net/minecraft/world/entity/Entity.java
+@@ -5457,12 +5457,12 @@ public abstract class Entity
+         return ((ServerLevel) this.level()).isPositionEntityTicking(this.blockPosition());
+     }
+     // Paper end
+-    // Weeper start - disguise api todo update when leaf updated leaf stuff -> move leaf into feature patch
++    // Weeper start - disguise api
+     public void clearPlayers() {
+-        // if (trackedEntity != null) trackedEntity.moonrise$clearPlayers();
++        if (trackedEntity != null) trackedEntity.moonrise$clearPlayers();
+     }
+     public void updatePlayers() {
+-        // if (trackedEntity != null) trackedEntity.updatePlayers(((ServerLevel)level).players());
++        if (trackedEntity != null) trackedEntity.updatePlayers(((ServerLevel)level).players());
+     }
+     // Weeper end - disguise api
+ }
