@@ -14,12 +14,3 @@
                          PrepareSpawnTask.this.listener.connection.savedPlayerForLegacyEvents = player;
                      }
                      org.spigotmc.event.player.PlayerSpawnLocationEvent ev = new org.spigotmc.event.player.PlayerSpawnLocationEvent(
-@@ -277,7 +_,7 @@
-                 player.updateOptionsNoEvents(cookie.clientInformation());
-                 player.setServerLevel(this.spawnLevel);
-             } else {
--                player = new ServerPlayer(PrepareSpawnTask.this.server, this.spawnLevel, cookie.gameProfile(), cookie.clientInformation());
-+                player = server.server.getOfflinePlayerEditor().createOrGet(PrepareSpawnTask.this.server, this.spawnLevel, cookie.gameProfile(), cookie.clientInformation()); // Weeper - Offline Player Editing
-             }
-             // Paper end - configuration api - possibly use legacy saved server player instance
- 

@@ -1,6 +1,6 @@
 --- a/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
 +++ b/src/main/java/org/bukkit/craftbukkit/scoreboard/CraftTeam.java
-@@ -16,10 +_,10 @@
+@@ -20,10 +_,10 @@
  import org.bukkit.scoreboard.NameTagVisibility;
  import org.bukkit.scoreboard.Team;
  
@@ -13,7 +13,7 @@
          super(scoreboard);
          this.team = team;
      }
-@@ -414,4 +_,8 @@
+@@ -419,4 +_,8 @@
          final CraftTeam other = (CraftTeam) obj;
          return Objects.equals(this.team, other.team);
      }
