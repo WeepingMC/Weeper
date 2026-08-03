@@ -5,10 +5,10 @@ Subject: [PATCH] enable moonrise hook
 
 
 diff --git a/net/minecraft/world/entity/Entity.java b/net/minecraft/world/entity/Entity.java
-index 440159b8947552a57b663e8243755edce1c7248b..442b0cf30085019db6f54491df782b44f1b32494 100644
+index e1a5d7b4bc2bdc51335b47c9d94e309e92584d8e..8e562ce5c8d2927392c4ece79c2fdaba58d2f7e0 100644
 --- a/net/minecraft/world/entity/Entity.java
 +++ b/net/minecraft/world/entity/Entity.java
-@@ -5457,12 +5457,12 @@ public abstract class Entity
+@@ -5460,12 +5460,12 @@ public abstract class Entity
          return ((ServerLevel) this.level()).isPositionEntityTicking(this.blockPosition());
      }
      // Paper end

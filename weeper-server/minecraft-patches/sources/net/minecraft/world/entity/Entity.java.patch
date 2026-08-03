@@ -8,7 +8,7 @@
              final SynchedEntityData.DataItem<?> item = this.entityData.getItem(accessor);
              values.add(item.value());
          }
-@@ -5463,4 +_,12 @@
+@@ -5459,4 +_,12 @@
          return ((ServerLevel) this.level()).isPositionEntityTicking(this.blockPosition());
      }
      // Paper end

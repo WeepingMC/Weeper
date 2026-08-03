@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yannick Lamprecht <yannick.lamprecht@7p-group.com>
+Date: Mon, 3 Aug 2026 15:01:44 +0200
+Subject: [PATCH] add leader zombie bonus migration to spotted data converter
+
+
+diff --git a/ca/spottedleaf/dataconverter/minecraft/versions/V4658.java b/ca/spottedleaf/dataconverter/minecraft/versions/V4658.java
+index 27219089e85bbe922cf889b8d7b9d1733c9f485c..958f9ec7d9df345e3ea08279af8f2e83da29a190 100644
+--- a/ca/spottedleaf/dataconverter/minecraft/versions/V4658.java
++++ b/ca/spottedleaf/dataconverter/minecraft/versions/V4658.java
+@@ -157,6 +157,8 @@ public final class V4658 {
+                 convertBool(gameRules, "universalAnger", "minecraft:universal_anger");
+                 convertBool(gameRules, "waterSourceConversion", "minecraft:water_source_conversion");
+ 
++                convertBool(gameRules, "leaderZombieBonus", "minecraft:leader_zombie_bonus"); // Weeper - migrate leader zombie bonus
++
+                 return null;
+             }
+         });
