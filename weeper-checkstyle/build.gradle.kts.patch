@@ -1,0 +1,11 @@
+--- a/paper-checkstyle/build.gradle.kts
++++ b/paper-checkstyle/build.gradle.kts
+@@ -16,7 +_,7 @@
+     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+     testData.implementationConfigurationName("org.jspecify:jspecify:1.0.0")
+ 
+-    checkstyle(project(":paper-checkstyle"))
++    checkstyle(project(":weeper-checkstyle"))
+ }
+ 
+ tasks {
