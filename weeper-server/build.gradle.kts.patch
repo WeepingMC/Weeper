@@ -72,7 +72,7 @@
          for (tld in setOf("net", "com", "org")) {
              attributes("$tld/bukkit", "Sealed" to true)
          }
-@@ -316,7 +_,7 @@
+@@ -327,7 +_,7 @@
  }
  
  fill {
@@ -81,7 +81,7 @@
      versionFamily(paperweight.minecraftVersion.map { it.split(".", "-").takeWhile { part -> part.toIntOrNull() != null }.take(2).joinToString(".") })
      version(paperweight.minecraftVersion)
  
-@@ -330,4 +_,29 @@
+@@ -341,4 +_,29 @@
              }
          }
      }
