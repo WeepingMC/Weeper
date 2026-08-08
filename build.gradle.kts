@@ -40,7 +40,7 @@ paperweight {
         patchDir("paperCheckstyle") {
             upstreamPath = "paper-checkstyle"
             excludes = setOf("build.gradle.kts")
-            patchesDir = file("weeper-checkstyle")
+            patchesDir = file("weeper-checkstyle/paper-patches")
             outputDir = file("paper-checkstyle")
         }
     }
