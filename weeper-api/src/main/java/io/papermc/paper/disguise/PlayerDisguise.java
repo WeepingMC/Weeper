@@ -99,7 +99,7 @@ public record PlayerDisguise(ResolvableProfile resolvableProfile, @Nullable Skin
         }
 
         /**
-         * Builds the disguise
+         * Builds the disguise.
          *
          * @return the built disguise
          */

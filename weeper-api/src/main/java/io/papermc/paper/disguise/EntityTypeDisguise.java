@@ -5,9 +5,14 @@ import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * Represents a disguise as a specific entity type.
+ *
+ * @param entityType the entity type to disguise as
+ */
 @NullMarked
 public record EntityTypeDisguise(EntityType entityType) implements DisguiseData {
-@ApiStatus.Internal
+    @ApiStatus.Internal
     public EntityTypeDisguise {
         Objects.requireNonNull(entityType, "type cannot be null");
     }
@@ -24,12 +29,12 @@ public record EntityTypeDisguise(EntityType entityType) implements DisguiseData 
         }
 
         /**
-         * Builds the disguise
+         * Builds the disguise.
          *
          * @return the built disguise
          */
         public EntityTypeDisguise build() {
-            return new EntityTypeDisguise(entityType);
+            return new EntityTypeDisguise(this.entityType);
         }
     }
 }

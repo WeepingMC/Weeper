@@ -62,15 +62,17 @@ public sealed interface DisguiseData permits DisguiseData.OriginalDisguise, Enti
     /**
      * An alias for {@link #original()} to cover certain views on it.
      *
-     * @see #original()
-     *
      * @return an original disguise data
+     * @see #original()
      */
     static OriginalDisguise reset() {
         return new OriginalDisguise();
     }
 
-    record OriginalDisguise() implements DisguiseData{
+    /**
+     * Represents the original state of an entity (no disguise).
+     */
+    record OriginalDisguise() implements DisguiseData {
         @ApiStatus.Internal
         public OriginalDisguise() {
 
