@@ -7,18 +7,42 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Server;
 import org.bukkit.entity.Pose;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+/**
+ * This is the data class for disguising an entity as a player.
+ * It contains the necessary information to create a player disguise,
+ * including the player's profile, skin parts, description, and pose.
+ *
+ * @param resolvableProfile the profile of the player to disguise as
+ * @param skinParts         the visible skin parts of the player disguise
+ * @param description       the description of the player disguise
+ * @param pose              the pose of the player disguise
+ */
 @NullMarked
 public record PlayerDisguise(ResolvableProfile resolvableProfile, @Nullable SkinParts skinParts,
                              @Nullable Component description, Pose pose) implements DisguiseData {
 
+    /**
+     * The constructor for the PlayerDisguise record. It ensures that the resolvableProfile is not null.
+     *
+     * @param resolvableProfile the profile of the player to disguise as
+     * @param skinParts         the visible skin parts of the player disguise
+     * @param description       the description of the player disguise
+     * @param pose              the pose of the player disguise
+     */
     @ApiStatus.Internal
     public PlayerDisguise {
         Objects.requireNonNull(resolvableProfile, "profile cannot be null");
     }
 
+    /**
+     * Creates a builder.
+     *
+     * @param playerProfile the profile of the player to disguise as
+     * @return an instance of the builder.
+     */
     public static Builder builder(ResolvableProfile playerProfile) {
         return new Builder(playerProfile);
     }
@@ -63,6 +87,12 @@ public record PlayerDisguise(ResolvableProfile resolvableProfile, @Nullable Skin
             return this;
         }
 
+        /**
+         * Sets the pose.
+         *
+         * @param pose the pose to be set.
+         * @return the builder instance
+         */
         public Builder pose(Pose pose) {
             this.pose = pose;
             return this;
@@ -74,7 +104,7 @@ public record PlayerDisguise(ResolvableProfile resolvableProfile, @Nullable Skin
          * @return the built disguise
          */
         public PlayerDisguise build() {
-            return new PlayerDisguise(resolvableProfile, skinParts, description, pose);
+            return new PlayerDisguise(this.resolvableProfile, this.skinParts, this.description, this.pose);
         }
     }
 }

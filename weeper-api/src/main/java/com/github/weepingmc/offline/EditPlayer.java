@@ -4,6 +4,9 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jspecify.annotations.NullMarked;
 
+/**
+ * The EditPlayer.
+ */
 @NullMarked
 public interface EditPlayer {
 

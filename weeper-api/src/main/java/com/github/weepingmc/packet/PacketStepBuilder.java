@@ -25,7 +25,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public interface PacketStepBuilder {
 
-    default PacketStepBuilder sendPlayerProfile(PlayerProfile playerProfile, ProfileAction profileAction){
+    default PacketStepBuilder sendPlayerProfile(PlayerProfile playerProfile, ProfileAction profileAction) {
         return sendPlayerProfile(playerProfile, profileAction, true);
     }
 
@@ -70,16 +70,24 @@ public interface PacketStepBuilder {
     PacketStepBuilder withMeta(int entityId, EntityMetaBuilder metaBuilder);
 
     /**
-     * sets the player abilities
+     * sets the player abilities.
      *
      * @param playerAbilities the abilities to modify
      * @return builder
      */
     PacketStepBuilder withPlayerAbilities(Set<com.github.weepingmc.packet.options.abilities.PlayerAbility> playerAbilities);
 
-    default void send(){
+    /**
+     * Sends the configured packets to all players.
+     */
+    default void send() {
         send(Bukkit.getOnlinePlayers());
     }
 
+    /**
+     * Sends the configured packets to a collection of players.
+     *
+     * @param players the players that receive the packets
+     */
     void send(Collection<? extends Player> players);
 }

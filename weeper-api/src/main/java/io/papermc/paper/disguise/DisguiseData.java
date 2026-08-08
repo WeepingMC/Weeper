@@ -40,6 +40,7 @@ public sealed interface DisguiseData permits DisguiseData.OriginalDisguise, Enti
 
     /**
      * Creates a {@link PlayerDisguise.Builder} where you can configure certain properties of the fake player appearance.
+     *
      * @param resolvableProfile a resolvable profile that will be the fake players skin
      * @return a builder to configure certain attributes
      */
@@ -71,6 +72,8 @@ public sealed interface DisguiseData permits DisguiseData.OriginalDisguise, Enti
 
     record OriginalDisguise() implements DisguiseData{
         @ApiStatus.Internal
-        public OriginalDisguise() {}
+        public OriginalDisguise() {
+
+        }
     }
 }
