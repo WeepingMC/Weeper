@@ -25,6 +25,11 @@ paperweight {
             outputFile = file("weeper-generator/build.gradle.kts")
             patchFile = file("weeper-generator/build.gradle.kts.patch")
         }
+        patchFile {
+            path = "paper-checkstyle/build.gradle.kts"
+            outputFile = file("weeper-checkstyle/build.gradle.kts")
+            patchFile = file("weeper-checkstyle/build.gradle.kts.patch")
+        }
         patchDir("paperApi") {
             upstreamPath = "paper-api"
             excludes = setOf("build.gradle.kts")
