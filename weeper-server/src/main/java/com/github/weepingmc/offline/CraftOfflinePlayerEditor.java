@@ -23,12 +23,12 @@ public class CraftOfflinePlayerEditor implements OfflinePlayerEditor {
     }
 
     @Override
-    public void editOfflinePlayer(@NonNull UUID playerUUID, @NonNull Consumer<EditPlayer> consumer) {
-        GameProfile playerProfile = ((CraftPlayerProfile) createProfile(playerUUID)).buildGameProfile();
-        ServerPlayer serverPlayer = server.getPlayerList().getPlayer(playerUUID);
+    public void editOfflinePlayer(@NonNull UUID uuid, @NonNull Consumer<EditPlayer> consumer) {
+        GameProfile playerProfile = ((CraftPlayerProfile) createProfile(uuid)).buildGameProfile();
+        ServerPlayer serverPlayer = server.getPlayerList().getPlayer(uuid);
 
         if (serverPlayer == null) {
-            serverPlayer = offlineEditedPlayers.get(playerUUID);
+            serverPlayer = offlineEditedPlayers.get(uuid);
         }
         if (serverPlayer == null) {
 
