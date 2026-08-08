@@ -37,3 +37,9 @@
  }
  
  tasks {
+@@ -22,6 +_,7 @@
+     test {
+         useJUnitPlatform()
++        workingDir = file("../paper-checkstyle")
+     }
+ }
