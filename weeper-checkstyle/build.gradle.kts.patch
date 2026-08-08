@@ -1,5 +1,33 @@
 --- a/paper-checkstyle/build.gradle.kts
 +++ b/paper-checkstyle/build.gradle.kts
+@@ -5,6 +_,27 @@
+ 
+ val testData = sourceSets.create("testData")
+ 
++sourceSets {
++    main {
++        java {
++            srcDir(file("../paper-checkstyle/src/main/java"))
++        }
++        resources {
++            srcDir(file("../paper-checkstyle/src/main/resources"))
++        }
++    }
++    test {
++        java {
++            srcDir(file("../paper-checkstyle/src/test/java"))
++        }
++    }
++    named(testData.name) {
++        java {
++            srcDir(file("../paper-checkstyle/src/testData/java"))
++        }
++    }
++}
++
+ dependencies {
+     implementation("com.puppycrawl.tools:checkstyle:13.8.0")
+     implementation("org.jspecify:jspecify:1.0.0")
 @@ -16,7 +_,7 @@
      testRuntimeOnly("org.junit.platform:junit-platform-launcher")
      testData.implementationConfigurationName("org.jspecify:jspecify:1.0.0")
