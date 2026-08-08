@@ -37,6 +37,12 @@ paperweight {
             patchesDir = file("weeper-generator/paper-patches")
             outputDir = file("paper-generator")
         }
+        patchDir("paperCheckstyle") {
+            upstreamPath = "paper-checkstyle"
+            excludes = setOf("build.gradle.kts")
+            patchesDir = file("weeper-checkstyle")
+            outputDir = file("paper-checkstyle")
+        }
     }
 }
 
