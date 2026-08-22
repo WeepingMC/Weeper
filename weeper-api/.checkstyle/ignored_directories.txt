@@ -405,3 +405,7 @@ weeper-api/src/test/java/org/bukkit/support/provider/
 weeper-api/src/test/java/org/bukkit/support/test/
 weeper-api/src/test/java/org/bukkit/util/
 weeper-api/src/test/java/org/bukkit/util/io/
+
+weeper-api/src/main/java/io/papermc/paper/
+weeper-api/src/generated/java/com/destroystokyo/paper/entity/ai/
+weeper-api/src/generated/java/io/papermc/
