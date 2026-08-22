@@ -13,7 +13,7 @@ public interface OfflinePlayerEditor {
      * Edits the information of an offline player.
      *
      * @param uuid         the UUID of the offline player to edit.
-     * @param consumer           a consumer function that takes an EditPlayer object as input.
+     * @param consumer     a consumer function that takes an EditPlayer object as input.
      */
     void editOfflinePlayer(UUID uuid, Consumer<EditPlayer> consumer);
 }
