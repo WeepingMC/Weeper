@@ -48,6 +48,11 @@ paperweight {
             patchesDir = file("weeper-checkstyle/paper-patches")
             outputDir = file("paper-checkstyle")
         }
+        patchDir("paperCheckstyleConfig") {
+            upstreamPath = ".checkstyle"
+            patchesDir = file("weeper-checkstyle/config-patches")
+            outputDir = file(".checkstyle")
+        }
     }
 }
 
