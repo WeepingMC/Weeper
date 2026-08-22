@@ -25,6 +25,11 @@ paperweight {
             outputFile = file("weeper-generator/build.gradle.kts")
             patchFile = file("weeper-generator/build.gradle.kts.patch")
         }
+        patchFile {
+            path = "paper-checkstyle/build.gradle.kts"
+            outputFile = file("weeper-checkstyle/build.gradle.kts")
+            patchFile = file("weeper-checkstyle/build.gradle.kts.patch")
+        }
         patchDir("paperApi") {
             upstreamPath = "paper-api"
             excludes = setOf("build.gradle.kts")
@@ -36,6 +41,17 @@ paperweight {
             excludes = setOf("build.gradle.kts")
             patchesDir = file("weeper-generator/paper-patches")
             outputDir = file("paper-generator")
+        }
+        patchDir("paperCheckstyle") {
+            upstreamPath = "paper-checkstyle"
+            excludes = setOf("build.gradle.kts")
+            patchesDir = file("weeper-checkstyle/paper-patches")
+            outputDir = file("paper-checkstyle")
+        }
+        patchDir("paperCheckstyleConfig") {
+            upstreamPath = ".checkstyle"
+            patchesDir = file("weeper-checkstyle/config-patches")
+            outputDir = file(".checkstyle")
         }
     }
 }

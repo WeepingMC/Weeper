@@ -14,6 +14,9 @@ build
 /paper-api
 /paper-api-generator
 /paper-generator
+/paper-checkstyle
+/.checkstyle
+/weeper-checkstyle/build.gradle.kts
 /weeper-generator/build.gradle.kts
 /weeper-generator/logs
 

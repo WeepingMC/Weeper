@@ -23,12 +23,12 @@ public class CraftOfflinePlayerEditor implements OfflinePlayerEditor {
     }
 
     @Override
-    public void editOfflinePlayer(@NonNull UUID playerUUID, @NonNull Consumer<EditPlayer> editPlayerConsumer) {
-        GameProfile playerProfile = ((CraftPlayerProfile) createProfile(playerUUID)).buildGameProfile();
-        ServerPlayer serverPlayer = server.getPlayerList().getPlayer(playerUUID);
+    public void editOfflinePlayer(@NonNull UUID uuid, @NonNull Consumer<EditPlayer> consumer) {
+        GameProfile playerProfile = ((CraftPlayerProfile) createProfile(uuid)).buildGameProfile();
+        ServerPlayer serverPlayer = server.getPlayerList().getPlayer(uuid);
 
         if (serverPlayer == null) {
-            serverPlayer = offlineEditedPlayers.get(playerUUID);
+            serverPlayer = offlineEditedPlayers.get(uuid);
         }
         if (serverPlayer == null) {
 
@@ -44,7 +44,7 @@ public class CraftOfflinePlayerEditor implements OfflinePlayerEditor {
         }
         // ensure cleanup if user fucks something up
         try {
-            editPlayerConsumer.accept(new com.github.weepingmc.offline.CraftEditPlayer(serverPlayer));
+            consumer.accept(new com.github.weepingmc.offline.CraftEditPlayer(serverPlayer));
         } finally {
             serverPlayer.getBukkitEntity().saveData();
             offlineEditedPlayers.remove(playerProfile.id());
