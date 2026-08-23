@@ -64,3 +64,13 @@
                  include("**/doc-files/**")
              }
              into("build/docs/javadoc")
+@@ -253,7 +_,8 @@
+     options.compilerArgs.add("-parameters")
+ }
+ 
+-val scanJarForBadCalls by tasks.registering(io.papermc.paperweight.tasks.ScanJarForBadCalls::class) {
++val scanJarForBadCalls = tasks.register("scanJarForBadCalls",io.papermc.paperweight.tasks.ScanJarForBadCalls::class) {
++    description = "Scans the jar for calls to methods annotated with @DoNotUse"
+     badAnnotations.add("Lio/papermc/paper/annotation/DoNotUse;")
+     jarToScan.set(tasks.jar.flatMap { it.archiveFile })
+     classpath.from(configurations.compileClasspath)
