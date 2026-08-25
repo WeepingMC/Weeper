@@ -19,7 +19,7 @@
 +    }
 +
 +    /*updatingMinecraft {
-         oldPaperCommit = "37dc5450d9b7acb2e367e8f1fbe0f07bb01334d9"
+         oldPaperCommit = "bb09b431d24f586da72ee7c4aa2e8cff2b32a478"
 -    }
 +    }*/
  }
@@ -51,7 +51,7 @@
  dependencies {
 -    implementation(project(":paper-api"))
 +    implementation(project(":weeper-api")) // Weeper api
-     implementation("ca.spottedleaf:leafpile:1.1.0")
+     implementation("ca.spottedleaf:leafpile:1.2.0")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
 @@ -169,21 +_,7 @@
