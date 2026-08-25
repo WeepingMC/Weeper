@@ -1,9 +1,10 @@
 --- a/paper-server/build.gradle.kts
 +++ b/paper-server/build.gradle.kts
-@@ -22,6 +_,19 @@
+@@ -22,9 +_,22 @@
      minecraftVersion = providers.gradleProperty("mcVersion")
      gitFilePatches = false
  
+-    updatingMinecraft {
 +    activeFork = forks.register("weeper") {
 +        upstream.patchDir("paperServer") {
 +            upstreamPath = "paper-server"
@@ -17,9 +18,13 @@
 +        paperServerDir = upstreamsDirectory().map { it.dir("paper/paper-server") }
 +    }
 +
-     updatingMinecraft {
++    /*updatingMinecraft {
          oldPaperCommit = "37dc5450d9b7acb2e367e8f1fbe0f07bb01334d9"
-     }
+-    }
++    }*/
+ }
+ 
+ tasks.generateDevelopmentBundle {
 @@ -86,7 +_,18 @@
      }
  }
