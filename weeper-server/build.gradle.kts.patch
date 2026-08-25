@@ -18,7 +18,7 @@
 +    }
 +
      updatingMinecraft {
-         // oldPaperCommit = "d4fe85375af18bfa88f44d7c1e6a61904ae550cc"
+         oldPaperCommit = "37dc5450d9b7acb2e367e8f1fbe0f07bb01334d9"
      }
 @@ -86,7 +_,18 @@
      }
