@@ -1,14 +1,15 @@
 --- a/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
 +++ b/src/main/java/org/bukkit/plugin/java/JavaPluginLoader.java
-@@ -276,6 +_,11 @@
-                     if (!warningState.printFor(warning)) {
+@@ -281,6 +_,12 @@
                          break;
                      }
+ 
 +                    // Weeper start - allow exclusion for own plugin
 +                    if(java.util.Objects.equals(clazz.getClassLoader(), plugin.getClass().getClassLoader())) {
 +                        break;
 +                    }
 +                    // Weeper end - allow exclusion for own plugin
++
                      plugin.getLogger().log(
                              Level.WARNING,
                              String.format(
