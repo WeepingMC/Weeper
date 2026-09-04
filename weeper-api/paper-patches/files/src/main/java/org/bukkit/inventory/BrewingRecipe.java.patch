@@ -1,0 +1,15 @@
+--- a/src/main/java/org/bukkit/inventory/BrewingRecipe.java
++++ b/src/main/java/org/bukkit/inventory/BrewingRecipe.java
+@@ -2,10 +_,12 @@
+ 
+ import org.bukkit.Keyed;
+ import org.bukkit.NamespacedKey;
++import org.jspecify.annotations.NullMarked;
+ 
+ /**
+  * Represents a recipe that is applicable to brewing stands.
+  */
++@NullMarked
+ public class BrewingRecipe implements Recipe, Keyed {
+ 
+     private final NamespacedKey key;
