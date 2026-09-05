@@ -64,6 +64,7 @@ import net.minecraft.world.entity.boss.enderdragon.EnderDragon;
 import net.minecraft.world.entity.boss.enderdragon.EnderDragonPart;
 import net.minecraft.world.entity.boss.wither.WitherBoss;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.decoration.Cushion;
 import net.minecraft.world.entity.decoration.GlowItemFrame;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.decoration.LeashFenceKnotEntity;
@@ -72,7 +73,22 @@ import net.minecraft.world.entity.decoration.painting.Painting;
 import net.minecraft.world.entity.item.FallingBlockEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.item.PrimedTnt;
-import net.minecraft.world.entity.monster.*;
+import net.minecraft.world.entity.monster.Blaze;
+import net.minecraft.world.entity.monster.Creeper;
+import net.minecraft.world.entity.monster.ElderGuardian;
+import net.minecraft.world.entity.monster.Enderman;
+import net.minecraft.world.entity.monster.Endermite;
+import net.minecraft.world.entity.monster.Ghast;
+import net.minecraft.world.entity.monster.Giant;
+import net.minecraft.world.entity.monster.Guardian;
+import net.minecraft.world.entity.monster.Phantom;
+import net.minecraft.world.entity.monster.Ravager;
+import net.minecraft.world.entity.monster.Shulker;
+import net.minecraft.world.entity.monster.Silverfish;
+import net.minecraft.world.entity.monster.Strider;
+import net.minecraft.world.entity.monster.Vex;
+import net.minecraft.world.entity.monster.Witch;
+import net.minecraft.world.entity.monster.Zoglin;
 import net.minecraft.world.entity.monster.breeze.Breeze;
 import net.minecraft.world.entity.monster.creaking.Creaking;
 import net.minecraft.world.entity.monster.cubemob.MagmaCube;
@@ -735,6 +751,20 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
+    private static final Map<Long, EntityDataSerializer<?>> cushion() {
+        Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
+        result.put(0L, EntityDataSerializers.BYTE);
+        result.put(1L, EntityDataSerializers.INT);
+        result.put(2L, EntityDataSerializers.OPTIONAL_COMPONENT);
+        result.put(3L, EntityDataSerializers.BOOLEAN);
+        result.put(4L, EntityDataSerializers.BOOLEAN);
+        result.put(5L, EntityDataSerializers.BOOLEAN);
+        result.put(6L, EntityDataSerializers.POSE);
+        result.put(7L, EntityDataSerializers.INT);
+        result.put(8L, EntityDataSerializers.DYE_COLOR);
+        return Map.copyOf(result);
+    }
+
     private static final Map<Long, EntityDataSerializer<?>> dolphin() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
@@ -895,7 +925,7 @@ public final class EntityMetaWatcher {
         return Map.copyOf(result);
     }
 
-    private static final Map<Long, EntityDataSerializer<?>> enderMan() {
+    private static final Map<Long, EntityDataSerializer<?>> enderman() {
         Map<Long, EntityDataSerializer<?>> result = new HashMap<>();
         result.put(0L, EntityDataSerializers.BYTE);
         result.put(1L, EntityDataSerializers.INT);
@@ -3219,6 +3249,7 @@ public final class EntityMetaWatcher {
         result.put(Cow.class, cow());
         result.put(Creaking.class, creaking());
         result.put(Creeper.class, creeper());
+        result.put(Cushion.class, cushion());
         result.put(Dolphin.class, dolphin());
         result.put(Donkey.class, donkey());
         result.put(DragonFireball.class, dragonFireball());
@@ -3227,7 +3258,7 @@ public final class EntityMetaWatcher {
         result.put(EndCrystal.class, endCrystal());
         result.put(EnderDragon.class, enderDragon());
         result.put(EnderDragonPart.class, enderDragonPart());
-        result.put(Enderman.class, enderMan());
+        result.put(Enderman.class, enderman());
         result.put(Endermite.class, endermite());
         result.put(Evoker.class, evoker());
         result.put(EvokerFangs.class, evokerFangs());
