@@ -47,3 +47,4 @@ public net.minecraft.world.entity.monster.zombie.Drowned$DrownedMoveControl
 public net.minecraft.world.entity.monster.zombie.Drowned$DrownedSwimUpGoal
 public net.minecraft.world.entity.monster.zombie.Drowned$DrownedTridentAttackGoal
 public net.minecraft.world.entity.raid.Raider$RaiderMoveThroughVillageGoal
+public net.minecraft.world.entity.raid.Raider$HoldGroundAttackGoal
