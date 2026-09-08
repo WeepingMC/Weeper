@@ -8,7 +8,7 @@
          for (AttributeInstance changedAttributeInstance : attributesToUpdate) {
              this.onAttributeUpdated(changedAttributeInstance.getAttribute());
          }
-@@ -2643,6 +_,7 @@
+@@ -2647,6 +_,7 @@
      public boolean swing(final InteractionHand hand, final SwingAnimation animation, final boolean sendToSwingingEntity) {
          if (this.swingState.startIfAble(hand, animation, this.getModifiedSwingDuration(animation))) {
              if (this.level() instanceof ServerLevel serverLevel) {
