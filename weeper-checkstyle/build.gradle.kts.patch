@@ -1,13 +1,24 @@
 --- a/paper-checkstyle/build.gradle.kts
 +++ b/paper-checkstyle/build.gradle.kts
-@@ -5,6 +_,31 @@
+@@ -16,7 +_,7 @@
+     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+     testData.implementationConfigurationName("org.jspecify:jspecify:1.0.0")
  
- val testData = sourceSets.create("testData")
+-    checkstyle(project(":paper-checkstyle"))
++    checkstyle(project(":weeper-checkstyle")) // Weeper Checkstyle rules
+ }
  
+ tasks {
+@@ -24,3 +_,30 @@
+         useJUnitPlatform()
+     }
+ }
++
 +tasks.named<io.papermc.paperweight.checkstyle.tasks.MergeCheckstyleConfigs>("mergeCheckstyleConfigs") {
 +    overrideConfigFile.set(layout.projectDirectory.file("../paper-checkstyle/.checkstyle/checkstyle.xml"))
 +}
 +
++// Weeper start - Checkstyle source sets
 +sourceSets {
 +    main {
 +        java {
@@ -28,22 +39,4 @@
 +        }
 +    }
 +}
-+
- dependencies {
-     implementation("com.puppycrawl.tools:checkstyle:13.8.0")
-     implementation("org.jspecify:jspecify:1.0.1")
-@@ -16,11 +_,13 @@
-     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-     testData.implementationConfigurationName("org.jspecify:jspecify:1.0.1")
- 
--    checkstyle(project(":paper-checkstyle"))
-+    checkstyle(project(":weeper-checkstyle"))
- }
- 
- tasks {
-     test {
-         useJUnitPlatform()
-+        // Upstream tests resolve test fixtures via a relative src/testData/java path.
-+        workingDir = file("../paper-checkstyle")
-     }
- }
++// Weeper end - Checkstyle source sets
