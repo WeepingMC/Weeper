@@ -25,27 +25,16 @@ import javax.annotation.Nonnull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
-import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
-import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket;
-import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
-import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
-import net.minecraft.network.protocol.game.ClientboundRotateHeadPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
-import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
-import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket;
+import net.minecraft.network.protocol.game.*;
 import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket.Action;
-import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.PositionMoveRotation;
 import net.minecraft.world.entity.player.Abilities;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.portal.TeleportTransition;
 import net.minecraft.world.phys.Vec3;
@@ -199,9 +188,9 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
     public PacketStepBuilder movePositionAndRotateFullHead(int entityId, @Nonnull Vector direction, byte yaw, byte pitch, boolean onGround) {
         initial.setNext(of(new ClientboundMoveEntityPacket.PosRot(
                 entityId,
-                (short) direction.getX(),
+                new VecDelta.Linear((short) direction.getX(),
                 (short) direction.getY(),
-                (short) direction.getZ(),
+                (short) direction.getZ()),
                 (byte) ((int) (yaw * 256.0F / 360.0F)),
                 (byte) ((int) (pitch * 256.0F / 360.0F)),
                 onGround)));
@@ -254,7 +243,18 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
     @Override
     @Nonnull
     public PacketStepBuilder animateEntity(int entityId, @Nonnull Animation animation) {
-        initial.setNext(of(new ClientboundAnimatePacket(entityId, CraftPacketConversion.fromAnimation(animation))));
+        switch (animation) {
+            case Animation.SWING_MAIN_HAND:
+                initial.setNext(of(new ClientboundSwingAnimationPacket(entityId, net.minecraft.world.InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT)));
+                break;
+            case Animation.SWING_OFFHAND:
+                initial.setNext(of(new ClientboundSwingAnimationPacket(entityId, InteractionHand.OFF_HAND, SwingAnimation.DEFAULT)));
+                break;
+            case Animation.CRITICAL_HIT:
+            case Animation.MAGIC_CRITICAL_EFFECT:
+                initial.setNext(of(new ClientboundAnimatePacket(entityId, CraftPacketConversion.fromAnimation(animation))));
+                break;
+        }
         return this;
     }
 
