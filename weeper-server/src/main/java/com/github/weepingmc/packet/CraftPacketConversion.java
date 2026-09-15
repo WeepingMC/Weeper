@@ -79,9 +79,9 @@ public final class CraftPacketConversion {
 
     static int fromAnimation(Animation animation) {
         return switch (animation) {
-            case SWING_MAIN_HAND -> ClientboundAnimatePacket.SWING_MAIN_HAND;
+            case SWING_MAIN_HAND -> 0;
             case LEAVE_BED -> ClientboundAnimatePacket.WAKE_UP;
-            case SWING_OFFHAND -> ClientboundAnimatePacket.SWING_OFF_HAND;
+            case SWING_OFFHAND -> 0;
             case CRITICAL_HIT -> ClientboundAnimatePacket.CRITICAL_HIT;
             case MAGIC_CRITICAL_EFFECT -> ClientboundAnimatePacket.MAGIC_CRITICAL_HIT;
         };
