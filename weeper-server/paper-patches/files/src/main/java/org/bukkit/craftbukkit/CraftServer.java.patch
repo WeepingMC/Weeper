@@ -24,7 +24,7 @@
      }
  
      public boolean getCommandBlockOverride(String command) {
-@@ -2954,4 +_,25 @@
+@@ -2950,4 +_,25 @@
      public void allowPausing(final Plugin plugin, final boolean value) {
          this.console.addPluginAllowingSleep(plugin.getName(), value);
      }
