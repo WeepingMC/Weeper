@@ -46,7 +46,7 @@
  dependencies {
 -    implementation(project(":paper-api"))
 +    implementation(project(":weeper-api")) // Weeper api
-     implementation("ca.spottedleaf:leafpile:1.2.0")
+     implementation("ca.spottedleaf:leafpile:1.2.2")
      implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
      implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
 @@ -169,21 +_,7 @@
@@ -87,7 +87,7 @@
  tasks.check {
      dependsOn(scanJarForBadCalls)
  }
-@@ -327,7 +_,7 @@
+@@ -328,7 +_,7 @@
  }
  
  fill {
@@ -96,7 +96,7 @@
      versionFamily(paperweight.minecraftVersion.map { it.split(".", "-").takeWhile { part -> part.toIntOrNull() != null }.take(2).joinToString(".") })
      version(paperweight.minecraftVersion)
  
-@@ -341,4 +_,29 @@
+@@ -342,4 +_,29 @@
              }
          }
      }
