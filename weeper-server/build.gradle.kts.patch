@@ -46,10 +46,10 @@
  dependencies {
 -    implementation(project(":paper-api"))
 +    implementation(project(":weeper-api")) // Weeper api
-     implementation("ca.spottedleaf:leafpile:1.2.2")
-     implementation("org.jline:jline-terminal-ffm:3.27.1") // use ffm on java 22+
-     implementation("org.jline:jline-terminal-jni:3.27.1") // fall back to jni on java 21
-@@ -169,21 +_,7 @@
+     implementation(platform("ca.spottedleaf.leafpile:bom:1.2.4"))
+     implementation("ca.spottedleaf.leafpile:common")
+     implementation("ca.spottedleaf.leafpile:concurrentutil")
+@@ -172,21 +_,7 @@
          val implementationVersion = "$mcVersion-${build ?: "DEV"}-$gitHash"
          val date = git.exec(providers, "show", "-s", "--format=%ci", gitHash).get().trim()
          val gitBranch = git.exec(providers, "rev-parse", "--abbrev-ref", "HEAD").get().trim()
@@ -72,22 +72,7 @@
          for (tld in setOf("net", "com", "org")) {
              attributes("$tld/bukkit", "Sealed" to true)
          }
-@@ -209,11 +_,13 @@
-     options.forkOptions.memoryMaximumSize = "1G"
- }
- 
--val scanJarForBadCalls by tasks.registering(io.papermc.paperweight.tasks.ScanJarForBadCalls::class) {
-+val scanJarForBadCalls = tasks.register("scanJarForBadCalls", io.papermc.paperweight.tasks.ScanJarForBadCalls::class) {
-+    description = "Scans the jar for calls to methods annotated with @DoNotUse"
-     badAnnotations.add("Lio/papermc/paper/annotation/DoNotUse;")
-     jarToScan.set(tasks.jar.flatMap { it.archiveFile })
-     classpath.from(configurations.compileClasspath)
- }
-+
- tasks.check {
-     dependsOn(scanJarForBadCalls)
- }
-@@ -328,7 +_,7 @@
+@@ -331,7 +_,7 @@
  }
  
  fill {
@@ -96,7 +81,7 @@
      versionFamily(paperweight.minecraftVersion.map { it.split(".", "-").takeWhile { part -> part.toIntOrNull() != null }.take(2).joinToString(".") })
      version(paperweight.minecraftVersion)
  
-@@ -342,4 +_,29 @@
+@@ -345,4 +_,29 @@
              }
          }
      }
