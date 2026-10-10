@@ -1,15 +1,15 @@
 --- a/src/main/java/io/papermc/paper/persistence/PersistentDataContainerView.java
 +++ b/src/main/java/io/papermc/paper/persistence/PersistentDataContainerView.java
-@@ -1,7 +_,7 @@
- package io.papermc.paper.persistence;
+@@ -2,7 +_,7 @@
  
  import java.util.Set;
+ import com.google.common.base.Preconditions;
 -import org.bukkit.NamespacedKey;
 +import net.kyori.adventure.key.Key;
  import org.bukkit.persistence.PersistentDataAdapterContext;
  import org.bukkit.persistence.PersistentDataContainer;
  import org.bukkit.persistence.PersistentDataHolder;
-@@ -47,7 +_,7 @@
+@@ -48,7 +_,7 @@
       * @throws IllegalArgumentException if the type to cast the found object to is
       * null
       */
@@ -18,7 +18,7 @@
  
      /**
       * Returns if the persistent metadata provider has metadata registered matching
-@@ -64,7 +_,7 @@
+@@ -65,7 +_,7 @@
       * @return if a value with the provided key exists
       * @throws IllegalArgumentException if the key to look up is null
       */
@@ -26,8 +26,8 @@
 +    boolean has(Key key);
  
      /**
-      * Returns the metadata value that is stored on the
-@@ -85,7 +_,7 @@
+      * Returns if the persistent metadata provider has metadata registered
+@@ -112,7 +_,7 @@
       * the {@link
       * PersistentDataType#getPrimitiveType()}
       */
@@ -36,34 +36,24 @@
  
      /**
       * Returns the metadata value that is stored on the
-@@ -108,18 +_,32 @@
+@@ -135,7 +_,7 @@
       * @throws IllegalArgumentException if no suitable adapter was found for
       * the {@link PersistentDataType#getPrimitiveType()}
       */
 -    <P, C> C getOrDefault(NamespacedKey key, PersistentDataType<P, C> type, C defaultValue);
--
--    /**
--     * Get the set of keys present on this {@link PersistentDataContainer}
--     * instance.
--     * <p>
--     * Any changes made to the returned set will not be reflected on the
--     * instance.
--     *
--     * @return the key set
--     */
--    Set<NamespacedKey> getKeys();
 +    <P, C> C getOrDefault(Key key, PersistentDataType<P, C> type, C defaultValue);
-+
-+    /**
-+     * Get the set of keys present on this {@link PersistentDataContainer}
-+     * instance.
-+     * <p>
-+     * Any changes made to the returned set will not be reflected on the
-+     * instance.
-+     *
-+     * @return the key set
-+     */
-+    Set<Key> keys();
+ 
+     /**
+      * Returns the metadata value that is stored on the
+@@ -186,7 +_,22 @@
+      *
+      * @return the key set
+      */
+-    Set<NamespacedKey> getKeys();
++    @Deprecated
++    default Set<org.bukkit.NamespacedKey> getKeys() {
++        return Set.of(); // NOOP: Will be rewritten via Commodore and stays as a compatibility shim
++    }
 +
 +    /**
 +     * Get the set of keys present on this {@link PersistentDataContainer}
@@ -75,9 +65,7 @@
 +     * @return the key set
 +     */
 +    @Deprecated
-+    default Set<org.bukkit.NamespacedKey> getKeys(){
-+        return Set.of(); // NOOP: Will be rewritten via Commodore and stays as a compatibility shim
-+    }
++    Set<Key> keys();
  
      /**
       * Returns if the container instance is empty, therefore has no entries
