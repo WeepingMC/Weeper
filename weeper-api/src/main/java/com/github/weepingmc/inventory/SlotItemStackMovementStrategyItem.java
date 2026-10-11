@@ -4,6 +4,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents an item in a slot for item stack movement strategy.
@@ -18,6 +19,6 @@ public record SlotItemStackMovementStrategyItem(
         InventoryHolder inventoryHolder,
         ItemStack itemStack,
         int slot,
-        HumanEntity human
+        @Nullable HumanEntity human
 ) {
 }

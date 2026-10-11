@@ -1,6 +1,6 @@
 --- a/net/minecraft/server/level/ServerPlayer.java
 +++ b/net/minecraft/server/level/ServerPlayer.java
-@@ -1782,7 +_,7 @@
+@@ -1795,7 +_,7 @@
              return;
          }
          // CraftBukkit end
@@ -9,7 +9,7 @@
              this.level().getChunkSource().sendToTrackingPlayersAndSelf(this, new ClientboundAnimatePacket(this, ClientboundAnimatePacket.WAKE_UP));
          }
  
-@@ -2343,11 +_,13 @@
+@@ -2356,11 +_,13 @@
  
      @Override
      public void crit(final Entity entity) {
