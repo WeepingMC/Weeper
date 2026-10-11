@@ -17,7 +17,7 @@
 +    default InventoryView openInventory(Inventory inventory, java.util.function.@Nullable BiFunction<InventoryHolder, ItemStack, Boolean> mayPlaceStrategy){
 +        return openInventory(inventory, new com.github.weepingmc.inventory.InventoryItemStackMoveStrategy() {
 +            @Override
-+            public boolean canPlace(com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem slotItemStackMovementStrategyItem) {
++            public boolean allowedToModify(com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem slotItemStackMovementStrategyItem) {
 +                return mayPlaceStrategy != null ? mayPlaceStrategy.apply(slotItemStackMovementStrategyItem.inventoryHolder(), slotItemStackMovementStrategyItem.itemStack()) : true;
 +            }
 +        });
