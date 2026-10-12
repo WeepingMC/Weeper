@@ -14,6 +14,6 @@ rootProject.name = "weeper"
 include("weeper-api")
 include("weeper-server")
 include("weeper-generator")
-include("test-plugin")
+// include("test-plugin")
 
 include("weeper-checkstyle")
