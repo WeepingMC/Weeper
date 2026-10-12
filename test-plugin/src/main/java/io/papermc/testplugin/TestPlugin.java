@@ -19,14 +19,13 @@ import io.papermc.paper.command.brigadier.MessageComponentSerializer;
 import io.papermc.paper.command.brigadier.argument.CustomArgumentType;
 import io.papermc.paper.datacomponent.item.ResolvableProfile;
 import io.papermc.paper.disguise.DisguiseData;
+import io.papermc.paper.plugin.lifecycle.event.registrar.ReloadableRegistrarEvent;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
-import java.util.EnumSet;
-import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Mannequin;
 import org.bukkit.entity.Player;
@@ -36,6 +35,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.EnumSet;
+import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
+
 public final class TestPlugin extends JavaPlugin implements Listener {
 
     @Override
@@ -43,47 +46,69 @@ public final class TestPlugin extends JavaPlugin implements Listener {
         this.getServer().getPluginManager().registerEvents(this, this);
 
         getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
-            event.registrar().register(Commands.literal("test")
-                    .requires(source -> source.getExecutor() instanceof Player)
-                    .then(Commands.argument("pose", PoseArgument.pose())
-                            .executes(context -> {
-                                if (context.getSource().getExecutor() instanceof Player player) {
-                                    var pose = context.getArgument("pose", Pose.class);
-
-                                    player.getWorld().spawn(player.getLocation(), Zombie.class, (zombie) -> {
-                                        zombie.setDisguiseData(DisguiseData.player(ResolvableProfile.resolvableProfile(player.getPlayerProfile()))
-                                                .description(Component.text("Zombie Meme", NamedTextColor.RED))
-                                                .pose(pose)
-                                                .skinParts(SkinParts.allParts())
-                                                .build()
-                                        );
-                                        zombie.setCustomNameVisible(true);
-                                        zombie.customName(Component.text("ysl", NamedTextColor.RED));
-
-                                        Bukkit.getMobGoals().addGoal(zombie, 1, new TestGoal(zombie));
-                                    });
-                                    player.sendMessage(Component.text("Test command executed!", NamedTextColor.GREEN));
-                                }
-                                return Command.SINGLE_SUCCESS;
-                            })
-                    )
-
-                    .build());
+            registerPoseCommand(event);
+            registerInventoryCommand(event);
         });
 
 
     }
 
+    private void registerInventoryCommand(ReloadableRegistrarEvent<Commands> event) {
+        event.registrar().register(Commands.literal("open-inventory")
+                .requires(source -> source.getExecutor() instanceof Player)
+                .executes(context -> {
+                            if (context.getSource().getExecutor() instanceof Player player) {
+                                var inventory = Bukkit.createInventory(player, 9, Component.text("Test Inventory", NamedTextColor.GREEN));
+                                player.openInventory(inventory, (holder, item) -> {
+                                    // Example strategy: only allow placing items of type DIAMOND
+                                    return item.getType() == Material.DIAMOND;
+                                });
+                            }
+                            return Command.SINGLE_SUCCESS;
+                        }
+                ).build());
+    }
+
+
+    private void registerPoseCommand(ReloadableRegistrarEvent<Commands> event) {
+        event.registrar().register(Commands.literal("test")
+                .requires(source -> source.getExecutor() instanceof Player)
+                .then(Commands.argument("pose", PoseArgument.pose())
+                        .executes(context -> {
+                            if (context.getSource().getExecutor() instanceof Player player) {
+                                var pose = context.getArgument("pose", Pose.class);
+
+                                player.getWorld().spawn(player.getLocation(), Zombie.class, (zombie) -> {
+                                    zombie.setDisguiseData(DisguiseData.player(ResolvableProfile.resolvableProfile(player.getPlayerProfile()))
+                                            .description(Component.text("Zombie Meme", NamedTextColor.RED))
+                                            .pose(pose)
+                                            .skinParts(SkinParts.allParts())
+                                            .build()
+                                    );
+                                    zombie.setCustomNameVisible(true);
+                                    zombie.customName(Component.text("ysl", NamedTextColor.RED));
+
+                                    Bukkit.getMobGoals().addGoal(zombie, 1, new TestGoal(zombie));
+                                });
+                                player.sendMessage(Component.text("Test command executed!", NamedTextColor.GREEN));
+                            }
+                            return Command.SINGLE_SUCCESS;
+                        })
+                )
+
+                .build());
+    }
+
     @EventHandler
     public void onMobCreate(WorldCreateEntityEvent event) {
-        if(!(event.getEntity() instanceof Zombie))
+        if (!(event.getEntity() instanceof Zombie))
             return;
 
         Zombie zombie = event.getWorld().createEntity(event.getEntity().getLocation(), Zombie.class);
         zombie.setDisguiseData(DisguiseData.player(ResolvableProfile.resolvableProfile()
-                                .skinPatch(ResolvableProfile.SkinPatch.skinPatch()
-                                        .body(Key.key("minecraft", "entity/player/slim/kai"))
-                                        .build())
+                        .skinPatch(ResolvableProfile.SkinPatch.skinPatch()
+                                .body(Key.key("minecraft", "entity/player/slim/kai"))
+                                .build())
                         .build())
                 .description(Component.text("Zombie Meme", NamedTextColor.RED))
                 .pose(Pose.STANDING)
