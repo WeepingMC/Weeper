@@ -4,7 +4,7 @@
      public int index;
      public final int x;
      public final int y;
-+    private com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy; // Weeper - inventoryItemStackMoveStrategy
++    private com.github.weepingmc.inventory.@Nullable InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy; // Weeper - inventoryItemStackMoveStrategy
 +
 +    // Weeper start - inventoryItemStackMoveStrategy
 +    public void setInventoryItemstackMoveStrategy(com.github.weepingmc.inventory.InventoryItemStackMoveStrategy inventoryItemStackMoveStrategy){
@@ -14,12 +14,30 @@
  
      public Slot(final Container container, final int slot, final int x, final int y) {
          this.container = container;
+@@ -42,7 +_,7 @@
+     }
+ 
+     public boolean mayPlace(final ItemStack itemStack) {
+-        return true;
++        return (this.inventoryItemStackMoveStrategy == null || inventoryItemStackMoveStrategy.canPlace(new com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem(container.getOwner(), org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitCopy(itemStack), slot, null))); // Weeper - inventoryItemStackMoveStrategy
+     }
+ 
+     public ItemStack getItem() {
+@@ -87,7 +_,7 @@
+     }
+ 
+     public boolean mayPickup(final Player player) {
+-        return true;
++        return (this.inventoryItemStackMoveStrategy == null || inventoryItemStackMoveStrategy.canTake(new com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem(container.getOwner(), org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitCopy(this.getItem()), slot, player.getBukkitEntity()))); // Weeper - inventoryItemStackMoveStrategy
+     }
+ 
+     public boolean isActive() {
 @@ -154,7 +_,7 @@
      }
  
      public boolean allowModification(final Player player) {
 -        return this.mayPickup(player) && this.mayPlace(this.getItem());
-+        return (this.inventoryItemStackMoveStrategy == null || inventoryItemStackMoveStrategy.allowedToModify(new com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem(container.getOwner(), org.bukkit.craftbukkit.inventory.CraftItemStack.asBukkitCopy(this.getItem()), slot, player.getBukkitEntity()))) && this.mayPickup(player) && this.mayPlace(this.getItem()); // Weeper - inventoryItemStackMoveStrategy
++        return true;
      }
  
      public int getContainerSlot() {

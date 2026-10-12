@@ -12,9 +12,7 @@ public interface InventoryItemStackMoveStrategy {
      *
      * @param slotItemStackMovementStrategyItem the slot item stack movement strategy item
      * @return true if it can be placed, false otherwise
-     * @deprecated Use {@link #allowedToModify(SlotItemStackMovementStrategyItem)} instead. There is no longer a distinction between placing and taking items in the slot.
      */
-    @Deprecated
     default boolean canPlace(SlotItemStackMovementStrategyItem slotItemStackMovementStrategyItem) {
         return true;
     }
@@ -24,21 +22,8 @@ public interface InventoryItemStackMoveStrategy {
      *
      * @param slotItemStackMovementStrategyItem the slot item stack movement strategy item
      * @return true if it can be taken, false otherwise
-     * @deprecated Use {@link #allowedToModify(SlotItemStackMovementStrategyItem)} instead. There is no longer a distinction between placing and taking items in the slot.
      */
-    @Deprecated
     default boolean canTake(SlotItemStackMovementStrategyItem slotItemStackMovementStrategyItem) {
         return true;
     }
-
-    /**
-     * Checks if the item stack can be modified in the slot (both placed and taken).
-     *
-     * @param slotItemStackMovementStrategyItem the slot item stack movement strategy item
-     * @return true if it can be modified, false otherwise
-     */
-    default boolean allowedToModify(SlotItemStackMovementStrategyItem slotItemStackMovementStrategyItem) {
-        return this.canPlace(slotItemStackMovementStrategyItem) && this.canTake(slotItemStackMovementStrategyItem);
-    }
-
 }

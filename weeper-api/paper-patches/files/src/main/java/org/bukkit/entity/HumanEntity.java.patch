@@ -1,6 +1,14 @@
 --- a/src/main/java/org/bukkit/entity/HumanEntity.java
 +++ b/src/main/java/org/bukkit/entity/HumanEntity.java
-@@ -1040,5 +_,34 @@
+@@ -1,5 +_,7 @@
+ package org.bukkit.entity;
+ 
++import com.github.weepingmc.inventory.InventoryItemStackMoveStrategy;
++import com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem;
+ import io.papermc.paper.datacomponent.DataComponentTypes;
+ import io.papermc.paper.datacomponent.item.Fireworks;
+ import io.papermc.paper.datacomponent.item.UseCooldown;
+@@ -1040,5 +_,36 @@
      default Firework fireworkBoost() {
          return this.fireworkBoost(ItemStack.empty());
      }
@@ -11,13 +19,15 @@
 +     *
 +     * @param inventory The inventory to open
 +     * @param mayPlaceStrategy place conditions
++     * @deprecated This method is deprecated in favor of {@link #openInventory(Inventory, com.github.weepingmc.inventory.InventoryItemStackMoveStrategy)}.
 +     * @return The newly opened inventory view
 +     */
 +    @Nullable
++    @Deprecated
 +    default InventoryView openInventory(Inventory inventory, java.util.function.@Nullable BiFunction<InventoryHolder, ItemStack, Boolean> mayPlaceStrategy){
 +        return openInventory(inventory, new com.github.weepingmc.inventory.InventoryItemStackMoveStrategy() {
 +            @Override
-+            public boolean allowedToModify(com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem slotItemStackMovementStrategyItem) {
++            public boolean canPlace(com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem slotItemStackMovementStrategyItem) {
 +                return mayPlaceStrategy != null ? mayPlaceStrategy.apply(slotItemStackMovementStrategyItem.inventoryHolder(), slotItemStackMovementStrategyItem.itemStack()) : true;
 +            }
 +        });

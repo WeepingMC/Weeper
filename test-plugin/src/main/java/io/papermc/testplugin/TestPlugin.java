@@ -6,6 +6,8 @@ import com.destroystokyo.paper.entity.ai.Goal;
 import com.destroystokyo.paper.entity.ai.GoalKey;
 import com.destroystokyo.paper.entity.ai.GoalType;
 import com.github.weepingmc.event.world.WorldCreateEntityEvent;
+import com.github.weepingmc.inventory.InventoryItemStackMoveStrategy;
+import com.github.weepingmc.inventory.SlotItemStackMovementStrategyItem;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -33,6 +35,7 @@ import org.bukkit.entity.Pose;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.EnumSet;
@@ -58,10 +61,16 @@ public final class TestPlugin extends JavaPlugin implements Listener {
                 .requires(source -> source.getExecutor() instanceof Player)
                 .executes(context -> {
                             if (context.getSource().getExecutor() instanceof Player player) {
-                                var inventory = Bukkit.createInventory(player, 9, Component.text("Test Inventory", NamedTextColor.GREEN));
-                                player.openInventory(inventory, (holder, item) -> {
-                                    // Example strategy: only allow placing items of type DIAMOND
-                                    return item.getType() == Material.DIAMOND;
+                                var inventory = Bukkit.createInventory(null, 9, Component.text("Test Inventory", NamedTextColor.GREEN));
+                                player.openInventory(inventory, new InventoryItemStackMoveStrategy() {
+                                    @Override
+                                    public boolean canPlace(SlotItemStackMovementStrategyItem slotItemStackMovementStrategyItem) {
+
+                                        InventoryHolder holder = slotItemStackMovementStrategyItem.inventoryHolder();
+                                        var item = slotItemStackMovementStrategyItem.itemStack();
+
+                                        return holder != null || item.getType() == Material.DIAMOND_BLOCK;
+                                    }
                                 });
                             }
                             return Command.SINGLE_SUCCESS;
