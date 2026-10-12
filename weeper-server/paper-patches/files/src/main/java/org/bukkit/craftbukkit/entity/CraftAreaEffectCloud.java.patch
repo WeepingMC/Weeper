@@ -1,0 +1,14 @@
+--- a/src/main/java/org/bukkit/craftbukkit/entity/CraftAreaEffectCloud.java
++++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftAreaEffectCloud.java
+@@ -48,6 +_,11 @@
+     }
+ 
+     @Override
++    public void setPotionDurationScale(float scale) {
++        this.getHandle().setPotionDurationScale(scale);
++    }
++
++    @Override
+     public int getWaitTime() {
+         return this.getHandle().getWaitTime();
+     }
