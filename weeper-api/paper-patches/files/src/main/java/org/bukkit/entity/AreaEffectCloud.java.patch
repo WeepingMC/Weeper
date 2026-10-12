@@ -1,0 +1,16 @@
+--- a/src/main/java/org/bukkit/entity/AreaEffectCloud.java
++++ b/src/main/java/org/bukkit/entity/AreaEffectCloud.java
+@@ -32,6 +_,13 @@
+     void setDuration(int duration);
+ 
+     /**
++     * Sets the scale for the duration of the potion effect applied by this cloud.
++     *
++     * @param scale the scale factor for the potion effect duration
++     */
++    void setPotionDurationScale(float scale);
++
++    /**
+      * Gets the time which an entity has to be exposed to the cloud before the
+      * effect is applied.
+      *
