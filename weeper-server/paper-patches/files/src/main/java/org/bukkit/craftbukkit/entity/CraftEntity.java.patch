@@ -1,7 +1,7 @@
 --- a/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
 +++ b/src/main/java/org/bukkit/craftbukkit/entity/CraftEntity.java
-@@ -1388,4 +_,27 @@
-         return this.getHandleRaw().get(PaperDataComponentType.bukkitToMinecraft(type)) != null;
+@@ -1441,4 +_,27 @@
+             .removeIf(entry -> entry.getKey().namespace().equals(nameSpaced.namespace()));
      }
  
 +    // Weeper start - disguise api

@@ -1,9 +1,9 @@
 --- a/src/main/java/org/bukkit/entity/Entity.java
 +++ b/src/main/java/org/bukkit/entity/Entity.java
-@@ -1391,4 +_,33 @@
+@@ -1450,4 +_,33 @@
+      * @param namespaced the namespaced of the rule
       */
-     void broadcastHurtAnimation(@NotNull java.util.Collection<Player> players);
-     // Paper end - broadcast hurt animation
+     void removeAdditionalAlliedRule(@NotNull Namespaced namespaced);
 +    // Paper start - disguise api
 +    /**
 +     * Gets the current {@link io.papermc.paper.disguise.DisguiseData} of the entity.

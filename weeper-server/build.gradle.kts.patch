@@ -46,7 +46,7 @@
  dependencies {
 -    implementation(project(":paper-api"))
 +    implementation(project(":weeper-api")) // Weeper api
-     implementation(platform("ca.spottedleaf.leafpile:bom:1.2.4"))
+     implementation(platform("ca.spottedleaf.leafpile:bom:1.3.0"))
      implementation("ca.spottedleaf.leafpile:common")
      implementation("ca.spottedleaf.leafpile:concurrentutil")
 @@ -172,21 +_,7 @@
@@ -72,7 +72,7 @@
          for (tld in setOf("net", "com", "org")) {
              attributes("$tld/bukkit", "Sealed" to true)
          }
-@@ -331,7 +_,7 @@
+@@ -342,7 +_,7 @@
  }
  
  fill {
@@ -81,7 +81,7 @@
      versionFamily(paperweight.minecraftVersion.map { it.split(".", "-").takeWhile { part -> part.toIntOrNull() != null }.take(2).joinToString(".") })
      version(paperweight.minecraftVersion)
  
-@@ -345,4 +_,29 @@
+@@ -356,4 +_,29 @@
              }
          }
      }
