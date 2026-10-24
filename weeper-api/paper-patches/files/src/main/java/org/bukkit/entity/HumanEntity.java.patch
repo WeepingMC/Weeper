@@ -8,7 +8,7 @@
  import io.papermc.paper.datacomponent.DataComponentTypes;
  import io.papermc.paper.datacomponent.item.Fireworks;
  import io.papermc.paper.datacomponent.item.UseCooldown;
-@@ -1040,5 +_,36 @@
+@@ -1051,5 +_,36 @@
      default Firework fireworkBoost() {
          return this.fireworkBoost(ItemStack.empty());
      }
