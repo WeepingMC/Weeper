@@ -1,15 +1,14 @@
 --- a/src/main/java/io/papermc/paper/persistence/PersistentDataContainerView.java
 +++ b/src/main/java/io/papermc/paper/persistence/PersistentDataContainerView.java
-@@ -2,7 +_,7 @@
- 
+@@ -3,7 +_,6 @@
  import java.util.Set;
+ import net.kyori.adventure.key.Key;
  import com.google.common.base.Preconditions;
 -import org.bukkit.NamespacedKey;
-+import net.kyori.adventure.key.Key;
  import org.bukkit.persistence.PersistentDataAdapterContext;
  import org.bukkit.persistence.PersistentDataContainer;
  import org.bukkit.persistence.PersistentDataHolder;
-@@ -48,7 +_,7 @@
+@@ -49,7 +_,7 @@
       * @throws IllegalArgumentException if the type to cast the found object to is
       * null
       */
@@ -18,7 +17,7 @@
  
      /**
       * Returns if the persistent metadata provider has metadata registered matching
-@@ -65,7 +_,7 @@
+@@ -66,7 +_,7 @@
       * @return if a value with the provided key exists
       * @throws IllegalArgumentException if the key to look up is null
       */
@@ -27,7 +26,7 @@
  
      /**
       * Returns if the persistent metadata provider has metadata registered
-@@ -112,7 +_,7 @@
+@@ -113,7 +_,7 @@
       * the {@link
       * PersistentDataType#getPrimitiveType()}
       */
@@ -36,7 +35,7 @@
  
      /**
       * Returns the metadata value that is stored on the
-@@ -135,7 +_,7 @@
+@@ -136,7 +_,7 @@
       * @throws IllegalArgumentException if no suitable adapter was found for
       * the {@link PersistentDataType#getPrimitiveType()}
       */
@@ -45,7 +44,16 @@
  
      /**
       * Returns the metadata value that is stored on the
-@@ -186,7 +_,22 @@
+@@ -186,7 +_,7 @@
+      * defined in {@link PersistentDataType} which directly map to a specific
+      * nbt tag. The return value will be wrong if the data type is plugin
+      * specific or not represented by a specific nbt tag.
+-     * Use {@link #has(NamespacedKey, PersistentDataType)} if you expect a
++     * Use {@link #has(Key, PersistentDataType)} if you expect a
+      * specific data type.
+      *
+      * @param key the key to look up the value type of
+@@ -204,7 +_,22 @@
       *
       * @return the key set
       */
