@@ -1,23 +1,23 @@
 --- a/src/main/java/io/papermc/paper/persistence/PersistentDataContainerView.java
 +++ b/src/main/java/io/papermc/paper/persistence/PersistentDataContainerView.java
-@@ -3,7 +_,6 @@
+@@ -4,7 +_,6 @@
+ import java.io.IOException;
  import java.util.Set;
  import net.kyori.adventure.key.Key;
- import com.google.common.base.Preconditions;
 -import org.bukkit.NamespacedKey;
  import org.bukkit.persistence.PersistentDataAdapterContext;
  import org.bukkit.persistence.PersistentDataContainer;
  import org.bukkit.persistence.PersistentDataHolder;
-@@ -49,7 +_,7 @@
+@@ -48,7 +_,7 @@
       * @throws IllegalArgumentException if the type to cast the found object to is
-      * null
+      *                                  null
       */
 -    <P, C> boolean has(NamespacedKey key, PersistentDataType<P, C> type);
 +    <P, C> boolean has(Key key, PersistentDataType<P, C> type);
  
      /**
       * Returns if the persistent metadata provider has metadata registered matching
-@@ -66,7 +_,7 @@
+@@ -65,7 +_,7 @@
       * @return if a value with the provided key exists
       * @throws IllegalArgumentException if the key to look up is null
       */
@@ -26,25 +26,25 @@
  
      /**
       * Returns if the persistent metadata provider has metadata registered
-@@ -113,7 +_,7 @@
-      * the {@link
-      * PersistentDataType#getPrimitiveType()}
+@@ -112,7 +_,7 @@
+      *                                  the {@link
+      *                                  PersistentDataType#getPrimitiveType()}
       */
 -    <P, C> @Nullable C get(NamespacedKey key, PersistentDataType<P, C> type);
 +    <P, C> @Nullable C get(Key key, PersistentDataType<P, C> type);
  
      /**
       * Returns the metadata value that is stored on the
-@@ -136,7 +_,7 @@
+@@ -135,7 +_,7 @@
       * @throws IllegalArgumentException if no suitable adapter was found for
-      * the {@link PersistentDataType#getPrimitiveType()}
+      *                                  the {@link PersistentDataType#getPrimitiveType()}
       */
 -    <P, C> C getOrDefault(NamespacedKey key, PersistentDataType<P, C> type, C defaultValue);
 +    <P, C> C getOrDefault(Key key, PersistentDataType<P, C> type, C defaultValue);
  
      /**
       * Returns the metadata value that is stored on the
-@@ -186,7 +_,7 @@
+@@ -185,7 +_,7 @@
       * defined in {@link PersistentDataType} which directly map to a specific
       * nbt tag. The return value will be wrong if the data type is plugin
       * specific or not represented by a specific nbt tag.
@@ -53,7 +53,7 @@
       * specific data type.
       *
       * @param key the key to look up the value type of
-@@ -204,7 +_,22 @@
+@@ -203,7 +_,22 @@
       *
       * @return the key set
       */

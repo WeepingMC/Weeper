@@ -8,6 +8,7 @@ import com.github.weepingmc.packet.options.Animation;
 import com.github.weepingmc.packet.options.EntityMetaBuilder;
 import com.github.weepingmc.packet.options.ProfileAction;
 import com.github.weepingmc.packet.options.TeamMode;
+import com.github.weepingmc.packet.options.abilities.PlayerAbility;
 import com.google.common.base.Preconditions;
 import com.mojang.authlib.GameProfile;
 import com.mojang.datafixers.util.Pair;
@@ -21,15 +22,30 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import javax.annotation.Nonnull;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.*;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
+import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
+import net.minecraft.network.protocol.game.ClientboundMoveEntityPacket;
+import net.minecraft.network.protocol.game.ClientboundPlayerAbilitiesPacket;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
+import net.minecraft.network.protocol.game.ClientboundRemoveEntitiesPacket;
+import net.minecraft.network.protocol.game.ClientboundRotateHeadPacket;
+import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
+import net.minecraft.network.protocol.game.ClientboundSetEquipmentPacket;
+import net.minecraft.network.protocol.game.ClientboundSetPassengersPacket;
+import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket;
 import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket.Action;
+import net.minecraft.network.protocol.game.ClientboundSwingAnimationPacket;
+import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
+import net.minecraft.network.protocol.game.VecDelta;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.PositionMoveRotation;
@@ -44,12 +60,15 @@ import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.craftbukkit.inventory.CraftItemStack;
 import org.bukkit.craftbukkit.scoreboard.CraftTeam;
 import org.bukkit.craftbukkit.util.CraftLocation;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.craftbukkit.util.CraftNamespacedKey;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import static com.github.weepingmc.packet.CraftPacketConversion.from;
 import static com.github.weepingmc.packet.CraftPacketConversion.mapPlayerAbilities;
@@ -59,8 +78,7 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
     private final ChainablePacketStep initial = new ChainablePacketStep();
 
     @Override
-    @Nonnull
-    public PacketStepBuilder sendPlayerProfile(@Nonnull PlayerProfile playerProfile, @Nonnull ProfileAction profileAction, boolean listed) {
+    public PacketStepBuilder sendPlayerProfile(PlayerProfile playerProfile, ProfileAction profileAction, boolean listed) {
         GameProfile gameProfile = ((CraftPlayerProfile) playerProfile).getGameProfile();
 
         ClientboundPlayerInfoUpdatePacket.Entry playerUpdate =
@@ -76,24 +94,23 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
                         null
                 );
         ClientboundPlayerInfoUpdatePacket clientboundPlayerInfoUpdatePacket = new ClientboundPlayerInfoUpdatePacket(EnumSet.of(from(profileAction)), Collections.singletonList(playerUpdate));
-        initial.setNext(of(clientboundPlayerInfoUpdatePacket));
+        this.initial.setNext(this.of(clientboundPlayerInfoUpdatePacket));
 
         return this;
     }
 
     @Override
-    public @NotNull PacketStepBuilder removePlayerProfile(@NotNull PlayerProfile playerProfile) {
+    public PacketStepBuilder removePlayerProfile(@Nullable PlayerProfile playerProfile) {
         Preconditions.checkArgument(playerProfile != null, "playerProfile cannot be null");
         Preconditions.checkArgument(playerProfile.getId() != null, "playerProfile id cannot be null");
         ClientboundPlayerInfoRemovePacket clientboundPlayerInfoRemovePacket = new ClientboundPlayerInfoRemovePacket(List.of(playerProfile.getId()));
-        initial.setNext(of(clientboundPlayerInfoRemovePacket));
+        this.initial.setNext(this.of(clientboundPlayerInfoRemovePacket));
         return this;
     }
 
     @Override
-    @Nonnull
-    public PacketStepBuilder spawnPlayer(int entityId, @Nonnull UUID uuid, @Nonnull Location location) {
-        initial.setNext(of(new ClientboundAddEntityPacket(
+    public PacketStepBuilder spawnPlayer(int entityId, UUID uuid, Location location) {
+        this.initial.setNext(this.of(new ClientboundAddEntityPacket(
                 entityId,
                 uuid,
                 location.x(),
@@ -101,7 +118,7 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
                 location.z(),
                 location.getPitch(),
                 location.getYaw(),
-                net.minecraft.world.entity.EntityTypes.PLAYER,
+                EntityTypes.PLAYER,
                 0,
                 Vec3.ZERO,
                 location.getYaw()
@@ -110,8 +127,7 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
     }
 
     @Override
-    @Nonnull
-    public PacketStepBuilder setPlayerTeam(@Nonnull Team team, @Nonnull TeamMode teamMode) {
+    public PacketStepBuilder setPlayerTeam(Team team, TeamMode teamMode) {
         var nmsTeam = ((CraftTeam) team).getHandle();
         var packet = switch (teamMode) {
             case CREATE_TEAM, UPDATE_TEAM_INFO -> ClientboundSetPlayerTeamPacket.createAddOrModifyPacket(nmsTeam, true);
@@ -121,147 +137,128 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
                 yield ClientboundSetPlayerTeamPacket.createPlayerPacket(nmsTeam, "", operation);
             }
         };
-        initial.setNext(of(packet));
+        this.initial.setNext(this.of(packet));
         return this;
     }
 
     @Override
-    @Nonnull
-    public PacketStepBuilder teleportEntity(int entityId, @Nonnull Location location, boolean onGround) {
+    public PacketStepBuilder teleportEntity(int entityId, Location location, boolean onGround) {
         var transition = new TeleportTransition(((CraftWorld) location.getWorld()).getHandle(), CraftLocation.toVec3(location), Vec3.ZERO, location.getPitch(), location.getYaw(), Set.of(), TeleportTransition.DO_NOTHING);
         ClientboundTeleportEntityPacket teleportEntityPacket = ClientboundTeleportEntityPacket.teleport(entityId, PositionMoveRotation.of(transition), Set.of(), onGround);
-        initial.setNext(of(teleportEntityPacket));
+        this.initial.setNext(this.of(teleportEntityPacket));
         return this;
     }
 
     @Override
-    public @NotNull PacketStepBuilder mountEntity(int entityId, int @NotNull ... passenger) {
+    public PacketStepBuilder mountEntity(int entityId, int... passenger) {
         ClientboundSetPassengersPacket passengersPacket = new ClientboundSetPassengersPacket(entityId, passenger);
-        initial.setNext(of(passengersPacket));
+        this.initial.setNext(this.of(passengersPacket));
         return this;
     }
 
     @Override
-    @Nonnull
-    public PacketStepBuilder sendBlockChange(@Nonnull Location location, @Nonnull BlockData blockData) {
-        initial.setNext(new ChainablePacketStep((player) -> player.sendBlockChange(location, blockData)));
+    public PacketStepBuilder sendBlockChange(Location location, BlockData blockData) {
+        this.initial.setNext(new ChainablePacketStep((player) -> player.sendBlockChange(location, blockData)));
         return this;
     }
 
     @Override
-    @Nonnull
-    public PacketStepBuilder sleepAt(int entityId, @Nonnull Location location) {
+    public PacketStepBuilder sleepAt(int entityId, Location location) {
         List<SynchedEntityData.DataValue<?>> dataWatcherItems = new ArrayList<>();
         dataWatcherItems.add(new SynchedEntityData.DataItem<>(Entity.DATA_POSE, Pose.SLEEPING).value());
         dataWatcherItems.add(new SynchedEntityData.DataItem<>(LivingEntity.SLEEPING_POS_ID,
                 Optional.of(new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()))).value()
         );
         ClientboundSetEntityDataPacket meta = new ClientboundSetEntityDataPacket(entityId, dataWatcherItems);
-        initial.setNext(of(meta));
+        this.initial.setNext(this.of(meta));
         return this;
     }
 
     @Override
-    @Nonnull
     public PacketStepBuilder rotateHead(int entityId, float yaw) {
-        initial.setNext(of(new ClientboundRotateHeadPacket(
+        this.initial.setNext(this.of(new ClientboundRotateHeadPacket(
                 entityId,
-                (byte) ((int) (yaw * 256.0F / 360.0F))
+                (byte) ((int) (yaw * 256.0f / 360.0f))
         )));
         return this;
     }
 
     @Override
-    @Nonnull
     public PacketStepBuilder rotateFullHead(int entityId, float yaw, float pitch, boolean onGround) {
-        initial.setNext(of(new ClientboundMoveEntityPacket.Rot(
+        this.initial.setNext(this.of(new ClientboundMoveEntityPacket.Rot(
                 entityId,
-                (byte) ((int) (yaw * 256.0F / 360.0F)),
-                (byte) ((int) (pitch * 256.0F / 360.0F)),
+                (byte) ((int) (yaw * 256.0f / 360.0f)),
+                (byte) ((int) (pitch * 256.0f / 360.0f)),
                 onGround
         )));
         return this;
     }
 
     @Override
-    @Nonnull
-    public PacketStepBuilder movePositionAndRotateFullHead(int entityId, @Nonnull Vector direction, byte yaw, byte pitch, boolean onGround) {
-        initial.setNext(of(new ClientboundMoveEntityPacket.PosRot(
+    public PacketStepBuilder movePositionAndRotateFullHead(int entityId, Vector direction, byte yaw, byte pitch, boolean onGround) {
+        this.initial.setNext(this.of(new ClientboundMoveEntityPacket.PosRot(
                 entityId,
                 new VecDelta.Linear((short) direction.getX(),
                 (short) direction.getY(),
                 (short) direction.getZ()),
-                (byte) ((int) (yaw * 256.0F / 360.0F)),
-                (byte) ((int) (pitch * 256.0F / 360.0F)),
+                (byte) ((int) (yaw * 256.0f / 360.0f)),
+                (byte) ((int) (pitch * 256.0f / 360.0f)),
                 onGround)));
         return this;
     }
 
     @Override
-    @Nonnull
     public PacketStepBuilder destroyEntity(int entityId) {
-        initial.setNext(of(new ClientboundRemoveEntitiesPacket(entityId)));
+        this.initial.setNext(this.of(new ClientboundRemoveEntitiesPacket(entityId)));
         return this;
     }
 
     @Override
-    @Nonnull
-    public PacketStepBuilder animateBlockBreak(int entityID, @Nonnull Location location, byte destroyStage) {
-        initial.setNext(of(new ClientboundBlockDestructionPacket(entityID,
+    public PacketStepBuilder animateBlockBreak(int entityID, Location location, byte destroyStage) {
+        this.initial.setNext(this.of(new ClientboundBlockDestructionPacket(entityID,
                 new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()), destroyStage)));
         return this;
     }
 
     @Override
-    @Nonnull
-    public PacketStepBuilder setEquipmentItem(int entityId, @Nonnull org.bukkit.inventory.EquipmentSlot equipmentSlot, @Nonnull ItemStack itemStack) {
-        initial.setNext(of(new ClientboundSetEquipmentPacket(entityId, Collections.singletonList(new Pair<>(from(equipmentSlot), CraftItemStack.asNMSCopy(itemStack))))));
+    public PacketStepBuilder setEquipmentItem(int entityId, EquipmentSlot equipmentSlot, ItemStack itemStack) {
+        this.initial.setNext(this.of(new ClientboundSetEquipmentPacket(entityId, Collections.singletonList(new Pair<>(from(equipmentSlot), CraftItemStack.asNMSCopy(itemStack))))));
         return this;
     }
 
     @Override
-    @Nonnull
-    public PacketStepBuilder delay(@Nonnull JavaPlugin javaPlugin, long time, @Nonnull TimeUnit timeUnit) {
-        initial.setNext(new DelayPacketStep(javaPlugin, time, timeUnit));
+    public PacketStepBuilder delay(JavaPlugin javaPlugin, long time, TimeUnit timeUnit) {
+        this.initial.setNext(new DelayPacketStep(javaPlugin, time, timeUnit));
         return this;
     }
 
     @Override
-    @Nonnull
-    public PacketStepBuilder custom(@Nonnull PacketStep packetStep) {
-        initial.setNext(new ChainablePacketStep(packetStep));
+    public PacketStepBuilder custom(PacketStep packetStep) {
+        this.initial.setNext(new ChainablePacketStep(packetStep));
         return this;
     }
 
     @Override
-    @Nonnull
     public PacketStepBuilder removeEntity(int entityId) {
-        initial.setNext(of(new ClientboundRemoveEntitiesPacket(entityId)));
+        this.initial.setNext(this.of(new ClientboundRemoveEntitiesPacket(entityId)));
         return this;
     }
 
     @Override
-    @Nonnull
-    public PacketStepBuilder animateEntity(int entityId, @Nonnull Animation animation) {
-        switch (animation) {
-            case Animation.SWING_MAIN_HAND:
-                initial.setNext(of(new ClientboundSwingAnimationPacket(entityId, net.minecraft.world.InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT)));
-                break;
-            case Animation.SWING_OFFHAND:
-                initial.setNext(of(new ClientboundSwingAnimationPacket(entityId, InteractionHand.OFF_HAND, SwingAnimation.DEFAULT)));
-                break;
-            case Animation.CRITICAL_HIT:
-            case Animation.MAGIC_CRITICAL_EFFECT:
-                initial.setNext(of(new ClientboundAnimatePacket(entityId, CraftPacketConversion.fromAnimation(animation))));
-                break;
-        }
+    public PacketStepBuilder animateEntity(int entityId, Animation animation) {
+        var packect = switch (animation) {
+            case SWING_MAIN_HAND -> new ClientboundSwingAnimationPacket(entityId, InteractionHand.MAIN_HAND, SwingAnimation.DEFAULT);
+            case LEAVE_BED -> new ClientboundAnimatePacket(entityId, ClientboundAnimatePacket.WAKE_UP);
+            case SWING_OFFHAND -> new ClientboundSwingAnimationPacket(entityId, InteractionHand.OFF_HAND, SwingAnimation.DEFAULT);
+            case CRITICAL_HIT, MAGIC_CRITICAL_EFFECT -> new ClientboundAnimatePacket(entityId, CraftPacketConversion.fromAnimation(animation));
+        };
+        this.initial.setNext(this.of(packect));
         return this;
     }
 
     @Override
-    @Nonnull
-    public PacketStepBuilder spawnEntity(int entityId, @Nonnull UUID uuid, @Nonnull Location location, @Nonnull org.bukkit.entity.EntityType entityType, @Nonnull Vector movementDirection) {
-        initial.setNext(of(new ClientboundAddEntityPacket(
+    public PacketStepBuilder spawnEntity(int entityId, UUID uuid, Location location, EntityType entityType, Vector movementDirection) {
+        this.initial.setNext(this.of(new ClientboundAddEntityPacket(
                 entityId,
                 uuid,
                 location.getX(),
@@ -269,7 +266,7 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
                 location.getZ(),
                 location.getYaw(),
                 location.getPitch(),
-                BuiltInRegistries.ENTITY_TYPE.getOptional(org.bukkit.craftbukkit.util.CraftNamespacedKey.toMinecraft(entityType.getKey())).orElse(net.minecraft.world.entity.EntityTypes.ARMOR_STAND),
+                BuiltInRegistries.ENTITY_TYPE.getOptional(CraftNamespacedKey.toMinecraft(entityType.getKey())).orElse(EntityTypes.ARMOR_STAND),
                 1,
                 new Vec3(movementDirection.getX(), movementDirection.getY(), movementDirection.getZ()),
                 0
@@ -278,25 +275,24 @@ public class CraftPacketStepBuilder implements PacketStepBuilder {
     }
 
     @Override
-    @Nonnull
-    public PacketStepBuilder withMeta(int entityId, @Nonnull EntityMetaBuilder metaBuilder) {
-        initial.setNext(
-                of(new ClientboundSetEntityDataPacket(entityId,
+    public PacketStepBuilder withMeta(int entityId, EntityMetaBuilder metaBuilder) {
+        this.initial.setNext(
+                this.of(new ClientboundSetEntityDataPacket(entityId,
                         ((CraftEntityMetaBuilder) metaBuilder).build().stream().map(SynchedEntityData.DataItem::value).collect(Collectors.toList())))
         );
         return this;
     }
 
     @Override
-    public @NotNull PacketStepBuilder withPlayerAbilities(@NotNull Set<com.github.weepingmc.packet.options.abilities.PlayerAbility> playerAbilities) {
+    public PacketStepBuilder withPlayerAbilities(Set<PlayerAbility> playerAbilities) {
         Abilities playerAbilitiesNMS = mapPlayerAbilities(playerAbilities);
-        initial.setNext(of(new ClientboundPlayerAbilitiesPacket(playerAbilitiesNMS)));
+        this.initial.setNext(this.of(new ClientboundPlayerAbilitiesPacket(playerAbilitiesNMS)));
         return this;
     }
 
     @Override
-    public void send(@Nonnull Collection<? extends org.bukkit.entity.Player> players) {
-        initial.execute(players);
+    public void send(Collection<? extends Player> players) {
+        this.initial.execute(players);
     }
 
     private ChainablePacketStep of(Packet<?> packet) {

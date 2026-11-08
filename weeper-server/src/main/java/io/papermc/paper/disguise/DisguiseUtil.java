@@ -2,6 +2,7 @@ package io.papermc.paper.disguise;
 
 import io.papermc.paper.adventure.PaperAdventure;
 import io.papermc.paper.datacomponent.item.PaperResolvableProfile;
+import io.papermc.paper.entity.meta.EntityMetaWatcher;
 import io.papermc.paper.entity.meta.EntityTypeToEntityClass;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerInfoRemovePacket;
+import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -18,14 +20,16 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.decoration.Mannequin;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.NamespacedKey;
 import org.bukkit.craftbukkit.entity.CraftEntityType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.bukkit.persistence.PersistentDataType;
 
 public final class DisguiseUtil {
-    private static final Logger LOG = LoggerFactory.getLogger(DisguiseUtil.class);
+
+    private static final NamespacedKey SKIN_KEY = new NamespacedKey("npclib", "npclib-skin"); // Weeper - track entity events
 
     private DisguiseUtil() {
     }
@@ -48,25 +52,25 @@ public final class DisguiseUtil {
                 var data = new ArrayList<SynchedEntityData.DataValue<?>>();
                 data.add(new SynchedEntityData.DataItem<>(Mannequin.DATA_PROFILE, profile.getHandle()).value());
 
-                if(entity.hasCustomName()) {
+                if (entity.hasCustomName()) {
                     Component name = entity.getCustomName();
                     data.add(new SynchedEntityData.DataItem<>(Entity.DATA_CUSTOM_NAME, Optional.of(name)).value());
                 }
-                if(entity.isCustomNameVisible()) {
+                if (entity.isCustomNameVisible()) {
                     data.add(new SynchedEntityData.DataItem<>(Entity.DATA_CUSTOM_NAME_VISIBLE, true).value());
                 }
 
                 if (skinParts != null) {
                     data.add(new SynchedEntityData.DataItem<>(Mannequin.DATA_PLAYER_MODE_CUSTOMISATION, (byte) skinParts.getRaw()).value());
                 }
-                net.minecraft.world.entity.Pose internalPose = net.minecraft.world.entity.Pose.values()[pose.ordinal()];
+                Pose internalPose = Pose.values()[pose.ordinal()];
                 data.add(new SynchedEntityData.DataItem<>(Mannequin.DATA_POSE, internalPose).value());
                 if (description != null) {
                     var vanillaDescription = PaperAdventure.asVanilla(description);
                     data.add(new SynchedEntityData.DataItem<>(Mannequin.DATA_DESCRIPTION, Optional.of(vanillaDescription)).value());
                 }
 
-                player.connection.send(new net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket(
+                player.connection.send(new ClientboundSetEntityDataPacket(
                                 clientboundAddEntityPacket.getId(),
                                 data
                         )
@@ -99,37 +103,33 @@ public final class DisguiseUtil {
                 packet.getYRot(),
                 entityType,
                 0,
-                Vec3.ZERO.add(packet.getX(), packet.getY(), packet.getZ()).scale(1 / 8000.0D),
+                Vec3.ZERO.add(packet.getX(), packet.getY(), packet.getZ()).scale(1 / 8000.0d),
                 packet.getYHeadRot()
         );
     }
-
-    private static final org.bukkit.NamespacedKey skinKey = new org.bukkit.NamespacedKey("npclib", "npclib-skin"); // Weeper - track entity events
 
     /*
      * Is used to skip entity meta that doesn't fit the disguised type.
      * e.g. Player having a float at index 15 (additional hearts) and the server side entity is an Armorstand
      * that has a byte at that index.
      */
-
     public static boolean shouldSkip(Entity entity, EntityDataAccessor<?> dataAccessor) {
         return shouldSkip(entity, dataAccessor.serializer(), dataAccessor.id());
     }
 
     public static boolean shouldSkip(Entity entity, EntityDataSerializer<?> entityDataSerializer, int id) {
         // Weeper start - track entity events
-        if (entity.getBukkitEntity().getPersistentDataContainer().has(skinKey, org.bukkit.persistence.PersistentDataType.STRING)) {
-            return !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(ServerPlayer.class, entityDataSerializer, id);
+        if (entity.getBukkitEntity().getPersistentDataContainer().has(SKIN_KEY, PersistentDataType.STRING)) {
+            return !EntityMetaWatcher.isValidForClass(ServerPlayer.class, entityDataSerializer, id);
         }
         // Weeper end - track entity events
         return switch (entity.getBukkitEntity().getDisguiseData()) {
-            case DisguiseData.OriginalDisguise original -> false;
-            case EntityTypeDisguise entityTypeDisguise ->
-                    !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(
-                            EntityTypeToEntityClass.getClassByEntityType(entityTypeDisguise.entityType()),
-                            entityDataSerializer, id
-                    );
-            case PlayerDisguise playerDisguise -> !io.papermc.paper.entity.meta.EntityMetaWatcher.isValidForClass(
+            case DisguiseData.OriginalDisguise _ -> false;
+            case EntityTypeDisguise entityTypeDisguise -> !EntityMetaWatcher.isValidForClass(
+                    EntityTypeToEntityClass.getClassByEntityType(entityTypeDisguise.entityType()),
+                    entityDataSerializer, id
+            );
+            case PlayerDisguise _ -> !EntityMetaWatcher.isValidForClass(
                     ServerPlayer.class,
                     entityDataSerializer, id
             );
@@ -148,18 +148,18 @@ public final class DisguiseUtil {
 
     public static boolean shouldSkipAttributeSending(Entity entity) {
         return switch (entity.getBukkitEntity().getDisguiseData()) {
-            case DisguiseData.OriginalDisguise original -> false;
+            case DisguiseData.OriginalDisguise _ -> false;
             case EntityTypeDisguise entityTypeDisguise -> !entityTypeDisguise.entityType().hasDefaultAttributes();
-            case PlayerDisguise playerDisguise -> false;
+            case PlayerDisguise _ -> false;
         };
     }
 
     public static boolean canSendAnimation(Entity entity) {
         return switch (entity.getBukkitEntity().getDisguiseData()) {
-            case DisguiseData.OriginalDisguise original -> true;
+            case DisguiseData.OriginalDisguise _ -> true;
             case EntityTypeDisguise entityTypeDisguise ->
                     LivingEntity.class.isAssignableFrom(EntityTypeToEntityClass.getClassByEntityType(entityTypeDisguise.entityType()));
-            case PlayerDisguise playerDisguise -> true;
+            case PlayerDisguise _ -> true;
         };
     }
 }

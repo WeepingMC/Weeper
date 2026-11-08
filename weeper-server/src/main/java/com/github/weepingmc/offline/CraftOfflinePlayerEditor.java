@@ -4,17 +4,17 @@ import com.destroystokyo.paper.profile.CraftPlayerProfile;
 import com.mojang.authlib.GameProfile;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ClientInformation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import org.jspecify.annotations.NonNull;
 
 import static org.bukkit.Bukkit.createProfile;
 
 public class CraftOfflinePlayerEditor implements OfflinePlayerEditor {
-    private final Map<UUID, ServerPlayer> offlineEditedPlayers = new java.util.concurrent.ConcurrentHashMap<>();
+    private final Map<UUID, ServerPlayer> offlineEditedPlayers = new ConcurrentHashMap<>();
 
     private final MinecraftServer server;
 
@@ -23,12 +23,12 @@ public class CraftOfflinePlayerEditor implements OfflinePlayerEditor {
     }
 
     @Override
-    public void editOfflinePlayer(@NonNull UUID uuid, @NonNull Consumer<EditPlayer> consumer) {
+    public void editOfflinePlayer(UUID uuid, Consumer<EditPlayer> consumer) {
         GameProfile playerProfile = ((CraftPlayerProfile) createProfile(uuid)).buildGameProfile();
-        ServerPlayer serverPlayer = server.getPlayerList().getPlayer(uuid);
+        ServerPlayer serverPlayer = this.server.getPlayerList().getPlayer(uuid);
 
         if (serverPlayer == null) {
-            serverPlayer = offlineEditedPlayers.get(uuid);
+            serverPlayer = this.offlineEditedPlayers.get(uuid);
         }
         if (serverPlayer == null) {
 
@@ -36,24 +36,24 @@ public class CraftOfflinePlayerEditor implements OfflinePlayerEditor {
                     this.server,
                     this.server.overworld(),
                     playerProfile,
-                    net.minecraft.server.level.ClientInformation.createDefault()
+                    ClientInformation.createDefault()
             );
             var target = serverPlayer.getBukkitEntity();
             target.loadData();
-            offlineEditedPlayers.put(playerProfile.id(), serverPlayer);
+            this.offlineEditedPlayers.put(playerProfile.id(), serverPlayer);
         }
         // ensure cleanup if user fucks something up
         try {
-            consumer.accept(new com.github.weepingmc.offline.CraftEditPlayer(serverPlayer));
+            consumer.accept(new CraftEditPlayer(serverPlayer));
         } finally {
             serverPlayer.getBukkitEntity().saveData();
-            offlineEditedPlayers.remove(playerProfile.id());
+            this.offlineEditedPlayers.remove(playerProfile.id());
         }
 
     }
 
     public ServerPlayer createOrGet(MinecraftServer server, ServerLevel serverLevel, GameProfile gameProfile, ClientInformation clientInformation) {
-        ServerPlayer entity = offlineEditedPlayers.remove(gameProfile.id());
+        ServerPlayer entity = this.offlineEditedPlayers.remove(gameProfile.id());
         if (entity != null) {
             // saves data edited by offline player editing mechanic
             // server itself should load the playerdata some time later

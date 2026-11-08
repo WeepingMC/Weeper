@@ -4,23 +4,22 @@ import net.minecraft.server.level.ServerPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataContainer;
-import org.jetbrains.annotations.NotNull;
 
 public class CraftEditPlayer implements EditPlayer {
 
     private final Player player;
 
-    public CraftEditPlayer(ServerPlayer serverPlayer){
+    public CraftEditPlayer(ServerPlayer serverPlayer) {
         this.player = serverPlayer.getBukkitEntity();
     }
 
     @Override
-    public @NotNull PlayerInventory getInventory() {
-        return player.getInventory();
+    public PlayerInventory getInventory() {
+        return this.player.getInventory();
     }
 
     @Override
-    public @NotNull PersistentDataContainer getPersistentDataContainer() {
-        return player.getPersistentDataContainer();
+    public PersistentDataContainer getPersistentDataContainer() {
+        return this.player.getPersistentDataContainer();
     }
 }

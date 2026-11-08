@@ -8,6 +8,7 @@ import com.github.weepingmc.packet.options.abilities.CreativeModeInstantBreak;
 import com.github.weepingmc.packet.options.abilities.FlySpeedAbility;
 import com.github.weepingmc.packet.options.abilities.Flying;
 import com.github.weepingmc.packet.options.abilities.Invulnerable;
+import com.github.weepingmc.packet.options.abilities.PlayerAbility;
 import com.github.weepingmc.packet.options.abilities.WalkSpeedAbility;
 import com.mojang.datafixers.util.Pair;
 import java.util.ArrayList;
@@ -87,9 +88,9 @@ public final class CraftPacketConversion {
         };
     }
 
-    static Abilities mapPlayerAbilities(Set<com.github.weepingmc.packet.options.abilities.PlayerAbility> playerAbilities) {
+    static Abilities mapPlayerAbilities(Set<PlayerAbility> playerAbilities) {
         Abilities playerAbilitiesNMS = new Abilities();
-        for (com.github.weepingmc.packet.options.abilities.PlayerAbility playerAbilitiy : playerAbilities) {
+        for (PlayerAbility playerAbilitiy : playerAbilities) {
             switch (playerAbilitiy) {
                 case AllowFlying _ -> playerAbilitiesNMS.mayfly = true;
                 case CreativeModeInstantBreak _ -> playerAbilitiesNMS.instabuild = true;

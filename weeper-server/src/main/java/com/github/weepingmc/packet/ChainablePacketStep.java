@@ -2,27 +2,27 @@ package com.github.weepingmc.packet;
 
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
-import javax.annotation.Nonnull;
 import net.minecraft.network.protocol.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 public class ChainablePacketStep implements PacketStep {
 
-    protected ChainablePacketStep next;
-    private final PacketStep current;
+    protected @Nullable ChainablePacketStep next;
+    private final @Nullable PacketStep current;
 
-    public ChainablePacketStep(){
+    public ChainablePacketStep() {
         this.current = null;
     }
+
     public ChainablePacketStep(PacketStep current) {
         this.current = current;
     }
 
-    public void setNext(@Nonnull ChainablePacketStep next) {
+    public void setNext(ChainablePacketStep next) {
         if (this.next == null) {
             this.next = next;
         } else {
@@ -30,26 +30,28 @@ public class ChainablePacketStep implements PacketStep {
         }
     }
 
-    protected void executeNext(@Nonnull Collection<? extends Player> players) {
-        if (next != null) {
-            next.execute(players);
+    protected void executeNext(Collection<? extends Player> players) {
+        if (this.next != null) {
+            this.next.execute(players);
         }
     }
 
-    public final void execute(@Nonnull Collection<? extends Player> players) {
-        executeAll(players);
-        executeNext(players);
+    public final void execute(Collection<? extends Player> players) {
+        this.executeAll(players);
+        this.executeNext(players);
     }
 
-    protected void executeAll(@Nonnull Collection<? extends Player> players) {
+    protected void executeAll(Collection<? extends Player> players) {
         for (Player player : players) {
-            execute(player);
+            this.execute(player);
         }
     }
 
     @Override
-    public void execute(@Nonnull Player player) {
-        if(current != null) current.execute(player);
+    public void execute(Player player) {
+        if (this.current != null) {
+            this.current.execute(player);
+        }
     }
 
     public static class NmsPacketStep implements PacketStep {
@@ -61,8 +63,8 @@ public class ChainablePacketStep implements PacketStep {
         }
 
         @Override
-        public void execute(@Nonnull Player player) {
-            sendPacket(player, packet);
+        public void execute(Player player) {
+            this.sendPacket(player, this.packet);
         }
 
         private void sendPacket(Player player, Packet<?> packet) {
@@ -76,19 +78,17 @@ public class ChainablePacketStep implements PacketStep {
         private final long delay;
         private final TimeUnit timeUnit;
 
-        public DelayPacketStep(@Nonnull JavaPlugin javaPlugin, long delay,
-            @Nonnull TimeUnit timeUnit) {
-            super();
+        public DelayPacketStep(JavaPlugin javaPlugin, long delay, TimeUnit timeUnit) {
             this.javaPlugin = javaPlugin;
             this.delay = delay;
             this.timeUnit = timeUnit;
         }
 
         @Override
-        protected void executeNext(@NotNull Collection<? extends Player> players) {
-            Bukkit.getScheduler().runTaskLater(javaPlugin, () -> {
+        protected void executeNext(Collection<? extends Player> players) {
+            Bukkit.getScheduler().runTaskLater(this.javaPlugin, () -> {
                 super.executeNext(players);
-            }, 20 * timeUnit.toSeconds(delay));
+            }, 20 * this.timeUnit.toSeconds(this.delay));
         }
     }
 }

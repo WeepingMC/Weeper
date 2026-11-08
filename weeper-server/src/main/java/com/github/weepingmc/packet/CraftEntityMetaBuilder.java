@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import javax.annotation.Nonnull;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -16,6 +15,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import org.bukkit.craftbukkit.util.CraftChatMessage;
+import org.jspecify.annotations.Nullable;
 
 import static com.github.weepingmc.packet.CraftPacketConversion.mapStatus;
 
@@ -26,39 +26,39 @@ public class CraftEntityMetaBuilder implements EntityMetaBuilder {
     private final ServerLevel serverLevel;
 
     public CraftEntityMetaBuilder(ServerLevel level) {
-        serverLevel = level;
+        this.serverLevel = level;
     }
 
     public List<SynchedEntityData.DataItem<?>> build() {
-        return new ArrayList<>(dataWatcherList);
+        return new ArrayList<>(this.dataWatcherList);
     }
 
     @Override
-    public @Nonnull EntityMetaBuilder withEntityStatus(@Nonnull Set<EntityStatus> entityStatus) {
-        dataWatcherList.add(new SynchedEntityData.DataItem<>(Entity.DATA_SHARED_FLAGS_ID, mapStatus(entityStatus)));
+    public EntityMetaBuilder withEntityStatus(Set<EntityStatus> entityStatus) {
+        this.dataWatcherList.add(new SynchedEntityData.DataItem<>(Entity.DATA_SHARED_FLAGS_ID, mapStatus(entityStatus)));
         return this;
     }
 
-    public @Nonnull EntityMetaBuilder withSkinParts(@Nonnull SkinParts skinParts) {
-        dataWatcherList.add(new SynchedEntityData.DataItem<>(Player.DATA_PLAYER_MODE_CUSTOMISATION, (byte) skinParts.getRaw()));
+    public EntityMetaBuilder withSkinParts(SkinParts skinParts) {
+        this.dataWatcherList.add(new SynchedEntityData.DataItem<>(Player.DATA_PLAYER_MODE_CUSTOMISATION, (byte) skinParts.getRaw()));
         return this;
     }
 
     @Override
-    public @Nonnull EntityMetaBuilder withCustomName(@Nonnull BaseComponent[] baseComponents) {
-        return withCustomName(CraftChatMessage.bungeeToVanilla(baseComponents));
+    public EntityMetaBuilder withCustomName(@Nullable BaseComponent[] baseComponents) {
+        return this.withCustomName(CraftChatMessage.bungeeToVanilla(baseComponents));
     }
 
     @Override
-    public @Nonnull EntityMetaBuilder withCustomName(@Nonnull net.kyori.adventure.text.Component component) {
-        return withCustomName(PaperAdventure.asVanilla(component));
+    public EntityMetaBuilder withCustomName(net.kyori.adventure.text.Component component) {
+        return this.withCustomName(PaperAdventure.asVanilla(component));
     }
 
-    private @Nonnull EntityMetaBuilder withCustomName(Component component) {
+    private EntityMetaBuilder withCustomName(@Nullable Component component) {
         SynchedEntityData.DataItem<Optional<Component>> chat = new SynchedEntityData.DataItem<>(Entity.DATA_CUSTOM_NAME,
             Optional.ofNullable(component));
-        dataWatcherList.add(chat);
-        dataWatcherList.add(new SynchedEntityData.DataItem<>(Entity.DATA_CUSTOM_NAME_VISIBLE, true));
+        this.dataWatcherList.add(chat);
+        this.dataWatcherList.add(new SynchedEntityData.DataItem<>(Entity.DATA_CUSTOM_NAME_VISIBLE, true));
         return this;
     }
 }

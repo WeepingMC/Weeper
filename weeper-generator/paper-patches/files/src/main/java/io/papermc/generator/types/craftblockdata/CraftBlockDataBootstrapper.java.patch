@@ -9,11 +9,12 @@
  import io.papermc.generator.types.SourceGenerator;
  import io.papermc.generator.utils.BlockStateMapping;
  import java.util.List;
-@@ -19,5 +_,7 @@
+@@ -17,6 +_,8 @@
  
              generators.add(new CraftBlockDataGenerator<>(entry.getKey(), entry.getValue(), api));
          }
 +        generators.add(new EntityMetaWatcherGenerator("EntityMetaWatcher", "io.papermc.paper.entity.meta"));
 +        generators.add(new EntityTypeToEntityClassGenerator("EntityTypeToEntityClass", "io.papermc.paper.entity.meta"));
      }
- }
+ 
+     private CraftBlockDataBootstrapper() {
