@@ -1,6 +1,6 @@
 --- a/paper-generator/build.gradle.kts
 +++ b/paper-generator/build.gradle.kts
-@@ -3,10 +_,11 @@
+@@ -3,23 +_,41 @@
  plugins {
      java
      id("io.papermc.paperweight.source-generator")
@@ -12,8 +12,9 @@
 +    atFile = layout.projectDirectory.file("../paper-generator/wideners.at")
  }
  
- val serverRuntimeClasspath by configurations.registering { // resolvable?
-@@ -14,12 +_,29 @@
+-val serverRuntimeClasspath by configurations.registering { // resolvable?
++val serverRuntimeClasspath = configurations.register("serverRuntimeClasspath") {
+     isCanBeConsumed = false
      isCanBeResolved = true
  }
  
