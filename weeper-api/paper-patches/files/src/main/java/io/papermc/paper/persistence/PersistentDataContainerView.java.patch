@@ -1,13 +1,5 @@
 --- a/src/main/java/io/papermc/paper/persistence/PersistentDataContainerView.java
 +++ b/src/main/java/io/papermc/paper/persistence/PersistentDataContainerView.java
-@@ -4,7 +_,6 @@
- import java.io.IOException;
- import java.util.Set;
- import net.kyori.adventure.key.Key;
--import org.bukkit.NamespacedKey;
- import org.bukkit.persistence.PersistentDataAdapterContext;
- import org.bukkit.persistence.PersistentDataContainer;
- import org.bukkit.persistence.PersistentDataHolder;
 @@ -48,7 +_,7 @@
       * @throws IllegalArgumentException if the type to cast the found object to is
       *                                  null
@@ -53,13 +45,16 @@
       * specific data type.
       *
       * @param key the key to look up the value type of
-@@ -203,7 +_,22 @@
+@@ -202,8 +_,23 @@
+      * instance.
       *
       * @return the key set
-      */
+-     */
 -    Set<NamespacedKey> getKeys();
++     * @deprecated Use {@link #keys()} instead. This method will be removed in a future version of Paper.
++     */
 +    @Deprecated
-+    default Set<org.bukkit.NamespacedKey> getKeys() {
++    default Set<NamespacedKey> getKeys() {
 +        return Set.of(); // NOOP: Will be rewritten via Commodore and stays as a compatibility shim
 +    }
 +
@@ -72,7 +67,6 @@
 +     *
 +     * @return the key set
 +     */
-+    @Deprecated
 +    Set<Key> keys();
  
      /**
