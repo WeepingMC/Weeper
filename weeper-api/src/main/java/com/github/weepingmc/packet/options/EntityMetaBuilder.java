@@ -4,8 +4,10 @@ import com.destroystokyo.paper.SkinParts;
 import java.util.Set;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Builder for entity metadata.
@@ -47,4 +49,15 @@ public interface EntityMetaBuilder {
      * @return this builder
      */
     EntityMetaBuilder withSkinParts(SkinParts skinParts);
+
+    /**
+     * Sets the hand a living entity is using an item with. Clients then show the use animation of
+     * the item held in that hand (e.g. the spyglass or bow pose), without the server actually
+     * using the item.
+     *
+     * @param hand {@link EquipmentSlot#HAND}, {@link EquipmentSlot#OFF_HAND} or {@code null} to stop
+     * @return this builder
+     * @throws IllegalArgumentException if hand is not a hand slot
+     */
+    EntityMetaBuilder withActiveHand(@Nullable EquipmentSlot hand);
 }

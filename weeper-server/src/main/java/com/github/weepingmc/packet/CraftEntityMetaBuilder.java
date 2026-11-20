@@ -13,8 +13,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import org.bukkit.craftbukkit.util.CraftChatMessage;
+import org.bukkit.inventory.EquipmentSlot;
 import org.jspecify.annotations.Nullable;
 
 import static com.github.weepingmc.packet.CraftPacketConversion.mapStatus;
@@ -41,6 +43,17 @@ public class CraftEntityMetaBuilder implements EntityMetaBuilder {
 
     public EntityMetaBuilder withSkinParts(SkinParts skinParts) {
         this.dataWatcherList.add(new SynchedEntityData.DataItem<>(Player.DATA_PLAYER_MODE_CUSTOMISATION, (byte) skinParts.getRaw()));
+        return this;
+    }
+
+    @Override
+    public EntityMetaBuilder withActiveHand(@Nullable EquipmentSlot hand) {
+        if (hand != null && !hand.isHand()) {
+            throw new IllegalArgumentException("Not a hand slot: " + hand);
+        }
+        // LivingEntity flags: 1 = using item, 2 = off hand
+        byte flags = hand == null ? 0 : (byte) (hand == EquipmentSlot.OFF_HAND ? 3 : 1);
+        this.dataWatcherList.add(new SynchedEntityData.DataItem<>(LivingEntity.DATA_LIVING_ENTITY_FLAGS, flags));
         return this;
     }
 
