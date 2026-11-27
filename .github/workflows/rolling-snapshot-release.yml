@@ -93,9 +93,10 @@ jobs:
 
           title="Weeper ${MINECRAFT_VERSION} Snapshot"
           notes="Rolling snapshot built from ${GITHUB_SHA}. This prerelease is replaced by the next successful build for Minecraft ${MINECRAFT_VERSION}."
+          # GitHub keeps a release's published_at timestamp when its metadata
+          # or assets are edited. Recreate this rolling release so the time
+          # shown as "released ... ago" is the build/artifact publication time.
           if gh release view "$SNAPSHOT_TAG" >/dev/null 2>&1; then
-            gh release edit "$SNAPSHOT_TAG" --title "$title" --notes "$notes" --prerelease --target "$GITHUB_SHA"
-            gh release upload "$SNAPSHOT_TAG" "${jars[0]}" --clobber
-          else
-            gh release create "$SNAPSHOT_TAG" "${jars[0]}" --title "$title" --notes "$notes" --prerelease --target "$GITHUB_SHA"
+            gh release delete "$SNAPSHOT_TAG" --yes
           fi
+          gh release create "$SNAPSHOT_TAG" "${jars[0]}" --title "$title" --notes "$notes" --prerelease --target "$GITHUB_SHA"
