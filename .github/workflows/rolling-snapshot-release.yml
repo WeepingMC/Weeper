@@ -1,0 +1,101 @@
+name: Publish Rolling Snapshot Release
+
+on:
+  push:
+    branches:
+      - main
+      - 'release/**'
+  workflow_dispatch:
+
+# This workflow maintains one prerelease per supported Minecraft version.  It
+# needs to be able to move the corresponding rolling-release tag and update
+# the GitHub release assets.
+permissions:
+  contents: write
+
+concurrency:
+  group: rolling-snapshot-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Configure Git User Details
+        run: git config --global user.email "actions@github.com" && git config --global user.name "Github Actions"
+      - name: Determine snapshot version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          branch="${GITHUB_REF_NAME}"
+          if [[ "$branch" == "main" ]]; then
+            minecraft_version=$(sed -n 's/^mcVersion=//p' gradle.properties)
+          elif [[ "$branch" =~ ^release/([0-9]+\.[0-9]+)$ ]]; then
+            minecraft_version="${BASH_REMATCH[1]}"
+          else
+            echo "Unsupported branch: $branch" >&2
+            exit 1
+          fi
+
+          if [[ -z "$minecraft_version" ]]; then
+            echo "Could not determine the Minecraft version" >&2
+            exit 1
+          fi
+
+          echo "minecraft_version=$minecraft_version" >> "$GITHUB_OUTPUT"
+          echo "tag=v${minecraft_version}-SNAPSHOT" >> "$GITHUB_OUTPUT"
+
+      - name: Set up JDK
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v5
+
+      - name: Apply patches
+        run: ./gradlew applyAllPatches --stacktrace
+
+      - name: Build and package Paperclip jar
+        env:
+          BUILD_NUMBER: ${{ github.run_number }}
+          BUILD_STARTED_AT: ${{ github.event.head_commit.timestamp || github.event.repository.updated_at }}
+        run: ./gradlew build createPaperclipJar --stacktrace
+
+      - name: Update rolling prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SNAPSHOT_TAG: ${{ steps.version.outputs.tag }}
+          MINECRAFT_VERSION: ${{ steps.version.outputs.minecraft_version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          shopt -s nullglob
+          jars=(weeper-server/build/libs/weeper-paperclip-*.jar)
+          if (( ${#jars[@]} != 1 )); then
+            echo "Expected one Paperclip jar, found ${#jars[@]}" >&2
+            exit 1
+          fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git tag --force --annotate "$SNAPSHOT_TAG" "$GITHUB_SHA" --message "Weeper ${MINECRAFT_VERSION} rolling snapshot"
+          git push --force origin "refs/tags/$SNAPSHOT_TAG"
+
+          title="Weeper ${MINECRAFT_VERSION} Snapshot"
+          notes="Rolling snapshot built from ${GITHUB_SHA}. This prerelease is replaced by the next successful build for Minecraft ${MINECRAFT_VERSION}."
+          if gh release view "$SNAPSHOT_TAG" >/dev/null 2>&1; then
+            gh release edit "$SNAPSHOT_TAG" --title "$title" --notes "$notes" --prerelease --target "$GITHUB_SHA"
+            gh release upload "$SNAPSHOT_TAG" "${jars[0]}" --clobber
+          else
+            gh release create "$SNAPSHOT_TAG" "${jars[0]}" --title "$title" --notes "$notes" --prerelease --target "$GITHUB_SHA"
+          fi
