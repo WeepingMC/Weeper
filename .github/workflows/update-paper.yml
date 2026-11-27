@@ -48,12 +48,20 @@ jobs:
             --jq 'first(.[] | select(.headRefName | startswith("automation/paper-")) | [.number, .headRefName, .headRefOid, .url] | @tsv) // empty')
           if [[ -n "$existing" ]]; then
             IFS=$'\t' read -r number branch head_sha url <<< "$existing"
+            pr_ref=$(gh api \
+              --method GET \
+              "repos/$GITHUB_REPOSITORY/contents/gradle.properties" \
+              -f ref="$branch" \
+              --jq '.content' \
+              | base64 --decode \
+              | sed -n 's/^paperRef=//p')
             echo "Resuming existing Paper update PR: $url"
             echo "update=true" >> "$GITHUB_OUTPUT"
             echo "existing=true" >> "$GITHUB_OUTPUT"
             echo "number=$number" >> "$GITHUB_OUTPUT"
             echo "branch=$branch" >> "$GITHUB_OUTPUT"
             echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
+            echo "latest=$pr_ref" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
@@ -78,28 +86,71 @@ jobs:
           set -euo pipefail
 
           branch="automation/paper-${LATEST_REF:0:12}-${GITHUB_RUN_ID}"
+          changes=$(gh api \
+            --paginate \
+            "repos/PaperMC/Paper/compare/$CURRENT_REF...$LATEST_REF" \
+            --jq '.commits[].commit.message | split("\n")[0]')
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git switch -c "$branch"
 
           sed -i "s/^paperRef=.*/paperRef=$LATEST_REF/" gradle.properties
           git add gradle.properties
-          git commit -m "Update Paper to ${LATEST_REF:0:12}"
+          {
+            echo "Update Paper to ${LATEST_REF:0:12}"
+            echo
+            printf '%s\n' "$changes"
+          } > commit-message.txt
+          git commit --file commit-message.txt --cleanup=verbatim
           head_sha=$(git rev-parse HEAD)
           git push --set-upstream origin "$branch"
+
+          {
+            echo "Updates \`paperRef\` from [\`${CURRENT_REF:0:12}\`](https://github.com/PaperMC/Paper/commit/$CURRENT_REF) to [\`${LATEST_REF:0:12}\`](https://github.com/PaperMC/Paper/commit/$LATEST_REF)."
+            echo
+            echo "The **Patch and Build** workflow must succeed before this pull request is squash-merged."
+            echo
+            echo "### Upstream changes"
+            echo
+            printf '%s\n' "$changes" | sed 's/^/- /'
+          } > pull-request.md
 
           pr_url=$(gh pr create \
             --repo "$GITHUB_REPOSITORY" \
             --base main \
             --head "$branch" \
             --title "Update Paper to ${LATEST_REF:0:12}" \
-            --body "Updates \`paperRef\` from [\`${CURRENT_REF:0:12}\`](https://github.com/PaperMC/Paper/commit/$CURRENT_REF) to [\`${LATEST_REF:0:12}\`](https://github.com/PaperMC/Paper/commit/$LATEST_REF).
-
-          The **Patch and Build** workflow must succeed before this pull request is squash-merged.")
+            --body-file pull-request.md)
 
           echo "number=${pr_url##*/}" >> "$GITHUB_OUTPUT"
           echo "branch=$branch" >> "$GITHUB_OUTPUT"
           echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
+
+      - name: Add upstream changes to existing pull request
+        if: steps.paper.outputs.existing == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CURRENT_REF: ${{ steps.paper.outputs.current }}
+          LATEST_REF: ${{ steps.paper.outputs.latest }}
+          PR_NUMBER: ${{ steps.paper.outputs.number }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          changes=$(gh api \
+            --paginate \
+            "repos/PaperMC/Paper/compare/$CURRENT_REF...$LATEST_REF" \
+            --jq '.commits[].commit.message | split("\n")[0]')
+          {
+            echo "Updates \`paperRef\` from [\`${CURRENT_REF:0:12}\`](https://github.com/PaperMC/Paper/commit/$CURRENT_REF) to [\`${LATEST_REF:0:12}\`](https://github.com/PaperMC/Paper/commit/$LATEST_REF)."
+            echo
+            echo "The **Patch and Build** workflow must succeed before this pull request is squash-merged."
+            echo
+            echo "### Upstream changes"
+            echo
+            printf '%s\n' "$changes" | sed 's/^/- /'
+          } > pull-request.md
+          gh pr edit "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file pull-request.md
 
       - name: Dispatch and wait for Patch and Build
         if: steps.paper.outputs.update == 'true'
@@ -158,14 +209,24 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           PR_NUMBER: ${{ steps.pr.outputs.number || steps.paper.outputs.number }}
           HEAD_SHA: ${{ steps.pr.outputs.head_sha || steps.paper.outputs.head_sha }}
+          CURRENT_REF: ${{ steps.paper.outputs.current }}
+          LATEST_REF: ${{ steps.paper.outputs.latest }}
         shell: bash
         run: |
-          set -o pipefail
+          set -euo pipefail
+          touch merge-result.txt
+          changes=$(gh api \
+            --paginate \
+            "repos/PaperMC/Paper/compare/$CURRENT_REF...$LATEST_REF" \
+            --jq '.commits[].commit.message | split("\n")[0]')
+          printf '%s\n' "$changes" > squash-message.txt
           gh pr merge "$PR_NUMBER" \
             --repo "$GITHUB_REPOSITORY" \
             --squash \
             --delete-branch \
-            --match-head-commit "$HEAD_SHA" 2>&1 | tee merge-result.txt
+            --match-head-commit "$HEAD_SHA" \
+            --subject "Update Paper to ${LATEST_REF:0:12}" \
+            --body-file squash-message.txt 2>&1 | tee merge-result.txt
 
       - name: Comment when the update cannot be merged
         if: steps.build.outcome == 'success' && steps.merge.outcome == 'failure'
