@@ -5,14 +5,10 @@ on:
     # Every Monday at 06:17 UTC.
     - cron: "17 6 * * 1"
   workflow_dispatch:
-  workflow_run:
-    workflows: ["Patch and Build"]
-    types: [completed]
-    branches:
-      - "automation/paper-*"
 
 permissions:
   actions: write
+  checks: read
   contents: write
   pull-requests: write
 
@@ -22,8 +18,8 @@ concurrency:
 
 jobs:
   open-update:
-    if: github.event_name != 'workflow_run'
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     steps:
       - name: Check out main
         uses: actions/checkout@v6
@@ -44,28 +40,35 @@ jobs:
           echo "current=$current" >> "$GITHUB_OUTPUT"
           echo "latest=$latest" >> "$GITHUB_OUTPUT"
 
+          existing=$(gh pr list \
+            --repo "$GITHUB_REPOSITORY" \
+            --base main \
+            --state open \
+            --json number,headRefName,headRefOid,url \
+            --jq 'first(.[] | select(.headRefName | startswith("automation/paper-")) | [.number, .headRefName, .headRefOid, .url] | @tsv) // empty')
+          if [[ -n "$existing" ]]; then
+            IFS=$'\t' read -r number branch head_sha url <<< "$existing"
+            echo "Resuming existing Paper update PR: $url"
+            echo "update=true" >> "$GITHUB_OUTPUT"
+            echo "existing=true" >> "$GITHUB_OUTPUT"
+            echo "number=$number" >> "$GITHUB_OUTPUT"
+            echo "branch=$branch" >> "$GITHUB_OUTPUT"
+            echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
           if [[ "$current" == "$latest" ]]; then
             echo "Paper is already at $latest"
             echo "update=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          existing=$(gh pr list \
-            --repo "$GITHUB_REPOSITORY" \
-            --base main \
-            --state open \
-            --json headRefName,url \
-            --jq 'first(.[] | select(.headRefName | startswith("automation/paper-")) | .url) // empty')
-          if [[ -n "$existing" ]]; then
-            echo "A Paper update PR is already open: $existing"
-            echo "update=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-
           echo "update=true" >> "$GITHUB_OUTPUT"
+          echo "existing=false" >> "$GITHUB_OUTPUT"
 
       - name: Create update branch and pull request
-        if: steps.paper.outputs.update == 'true'
+        if: steps.paper.outputs.update == 'true' && steps.paper.outputs.existing != 'true'
+        id: pr
         env:
           GH_TOKEN: ${{ github.token }}
           CURRENT_REF: ${{ steps.paper.outputs.current }}
@@ -82,67 +85,79 @@ jobs:
           sed -i "s/^paperRef=.*/paperRef=$LATEST_REF/" gradle.properties
           git add gradle.properties
           git commit -m "Update Paper to ${LATEST_REF:0:12}"
+          head_sha=$(git rev-parse HEAD)
           git push --set-upstream origin "$branch"
 
-          gh pr create \
+          pr_url=$(gh pr create \
             --repo "$GITHUB_REPOSITORY" \
             --base main \
             --head "$branch" \
             --title "Update Paper to ${LATEST_REF:0:12}" \
             --body "Updates \`paperRef\` from [\`${CURRENT_REF:0:12}\`](https://github.com/PaperMC/Paper/commit/$CURRENT_REF) to [\`${LATEST_REF:0:12}\`](https://github.com/PaperMC/Paper/commit/$LATEST_REF).
 
-          The **Patch and Build** workflow must succeed before this pull request is squash-merged."
+          The **Patch and Build** workflow must succeed before this pull request is squash-merged.")
 
-          # Pushes authenticated with GITHUB_TOKEN do not trigger push workflows.
-          # A workflow_dispatch event does, without requiring a separate PAT.
-          gh workflow run build.yml --repo "$GITHUB_REPOSITORY" --ref "$branch"
+          echo "number=${pr_url##*/}" >> "$GITHUB_OUTPUT"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          echo "head_sha=$head_sha" >> "$GITHUB_OUTPUT"
 
-  finish-update:
-    # Only trust builds explicitly dispatched by this updater. In particular,
-    # never auto-merge a similarly named branch from a forked pull request.
-    if: >-
-      github.event_name == 'workflow_run' &&
-      github.event.workflow_run.event == 'workflow_dispatch' &&
-      github.event.workflow_run.actor.login == 'github-actions[bot]'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Find the update pull request
-        id: pr
+      - name: Dispatch and wait for Patch and Build
+        if: steps.paper.outputs.update == 'true'
+        id: build
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
-          HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
+          HEAD_BRANCH: ${{ steps.pr.outputs.branch || steps.paper.outputs.branch }}
         shell: bash
         run: |
           set -euo pipefail
 
-          # Allow for API/eventual-consistency delay between PR creation and
-          # this completion handler.
-          for attempt in {1..12}; do
-            number=$(gh pr list \
+          previous_run_id=$(gh run list \
+            --repo "$GITHUB_REPOSITORY" \
+            --workflow build.yml \
+            --branch "$HEAD_BRANCH" \
+            --event workflow_dispatch \
+            --limit 1 \
+            --json databaseId \
+            --jq '.[0].databaseId // empty')
+
+          # Pushes authenticated with GITHUB_TOKEN do not trigger push workflows.
+          # A workflow_dispatch event does, without requiring a separate PAT.
+          gh workflow run build.yml --repo "$GITHUB_REPOSITORY" --ref "$HEAD_BRANCH"
+
+          run_id=""
+          for attempt in {1..24}; do
+            candidate=$(gh run list \
               --repo "$GITHUB_REPOSITORY" \
-              --base main \
-              --head "$HEAD_BRANCH" \
-              --state open \
-              --json number \
-              --jq '.[0].number // empty')
-            if [[ -n "$number" ]]; then
-              echo "number=$number" >> "$GITHUB_OUTPUT"
-              exit 0
+              --workflow build.yml \
+              --branch "$HEAD_BRANCH" \
+              --event workflow_dispatch \
+              --limit 1 \
+              --json databaseId \
+              --jq '.[0].databaseId // empty')
+            if [[ -n "$candidate" && "$candidate" != "$previous_run_id" ]]; then
+              run_id=$candidate
+              break
             fi
             sleep 5
           done
 
-          echo "No open pull request found for $HEAD_BRANCH" >&2
-          exit 1
+          if [[ -z "$run_id" ]]; then
+            echo "The dispatched Patch and Build run did not appear" >&2
+            exit 1
+          fi
+
+          echo "run_id=$run_id" >> "$GITHUB_OUTPUT"
+          gh run watch "$run_id" --repo "$GITHUB_REPOSITORY" --exit-status
 
       - name: Squash-merge successful update
-        if: github.event.workflow_run.conclusion == 'success'
+        if: steps.paper.outputs.update == 'true' && steps.build.outcome == 'success'
         id: merge
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ steps.pr.outputs.number }}
-          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          PR_NUMBER: ${{ steps.pr.outputs.number || steps.paper.outputs.number }}
+          HEAD_SHA: ${{ steps.pr.outputs.head_sha || steps.paper.outputs.head_sha }}
         shell: bash
         run: |
           set -o pipefail
@@ -153,10 +168,10 @@ jobs:
             --match-head-commit "$HEAD_SHA" 2>&1 | tee merge-result.txt
 
       - name: Comment when the update cannot be merged
-        if: github.event.workflow_run.conclusion == 'success' && steps.merge.outcome == 'failure'
+        if: steps.build.outcome == 'success' && steps.merge.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ steps.pr.outputs.number }}
+          PR_NUMBER: ${{ steps.pr.outputs.number || steps.paper.outputs.number }}
         shell: bash
         run: |
           set -euo pipefail
@@ -177,23 +192,30 @@ jobs:
             echo '```'
           } > comment.md
           gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file comment.md
+          exit 1
 
       - name: Comment with failed build output
-        if: github.event.workflow_run.conclusion != 'success'
+        if: steps.paper.outputs.update == 'true' && steps.build.outcome == 'failure'
         env:
           GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ steps.pr.outputs.number }}
-          RUN_ID: ${{ github.event.workflow_run.id }}
-          RUN_URL: ${{ github.event.workflow_run.html_url }}
-          CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          PR_NUMBER: ${{ steps.pr.outputs.number || steps.paper.outputs.number }}
+          RUN_ID: ${{ steps.build.outputs.run_id }}
         shell: bash
         run: |
           set -euo pipefail
 
-          gh run view "$RUN_ID" --repo "$GITHUB_REPOSITORY" --log-failed > failed-steps.log 2>&1 || true
+          if [[ -n "$RUN_ID" ]]; then
+            run_url="https://github.com/$GITHUB_REPOSITORY/actions/runs/$RUN_ID"
+            conclusion=$(gh run view "$RUN_ID" --repo "$GITHUB_REPOSITORY" --json conclusion --jq '.conclusion')
+            gh run view "$RUN_ID" --repo "$GITHUB_REPOSITORY" --log-failed > failed-steps.log 2>&1 || true
+          else
+            run_url="https://github.com/$GITHUB_REPOSITORY/actions/workflows/build.yml"
+            conclusion="dispatch failure"
+            echo "The Patch and Build run could not be found after it was dispatched." > failed-steps.log
+          fi
           {
             echo "<!-- paper-update-build-failure -->"
-            echo "The [Patch and Build run]($RUN_URL) finished with status **$CONCLUSION**, so this update was not merged."
+            echo "The [Patch and Build run]($run_url) finished with status **$conclusion**, so this update was not merged."
             echo
             echo "Failed-step output (including the result of \`applyAllPatches\` when that task failed):"
             echo
@@ -203,3 +225,4 @@ jobs:
             echo '```'
           } > comment.md
           gh pr comment "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --body-file comment.md
+          exit 1
